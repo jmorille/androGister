@@ -39,7 +39,7 @@ public class ProductSelectorFragment extends ListFragment {
 //		}
 		Article status = new Article().setState(item);
 		getActivity().sendBroadcast(Intents.status(status));
-		Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+//		Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 	}
 
 	private String getCapt(String ship) {
