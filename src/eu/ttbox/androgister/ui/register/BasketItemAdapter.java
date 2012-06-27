@@ -42,12 +42,12 @@ public class BasketItemAdapter extends ArrayAdapter<Product> {
 		 TextView nameTexView =  (TextView)view.findViewById(R.id.basket_list_item_article);
 		 TextView priceTexView =  (TextView)view.findViewById(R.id.basket_list_item_price);
 		 nameTexView.setText(data.getName());
-		 BigDecimal price = data.getPrice();
+		 long price = data.getPriceHT();
 		 String priceString = null;
-		 if (price!=null) {
-			 priceString = price.toString();
+		 if (price>-1) {
+			 priceString = String.valueOf(price);
 		 }
-		 priceTexView.setText(priceString);
+ 		 priceTexView.setText(priceString);
 	 }
 	 
 

@@ -90,7 +90,7 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 				String[] strings = TextUtils.split(line, "-");
 				if (strings.length < 2)
 					continue;
-				long id = addProduct(strings[0].trim(), strings[1].trim());
+				long id = addProduct(strings[0].trim(), strings[1].trim(), strings[2].trim());
 				if (id < 0) {
 					Log.e(TAG, "unable to add word: " + strings[0].trim());
 				}
@@ -106,10 +106,11 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 	 * 
 	 * @return rowId or -1 if failed
 	 */
-	public long addProduct(String name, String description) {
+	public long addProduct(String name, String description, String price) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(ProductDatabase.Column.KEY_NAME, name);
 		initialValues.put(ProductDatabase.Column.KEY_DESCRIPTION, description);
+		initialValues.put(ProductDatabase.Column.KEY_PRICEHT, price);
 
 		return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
 	}

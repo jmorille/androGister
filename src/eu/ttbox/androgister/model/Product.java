@@ -7,6 +7,8 @@ public class Product implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
+	private long id = -1;
+	
 	private String name;
 
 	private String description;
@@ -15,7 +17,17 @@ public class Product implements Serializable {
 
 	private String tag;
 
-	private BigDecimal priceHT;
+	private long priceHT = 1230l;
+ 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	
 	
 	public Product setName(String state) {
 		this.name = state;
@@ -25,11 +37,7 @@ public class Product implements Serializable {
 	public String getName() {
 		return name;
 	}
-
-	public BigDecimal getPrice() { 
-		return priceHT;
-	}
-
+ 
 	public String getDescription() {
 		return description;
 	}
@@ -57,15 +65,14 @@ public class Product implements Serializable {
 		return this;
 	}
 
-	public BigDecimal getPriceHT() {
+	public long getPriceHT() {
 		return priceHT;
 	}
 
-	public Product setPriceHT(BigDecimal priceHT) {
+	public Product setPriceHT(long priceHT) {
 		this.priceHT = priceHT;
 		return this;
 	}
 
-	
 	
 }

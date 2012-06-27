@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- http://stackoverflow.com/questions/9877390/custom-swipe-animation-tilt-card-deck-3d-etc -->
-<!-- http://android-developers.blogspot.fr/2011/08/horizontal-view-swiping-with-viewpager.html -->
-<ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"   android:background="@drawable/appwidget_bg">
@@ -10,12 +8,14 @@
         android:id="@+id/fragment_product_selector"
         android:name="eu.ttbox.androgister.ui.product.ProductSelectorFragment"
         android:layout_width="0px"
-        android:layout_height="match_parent"  />
+        android:layout_height="match_parent"
+        android:layout_weight="2" />
 
     <fragment
         android:id="@+id/fragment_product_register"
         android:name="eu.ttbox.androgister.ui.register.ProductRegisterFragment"
         android:layout_width="0px"
-        android:layout_height="match_parent"  />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
-</ViewPager>
+</LinearLayout>

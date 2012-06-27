@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.ttbox.androgister</groupId>
 	<artifactId>androgister</artifactId>
-	<version>0.1.2</version>
+	<version>0.0.1</version>
 	<packaging>apk</packaging>
 	<name>AndroGister</name>
 
