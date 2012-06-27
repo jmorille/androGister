@@ -16,13 +16,13 @@ import android.widget.ListAdapter;
 import android.widget.Toast;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.model.Article;
+import eu.ttbox.androgister.model.Product;
 
 public class BasketScreenFragment extends ListFragment {
 
 	private BroadcastReceiver mStatusReceiver;
 
-	private ArrayList<Article> basket = new ArrayList<Article>();
+	private ArrayList<Product> basket = new ArrayList<Product>();
 	private BasketItemAdapter listAdapter;
 	
 	@Override
@@ -58,13 +58,13 @@ public class BasketScreenFragment extends ListFragment {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (Intents.ACTION_STATUS.equals(action)) { 
-				Article status = (Article) intent.getSerializableExtra(Intents.EXTRA_STATUS);
+				Product status = (Product) intent.getSerializableExtra(Intents.EXTRA_STATUS);
 				onStatusChanged(status);
 			}
 		}
 	}
 
-	public void onStatusChanged(Article status) {
+	public void onStatusChanged(Product status) {
  		listAdapter.add(status );
 		Toast.makeText(getActivity(), "Add basket " + status.getName() + " / "+basket.size(), Toast.LENGTH_LONG).show();
 	}

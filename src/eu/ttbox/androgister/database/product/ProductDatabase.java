@@ -15,10 +15,13 @@ public class ProductDatabase {
 	public static class Column {
 
 		public static final String KEY_ID =  BaseColumns._ID;
-		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
-		public static final String KEY_DEFINITION = SearchManager.SUGGEST_COLUMN_TEXT_2;
+		public static final String KEY_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
+		public static final String KEY_DESCRIPTION = SearchManager.SUGGEST_COLUMN_TEXT_2;
+		public static final String KEY_EAN = "EAN";
+		public static final String KEY_PRICEHT = "PRICEHT";
+		public static final String KEY_TAG = "TAG";
 		
-		public static final String[] ALL_KEYS = new String[] {KEY_WORD, KEY_DEFINITION};
+		public static final String[] ALL_KEYS = new String[] {KEY_ID, KEY_NAME, KEY_DESCRIPTION, KEY_EAN, KEY_PRICEHT, KEY_TAG};
 
 	}
 
@@ -44,16 +47,20 @@ public class ProductDatabase {
 	 */
 	private static HashMap<String, String> buildColumnMap() {
 		HashMap<String, String> map = new HashMap<String, String>();
+		// Add Id
+		map.put(BaseColumns._ID, "rowid AS " + BaseColumns._ID);
 		// Add Identity Column
 		for (String col : Column.ALL_KEYS) {
+			if (!col.equals(Column.KEY_ID)) {
 			map.put(col, col); 
+			}
 		}
-		// Add Aliases 
-		map.put(BaseColumns._ID, "rowid AS " + BaseColumns._ID);
+		// Add Suggest Aliases 
 		map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS "
 				+ SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
 		map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS "
 				+ SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
+		// Add Other Aliases 
 		return map;
 	}
 
@@ -88,7 +95,7 @@ public class ProductDatabase {
 	 * @return Cursor over all words that match, or null if none found.
 	 */
 	public Cursor getWordMatches(String query, String[] columns) {
-		String selection = Column.KEY_WORD + " MATCH ?";
+		String selection = Column.KEY_NAME + " MATCH ?";
 		String[] selectionArgs = new String[] { query + "*" };
 
 		return query(selection, selectionArgs, columns);
@@ -121,7 +128,7 @@ public class ProductDatabase {
 	 *            The columns to return
 	 * @return A Cursor over all rows matching the query
 	 */
-	private Cursor query(String selection, String[] selectionArgs,
+	public Cursor query(String selection, String[] selectionArgs,
 			String[] columns) {
 		/*
 		 * The SQLiteBuilder provides a map for all possible columns requested

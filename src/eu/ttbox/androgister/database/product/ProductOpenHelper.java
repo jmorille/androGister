@@ -31,8 +31,11 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 	private static final String FTS_TABLE_CREATE = "CREATE VIRTUAL TABLE "
 			+ FTS_VIRTUAL_TABLE + //
 			" USING fts3 (" //
-			+ ProductDatabase.Column.KEY_WORD //
-			+ ", " + ProductDatabase.Column.KEY_DEFINITION //
+			+ ProductDatabase.Column.KEY_NAME //
+			+ ", " + ProductDatabase.Column.KEY_DESCRIPTION //
+			+ ", " + ProductDatabase.Column.KEY_EAN  //
+			+ ", " + ProductDatabase.Column.KEY_PRICEHT //
+			+ ", " + ProductDatabase.Column.KEY_TAG //
 			+ ");";
 
 
@@ -66,7 +69,7 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					loadWords();
+					loadProducts();
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -74,7 +77,7 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 		}).start();
 	}
 
-	private void loadWords() throws IOException {
+	private void loadProducts() throws IOException {
 		Log.d(TAG, "Loading words...");
 		final Resources resources = mHelperContext.getResources();
 		InputStream inputStream = resources.openRawResource(R.raw.definitions);
@@ -87,7 +90,7 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 				String[] strings = TextUtils.split(line, "-");
 				if (strings.length < 2)
 					continue;
-				long id = addWord(strings[0].trim(), strings[1].trim());
+				long id = addProduct(strings[0].trim(), strings[1].trim());
 				if (id < 0) {
 					Log.e(TAG, "unable to add word: " + strings[0].trim());
 				}
@@ -103,10 +106,10 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 	 * 
 	 * @return rowId or -1 if failed
 	 */
-	public long addWord(String word, String definition) {
+	public long addProduct(String name, String description) {
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(ProductDatabase.Column.KEY_WORD, word);
-		initialValues.put(ProductDatabase.Column.KEY_DEFINITION, definition);
+		initialValues.put(ProductDatabase.Column.KEY_NAME, name);
+		initialValues.put(ProductDatabase.Column.KEY_DESCRIPTION, description);
 
 		return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
 	}

@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.model.Article;
+import eu.ttbox.androgister.model.Product;
 import eu.ttbox.androgister.ui.register.ProductRegisterFragment;
 
 public class ProductSelectorFragment extends ListFragment {
@@ -37,7 +37,7 @@ public class ProductSelectorFragment extends ListFragment {
 //		if (frag != null && frag.isInLayout()) {
 //			frag.setText(getCapt(item));
 //		}
-		Article status = new Article().setName(item);
+		Product status = new Product().setName(item);
 		getActivity().sendBroadcast(Intents.status(status));
 //		Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 	}

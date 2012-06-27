@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.model.Article;
+import eu.ttbox.androgister.model.Product;
 
 public class ProductRegisterFragment extends Fragment {
 
@@ -53,13 +53,13 @@ public class ProductRegisterFragment extends Fragment {
 			String action = intent.getAction();
 			if (Intents.ACTION_STATUS.equals(action)) {
 				// TODO: Filter by authority
-				Article status = (Article) intent.getSerializableExtra(Intents.EXTRA_STATUS);
+				Product status = (Product) intent.getSerializableExtra(Intents.EXTRA_STATUS);
 				onStatusChanged(status);
 			}
 		}
 	}
 
-	public void onStatusChanged(Article status) {
+	public void onStatusChanged(Product status) {
 		setText(status.getName());
  	}
 }

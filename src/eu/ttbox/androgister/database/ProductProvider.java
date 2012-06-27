@@ -25,8 +25,8 @@ public class ProductProvider extends ContentProvider {
 	private ProductDatabase mDictionary;
 
 	// UriMatcher stuff
-	private static final int SEARCH_WORDS = 0;
-	private static final int GET_WORD = 1;
+	private static final int SEARCH_PRODUCTS = 0;
+	private static final int GET_PRODUCT = 1;
 	private static final int SEARCH_SUGGEST = 2;
 	private static final int REFRESH_SHORTCUT = 3;
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
@@ -38,8 +38,8 @@ public class ProductProvider extends ContentProvider {
 	private static UriMatcher buildUriMatcher() {
 		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		// to get definitions...
-		matcher.addURI(AUTHORITY, "product", SEARCH_WORDS);
-		matcher.addURI(AUTHORITY, "product/#", GET_WORD);
+		matcher.addURI(AUTHORITY, "product", SEARCH_PRODUCTS);
+		matcher.addURI(AUTHORITY, "product/#", GET_PRODUCT);
 		// to get suggestions...
 		matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY,
 				SEARCH_SUGGEST);
@@ -87,13 +87,13 @@ public class ProductProvider extends ContentProvider {
 						"selectionArgs must be provided for the Uri: " + uri);
 			}
 			return getSuggestions(selectionArgs[0]);
-		case SEARCH_WORDS:
+		case SEARCH_PRODUCTS:
 			if (selectionArgs == null) {
 				throw new IllegalArgumentException(
 						"selectionArgs must be provided for the Uri: " + uri);
 			}
 			return search(selectionArgs[0]);
-		case GET_WORD:
+		case GET_PRODUCT:
 			return getWord(uri);
 		case REFRESH_SHORTCUT:
 			return refreshShortcut(uri);
@@ -105,8 +105,8 @@ public class ProductProvider extends ContentProvider {
 	private Cursor getSuggestions(String query) {
 		query = query.toLowerCase();
 		String[] columns = new String[] { ProductDatabase.Column.KEY_ID,
-				ProductDatabase.Column.KEY_WORD,
-				ProductDatabase.Column.KEY_DEFINITION,
+				ProductDatabase.Column.KEY_NAME,
+				ProductDatabase.Column.KEY_DESCRIPTION,
 				/*
 				 * SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, (only if you want
 				 * to refresh shortcuts)
@@ -119,16 +119,16 @@ public class ProductProvider extends ContentProvider {
 	private Cursor search(String query) {
 		query = query.toLowerCase();
 		String[] columns = new String[] { ProductDatabase.Column.KEY_ID,
-				ProductDatabase.Column.KEY_WORD,
-				ProductDatabase.Column.KEY_DEFINITION };
+				ProductDatabase.Column.KEY_NAME,
+				ProductDatabase.Column.KEY_DESCRIPTION };
 
 		return mDictionary.getWordMatches(query, columns);
 	}
 
 	private Cursor getWord(Uri uri) {
 		String rowId = uri.getLastPathSegment();
-		String[] columns = new String[] { ProductDatabase.Column.KEY_WORD,
-				ProductDatabase.Column.KEY_DEFINITION };
+		String[] columns = new String[] { ProductDatabase.Column.KEY_NAME,
+				ProductDatabase.Column.KEY_DESCRIPTION };
 
 		return mDictionary.getWord(rowId, columns);
 	}
@@ -145,8 +145,8 @@ public class ProductProvider extends ContentProvider {
 		 */
 		String rowId = uri.getLastPathSegment();
 		String[] columns = new String[] { ProductDatabase.Column.KEY_ID,
-				ProductDatabase.Column.KEY_WORD,
-				ProductDatabase.Column.KEY_DEFINITION,
+				ProductDatabase.Column.KEY_NAME,
+				ProductDatabase.Column.KEY_DESCRIPTION,
 				SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
 				SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
 
@@ -160,9 +160,9 @@ public class ProductProvider extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch (sURIMatcher.match(uri)) {
-		case SEARCH_WORDS:
+		case SEARCH_PRODUCTS:
 			return WORDS_MIME_TYPE;
-		case GET_WORD:
+		case GET_PRODUCT:
 			return DEFINITION_MIME_TYPE;
 		case SEARCH_SUGGEST:
 			return SearchManager.SUGGEST_MIME_TYPE;
