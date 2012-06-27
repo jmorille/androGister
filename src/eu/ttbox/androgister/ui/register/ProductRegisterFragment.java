@@ -60,6 +60,6 @@ public class ProductRegisterFragment extends Fragment {
 	}
 
 	public void onStatusChanged(Article status) {
-		setText(status.getState());
+		setText(status.getName());
  	}
 }

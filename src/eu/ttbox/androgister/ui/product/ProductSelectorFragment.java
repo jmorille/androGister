@@ -37,7 +37,7 @@ public class ProductSelectorFragment extends ListFragment {
 //		if (frag != null && frag.isInLayout()) {
 //			frag.setText(getCapt(item));
 //		}
-		Article status = new Article().setState(item);
+		Article status = new Article().setName(item);
 		getActivity().sendBroadcast(Intents.status(status));
 //		Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 	}

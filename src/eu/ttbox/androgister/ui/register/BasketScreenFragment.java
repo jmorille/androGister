@@ -22,7 +22,7 @@ public class BasketScreenFragment extends ListFragment {
 
 	private BroadcastReceiver mStatusReceiver;
 
-	private ArrayList<String> basket = new ArrayList<String>();
+	private ArrayList<Article> basket = new ArrayList<Article>();
 	private BasketItemAdapter listAdapter;
 	
 	@Override
@@ -65,8 +65,8 @@ public class BasketScreenFragment extends ListFragment {
 	}
 
 	public void onStatusChanged(Article status) {
- 		listAdapter.add(status.getState());
-		Toast.makeText(getActivity(), "Add basket " + status.getState() + " / "+basket.size(), Toast.LENGTH_LONG).show();
+ 		listAdapter.add(status );
+		Toast.makeText(getActivity(), "Add basket " + status.getName() + " / "+basket.size(), Toast.LENGTH_LONG).show();
 	}
 
 }
