@@ -14,8 +14,11 @@
         <google.maps.version>15_r2</google.maps.version> 
         <osmdroid.version>3.0.8</osmdroid.version>
         <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
-        <!-- Release -->
+         <!-- Release -->
         <sign.alias>android</sign.alias>
+        <build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
+        <android-maven-plugin.version.version>3.2.0</android-maven-plugin.version.version>
+        <maven-jarsigner-plugin.version>1.2</maven-jarsigner-plugin.version>
        </properties>
 
 	<dependencies>
@@ -120,6 +123,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>${maven-jarsigner-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>signing</id>
@@ -149,6 +153,7 @@
                     <plugin>
                         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                         <artifactId>android-maven-plugin</artifactId>
+                        <version>${android-maven-plugin.version}</version>
                         <inherited>true</inherited>
                         <configuration>
                             <sign>
@@ -188,6 +193,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
+                         <version>${build-helper-maven-plugin.version}</version>
                         <configuration>
                             <artifacts>
                                 <artifact>
