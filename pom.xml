@@ -17,7 +17,7 @@
          <!-- Release -->
         <sign.alias>android</sign.alias>
         <build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
-        <android-maven-plugin.version.version>3.2.0</android-maven-plugin.version.version>
+        <android-maven-plugin.version>3.2.0</android-maven-plugin.version>
         <maven-jarsigner-plugin.version>1.2</maven-jarsigner-plugin.version>
        </properties>
 
