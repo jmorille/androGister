@@ -91,6 +91,7 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 				if (strings.length < 2)
 					continue;
 				long id = addProduct(strings[0].trim(), strings[1].trim(), strings[2].trim());
+				Log.i(TAG, String.format("Add Product id %s : name=%s", id, strings[0]));
 				if (id < 0) {
 					Log.e(TAG, "unable to add word: " + strings[0].trim());
 				}
