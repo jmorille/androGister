@@ -30,6 +30,9 @@
             </intent-filter>
         </activity>
         
+        <provider android:name=".database.ProductProvider"
+                  android:authorities="eu.ttbox.androgister.searchableproduct.ProductProvider" />
+        
         
     </application>
 

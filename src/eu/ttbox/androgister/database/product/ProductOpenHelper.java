@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.database;
+package eu.ttbox.androgister.database.product;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,9 +16,11 @@ import eu.ttbox.androgister.R;
 
 public class ProductOpenHelper extends SQLiteOpenHelper {
 
-	public static final String DATABASE_NAME = "dictionary";
-	public static final String FTS_VIRTUAL_TABLE = "FTSdictionary";
-	public static final int DATABASE_VERSION = 2;
+	private static final String TAG = "ProductOpenHelper";
+
+	public static final String DATABASE_NAME = "productDb";
+	public static final String FTS_VIRTUAL_TABLE = "FTSproduct";
+	public static final int DATABASE_VERSION = 1;
 
 	/*
 	 * Note that FTS3 does not support column constraints and thus, you cannot
@@ -33,7 +35,6 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 			+ ", " + ProductDatabase.Column.KEY_DEFINITION //
 			+ ");";
 
-	private static final String TAG = "ProductOpenHelper";
 
 	private final Context mHelperContext;
 	private SQLiteDatabase mDatabase;

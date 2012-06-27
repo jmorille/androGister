@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.database;
+package eu.ttbox.androgister.database.product;
 
 import java.util.HashMap;
 
