@@ -23,12 +23,13 @@ public class BasketScreenFragment extends ListFragment {
 	private BroadcastReceiver mStatusReceiver;
 
 	private ArrayList<String> basket = new ArrayList<String>();
-
+	private BasketItemAdapter listAdapter;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); 
-		ListAdapter myListAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, basket);
-		setListAdapter(myListAdapter);
+		listAdapter = new BasketItemAdapter (getActivity(),  basket);
+		setListAdapter(listAdapter);
 		// Services
 		mStatusReceiver = new StatusReceiver();
 	}
@@ -64,8 +65,7 @@ public class BasketScreenFragment extends ListFragment {
 	}
 
 	public void onStatusChanged(Article status) {
- 
-		((ArrayAdapter<String>)getListAdapter()).add(status.getState());
+ 		listAdapter.add(status.getState());
 		Toast.makeText(getActivity(), "Add basket " + status.getState() + " / "+basket.size(), Toast.LENGTH_LONG).show();
 	}
 
