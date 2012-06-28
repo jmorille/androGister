@@ -69,6 +69,11 @@ public class Product implements Serializable {
 		return priceHT;
 	}
 
+	public String getPriceHTasString() {
+		return PriceHelper.getToStringPrice(priceHT);
+ 	}
+
+	
 	public Product setPriceHT(long priceHT) {
 		this.priceHT = priceHT;
 		return this;
