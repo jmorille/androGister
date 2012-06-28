@@ -18,5 +18,5 @@ Chili Con Carne-Plat-215
 Entrecote-Plat-215
 Petite Salade-Entrée-85
 Grande Salade-Entrée-110
-Soupe Légume-Entrée-110
-Charcuterie-Entrée-110
+Soupe Légume-Entrée-60
+Charcuterie-Entrée-90
