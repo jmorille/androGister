@@ -21,12 +21,12 @@ import eu.ttbox.androgister.model.Product;
 
 public class ProductSelectorFragment extends Fragment implements OnLoadCompleteListener<Cursor> {
 
-	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Column.KEY_ID, Column.KEY_NAME,  Column.KEY_PRICEHT };
+	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Column.KEY_ID, Column.KEY_NAME, Column.KEY_PRICEHT };
 
 	private GridView gridView;
 
 	private ProductWrapper productWrapper;
-	
+
 	private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 			onListItemClick((GridView) parent, v, position, id);
@@ -58,19 +58,13 @@ public class ProductSelectorFragment extends Fragment implements OnLoadCompleteL
 				sortOrder);
 
 		cursorLoader.registerListener(1, this);
-		cursorLoader.startLoading();
-
-		// Uri searchUri = ProductProvider.Constants.CONTENT_URI;
-		// Cursor cursor = managedQuery(searchUri, SEARCH_PROJECTION_COLOMN, selection, selectionArgs, sortOrder);
-		// showResult(cursorLoader);
+		cursorLoader.startLoading(); 
 	}
 
 	@Override
 	public void onLoadComplete(Loader<Cursor> loader, Cursor data) {
 		// Mapping
-		String[] from = new String[] { Column.KEY_NAME,   Column.KEY_PRICEHT }; // ,
-		int[] to = new int[] { R.id.product_list_item_name,  R.id.product_list_item_price }; // ,
-		ProductItemAdapter myListAdapter = new ProductItemAdapter(getActivity(), R.layout.product_list_item, data, from, to,
+		ProductItemAdapter myListAdapter = new ProductItemAdapter(getActivity(), R.layout.product_list_item, data,
 				SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		gridView.setAdapter(myListAdapter);
 	}
