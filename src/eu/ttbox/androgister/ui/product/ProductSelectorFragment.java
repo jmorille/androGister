@@ -21,7 +21,7 @@ import eu.ttbox.androgister.model.Product;
 
 public class ProductSelectorFragment extends Fragment implements OnLoadCompleteListener<Cursor> {
 
-	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Column.KEY_ID, Column.KEY_NAME, Column.KEY_PRICEHT };
+	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Column.KEY_ID, Column.KEY_NAME, Column.KEY_PRICEHT , Column.KEY_TAG};
 
 	private GridView gridView;
 
@@ -62,8 +62,7 @@ public class ProductSelectorFragment extends Fragment implements OnLoadCompleteL
 	}
 
 	@Override
-	public void onLoadComplete(Loader<Cursor> loader, Cursor data) {
-		// Mapping
+	public void onLoadComplete(Loader<Cursor> loader, Cursor data) { 
 		ProductItemAdapter myListAdapter = new ProductItemAdapter(getActivity(), R.layout.product_list_item, data,
 				SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		gridView.setAdapter(myListAdapter);

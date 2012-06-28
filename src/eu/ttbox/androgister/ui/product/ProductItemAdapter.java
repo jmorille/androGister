@@ -10,8 +10,7 @@ import eu.ttbox.androgister.database.product.ProductDatabase.Column;
 import eu.ttbox.androgister.model.PriceHelper;
 
 public class ProductItemAdapter extends ResourceCursorAdapter {
-
-	private static final String TAG = "ProductItemAdapter";
+ 
 
 	private int nameIdx = -1;
 	private int priceIdx = -1;
@@ -22,8 +21,7 @@ public class ProductItemAdapter extends ResourceCursorAdapter {
 	}
 
 	private void intViewBinding(View view, Context context, Cursor cursor) {
-
-		// Init Cursor
+ 		// Init Cursor
 		nameIdx = cursor.getColumnIndex(Column.KEY_NAME);
 		priceIdx = cursor.getColumnIndex(Column.KEY_PRICEHT);
 		isNotBinding = false;
