@@ -11,11 +11,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.Toast;
+import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
+import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.model.Product;
 
 public class BasketScreenFragment extends ListFragment {
@@ -24,10 +23,12 @@ public class BasketScreenFragment extends ListFragment {
 
 	private ArrayList<Product> basket = new ArrayList<Product>();
 	private BasketItemAdapter listAdapter;
+	private TextView sumTextView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); 
+		// Adpater
 		listAdapter = new BasketItemAdapter (getActivity(),  basket);
 		setListAdapter(listAdapter);
 		// Services
@@ -36,7 +37,10 @@ public class BasketScreenFragment extends ListFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.basket_screen, container, false);
+		View view=  inflater.inflate(R.layout.basket_screen, container, false);
+		// View
+		sumTextView = (TextView)view.findViewById(R.id.basket_screen_sum);
+		return view;
 	}
 
 	@Override
@@ -63,10 +67,19 @@ public class BasketScreenFragment extends ListFragment {
 			}
 		}
 	}
+	
+	private void doSumBasket() {
+		long sum = 0;
+		for (Product item: basket) {
+			sum+=item.getPriceHT();
+		}
+		sumTextView.setText(PriceHelper.getToStringPrice(sum));
+	}
 
 	public void onStatusChanged(Product status) {
  		listAdapter.add(status );
-		Toast.makeText(getActivity(), "Add basket " + status.getName() + " / "+basket.size(), Toast.LENGTH_LONG).show();
+ 		doSumBasket();
+//		Toast.makeText(getActivity(), "Add basket " + status.getName() + " / "+basket.size(), Toast.LENGTH_LONG).show();
 	}
 
 }

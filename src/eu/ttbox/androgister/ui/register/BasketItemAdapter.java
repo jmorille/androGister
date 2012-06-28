@@ -1,16 +1,15 @@
 package eu.ttbox.androgister.ui.register;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.model.Product;
 
 public class BasketItemAdapter extends ArrayAdapter<Product> {
@@ -45,7 +44,7 @@ public class BasketItemAdapter extends ArrayAdapter<Product> {
 		 long price = data.getPriceHT();
 		 String priceString = null;
 		 if (price>-1) {
-			 priceString = String.valueOf(price);
+			 priceString = PriceHelper.getToStringPrice(price);
 		 }
  		 priceTexView.setText(priceString);
 	 }
