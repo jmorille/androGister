@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
@@ -31,7 +32,7 @@ public class BasketScreenFragment extends ListFragment {
 		// Adpater
 		listAdapter = new BasketItemAdapter (getActivity(),  basket);
 		setListAdapter(listAdapter);
-		// Services
+  		// Services
 		mStatusReceiver = new StatusReceiver();
 	}
 
@@ -40,15 +41,18 @@ public class BasketScreenFragment extends ListFragment {
 		View view=  inflater.inflate(R.layout.basket_screen, container, false);
 		// View
 		sumTextView = (TextView)view.findViewById(R.id.basket_screen_sum);
+		doSumBasket();
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume(); 
+		// Register Listener
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.ACTION_STATUS); 
 		getActivity().registerReceiver(mStatusReceiver, filter);
+		
 	}
 
 	@Override

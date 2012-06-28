@@ -29,7 +29,7 @@ public class BasketItemAdapter extends ArrayAdapter<Product> {
 		View view; 
 		if (convertView == null) {
 			view = mInflater.inflate( R.layout.basket_list_item, parent, false);
-		} else {
+ 		} else {
 			view = convertView;
 		}
 		Product data = getItem(position);

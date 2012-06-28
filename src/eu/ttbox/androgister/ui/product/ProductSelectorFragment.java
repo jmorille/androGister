@@ -1,6 +1,6 @@
 package eu.ttbox.androgister.ui.product;
 
-import android.app.ListFragment;
+import android.app.Fragment;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.content.Loader.OnLoadCompleteListener;
@@ -9,7 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.SimpleCursorAdapter;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
@@ -18,35 +19,47 @@ import eu.ttbox.androgister.database.product.ProductDatabase.Column;
 import eu.ttbox.androgister.database.product.ProductWrapper;
 import eu.ttbox.androgister.model.Product;
 
-public class ProductSelectorFragment extends ListFragment implements OnLoadCompleteListener<Cursor> {
+public class ProductSelectorFragment extends Fragment implements OnLoadCompleteListener<Cursor> {
 
-	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Column.KEY_ID, Column.KEY_NAME, Column.KEY_DESCRIPTION, Column.KEY_PRICEHT };
+	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Column.KEY_ID, Column.KEY_NAME,  Column.KEY_PRICEHT };
 
-	String[] month = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+	private GridView gridView;
+
+	private ProductWrapper productWrapper;
+	
+	private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+			onListItemClick((GridView) parent, v, position, id);
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		productWrapper = new ProductWrapper();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.product_selector, container, false);
-		 doSearch();
+		// Link search
+		gridView = (GridView) view.findViewById(R.id.product_selector_gridview);
+		gridView.setOnItemClickListener(mOnClickListener);
+		// Init Search
+		doSearch();
 		return view;
 	}
 
 	private void doSearch() {
 		String selection = null;
 		String[] selectionArgs = null; // new String[] { query };
-		String sortOrder = String.format("%s ASC", Column.KEY_NAME);
+		String sortOrder = String.format("%s ASC, %s ASC", Column.KEY_TAG, Column.KEY_NAME);
 		CursorLoader cursorLoader = new CursorLoader(getActivity(), ProductProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs,
 				sortOrder);
 
 		cursorLoader.registerListener(1, this);
 		cursorLoader.startLoading();
-		
+
 		// Uri searchUri = ProductProvider.Constants.CONTENT_URI;
 		// Cursor cursor = managedQuery(searchUri, SEARCH_PROJECTION_COLOMN, selection, selectionArgs, sortOrder);
 		// showResult(cursorLoader);
@@ -55,22 +68,18 @@ public class ProductSelectorFragment extends ListFragment implements OnLoadCompl
 	@Override
 	public void onLoadComplete(Loader<Cursor> loader, Cursor data) {
 		// Mapping
-		String[] from = new String[] { Column.KEY_NAME, Column.KEY_DESCRIPTION, Column.KEY_PRICEHT }; // ,
-		int[] to = new int[] { R.id.product_list_item_name, R.id.product_list_item_description, R.id.product_list_item_price }; // ,
+		String[] from = new String[] { Column.KEY_NAME,   Column.KEY_PRICEHT }; // ,
+		int[] to = new int[] { R.id.product_list_item_name,  R.id.product_list_item_price }; // ,
 		ProductItemAdapter myListAdapter = new ProductItemAdapter(getActivity(), R.layout.product_list_item, data, from, to,
 				SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-		// ListAdapter myListAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, month);
-		setListAdapter(myListAdapter);
+		gridView.setAdapter(myListAdapter);
 	}
- 
 
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		Cursor item = (Cursor) getListAdapter().getItem(position);
- 		Product status = ProductWrapper.getEntity(item);
+	public void onListItemClick(GridView l, View v, int position, long id) {
+		Cursor item = (Cursor) l.getAdapter().getItem(position);
+		Product status = productWrapper.getEntity(item);
 		getActivity().sendBroadcast(Intents.status(status));
 		// Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 	}
- 
 
 }

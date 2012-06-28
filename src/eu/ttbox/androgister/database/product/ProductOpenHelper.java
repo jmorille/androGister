@@ -107,10 +107,10 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 	 * 
 	 * @return rowId or -1 if failed
 	 */
-	public long addProduct(String name, String description, String price) {
+	public long addProduct(String name, String tag, String price) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(ProductDatabase.Column.KEY_NAME, name);
-		initialValues.put(ProductDatabase.Column.KEY_DESCRIPTION, description);
+		initialValues.put(ProductDatabase.Column.KEY_TAG, tag);
 		initialValues.put(ProductDatabase.Column.KEY_PRICEHT, price);
 
 		return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);

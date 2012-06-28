@@ -1,4 +1,18 @@
-Pomme-Pomme verte-125
-Evian-Evian 125ml-450
-Vitel-Vitel 125ml-50
-Minute Maid-330ml-150
+Pomme-Dessert Fruit-125
+Bannane-Dessert Fruit-125
+Coupe Fruit-Dessert Fruit-125
+Yahourt Nature-Dessert Fruit-125
+Yahourt Fruit-Dessert Fruit-125
+Activia Nature-Dessert Fruit-125
+Activia Fruit-Dessert Fruit-125
+Evian 125ml-Boisson-450
+Vitel 125ml-Boisson-50
+Perrier 125ml-Boisson-50
+Minute Maid-Boisson-60
+Coca Cola-Boisson-65
+Bierre-Boisson-150
+Vin 33cl-Boisson-120
+Mix Brochette-Plat-320
+Truite Grillé-Plat-410
+Chili Con Carne-Plat-215
+Entrecote-Plat-215

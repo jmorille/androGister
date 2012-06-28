@@ -1,7 +1,10 @@
 androGister
 ===========
 
+TODO: http://android.cyrilmottier.com/
 
+# Wifi Deploy
+##############
 According to a post on xda-developers, you can enable ADB over WiFi from the device with the commands
 
 setprop service.adb.tcp.port 5555
@@ -23,7 +26,10 @@ There are also several apps on the Android Market that automate this process.
 
 
 # Proxy
+##############
 $ adb shell am start -a andoid.intent.action.MAIN -n com.android.settings/.ProxySelector
 
 Sinon, il existe une application dans le market pour y accéder :
 https://market.android.com/details?id=org.credil.proxysettings&feature=search_result
+
+##############
