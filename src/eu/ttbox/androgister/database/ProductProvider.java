@@ -42,7 +42,7 @@ public class ProductProvider extends ContentProvider {
 		// to get suggestions...
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
-
+	 
 		/*
 		 * The following are unused in this implementation, but if we include {@link SearchManager#SUGGEST_COLUMN_SHORTCUT_ID} as a column in our suggestions
 		 * table, we could expect to receive refresh queries when a shortcutted suggestion is displayed in Quick Search Box, in which case, the following Uris

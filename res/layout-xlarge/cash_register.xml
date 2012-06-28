@@ -5,17 +5,19 @@
     android:orientation="horizontal"   android:background="@drawable/appwidget_bg">
 
     <fragment
+        android:id="@+id/fragment_product_register"
+        android:name="eu.ttbox.androgister.ui.register.ProductRegisterFragment"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+    
+        
+    <fragment
         android:id="@+id/fragment_product_selector"
         android:name="eu.ttbox.androgister.ui.product.ProductSelectorFragment"
         android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_weight="2" />
 
-    <fragment
-        android:id="@+id/fragment_product_register"
-        android:name="eu.ttbox.androgister.ui.register.ProductRegisterFragment"
-        android:layout_width="0px"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
 
 </LinearLayout>
