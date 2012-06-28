@@ -1,7 +1,6 @@
 package eu.ttbox.androgister.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 public class Product implements Serializable {
 	
@@ -17,7 +16,7 @@ public class Product implements Serializable {
 
 	private String tag;
 
-	private long priceHT = 1230l;
+	private long priceHT = 0l;
  
 	public long getId() {
 		return id;

@@ -9,15 +9,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.model.OrderItem;
 import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.model.Product;
 
-public class BasketItemAdapter extends ArrayAdapter<Product> {
+public class BasketItemAdapter extends ArrayAdapter<OrderItem> {
 
 	private Context context;
 	private LayoutInflater mInflater;
 
-	public BasketItemAdapter(Context context, List<Product> objects) {
+	public BasketItemAdapter(Context context, List<OrderItem> objects) {
 		super(context, R.layout.basket_list_item, objects);
 		this.context = context;
 		mInflater = (LayoutInflater) context
@@ -32,21 +33,25 @@ public class BasketItemAdapter extends ArrayAdapter<Product> {
  		} else {
 			view = convertView;
 		}
-		Product data = getItem(position);
+		OrderItem data = getItem(position);
 		bindView(view, context, data);
 		return  view;
 	}
 
-	 public void  bindView(View view, Context context, Product data) {
-		 TextView nameTexView =  (TextView)view.findViewById(R.id.basket_list_item_article);
-		 TextView priceTexView =  (TextView)view.findViewById(R.id.basket_list_item_price);
-		 nameTexView.setText(data.getName());
-		 long price = data.getPriceHT();
+	 public void  bindView(View view, Context context, OrderItem data) {
+		 // Bind
+		 TextView quantityTextView =  (TextView)view.findViewById(R.id.basket_list_item_quantity);
+		 TextView nameTextView =  (TextView)view.findViewById(R.id.basket_list_item_name);
+		 TextView priceTextView =  (TextView)view.findViewById(R.id.basket_list_item_price);
+		 // Set value
+		 quantityTextView.setText(String.valueOf(data.getQuantity()));
+		 nameTextView.setText(data.getName());
+		 long price = data.getPriceSumHT();
 		 String priceString = null;
 		 if (price>-1) {
 			 priceString = PriceHelper.getToStringPrice(price);
 		 }
- 		 priceTexView.setText(priceString);
+ 		 priceTextView.setText(priceString);
 	 }
 	 
 

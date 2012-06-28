@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
+import eu.ttbox.androgister.model.OrderItem;
+import eu.ttbox.androgister.model.OrderItemHelper;
 import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.model.Product;
 
@@ -24,7 +26,7 @@ public class BasketScreenFragment extends Fragment {
 
 	private BroadcastReceiver mStatusReceiver;
 
-	private ArrayList<Product> basket = new ArrayList<Product>();
+	private ArrayList<OrderItem> basket = new ArrayList<OrderItem>();
 	private BasketItemAdapter listAdapter;
 	// View
 	private TextView sumTextView;
@@ -90,20 +92,21 @@ public class BasketScreenFragment extends Fragment {
 
 	private void doSumBasket() {
 		long sum = 0;
-		for (Product item : basket) {
-			sum += item.getPriceHT();
+		for (OrderItem item : basket) {
+			sum += item.getPriceSumHT();
 		}
 		sumTextView.setText(PriceHelper.getToStringPrice(sum));
 	}
 
-	public void onStatusChanged(Product status) {
-		listAdapter.add(status);
+	public void onStatusChanged(Product product) {
+		OrderItem item = OrderItemHelper.createFromProduct(product);
+		listAdapter.add(item);
 		doSumBasket();
 	}
 
 	protected boolean onListItemLongClick(ListView list, View view, int position, long id) {
-		Product product = (Product) listAdapter.getItem(position);
-		listAdapter.remove(product);
+		OrderItem item = (OrderItem) listAdapter.getItem(position);
+ 		listAdapter.remove(item);
 		doSumBasket();
 		return true;
 	}
