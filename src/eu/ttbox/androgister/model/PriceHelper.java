@@ -3,7 +3,7 @@ package eu.ttbox.androgister.model;
 public class PriceHelper {
 
 	public static String getToStringPrice(long price) {
-		double priceInDevice = ((double)price) /100;
+		double priceInDevice = price /100d;
 		return String.valueOf(priceInDevice);
 	}
 	
