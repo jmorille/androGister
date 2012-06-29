@@ -8,7 +8,9 @@ TODO: http://android.cyrilmottier.com/
 According to a post on xda-developers, you can enable ADB over WiFi from the device with the commands
 
 setprop service.adb.tcp.port 5555
+
 stop adbd
+
 start adbd
 And you can disable it and return ADB to listening on USB with
 
