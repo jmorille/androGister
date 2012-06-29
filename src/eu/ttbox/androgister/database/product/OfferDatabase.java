@@ -8,9 +8,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 
-public class ProductDatabase {
+public class OfferDatabase {
 
 	private static final String TAG = "ProductDatabase";
+
+	public static final String TABLE_OFFER_FTS = "offerFTS";
 
 	public static class Column {
 
@@ -25,7 +27,7 @@ public class ProductDatabase {
 
 	}
 
-	private final ProductOpenHelper mDatabaseOpenHelper;
+	private final OfferOpenHelper mDatabaseOpenHelper;
 	private static final HashMap<String, String> mColumnMap = buildColumnMap();
 
 	/**
@@ -34,8 +36,8 @@ public class ProductDatabase {
 	 * @param context
 	 *            The Context within which to work, used to create the DB
 	 */
-	public ProductDatabase(Context context) {
-		mDatabaseOpenHelper = new ProductOpenHelper(context);
+	public OfferDatabase(Context context) {
+		mDatabaseOpenHelper = new OfferOpenHelper(context);
 	}
 
 	/**
@@ -137,7 +139,7 @@ public class ProductDatabase {
 		 * column names
 		 */
 		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-		builder.setTables(ProductOpenHelper.FTS_VIRTUAL_TABLE);
+		builder.setTables(TABLE_OFFER_FTS);
 		builder.setProjectionMap(mColumnMap);
 
 		Cursor cursor = builder.query(

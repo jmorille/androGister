@@ -7,6 +7,5 @@
         android:gradientRadius="270"
         android:endColor="#27358d"
         android:startColor="#000000" />
-
  
  </shape>

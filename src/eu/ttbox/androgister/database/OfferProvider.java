@@ -1,6 +1,6 @@
 package eu.ttbox.androgister.database;
 
-import eu.ttbox.androgister.database.product.ProductDatabase;
+import eu.ttbox.androgister.database.product.OfferDatabase;
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -9,20 +9,20 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
-public class ProductProvider extends ContentProvider {
-	private static final String TAG = "ProductProvider";
+public class OfferProvider extends ContentProvider {
+	private static final String TAG = "OfferProvider";
 
 	// MIME types used for searching words or looking up a single definition
-	public static final String WORDS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableproduct";
-	public static final String DEFINITION_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableproduct";
+	public static final String WORDS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableoffer";
+	public static final String DEFINITION_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableoffer";
 
 	public static class Constants {
-		public static String AUTHORITY = "eu.ttbox.androgister.searchableproduct.ProductProvider";
-		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/product");
-		public static final Uri CONTENT_URI_GET_PRODUCT = Uri.parse("content://" + AUTHORITY + "/product/");
+		public static String AUTHORITY = "eu.ttbox.androgister.searchableoffer.OfferProvider";
+		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/offer");
+		public static final Uri CONTENT_URI_GET_PRODUCT = Uri.parse("content://" + AUTHORITY + "/offer/");
 	}
 
-	private ProductDatabase mDictionary;
+	private OfferDatabase mDictionary;
 
 	// UriMatcher stuff
 	private static final int SEARCH_PRODUCTS = 0;
@@ -37,8 +37,8 @@ public class ProductProvider extends ContentProvider {
 	private static UriMatcher buildUriMatcher() {
 		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		// to get definitions...
-		matcher.addURI(Constants.AUTHORITY, "product", SEARCH_PRODUCTS);
-		matcher.addURI(Constants.AUTHORITY, "product/#", GET_PRODUCT);
+		matcher.addURI(Constants.AUTHORITY, "offer", SEARCH_PRODUCTS);
+		matcher.addURI(Constants.AUTHORITY, "offer/#", GET_PRODUCT);
 		// to get suggestions...
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
@@ -55,7 +55,7 @@ public class ProductProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		mDictionary = new ProductDatabase(getContext());
+		mDictionary = new OfferDatabase(getContext());
 		return true;
 	}
 
@@ -92,7 +92,7 @@ public class ProductProvider extends ContentProvider {
 
 	private Cursor getSuggestions(String query) {
 		query = query.toLowerCase();
-		String[] columns = new String[] { ProductDatabase.Column.KEY_ID, ProductDatabase.Column.KEY_NAME, ProductDatabase.Column.KEY_DESCRIPTION,
+		String[] columns = new String[] { OfferDatabase.Column.KEY_ID, OfferDatabase.Column.KEY_NAME, OfferDatabase.Column.KEY_DESCRIPTION,
 		/*
 		 * SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, (only if you want to refresh shortcuts)
 		 */
@@ -102,7 +102,7 @@ public class ProductProvider extends ContentProvider {
 	}
 
 	private Cursor search(String[] _projection, String _selection, String[] _selectionArgs, String _sortOrder) {
-		String[] projection = _projection==null? ProductDatabase.Column.ALL_KEYS : _projection;
+		String[] projection = _projection==null? OfferDatabase.Column.ALL_KEYS : _projection;
 		String selection = _selection;
 		String[] selectionArgs = _selectionArgs;
 		String sortOrder = _sortOrder;
@@ -112,13 +112,13 @@ public class ProductProvider extends ContentProvider {
 
 	private Cursor search(String query) {
 		query = query.toLowerCase();
-		String[] columns = new String[] { ProductDatabase.Column.KEY_ID, ProductDatabase.Column.KEY_NAME, ProductDatabase.Column.KEY_DESCRIPTION };
+		String[] columns = new String[] { OfferDatabase.Column.KEY_ID, OfferDatabase.Column.KEY_NAME, OfferDatabase.Column.KEY_DESCRIPTION };
 		return mDictionary.getWordMatches(query, columns);
 	}
 
 	private Cursor getWord(Uri uri) {
 		String rowId = uri.getLastPathSegment();
-		String[] columns = new String[] { ProductDatabase.Column.KEY_NAME, ProductDatabase.Column.KEY_DESCRIPTION };
+		String[] columns = new String[] { OfferDatabase.Column.KEY_NAME, OfferDatabase.Column.KEY_DESCRIPTION };
 		return mDictionary.getWord(rowId, columns);
 	}
 
@@ -130,7 +130,7 @@ public class ProductProvider extends ContentProvider {
 		 * query.
 		 */
 		String rowId = uri.getLastPathSegment();
-		String[] columns = new String[] { ProductDatabase.Column.KEY_ID, ProductDatabase.Column.KEY_NAME, ProductDatabase.Column.KEY_DESCRIPTION,
+		String[] columns = new String[] { OfferDatabase.Column.KEY_ID, OfferDatabase.Column.KEY_NAME, OfferDatabase.Column.KEY_DESCRIPTION,
 				SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
 
 		return mDictionary.getWord(rowId, columns);

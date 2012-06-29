@@ -2,10 +2,10 @@ package eu.ttbox.androgister.database.product;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import eu.ttbox.androgister.database.product.ProductDatabase.Column;
+import eu.ttbox.androgister.database.product.OfferDatabase.Column;
 import eu.ttbox.androgister.model.Product;
 
-public class ProductWrapper {
+public class OfferWrapper {
 	
 	boolean isNotInit = true;
 	int idIdx = -1;

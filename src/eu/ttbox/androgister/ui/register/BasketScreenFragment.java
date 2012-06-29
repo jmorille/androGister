@@ -1,6 +1,8 @@
 package eu.ttbox.androgister.ui.register;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
@@ -8,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +35,36 @@ public class BasketScreenFragment extends Fragment {
 	// View
 	private TextView sumTextView;
 	private ListView listView;
+
+	private Executor executor = Executors.newSingleThreadExecutor();
+
+	private static final int UI_MSG_SET_BASKET_SUM = 1;
+
+	private Handler uiHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case UI_MSG_SET_BASKET_SUM:
+				Long sum = (Long) msg.obj;
+				sumTextView.setText(PriceHelper.getToStringPrice(sum));
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	private final Runnable doBasketSum = new Runnable() {
+		@Override
+		public void run() {
+			long sum = 0;
+			for (OrderItem item : basket) {
+				sum += item.getPriceSumHT();
+			}
+			uiHandler.sendMessage(uiHandler.obtainMessage(UI_MSG_SET_BASKET_SUM, Long.valueOf(sum)));
+		}
+	};
 
 	private final OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
 		@Override
@@ -91,11 +125,12 @@ public class BasketScreenFragment extends Fragment {
 	}
 
 	private void doSumBasket() {
-		long sum = 0;
-		for (OrderItem item : basket) {
-			sum += item.getPriceSumHT();
-		}
-		sumTextView.setText(PriceHelper.getToStringPrice(sum));
+		executor.execute(doBasketSum);
+		// long sum = 0;
+		// for (OrderItem item : basket) {
+		// sum += item.getPriceSumHT();
+		// }
+		// sumTextView.setText(PriceHelper.getToStringPrice(sum));
 	}
 
 	public void onStatusChanged(Product product) {
@@ -106,7 +141,7 @@ public class BasketScreenFragment extends Fragment {
 
 	protected boolean onListItemLongClick(ListView list, View view, int position, long id) {
 		OrderItem item = (OrderItem) listAdapter.getItem(position);
- 		listAdapter.remove(item);
+		listAdapter.remove(item);
 		doSumBasket();
 		return true;
 	}

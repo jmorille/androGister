@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingLeft="8dp"
     android:paddingRight="8dp" >
 
+    <ListView
+        android:id="@+id/product_selector_filterList"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+
     <GridView
         android:id="@+id/product_selector_gridview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" 
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:columnWidth="160dp"
         android:drawSelectorOnTop="false"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="10dp" />
-
-    <TextView
-        android:id="@id/android:empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="No data" />
 
 </LinearLayout>

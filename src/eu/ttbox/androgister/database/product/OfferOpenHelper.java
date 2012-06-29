@@ -14,12 +14,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import eu.ttbox.androgister.R;
 
-public class ProductOpenHelper extends SQLiteOpenHelper {
+public class OfferOpenHelper extends SQLiteOpenHelper {
 
 	private static final String TAG = "ProductOpenHelper";
 
-	public static final String DATABASE_NAME = "productDb";
-	public static final String FTS_VIRTUAL_TABLE = "FTSproduct";
+	public static final String DATABASE_NAME = "offerDb";
 	public static final int DATABASE_VERSION = 1;
 
 	/*
@@ -29,20 +28,20 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 	 * "rowid"
 	 */
 	private static final String FTS_TABLE_CREATE = "CREATE VIRTUAL TABLE "
-			+ FTS_VIRTUAL_TABLE + //
+			+ OfferDatabase.TABLE_OFFER_FTS + //
 			" USING fts3 (" //
-			+ ProductDatabase.Column.KEY_NAME //
-			+ ", " + ProductDatabase.Column.KEY_DESCRIPTION //
-			+ ", " + ProductDatabase.Column.KEY_EAN  //
-			+ ", " + ProductDatabase.Column.KEY_PRICEHT //
-			+ ", " + ProductDatabase.Column.KEY_TAG //
+			+ OfferDatabase.Column.KEY_NAME //
+			+ ", " + OfferDatabase.Column.KEY_DESCRIPTION //
+			+ ", " + OfferDatabase.Column.KEY_EAN  //
+			+ ", " + OfferDatabase.Column.KEY_PRICEHT //
+			+ ", " + OfferDatabase.Column.KEY_TAG //
 			+ ");";
 
 
 	private final Context mHelperContext;
 	private SQLiteDatabase mDatabase;
 
-	ProductOpenHelper(Context context) {
+	OfferOpenHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		mHelperContext = context;
 	}
@@ -58,7 +57,7 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 				+ newVersion + ", which will destroy all old data");
-		db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + OfferDatabase.TABLE_OFFER_FTS);
 		onCreate(db);
 	}
 
@@ -109,11 +108,11 @@ public class ProductOpenHelper extends SQLiteOpenHelper {
 	 */
 	public long addProduct(String name, String tag, String price) {
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(ProductDatabase.Column.KEY_NAME, name);
-		initialValues.put(ProductDatabase.Column.KEY_TAG, tag);
-		initialValues.put(ProductDatabase.Column.KEY_PRICEHT, price);
+		initialValues.put(OfferDatabase.Column.KEY_NAME, name);
+		initialValues.put(OfferDatabase.Column.KEY_TAG, tag);
+		initialValues.put(OfferDatabase.Column.KEY_PRICEHT, price);
 
-		return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
+		return mDatabase.insert(OfferDatabase.TABLE_OFFER_FTS, null, initialValues);
 	}
 
 }
