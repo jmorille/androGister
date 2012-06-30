@@ -83,7 +83,7 @@ public class RegisterBasketFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.basket_screen, container, false);
+		View view = inflater.inflate(R.layout.register_basket, container, false);
 		// Bind
 		listView = (ListView) view.findViewById(R.id.basket_screen_list);
 		listView.setOnItemLongClickListener(mOnLongClickListener);

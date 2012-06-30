@@ -18,7 +18,7 @@ public class BasketItemAdapter extends ArrayAdapter<OrderItem> {
 	private LayoutInflater mInflater;
 
 	public BasketItemAdapter(Context context, List<OrderItem> objects) {
-		super(context, R.layout.basket_list_item, objects);
+		super(context, R.layout.register_basket_list_item, objects);
 		this.context = context;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
@@ -27,7 +27,7 @@ public class BasketItemAdapter extends ArrayAdapter<OrderItem> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view;
 		if (convertView == null) {
-			view = mInflater.inflate(R.layout.basket_list_item, parent, false);
+			view = mInflater.inflate(R.layout.register_basket_list_item, parent, false);
 		} else {
 			view = convertView;
 		}
