@@ -157,6 +157,7 @@ public class RegisterBasketFragment extends Fragment {
 		order.setPriceSumHT(sumBasket);
 		// Save It
 		getActivity().sendBroadcast(Intents.saveOrder(order));
+//		getActivity().getContentResolver().insert(O, values)
 		// Temporay Del
 		clearBasket();
 	}

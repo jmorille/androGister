@@ -22,7 +22,7 @@ public class OfferProvider extends ContentProvider {
 		public static final Uri CONTENT_URI_GET_PRODUCT = Uri.parse("content://" + AUTHORITY + "/offer/");
 	}
 
-	private OfferDatabase mDictionary;
+	private OfferDatabase offerDatabase;
 
 	// UriMatcher stuff
 	private static final int SEARCH_OFFERS = 0;
@@ -55,7 +55,7 @@ public class OfferProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		mDictionary = new OfferDatabase(getContext());
+		offerDatabase = new OfferDatabase(getContext());
 		return true;
 	}
 
@@ -98,7 +98,7 @@ public class OfferProvider extends ContentProvider {
 		 */
 		SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
 
-		return mDictionary.getWordMatches(query, columns);
+		return offerDatabase.getWordMatches(query, columns);
 	}
 
 	private Cursor search(String[] _projection, String _selection, String[] _selectionArgs, String _sortOrder) {
@@ -107,19 +107,19 @@ public class OfferProvider extends ContentProvider {
 		String[] selectionArgs = _selectionArgs;
 		String sortOrder = _sortOrder;
 //		String[] columns = new String[] { ProductDatabase.Column.KEY_ID, ProductDatabase.Column.KEY_NAME, ProductDatabase.Column.KEY_DESCRIPTION };
-		return mDictionary.query( selection,  selectionArgs, projection);
+		return offerDatabase.query( selection,  selectionArgs, projection);
 	}
 
 	private Cursor search(String query) {
 		query = query.toLowerCase();
 		String[] columns = new String[] { OfferDatabase.Column.KEY_ID, OfferDatabase.Column.KEY_NAME, OfferDatabase.Column.KEY_DESCRIPTION };
-		return mDictionary.getWordMatches(query, columns);
+		return offerDatabase.getWordMatches(query, columns);
 	}
 
 	private Cursor getWord(Uri uri) {
 		String rowId = uri.getLastPathSegment();
 		String[] columns = new String[] { OfferDatabase.Column.KEY_NAME, OfferDatabase.Column.KEY_DESCRIPTION };
-		return mDictionary.getWord(rowId, columns);
+		return offerDatabase.getWord(rowId, columns);
 	}
 
 	private Cursor refreshShortcut(Uri uri) {
@@ -133,7 +133,7 @@ public class OfferProvider extends ContentProvider {
 		String[] columns = new String[] { OfferDatabase.Column.KEY_ID, OfferDatabase.Column.KEY_NAME, OfferDatabase.Column.KEY_DESCRIPTION,
 				SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
 
-		return mDictionary.getWord(rowId, columns);
+		return offerDatabase.getWord(rowId, columns);
 	}
 
 	/**

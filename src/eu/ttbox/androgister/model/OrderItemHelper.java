@@ -2,7 +2,7 @@ package eu.ttbox.androgister.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import eu.ttbox.androgister.database.order.OrderItemDatabase.OrderItemColumns;
+import eu.ttbox.androgister.database.order.OrderDatabase.OrderItemColumns;
 
 public class OrderItemHelper {
 

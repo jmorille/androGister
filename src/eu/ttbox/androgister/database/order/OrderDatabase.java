@@ -1,23 +1,34 @@
 package eu.ttbox.androgister.database.order;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.SearchManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
+import eu.ttbox.androgister.model.Order;
+import eu.ttbox.androgister.model.OrderHelper;
+import eu.ttbox.androgister.model.OrderItem;
+import eu.ttbox.androgister.model.OrderItemHelper;
 
-public class OrderItemDatabase {
+public class OrderDatabase {
 
 	private static final String TAG = "OrderItemDatabase";
 
 	public static final String ORDER_TABLE = "order";
 	public static final String ORDER_ITEM_TABLE = "order_item";
 
+	private Object[] lockInsertOrder = new Object[0];
+
 	public static class OrderColumns {
 		public static final String KEY_ID = BaseColumns._ID;
 		public static final String KEY_ORDER_NUMBER = "ORDER_NUMBER";
+		public static final String KEY_ORDER_DATE = "ORDER_DATE";
 		public static final String KEY_STATUS = "STATUS";
 		public static final String KEY_PRICE_SUM_HT = "PRICE_SUM_HT";
 	}
@@ -46,8 +57,13 @@ public class OrderItemDatabase {
 	 * @param context
 	 *            The Context within which to work, used to create the DB
 	 */
-	public OrderItemDatabase(Context context) {
+	public OrderDatabase(Context context) {
 		mDatabaseOpenHelper = new OrderDbOpenHelper(context);
+
+	}
+
+	public SQLiteDatabase getWritableDatabase() {
+		return mDatabaseOpenHelper.getWritableDatabase();
 	}
 
 	/**
@@ -148,5 +164,40 @@ public class OrderItemDatabase {
 			return null;
 		}
 		return cursor;
+	}
+
+	public long insertOrder(Order order) throws SQLException {
+		synchronized (lockInsertOrder) {
+ 			SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
+			try {
+				db.beginTransaction();
+				try {
+					//TODO Check for increment number
+					long now = System.currentTimeMillis();
+					order.setOrderDate(now);
+					// Order
+					ContentValues orderValues = OrderHelper.getContentValues(order);
+					long orderId = db.insertOrThrow(OrderDatabase.ORDER_TABLE, null, orderValues);
+					order.setId(orderId);
+					// Orders Items
+					ArrayList<OrderItem> items = order.getItems();
+					if (items != null && !items.isEmpty()) {
+						for (OrderItem item : items) {
+							item.setOrderId(orderId);
+							ContentValues itemValues = OrderItemHelper.getContentValues(item);
+							long itemId = db.insertOrThrow(OrderDatabase.ORDER_ITEM_TABLE, null, itemValues);
+							item.setId(itemId);
+						}
+					}
+					// Commit 
+					db.setTransactionSuccessful();
+				} finally { 
+					db.endTransaction();
+				}
+			} finally {
+				db.close();
+			}
+		}
+ 		return -1;
 	}
 }

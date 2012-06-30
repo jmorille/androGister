@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.model.Offer;

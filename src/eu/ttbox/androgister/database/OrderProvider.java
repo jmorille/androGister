@@ -6,15 +6,23 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import eu.ttbox.androgister.database.product.OfferDatabase;
+import eu.ttbox.androgister.database.order.OrderDatabase;
 
+/**
+ * Conent provider tutorial {link http://www.tutos-android.com/contentprovider-android}
+ * @author jmorille
+ *
+ */
 public class OrderProvider extends ContentProvider {
 	private static final String TAG = "OrderProvider";
 
 	// MIME types used for searching words or looking up a single definition
 	public static final String ORDERS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableorder";
 	public static final String ORDER_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableorder";
+	public static final String ORDERS_ITEMS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableordeitemr";
+	public static final String ORDER_ITEM_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableordeitemr";
 
 	public static class Constants {
 		public static String AUTHORITY = "eu.ttbox.androgister.searchableorder.OrderProvider";
@@ -22,13 +30,14 @@ public class OrderProvider extends ContentProvider {
 		public static final Uri CONTENT_URI_GET_ODRER = Uri.parse("content://" + AUTHORITY + "/order/");
 	}
 
-	private OfferDatabase mDictionary;
+	private OrderDatabase orderDatabase;
 
 	// UriMatcher stuff
 	private static final int SEARCH_ORDERS = 0;
 	private static final int GET_ORDER = 1;
-	private static final int SEARCH_SUGGEST = 2;
-	private static final int REFRESH_SHORTCUT = 3;
+	private static final int GET_ORDER_ITEM = 2;
+	private static final int SEARCH_SUGGEST = 3;
+	private static final int REFRESH_SHORTCUT = 4;
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 
 	/**
@@ -62,6 +71,8 @@ public class OrderProvider extends ContentProvider {
 			return ORDERS_MIME_TYPE;
 		case GET_ORDER:
 			return ORDER_MIME_TYPE;
+		case GET_ORDER_ITEM:
+			return ORDER_ITEM_MIME_TYPE;
 		case SEARCH_SUGGEST:
 			return SearchManager.SUGGEST_MIME_TYPE;
 		case REFRESH_SHORTCUT:
@@ -73,29 +84,43 @@ public class OrderProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		mDictionary = new OfferDatabase(getContext());
+		orderDatabase = new OrderDatabase(getContext());
 		return true;
 	}
 	
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		// TODO Auto-generated method stub
-		return null;
+		switch (sURIMatcher.match(uri)) {
+		case SEARCH_SUGGEST:
+ 		case SEARCH_ORDERS:
+ 		case GET_ORDER:
+ 		case REFRESH_SHORTCUT:
+ 		default:
+			throw new IllegalArgumentException("Unknown Uri: " + uri);
+		}
 	}
+	
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		// TODO Auto-generated method stub
+		SQLiteDatabase db = orderDatabase.getWritableDatabase();
+		try {
+			long id = db.insertOrThrow(OrderDatabase.ORDER_TABLE, null , values);
+			
+		} finally {
+			db.close();
+		}
+		
 		return null;
 	}
+	
+	
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+		throw new RuntimeException("Delete Order Not Implemented");
+ 	}
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new RuntimeException("Delete Order Not Implemented");
 	}
 
 }

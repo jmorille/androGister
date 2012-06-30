@@ -24,6 +24,12 @@
                 <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_BASKET"/>  
              </intent-filter>
        </activity>
+          
+       <service android:exported="false" android:name=".service.OrderService">
+          <intent-filter>
+                <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_ORDER"/> 
+            </intent-filter>
+        </service>
         
         <provider android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider" android:name=".database.OfferProvider"/>
         <provider android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider" android:name=".database.OrderProvider"/>

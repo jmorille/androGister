@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
 
 public class OfferDatabase {
 
-	private static final String TAG = "ProductDatabase";
+	private static final String TAG = "OfferDatabase";
 
 	public static final String TABLE_OFFER_FTS = "offerFTS";
 

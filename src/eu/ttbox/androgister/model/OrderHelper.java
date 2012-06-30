@@ -2,7 +2,7 @@ package eu.ttbox.androgister.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import eu.ttbox.androgister.database.order.OrderItemDatabase.OrderColumns;
+import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
 
 public class OrderHelper {
 	
@@ -29,12 +29,14 @@ public class OrderHelper {
 	}
 	
 
-	public static ContentValues getContentValues(OrderItem orderItem) {
+	public static ContentValues getContentValues(Order order) {
 		ContentValues initialValues = new ContentValues();
-		if (orderItem.getId() > -1) {
-			initialValues.put(OrderColumns.KEY_ID, Long.valueOf(orderItem.getId()));
+		if (order.getId() > -1) {
+			initialValues.put(OrderColumns.KEY_ID, Long.valueOf(order.getId()));
 		} 
-		initialValues.put(OrderColumns.KEY_PRICE_SUM_HT, Long.valueOf(orderItem.getPriceSumHT()));
+		initialValues.put(OrderColumns.KEY_STATUS, Integer.valueOf(order.getStatus().ordinal()));
+		initialValues.put(OrderColumns.KEY_ORDER_DATE, Long.valueOf(order.getOrderDate()));
+		initialValues.put(OrderColumns.KEY_PRICE_SUM_HT, Long.valueOf(order.getPriceSumHT()));
 
 		return initialValues;
 	}
