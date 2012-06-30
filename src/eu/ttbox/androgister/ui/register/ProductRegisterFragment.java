@@ -12,31 +12,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.model.Product;
+import eu.ttbox.androgister.model.Offer;
 
 public class ProductRegisterFragment extends Fragment {
 
 	private BroadcastReceiver mStatusReceiver;
 
-	TextView resultTextview;
-	
+	 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view =  inflater.inflate(R.layout.product_register, container, false);
-		resultTextview = (TextView)view.findViewById(R.id.resultText);
+		View view =  inflater.inflate(R.layout.product_register, container, false); 
 		return view;
 	}
-
-	public void setText(String capt) {
-		resultTextview.setText(capt);
-	}
+ 
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		mStatusReceiver = new StatusReceiver();
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(Intents.ACTION_STATUS);
+		filter.addAction(Intents.ACTION_ADD_BASKET);
 		getActivity().registerReceiver(mStatusReceiver, filter);
 	}
 
@@ -51,15 +46,15 @@ public class ProductRegisterFragment extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (Intents.ACTION_STATUS.equals(action)) {
+			if (Intents.ACTION_ADD_BASKET.equals(action)) {
 				// TODO: Filter by authority
-				Product status = (Product) intent.getSerializableExtra(Intents.EXTRA_STATUS);
+				Offer status = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
 				onStatusChanged(status);
 			}
 		}
 	}
 
-	public void onStatusChanged(Product status) {
-		setText(status.getName());
+	public void onStatusChanged(Offer status) {
+		//setText(status.getName());
  	}
 }

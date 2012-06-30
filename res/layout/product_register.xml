@@ -5,17 +5,18 @@
     android:orientation="vertical" >
 
     <fragment
-        android:id="@+id/fragment_basket_screen"
-        android:name="eu.ttbox.androgister.ui.register.BasketScreenFragment"
+        android:id="@+id/fragment_register_basket"
+        android:name="eu.ttbox.androgister.ui.register.RegisterBasketFragment"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1" />
+ 
 
-    <TextView
-        android:id="@+id/resultText"
+    <fragment
+        android:id="@+id/fragment_register_keyboard"
+        android:name="eu.ttbox.androgister.ui.register.RegisterKeyboardFragment"
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1"
-        android:text="Hello! It&apos;s Fragment2" />
+        android:layout_weight="1" />
 
 </LinearLayout>

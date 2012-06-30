@@ -25,8 +25,8 @@ public class OfferProvider extends ContentProvider {
 	private OfferDatabase mDictionary;
 
 	// UriMatcher stuff
-	private static final int SEARCH_PRODUCTS = 0;
-	private static final int GET_PRODUCT = 1;
+	private static final int SEARCH_OFFERS = 0;
+	private static final int GET_OFFER = 1;
 	private static final int SEARCH_SUGGEST = 2;
 	private static final int REFRESH_SHORTCUT = 3;
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
@@ -37,8 +37,8 @@ public class OfferProvider extends ContentProvider {
 	private static UriMatcher buildUriMatcher() {
 		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		// to get definitions...
-		matcher.addURI(Constants.AUTHORITY, "offer", SEARCH_PRODUCTS);
-		matcher.addURI(Constants.AUTHORITY, "offer/#", GET_PRODUCT);
+		matcher.addURI(Constants.AUTHORITY, "offer", SEARCH_OFFERS);
+		matcher.addURI(Constants.AUTHORITY, "offer/#", GET_OFFER);
 		// to get suggestions...
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
@@ -75,13 +75,13 @@ public class OfferProvider extends ContentProvider {
 				throw new IllegalArgumentException("selectionArgs must be provided for the Uri: " + uri);
 			}
 			return getSuggestions(selectionArgs[0]);
-		case SEARCH_PRODUCTS:
+		case SEARCH_OFFERS:
 			return search(projection, selection, selectionArgs, sortOrder);
 //			if (selectionArgs == null) {
 //				throw new IllegalArgumentException("selectionArgs must be provided for the Uri: " + uri);
 //			}
 //			return search(selectionArgs[0]);
-		case GET_PRODUCT:
+		case GET_OFFER:
 			return getWord(uri);
 		case REFRESH_SHORTCUT:
 			return refreshShortcut(uri);
@@ -142,9 +142,9 @@ public class OfferProvider extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch (sURIMatcher.match(uri)) {
-		case SEARCH_PRODUCTS:
+		case SEARCH_OFFERS:
 			return WORDS_MIME_TYPE;
-		case GET_PRODUCT:
+		case GET_OFFER:
 			return DEFINITION_MIME_TYPE;
 		case SEARCH_SUGGEST:
 			return SearchManager.SUGGEST_MIME_TYPE;

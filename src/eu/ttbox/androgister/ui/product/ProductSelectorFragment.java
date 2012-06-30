@@ -19,8 +19,13 @@ import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.OfferProvider;
 import eu.ttbox.androgister.database.product.OfferDatabase.Column;
 import eu.ttbox.androgister.database.product.OfferWrapper;
-import eu.ttbox.androgister.model.Product;
+import eu.ttbox.androgister.model.Offer;
 
+/**
+ * TODO {link http://blogingtutorials.blogspot.fr/2010/11/android-listview-header-two-or-more-in.html}
+ * @author jmorille
+ *
+ */
 public class ProductSelectorFragment extends Fragment implements OnLoadCompleteListener<Cursor> {
 
 	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Column.KEY_ID, Column.KEY_NAME, Column.KEY_PRICEHT, Column.KEY_TAG };
@@ -100,8 +105,8 @@ public class ProductSelectorFragment extends Fragment implements OnLoadCompleteL
 
 	public void onListItemClick(GridView l, View v, int position, long id) {
 		Cursor item = (Cursor) l.getAdapter().getItem(position);
-		Product status = offerWrapper.getEntity(item);
-		getActivity().sendBroadcast(Intents.status(status));
+		Offer status = offerWrapper.getEntity(item);
+		getActivity().sendStickyBroadcast(Intents.addToBasket(status));
 		// Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 	}
 

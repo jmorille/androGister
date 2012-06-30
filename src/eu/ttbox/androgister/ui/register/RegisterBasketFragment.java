@@ -21,12 +21,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
+import eu.ttbox.androgister.model.Offer;
+import eu.ttbox.androgister.model.Order;
 import eu.ttbox.androgister.model.OrderItem;
 import eu.ttbox.androgister.model.OrderItemHelper;
 import eu.ttbox.androgister.model.PriceHelper;
-import eu.ttbox.androgister.model.Product;
 
-public class BasketScreenFragment extends Fragment {
+public class RegisterBasketFragment extends Fragment {
 
 	private BroadcastReceiver mStatusReceiver;
 
@@ -58,10 +59,7 @@ public class BasketScreenFragment extends Fragment {
 	private final Runnable doBasketSum = new Runnable() {
 		@Override
 		public void run() {
-			long sum = 0;
-			for (OrderItem item : basket) {
-				sum += item.getPriceSumHT();
-			}
+			long sum = getComputeBasketSum();
 			uiHandler.sendMessage(uiHandler.obtainMessage(UI_MSG_SET_BASKET_SUM, Long.valueOf(sum)));
 		}
 	};
@@ -92,8 +90,8 @@ public class BasketScreenFragment extends Fragment {
 		listView.setAdapter(listAdapter);
 		// View
 		sumTextView = (TextView) view.findViewById(R.id.basket_screen_sum);
-		// Compute
-		doSumBasket();
+		// Compute Initila Values
+		executor.execute(doBasketSum);
 		return view;
 	}
 
@@ -102,7 +100,8 @@ public class BasketScreenFragment extends Fragment {
 		super.onResume();
 		// Register Listener
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(Intents.ACTION_STATUS);
+		filter.addAction(Intents.ACTION_ADD_BASKET);
+		filter.addAction(Intents.ACTION_SAVE_BASKET);
 		getActivity().registerReceiver(mStatusReceiver, filter);
 
 	}
@@ -113,37 +112,65 @@ public class BasketScreenFragment extends Fragment {
 		super.onPause();
 	}
 
-	private class StatusReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (Intents.ACTION_STATUS.equals(action)) {
-				Product status = (Product) intent.getSerializableExtra(Intents.EXTRA_STATUS);
-				onStatusChanged(status);
+	private long getComputeBasketSum() {
+		return getComputeBasketSum(basket);
+	}
+
+	private long getComputeBasketSum(ArrayList<OrderItem> items) {
+		long sum = 0;
+		if (items != null && !items.isEmpty()) {
+			for (OrderItem item : items) {
+				sum += item.getPriceSumHT();
 			}
 		}
+		return sum;
 	}
 
-	private void doSumBasket() {
-		executor.execute(doBasketSum);
-		// long sum = 0;
-		// for (OrderItem item : basket) {
-		// sum += item.getPriceSumHT();
-		// }
-		// sumTextView.setText(PriceHelper.getToStringPrice(sum));
-	}
-
-	public void onStatusChanged(Product product) {
+	public void onAddBasketItem(Offer product) {
 		OrderItem item = OrderItemHelper.createFromProduct(product);
 		listAdapter.add(item);
-		doSumBasket();
+		// TODO ADD item
+		executor.execute(doBasketSum);
 	}
 
 	protected boolean onListItemLongClick(ListView list, View view, int position, long id) {
 		OrderItem item = (OrderItem) listAdapter.getItem(position);
 		listAdapter.remove(item);
-		doSumBasket();
+		// TODO Delete Basket
+		executor.execute(doBasketSum);
 		return true;
 	}
 
+	private void clearBasket() {
+		basket.clear();
+		listAdapter.notifyDataSetChanged();
+		executor.execute(doBasketSum);
+	}
+
+	private void saveOrder() {
+		// Get Clone of Basket Items
+		ArrayList<OrderItem> items = new ArrayList<OrderItem>(basket);
+		long sumBasket = getComputeBasketSum(items);
+		// Prepare Object
+		Order order = new Order();
+		order.setItems(items);
+		order.setPriceSumHT(sumBasket);
+		// Save It
+		getActivity().sendBroadcast(Intents.saveOrder(order));
+		// Temporay Del
+		clearBasket();
+	}
+
+	private class StatusReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (Intents.ACTION_ADD_BASKET.equals(action)) {
+				Offer status = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
+				onAddBasketItem(status);
+			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
+				saveOrder();
+			}
+		}
+	}
 }

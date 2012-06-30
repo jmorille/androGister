@@ -3,7 +3,7 @@ package eu.ttbox.androgister.database.product;
 import android.content.ContentValues;
 import android.database.Cursor;
 import eu.ttbox.androgister.database.product.OfferDatabase.Column;
-import eu.ttbox.androgister.model.Product;
+import eu.ttbox.androgister.model.Offer;
 
 public class OfferWrapper {
 	
@@ -25,11 +25,11 @@ public class OfferWrapper {
 		 isNotInit = false;
 	}
 
-	public Product getEntity(Cursor cursor) {
+	public Offer getEntity(Cursor cursor) {
 		if (isNotInit) {
 			initWrapper(cursor);
 		}
-		Product product = new Product();
+		Offer product = new Offer();
 		product.setId(idIdx > -1 ? cursor.getLong(idIdx) : -1);
 		product.setName(nameIdx > -1 ? cursor.getString(nameIdx) : null);
 		// Description
@@ -44,7 +44,7 @@ public class OfferWrapper {
 		return product;
 	}
 
-	public static ContentValues getContentValues(Product product) {
+	public static ContentValues getContentValues(Offer product) {
 		ContentValues initialValues = new ContentValues();
 		if (product.getId() > -1) {
 			initialValues.put(Column.KEY_ID, Long.valueOf(product.getId()));

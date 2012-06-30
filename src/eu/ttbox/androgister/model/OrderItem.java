@@ -7,14 +7,15 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private long id = -1;
- 	private long productId = -1;
+	private long orderId = -1;
+	private long productId = -1;
 
 	private String name;
- 	private String ean;
+	private String ean;
 
 	int quantity = 1;
- 	long priceUnitHT = 0l;
- 	long priceSumHT = 0l;
+	long priceUnitHT = 0l;
+	long priceSumHT = 0l;
 
 	public long getId() {
 		return id;
@@ -22,6 +23,15 @@ public class OrderItem implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getOrderId() {
+		return orderId;
+	}
+
+	public OrderItem setOrderId(long orderId) {
+		this.orderId = orderId;
+		return this;
 	}
 
 	public long getProductId() {

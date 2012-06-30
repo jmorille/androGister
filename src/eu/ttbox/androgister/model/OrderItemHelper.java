@@ -2,12 +2,13 @@ package eu.ttbox.androgister.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import eu.ttbox.androgister.database.order.OrderItemDatabase.Column;
+import eu.ttbox.androgister.database.order.OrderItemDatabase.OrderItemColumns;
 
 public class OrderItemHelper {
 
 	boolean isNotInit = true;
 	int idIdx = -1;
+	int orderIdIdx = -1; 
 	int nameIdx = -1;
 	int productIdx = -1;
 	int eanIdx = -1;
@@ -15,7 +16,7 @@ public class OrderItemHelper {
 	int priceUnitIdx = -1;
 	int priceSumIdx = -1;
 
-	public static OrderItem createFromProduct(Product p) {
+	public static OrderItem createFromProduct(Offer p) {
 		OrderItem item = null;
 		if (p != null) {
 			item = new OrderItem();
@@ -25,13 +26,14 @@ public class OrderItemHelper {
 	}
 
 	public void initWrapper(Cursor cursor) {
-		idIdx = cursor.getColumnIndex(Column.KEY_ID);
-		nameIdx = cursor.getColumnIndex(Column.KEY_NAME);
-		productIdx = cursor.getColumnIndex(Column.KEY_PRODUCT_ID);
-		eanIdx = cursor.getColumnIndex(Column.KEY_EAN);
-		quantityIdx = cursor.getColumnIndex(Column.KEY_QUANTITY);
-		priceUnitIdx = cursor.getColumnIndex(Column.KEY_PRICE_UNIT_HT);
-		priceSumIdx = cursor.getColumnIndex(Column.KEY_PRICE_SUM_HT);
+		idIdx = cursor.getColumnIndex(OrderItemColumns.KEY_ID);
+ 		orderIdIdx = cursor.getColumnIndex(OrderItemColumns.KEY_ORDER_ID);
+		nameIdx = cursor.getColumnIndex(OrderItemColumns.KEY_NAME);
+		productIdx = cursor.getColumnIndex(OrderItemColumns.KEY_PRODUCT_ID);
+		eanIdx = cursor.getColumnIndex(OrderItemColumns.KEY_EAN);
+		quantityIdx = cursor.getColumnIndex(OrderItemColumns.KEY_QUANTITY);
+		priceUnitIdx = cursor.getColumnIndex(OrderItemColumns.KEY_PRICE_UNIT_HT);
+		priceSumIdx = cursor.getColumnIndex(OrderItemColumns.KEY_PRICE_SUM_HT);
 		isNotInit = false;
 	}
 
@@ -41,6 +43,7 @@ public class OrderItemHelper {
 		}
 		OrderItem orderItem = new OrderItem();
 		orderItem.setId(idIdx > -1 ? cursor.getLong(idIdx) : -1);
+		orderItem.setOrderId(orderIdIdx > -1 ? cursor.getLong(orderIdIdx) : null);
 		orderItem.setProductId(productIdx > -1 ? cursor.getLong(productIdx) : null);
  		// Ean
 		orderItem.setName(nameIdx > -1 ? cursor.getString(nameIdx) : null);
@@ -48,25 +51,26 @@ public class OrderItemHelper {
 		// Price
 		orderItem.quantity = cursor.getInt(quantityIdx);
 		orderItem.priceUnitHT = cursor.getLong(priceUnitIdx);
-		orderItem.priceSumHT = cursor.getLong(priceUnitIdx);
+		orderItem.priceSumHT = cursor.getLong(priceSumIdx);
 		 
 		return orderItem;
 	}
 	
 
-	public static ContentValues getContentValues(OrderItem product) {
+	public static ContentValues getContentValues(OrderItem orderItem) {
 		ContentValues initialValues = new ContentValues();
-		if (product.getId() > -1) {
-			initialValues.put(Column.KEY_ID, Long.valueOf(product.getId()));
+		if (orderItem.getId() > -1) {
+			initialValues.put(OrderItemColumns.KEY_ID, Long.valueOf(orderItem.getId()));
 		}
-		initialValues.put(Column.KEY_PRODUCT_ID, product.getProductId());
+		initialValues.put(OrderItemColumns.KEY_ORDER_ID, orderItem.getOrderId());
+		initialValues.put(OrderItemColumns.KEY_PRODUCT_ID, orderItem.getProductId());
 		
-		initialValues.put(Column.KEY_NAME, product.getName());
-		initialValues.put(Column.KEY_EAN, product.getEan());
+		initialValues.put(OrderItemColumns.KEY_NAME, orderItem.getName());
+		initialValues.put(OrderItemColumns.KEY_EAN, orderItem.getEan());
 
-		initialValues.put(Column.KEY_QUANTITY, product.getQuantity());
-		initialValues.put(Column.KEY_PRICE_UNIT_HT, Long.valueOf(product.getPriceUnitHT()));
-		initialValues.put(Column.KEY_PRICE_SUM_HT, Long.valueOf(product.getPriceSumHT()));
+		initialValues.put(OrderItemColumns.KEY_QUANTITY, orderItem.getQuantity());
+		initialValues.put(OrderItemColumns.KEY_PRICE_UNIT_HT, Long.valueOf(orderItem.getPriceUnitHT()));
+		initialValues.put(OrderItemColumns.KEY_PRICE_SUM_HT, Long.valueOf(orderItem.getPriceSumHT()));
 
 		return initialValues;
 	}

@@ -2,7 +2,7 @@ package eu.ttbox.androgister.model;
 
 import java.io.Serializable;
 
-public class Product implements Serializable {
+public class Offer implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class Product implements Serializable {
 
 	
 	
-	public Product setName(String state) {
+	public Offer setName(String state) {
 		this.name = state;
 		return this;
 	}
@@ -41,7 +41,7 @@ public class Product implements Serializable {
 		return description;
 	}
 
-	public Product setDescription(String description) {
+	public Offer setDescription(String description) {
 		this.description = description;
 		return this;
 	}
@@ -50,7 +50,7 @@ public class Product implements Serializable {
 		return ean;
 	}
 
-	public Product setEan(String ean) {
+	public Offer setEan(String ean) {
 		this.ean = ean;
 		return this;
 	}
@@ -59,7 +59,7 @@ public class Product implements Serializable {
 		return tag;
 	}
 
-	public Product setTag(String tag) {
+	public Offer setTag(String tag) {
 		this.tag = tag;
 		return this;
 	}
@@ -73,7 +73,7 @@ public class Product implements Serializable {
  	}
 
 	
-	public Product setPriceHT(long priceHT) {
+	public Offer setPriceHT(long priceHT) {
 		this.priceHT = priceHT;
 		return this;
 	}
