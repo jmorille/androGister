@@ -6,11 +6,14 @@ import java.util.concurrent.Executors;
 
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +29,12 @@ import eu.ttbox.androgister.model.Order;
 import eu.ttbox.androgister.model.OrderItem;
 import eu.ttbox.androgister.model.OrderItemHelper;
 import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.service.OrderService;
 
 public class RegisterBasketFragment extends Fragment {
 
 	private BroadcastReceiver mStatusReceiver;
+	private OrderService orderService;
 
 	private ArrayList<OrderItem> basket = new ArrayList<OrderItem>();
 	private BasketItemAdapter listAdapter;
@@ -72,6 +77,16 @@ public class RegisterBasketFragment extends Fragment {
 
 	};
 
+	private ServiceConnection orderServiceConnection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			orderService = ((OrderService.LocalBinder) service).getService();
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			orderService = null;
+		}
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,6 +94,13 @@ public class RegisterBasketFragment extends Fragment {
 		listAdapter = new BasketItemAdapter(getActivity(), basket);
 		// Services
 		mStatusReceiver = new StatusReceiver();
+		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
+	}
+
+	@Override
+	public void onDestroy() {
+		getActivity().unbindService(orderServiceConnection);
+		super.onDestroy();
 	}
 
 	@Override
@@ -157,7 +179,7 @@ public class RegisterBasketFragment extends Fragment {
 		order.setPriceSumHT(sumBasket);
 		// Save It
 		getActivity().sendBroadcast(Intents.saveOrder(order));
-//		getActivity().getContentResolver().insert(O, values)
+		// getActivity().getContentResolver().insert(O, values)
 		// Temporay Del
 		clearBasket();
 	}
@@ -174,4 +196,5 @@ public class RegisterBasketFragment extends Fragment {
 			}
 		}
 	}
+
 }

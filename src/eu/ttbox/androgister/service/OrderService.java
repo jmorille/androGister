@@ -9,21 +9,22 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.OrderProvider;
+import eu.ttbox.androgister.database.order.OrderDatabase;
 import eu.ttbox.androgister.model.Order;
 import eu.ttbox.androgister.model.OrderHelper;
 
 public class OrderService extends Service {
 
-	private BroadcastReceiver receiver;
+	private static final String TAG = "OrderService";
 
-	private final IBinder localBinder = new Binder() {
-		@SuppressWarnings("unused")
-		public OrderService getService() {
-			return OrderService.this;
-		}
-	};
+	private BroadcastReceiver receiver;
+	private IBinder localBinder;
+	private OrderDatabase  orderDatabase;
+	
+	 
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -33,7 +34,10 @@ public class OrderService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		// Service
+		orderDatabase = new OrderDatabase(getBaseContext());
 		// Register Listener
+		localBinder = new LocalBinder();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.ACTION_SAVE_ORDER);
 		receiver = new StatusReceiver();
@@ -42,6 +46,9 @@ public class OrderService extends Service {
 
 	@Override
 	public void onDestroy() {
+		// Service
+		orderDatabase = null;
+		// Listeenr
 		unregisterReceiver(receiver);
 		super.onDestroy();
 	}
@@ -52,11 +59,19 @@ public class OrderService extends Service {
 	}
 
 	private void saveOrder(Order order) {
-		ContentValues orderValues = OrderHelper.getContentValues(order);
-		Uri orderUri = getContentResolver().insert(OrderProvider.Constants.CONTENT_URI, orderValues);
+		long orderId= orderDatabase.insertOrder(order);
+		Log.i(TAG, "Save Order with id " + orderId);
+//		ContentValues orderValues = OrderHelper.getContentValues(order);
+//		Uri orderUri = getContentResolver().insert(OrderProvider.Constants.CONTENT_URI, orderValues);
 	}
 	
-
+	public class LocalBinder extends Binder {
+		 
+		public OrderService getService() {
+			return OrderService.this;
+		}
+	};
+	
 	private class StatusReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {

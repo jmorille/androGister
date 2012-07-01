@@ -14,7 +14,7 @@ public class Order implements Serializable {
 	
 	private long orderDate = -1;
  	  
-	private transient OrderStatusEnum status = OrderStatusEnum.ORDER;
+	private  OrderStatusEnum status = OrderStatusEnum.ORDER;
 
 	private transient Date cachedOrderDate = null;
 

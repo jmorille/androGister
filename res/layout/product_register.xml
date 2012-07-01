@@ -9,7 +9,9 @@
         android:name="eu.ttbox.androgister.ui.register.RegisterBasketFragment"
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1" />
+        android:layout_weight="1" >
+        <!-- Preview: layout=@layout/register_basket -->
+    </fragment>
  
 
     <fragment
@@ -17,6 +19,8 @@
         android:name="eu.ttbox.androgister.ui.register.RegisterKeyboardFragment"
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1" />
+        android:layout_weight="1" >
+        <!-- Preview: layout=@layout/register_keyboard -->
+    </fragment>
 
 </LinearLayout>

@@ -8,6 +8,12 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
     
+    <style name="order_list_item">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+    
     <style name="basket_list_item">
         <item name="android:layout_width">0dip</item>
         <item name="android:layout_height">wrap_content</item>

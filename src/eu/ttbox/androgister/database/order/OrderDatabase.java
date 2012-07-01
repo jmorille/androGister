@@ -20,8 +20,8 @@ public class OrderDatabase {
 
 	private static final String TAG = "OrderItemDatabase";
 
-	public static final String ORDER_TABLE = "order";
-	public static final String ORDER_ITEM_TABLE = "order_item";
+	public static final String ORDER_TABLE = "b_order";
+	public static final String ORDER_ITEM_TABLE = "b_order_item";
 
 	private Object[] lockInsertOrder = new Object[0];
 
@@ -167,6 +167,7 @@ public class OrderDatabase {
 	}
 
 	public long insertOrder(Order order) throws SQLException {
+		long result = -1;
 		synchronized (lockInsertOrder) {
  			SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
 			try {
@@ -179,7 +180,7 @@ public class OrderDatabase {
 					ContentValues orderValues = OrderHelper.getContentValues(order);
 					long orderId = db.insertOrThrow(OrderDatabase.ORDER_TABLE, null, orderValues);
 					order.setId(orderId);
-					// Orders Items
+  					// Orders Items
 					ArrayList<OrderItem> items = order.getItems();
 					if (items != null && !items.isEmpty()) {
 						for (OrderItem item : items) {
@@ -191,6 +192,7 @@ public class OrderDatabase {
 					}
 					// Commit 
 					db.setTransactionSuccessful();
+					result= orderId;
 				} finally { 
 					db.endTransaction();
 				}
@@ -198,6 +200,6 @@ public class OrderDatabase {
 				db.close();
 			}
 		}
- 		return -1;
+ 		return result;
 	}
 }

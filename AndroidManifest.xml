@@ -25,7 +25,7 @@
              </intent-filter>
        </activity>
           
-       <service android:exported="false" android:name=".service.OrderService">
+       <service android:exported="false" android:name=".service.OrderService" >
           <intent-filter>
                 <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_ORDER"/> 
             </intent-filter>
