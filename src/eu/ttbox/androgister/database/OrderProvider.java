@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import eu.ttbox.androgister.database.order.OrderDatabase;
+import eu.ttbox.androgister.database.product.OfferDatabase;
 
 /**
  * Conent provider tutorial {link http://www.tutos-android.com/contentprovider-android}
@@ -46,8 +47,8 @@ public class OrderProvider extends ContentProvider {
 	private static UriMatcher buildUriMatcher() {
 		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		// to get definitions...
-		matcher.addURI(Constants.AUTHORITY, "offer", SEARCH_ORDERS);
-		matcher.addURI(Constants.AUTHORITY, "offer/#", GET_ORDER);
+		matcher.addURI(Constants.AUTHORITY, "order", SEARCH_ORDERS);
+		matcher.addURI(Constants.AUTHORITY, "order/#", GET_ORDER);
 		// to get suggestions...
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
@@ -92,7 +93,9 @@ public class OrderProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		switch (sURIMatcher.match(uri)) {
 		case SEARCH_SUGGEST:
+			return search(projection, selection, selectionArgs, sortOrder);
  		case SEARCH_ORDERS:
+ 			return search(projection, selection, selectionArgs, sortOrder);
  		case GET_ORDER:
  		case REFRESH_SHORTCUT:
  		default:
@@ -100,17 +103,17 @@ public class OrderProvider extends ContentProvider {
 		}
 	}
 	
+	
+	private Cursor search(String[] _projection, String _selection, String[] _selectionArgs, String _sortOrder) {
+		String[] projection = _projection==null? OrderDatabase.OrderColumns.ALL_KEYS : _projection;
+		String selection = _selection;
+		String[] selectionArgs = _selectionArgs;
+		String sortOrder = _sortOrder;
+ 		return orderDatabase.queryOrder( selection,  selectionArgs, projection, sortOrder);
+	}
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		SQLiteDatabase db = orderDatabase.getWritableDatabase();
-		try {
-			long id = db.insertOrThrow(OrderDatabase.ORDER_TABLE, null , values);
-			
-		} finally {
-			db.close();
-		}
-		
-		return null;
+		throw new RuntimeException("Insert Order Not Implemented");
 	}
 	
 	

@@ -17,7 +17,8 @@ import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
 
 public class OrderInvalidateFragment extends Fragment implements OnLoadCompleteListener<Cursor>{
 
-	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_PRICE_SUM_HT };
+	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_STATUS
+		, OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_PRICE_SUM_HT };
 
 	OrderAdapter listAdapter;
 	ListView listView;
@@ -31,14 +32,16 @@ public class OrderInvalidateFragment extends Fragment implements OnLoadCompleteL
 	@Override
 	public void onDestroy() { 
 		super.onDestroy();
-	}
+ 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.register_basket, container, false);
+		View view = inflater.inflate(R.layout.order_list, container, false);
 		// Bind
 		listView = (ListView) view.findViewById(R.id.order_list_list); 
 		listView.setAdapter(listAdapter); 
+		// 
+		doSearch(null, (String[])null);
 		return view;
 	}
 	private void doSearch(String selection, String... selectionArgs) {

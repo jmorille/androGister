@@ -93,13 +93,11 @@ public class RegisterBasketFragment extends Fragment {
 		// Adpater
 		listAdapter = new BasketItemAdapter(getActivity(), basket);
 		// Services
-		mStatusReceiver = new StatusReceiver();
-		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
+		mStatusReceiver = new StatusReceiver(); 
 	}
 
 	@Override
-	public void onDestroy() {
-		getActivity().unbindService(orderServiceConnection);
+	public void onDestroy() { 
 		super.onDestroy();
 	}
 
@@ -120,7 +118,9 @@ public class RegisterBasketFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		// Register Listener
+		// Register Service
+		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
+ 		// Register Listener
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.ACTION_ADD_BASKET);
 		filter.addAction(Intents.ACTION_SAVE_BASKET);
@@ -130,6 +130,9 @@ public class RegisterBasketFragment extends Fragment {
 
 	@Override
 	public void onPause() {
+		// Service
+		getActivity().unbindService(orderServiceConnection);
+		// Listener
 		getActivity().unregisterReceiver(mStatusReceiver);
 		super.onPause();
 	}

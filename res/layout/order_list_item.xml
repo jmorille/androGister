@@ -6,6 +6,23 @@
     android:orientation="horizontal" >
 
     <TextView
+        android:id="@+id/order_list_item_orderNum"
+        style="@style/order_list_item"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:paddingLeft="10dip" />
+
+    <TextView
+        android:id="@+id/order_list_item_status"
+        style="@style/order_list_item"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:paddingLeft="10dip" />
+    
+        
+    <TextView
         android:id="@+id/order_list_item_date"
         style="@style/order_list_item"
         android:layout_width="0dip"
@@ -13,19 +30,11 @@
         android:layout_weight="0.2"
         android:paddingLeft="10dip" />
 
-    
-    <TextView
-        android:id="@+id/order_list_item_status"
-        style="@style/order_list_item"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingLeft="10dip" />
 
     <TextView
         android:id="@+id/order_list_item_price"
         style="@style/order_list_item"
-        android:layout_weight="0.5"
+        android:layout_weight="0.2"
         android:paddingLeft="10dip" />
 
 </LinearLayout>
