@@ -194,6 +194,7 @@ public class RegisterBasketFragment extends Fragment {
 			if (Intents.ACTION_ADD_BASKET.equals(action)) {
 				Offer status = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
 				onAddBasketItem(status);
+				context.removeStickyBroadcast(intent);
 			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
 				saveOrder();
 			}

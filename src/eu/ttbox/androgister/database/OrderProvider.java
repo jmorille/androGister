@@ -97,13 +97,24 @@ public class OrderProvider extends ContentProvider {
  		case SEARCH_ORDERS:
  			return search(projection, selection, selectionArgs, sortOrder);
  		case GET_ORDER:
- 		case REFRESH_SHORTCUT:
+ 			String rowId = uri.getLastPathSegment();
+ 			return getOrder(rowId, projection);
+ 		case GET_ORDER_ITEM:
+ 			String orderId = uri.getLastPathSegment();
+ 			return getOrderItem(orderId, projection); 
  		default:
 			throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
 	}
 	
-	
+	private Cursor getOrder(String rowId, String[] _projection) {
+		String[] projection = _projection==null? OrderDatabase.OrderColumns.ALL_KEYS : _projection;
+		return orderDatabase.getOrder(rowId, projection);
+	}
+	private Cursor getOrderItem(String orderId, String[] _projection) {
+		String[] projection = _projection==null? OrderDatabase.OrderColumns.ALL_KEYS : _projection;
+		return orderDatabase.getOrderItem(orderId, projection, null);
+ 	}
 	private Cursor search(String[] _projection, String _selection, String[] _selectionArgs, String _sortOrder) {
 		String[] projection = _projection==null? OrderDatabase.OrderColumns.ALL_KEYS : _projection;
 		String selection = _selection;

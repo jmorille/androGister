@@ -17,7 +17,7 @@ import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
 
 public class OrderInvalidateFragment extends Fragment implements OnLoadCompleteListener<Cursor>{
 
-	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_STATUS
+	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_ORDER_UUID, OrderColumns.KEY_STATUS
 		, OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_PRICE_SUM_HT };
 
 	OrderAdapter listAdapter;

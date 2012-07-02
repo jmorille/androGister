@@ -12,6 +12,10 @@ public class Order implements Serializable {
 	
 	private long priceSumHT = 0l;
 	
+ 	private long orderNumber= -1;
+ 	
+ 	private String orderUUID;
+
 	private long orderDate = -1;
  	  
 	private  OrderStatusEnum status = OrderStatusEnum.ORDER;
@@ -74,6 +78,22 @@ public class Order implements Serializable {
 	public Order setStatus(OrderStatusEnum status) {  
 		this.status = status;
 		return this;
+	}
+
+	public long getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(long orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public String getOrderUUID() {
+		return orderUUID;
+	}
+
+	public void setOrderUUID(String orderUUID) {
+		this.orderUUID = orderUUID;
 	}
 
 	

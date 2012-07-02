@@ -11,6 +11,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
+import android.util.Log;
 import eu.ttbox.androgister.model.Order;
 import eu.ttbox.androgister.model.OrderHelper;
 import eu.ttbox.androgister.model.OrderItem;
@@ -25,14 +26,17 @@ public class OrderDatabase {
 
 	private Object[] lockInsertOrder = new Object[0];
 
+	private OrderIdGenerator orderIdGenerator;
+	
 	public static class OrderColumns {
 		public static final String KEY_ID = BaseColumns._ID;
 		public static final String KEY_ORDER_NUMBER = "ORDER_NUMBER";
+		public static final String KEY_ORDER_UUID = "ORDER_UUID";
 		public static final String KEY_STATUS = "STATUS";
 		public static final String KEY_ORDER_DATE = "ORDER_DATE";
 		public static final String KEY_PRICE_SUM_HT = "PRICE_SUM_HT";
-		
-		public static final String[] ALL_KEYS = new String[] { KEY_ID, KEY_ORDER_NUMBER, KEY_STATUS, KEY_ORDER_DATE, KEY_PRICE_SUM_HT };
+
+		public static final String[] ALL_KEYS = new String[] { KEY_ID, KEY_ORDER_NUMBER, KEY_ORDER_UUID,KEY_STATUS, KEY_ORDER_DATE, KEY_PRICE_SUM_HT };
 
 	}
 
@@ -63,6 +67,7 @@ public class OrderDatabase {
 	 */
 	public OrderDatabase(Context context) {
 		mDatabaseOpenHelper = new OrderDbOpenHelper(context);
+		orderIdGenerator = new OrderIdGenerator();
 
 	}
 
@@ -109,7 +114,6 @@ public class OrderDatabase {
 		return map;
 	}
 
-	
 	/**
 	 * Returns a Cursor positioned at the word specified by rowId
 	 * 
@@ -120,12 +124,16 @@ public class OrderDatabase {
 	 * @return Cursor positioned to matching word, or null if not found.
 	 */
 	public Cursor getOrder(String rowId, String[] columns) {
-		String selection = "rowid = ?";
+		String selection = String.format("%s = ?", OrderColumns.KEY_ID);
 		String[] selectionArgs = new String[] { rowId };
- 		return queryOrder(selection, selectionArgs, columns, null); 
+		return queryOrder(selection, selectionArgs, columns, null);
 	}
 
-	 
+	public Cursor getOrderItem(String rowId, String[] columns, String sortOrder) {
+		String selection = String.format("%s = ?", OrderItemColumns.KEY_ORDER_ID);
+		String[] selectionArgs = new String[] { rowId };
+		return queryOrderItem(selection, selectionArgs, columns, sortOrder);
+	}
 
 	/**
 	 * Performs a database query.
@@ -158,21 +166,50 @@ public class OrderDatabase {
 		return cursor;
 	}
 
-	public long insertOrder(Order order) throws SQLException {
+	public Cursor queryOrderItem(String selection, String[] selectionArgs, String[] columns, String sortOrder) {
+		/*
+		 * The SQLiteBuilder provides a map for all possible columns requested to actual columns in the database, creating a simple column alias mechanism by
+		 * which the ContentProvider does not need to know the real column names
+		 */
+		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+		builder.setTables(ORDER_ITEM_TABLE);
+		builder.setProjectionMap(mOrderItemColumnMap);
+
+		Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, sortOrder);
+
+		if (cursor == null) {
+			return null;
+		} else if (!cursor.moveToFirst()) {
+			cursor.close();
+			return null;
+		}
+		return cursor;
+	}
+
+	
+
+	public long insertOrder(String deviceId, Order order) throws SQLException {
 		long result = -1;
 		synchronized (lockInsertOrder) {
- 			SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
+			SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
 			try {
 				db.beginTransaction();
 				try {
-					//TODO Check for increment number
+					// TODO Check for increment number
 					long now = System.currentTimeMillis();
 					order.setOrderDate(now);
+					// Order Id
+					long orderNumber = orderIdGenerator.getNextOrderNum(db, now);
+					order.setOrderNumber(orderNumber);
+					// Order UUID
+					String orderUUID = OrderHelper.generateOrderUUID(now, deviceId, orderNumber);
+					order.setOrderUUID(orderUUID);
+					Log.i(TAG, "Compute new Order UUID : " + orderUUID);
 					// Order
 					ContentValues orderValues = OrderHelper.getContentValues(order);
 					long orderId = db.insertOrThrow(OrderDatabase.ORDER_TABLE, null, orderValues);
 					order.setId(orderId);
-  					// Orders Items
+					// Orders Items
 					ArrayList<OrderItem> items = order.getItems();
 					if (items != null && !items.isEmpty()) {
 						for (OrderItem item : items) {
@@ -182,16 +219,16 @@ public class OrderDatabase {
 							item.setId(itemId);
 						}
 					}
-					// Commit 
+					// Commit
 					db.setTransactionSuccessful();
-					result= orderId;
-				} finally { 
+					result = orderId;
+				} finally {
 					db.endTransaction();
 				}
 			} finally {
 				db.close();
 			}
 		}
- 		return result;
+		return result;
 	}
 }

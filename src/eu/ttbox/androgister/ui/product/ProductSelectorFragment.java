@@ -106,7 +106,7 @@ public class ProductSelectorFragment extends Fragment implements OnLoadCompleteL
 	public void onListItemClick(GridView l, View v, int position, long id) {
 		Cursor item = (Cursor) l.getAdapter().getItem(position);
 		Offer status = offerWrapper.getEntity(item);
-		getActivity().sendStickyBroadcast(Intents.addToBasket(status));
+		getActivity().sendBroadcast(Intents.addToBasket(status));
 		// Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 	}
 
