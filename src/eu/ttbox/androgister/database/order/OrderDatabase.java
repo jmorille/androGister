@@ -222,6 +222,14 @@ public class OrderDatabase {
 					// Commit
 					db.setTransactionSuccessful();
 					result = orderId;
+				} catch (SQLException e) {
+					orderIdGenerator.invalidateCacheCounter();
+					Log.w(TAG, "invalidate orderIdGenerator Cache Counter for SQLException : " + e.getMessage());
+					throw e;
+				} catch (RuntimeException er) {
+					orderIdGenerator.invalidateCacheCounter();
+					Log.w(TAG, "invalidate orderIdGenerator Cache Counter for RuntimeException : " + er.getMessage());
+					throw er;
 				} finally {
 					db.endTransaction();
 				}

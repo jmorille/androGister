@@ -40,6 +40,10 @@ public class OrderIdGenerator {
  		return nextOrderNum;
 	}
  
+	public void invalidateCacheCounter() {
+		cacheMidnight = -1;
+		cacheCounter = null;
+	}
 	
 	private long getDbMaxId(SQLiteDatabase db, long dateMightnight, long tomorrow) {
  		// Do Database Request
