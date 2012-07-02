@@ -14,7 +14,7 @@ public class OrderIdGenerator {
 	
 	private final static String QUERY_SELECT_MAX_ORDER_NUMBER = 
  			"SELECT MAX(" + OrderColumns.KEY_ORDER_NUMBER + ") AS max_id FROM " + OrderDatabase.ORDER_TABLE
-			+ " WHERE " + OrderColumns.KEY_ORDER_DATE + " >= %s and "+ OrderColumns.KEY_ORDER_DATE + "< %s";
+			+ " WHERE " + OrderColumns.KEY_ORDER_DATE + " >= %s and "+ OrderColumns.KEY_ORDER_DATE + " < %s";
 
 	private AtomicLong cacheCounter;
 	private long cacheMidnight = -1;
@@ -23,6 +23,7 @@ public class OrderIdGenerator {
 		// Compute Minighth date
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(now);
+		cal.clear(Calendar.HOUR);
 		cal.clear(Calendar.HOUR_OF_DAY);
 		cal.clear(Calendar.MINUTE);
 		cal.clear(Calendar.SECOND);
@@ -48,6 +49,7 @@ public class OrderIdGenerator {
 	private long getDbMaxId(SQLiteDatabase db, long dateMightnight, long tomorrow) {
  		// Do Database Request
 		String query = String.format(QUERY_SELECT_MAX_ORDER_NUMBER, dateMightnight, tomorrow);
+		Log.i(TAG, String.format("Check for max Order Number in range of %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS,%1$tL to Tomorrow %2$tY-%2$tm-%2$td %2$tH:%2$tM:%2$tS,%2$tL", dateMightnight, tomorrow));
 		Log.i(TAG, query);
 		Cursor cursor = db.rawQuery(query, null);
 		long id = 0;
