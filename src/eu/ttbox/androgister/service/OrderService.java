@@ -63,7 +63,7 @@ public class OrderService extends Service implements SharedPreferences.OnSharedP
 	public void onDestroy() {
 		// Service
 		orderDatabase = null;
-		// Listeenr
+		// Listener
 		prefs.unregisterOnSharedPreferenceChangeListener(this);
  		unregisterReceiver(receiver);
 		super.onDestroy();

@@ -3,8 +3,13 @@
 
     <string name="hello">Hello World, AndroGisterActivity!</string>
     <string name="app_name">AndroGister</string>
+    <string name="basket_sum">Total</string>
 
+    <string name="order_number">N°</string>
+    <string name="order_uuid">Id</string>
+    <string name="order_date">Date</string>
+    <string name="order_price">Total</string>
+    <string name="order_status">Statut</string>
     
-        <string name="basket_sum">Total</string>
     
 </resources>
