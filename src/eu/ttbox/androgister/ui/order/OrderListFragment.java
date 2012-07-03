@@ -15,9 +15,8 @@ import android.widget.SimpleCursorAdapter;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.database.OrderProvider;
 import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
-import eu.ttbox.androgister.model.Order;
 
-public class OrderInvalidateFragment extends Fragment implements
+public class OrderListFragment extends Fragment implements
 		OnLoadCompleteListener<Cursor> {
 
 	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] {
