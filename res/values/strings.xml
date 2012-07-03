@@ -11,5 +11,7 @@
     <string name="order_price">Total</string>
     <string name="order_status">Statut</string>
     
+    <string name="tab_words">Word</string>
+    <string name="tab_numbers">Number</string>
     
 </resources>

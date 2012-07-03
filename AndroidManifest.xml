@@ -1,40 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="7" 
-    android:versionName="0.0.1" package="eu.ttbox.androgister">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="eu.ttbox.androgister"
+    android:versionCode="7"
+    android:versionName="0.0.1" >
 
-    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="16"/>
+    <uses-sdk
+        android:minSdkVersion="13"
+        android:targetSdkVersion="16" />
 
-    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
-    
-    <application android:debuggable="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name="AndroGisterApplication" android:theme="@style/MyTheme">
-        <activity android:label="@string/app_name" android:name=".AndroGisterActivity">
-<!--             <intent-filter> -->
-<!--                 <action android:name="android.intent.action.MAIN" /> -->
-<!--                  <category android:name="android.intent.category.LAUNCHER" /> -->
-<!--             </intent-filter> -->
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+
+    <uses-feature android:name="android.hardware.usb.accessory" />
+
+    <application
+        android:name="AndroGisterApplication"
+        android:debuggable="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/MyTheme" >
+        <activity
+            android:name=".AndroGisterActivity"
+            android:label="@string/app_name" >
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".ui.CashRegisterActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="eu.ttbox.androgister.intent.ADD_BASKET" />
+                <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_BASKET" />
+            </intent-filter>
         </activity>
 
-       <activity android:label="@string/app_name" android:name=".ui.CashRegisterActivity">
+        <service
+            android:name=".service.OrderService"
+            android:exported="false" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-             <intent-filter>
-                <action android:name="eu.ttbox.androgister.intent.ADD_BASKET"/> 
-                <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_BASKET"/>  
-             </intent-filter>
-       </activity>
-          
-       <service android:exported="false" android:name=".service.OrderService">
-          <intent-filter>
-                <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_ORDER"/> 
+                <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_ORDER" />
             </intent-filter>
         </service>
-        
-        <provider android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider" android:name=".database.OfferProvider"/>
-        <provider android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider" android:name=".database.OrderProvider"/>
-        
-        
+        <service
+            android:name=".service.UsbService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name=".database.OfferProvider"
+            android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider" />
+        <provider
+            android:name=".database.OrderProvider"
+            android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider" />
     </application>
 
 </manifest>

@@ -6,7 +6,7 @@
 
       <fragment
         android:id="@+id/fragment_register_orderklist"
-        android:name="eu.ttbox.androgister.ui.order.OrderLisFragment"
+        android:name="eu.ttbox.androgister.ui.order.OrderListFragment"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1" > 

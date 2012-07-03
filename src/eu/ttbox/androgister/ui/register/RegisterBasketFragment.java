@@ -119,7 +119,7 @@ public class RegisterBasketFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		// Register Service
-		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
+//		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
  		// Register Listener
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.ACTION_ADD_BASKET);
@@ -131,7 +131,7 @@ public class RegisterBasketFragment extends Fragment {
 	@Override
 	public void onPause() {
 		// Service
-		getActivity().unbindService(orderServiceConnection);
+//		getActivity().unbindService(orderServiceConnection);
 		// Listener
 		getActivity().unregisterReceiver(mStatusReceiver);
 		super.onPause();
@@ -172,7 +172,7 @@ public class RegisterBasketFragment extends Fragment {
 		executor.execute(doBasketSum);
 	}
 
-	private void saveOrder() {
+	public void saveOrder() {
 		// Get Clone of Basket Items
 		ArrayList<OrderItem> items = new ArrayList<OrderItem>(basket);
 		long sumBasket = getComputeBasketSum(items);
@@ -193,10 +193,10 @@ public class RegisterBasketFragment extends Fragment {
 			String action = intent.getAction();
 			if (Intents.ACTION_ADD_BASKET.equals(action)) {
 				Offer status = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
-				onAddBasketItem(status);
+//				onAddBasketItem(status);
 				context.removeStickyBroadcast(intent);
 			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
-				saveOrder();
+//				saveOrder();
 			}
 		}
 	}
