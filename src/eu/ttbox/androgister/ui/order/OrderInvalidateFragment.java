@@ -53,6 +53,7 @@ public class OrderInvalidateFragment extends Fragment implements
 		// Bind
 		listView = (ListView) view.findViewById(R.id.order_list_list);
 		listView.setAdapter(listAdapter);
+		listView.setOnItemClickListener(mOnClickListener);
 		// Header
 		ViewGroup mTop = (ViewGroup) inflater.inflate(
 				R.layout.order_list_header, listView, false);
