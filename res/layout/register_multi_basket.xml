@@ -19,23 +19,22 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
 
-<!--             <fragment -->
-<!--                 android:id="@+id/fragment_register_basket_one" -->
-<!--                 android:name="eu.ttbox.androgister.ui.register.RegisterBasketFragment" -->
-<!--                 android:layout_width="fill_parent" -->
-<!--                 android:layout_height="fill_parent"  -->
-<!--             </fragment> -->
-            
+            <!-- <fragment -->
+            <!-- android:id="@+id/fragment_register_basket_one" -->
+            <!-- android:name="eu.ttbox.androgister.ui.register.RegisterBasketFragment" -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="fill_parent" -->
+            <!-- </fragment> -->
+
             <FrameLayout
-                    android:id="@+id/tab_1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
- 
-                <FrameLayout
-                    android:id="@+id/tab_2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
-            
+                android:id="@+id/tab_1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+
+            <FrameLayout
+                android:id="@+id/tab_2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
         </FrameLayout>
     </LinearLayout>
 
