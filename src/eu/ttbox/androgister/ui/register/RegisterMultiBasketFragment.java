@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +30,15 @@ public class RegisterMultiBasketFragment extends Fragment {
 	// Listener
 	private BroadcastReceiver mStatusReceiver;
 
+	
 	// View
 	private LinearLayout viewTabs;
 	private Button addTabButton;
 
+	// config 
+	private int MAX_KEY = 10;
+
+	// Data
 	private int mCurrentTab = -1;
 
 	private RegisterBasketFragment currentBasket;
@@ -60,7 +66,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 			}
 		});
 		// add Nav
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 3; i++) {
 			addNewTab(i, false);
 		}
 		updateTab(0);
@@ -87,7 +93,6 @@ public class RegisterMultiBasketFragment extends Fragment {
 	}
 
 	private void addNewTab() {
-		int MAX_KEY = 10;
 		for (int i = 0; i < MAX_KEY; i++) {
 			Button btn = cacheButton.get(i);
 			if (btn == null) {
@@ -129,7 +134,8 @@ public class RegisterMultiBasketFragment extends Fragment {
 	}
 
 	private void removeTab(int tabId) {
-		if (cacheBasket.size() > 1) {
+		Log.i(TAG, "Remove for basket Size " +cacheButton.size() );
+		if (cacheButton.size() > 1) {
 			// Delete the tabs
 			cacheBasket.delete(tabId);
 			Button btn = cacheButton.get(tabId);
