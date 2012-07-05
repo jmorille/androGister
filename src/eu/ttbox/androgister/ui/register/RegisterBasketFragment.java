@@ -45,7 +45,9 @@ public class RegisterBasketFragment extends Fragment {
 	private Executor executor = Executors.newSingleThreadExecutor();
 
 	private static final int UI_MSG_SET_BASKET_SUM = 1;
-
+	
+	private OnBasketSunUpdateListener onBasketSunUpdateListener;
+	
 	private Handler uiHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -53,6 +55,9 @@ public class RegisterBasketFragment extends Fragment {
 			case UI_MSG_SET_BASKET_SUM:
 				Long sum = (Long) msg.obj;
 				sumTextView.setText(PriceHelper.getToStringPrice(sum));
+				if (onBasketSunUpdateListener!=null) {
+					onBasketSunUpdateListener.onBasketSum(sum);
+				}
 				break;
 
 			default:
@@ -86,6 +91,13 @@ public class RegisterBasketFragment extends Fragment {
 			orderService = null;
 		}
 	};
+
+	
+	
+	public void setOnBasketSunUpdateListener(
+			OnBasketSunUpdateListener onBasketSunUpdateListener) {
+		this.onBasketSunUpdateListener = onBasketSunUpdateListener;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -200,5 +212,9 @@ public class RegisterBasketFragment extends Fragment {
 			}
 		}
 	}
+	
+	 public interface OnBasketSunUpdateListener {
+		 void onBasketSum(long sum);
+	 }
 
 }

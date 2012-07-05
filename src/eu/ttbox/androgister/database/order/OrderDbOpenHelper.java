@@ -34,6 +34,8 @@ public class OrderDbOpenHelper extends SQLiteOpenHelper {
 			+ ", " + OrderItemColumns.KEY_QUANTITY + " INTEGER NOT NULL" //
 			+ ", " + OrderItemColumns.KEY_PRICE_UNIT_HT + " INTEGER NOT NULL" //
 			+ ", " + OrderItemColumns.KEY_PRICE_SUM_HT + " INTEGER NOT NULL" //
+			+ ", FOREIGN KEY (" + OrderItemColumns.KEY_ORDER_ID + ") REFERENCES " //
+			+ OrderDatabase.ORDER_TABLE + " ( " + OrderColumns.KEY_ID + ")" //
 			+ ");";
 
 	private final Context mHelperContext;
@@ -41,7 +43,7 @@ public class OrderDbOpenHelper extends SQLiteOpenHelper {
 
 	OrderDbOpenHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		mHelperContext = context;
+		this.mHelperContext = context;
 	}
 
 	@Override
