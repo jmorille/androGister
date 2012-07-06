@@ -34,13 +34,13 @@ public class RegisterMultiBasketFragment extends Fragment {
 	// Listener
 	private BroadcastReceiver mStatusReceiver;
 	private OrderService orderService;
-	
+
 	// View
 	private LinearLayout viewTabs;
 	private Button addTabButton;
 
-	// config 
-	private int MAX_KEY = 10;
+	// config
+	private int MAX_KEY = 3;
 
 	// Data
 	private int mCurrentTab = -1;
@@ -56,13 +56,16 @@ public class RegisterMultiBasketFragment extends Fragment {
 		// Services
 		mStatusReceiver = new StatusReceiver();
 		// Listener
-		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
+		getActivity().bindService(
+				new Intent(getActivity(), OrderService.class),
+				orderServiceConnection, Context.BIND_AUTO_CREATE);
 
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		getActivity().unbindService(orderServiceConnection);
+		super.onDestroy();
 	}
 
 	@Override
@@ -78,9 +81,9 @@ public class RegisterMultiBasketFragment extends Fragment {
 			}
 		});
 		// add Nav
-//		for (int i = 0; i < 3; i++) {
-//			addNewTab(i, false);
-//		}
+		// for (int i = 0; i < 3; i++) {
+		// addNewTab(i, false);
+		// }
 		updateTab(0);
 
 		return view;
@@ -95,13 +98,13 @@ public class RegisterMultiBasketFragment extends Fragment {
 		filter.addAction(Intents.ACTION_SAVE_BASKET);
 		// Listener
 		getActivity().registerReceiver(mStatusReceiver, filter);
-			}
+	}
 
 	@Override
 	public void onPause() {
 		// Listener
 		getActivity().unregisterReceiver(mStatusReceiver);
-		
+
 		super.onPause();
 	}
 
@@ -110,7 +113,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 			Button btn = cacheButton.get(i);
 			if (btn == null) {
 				updateTab(i);
-				return;
+ 				return;
 			}
 		}
 	}
@@ -147,7 +150,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 	}
 
 	private void removeTab(int tabId) {
-		Log.i(TAG, "Remove for basket Size " +cacheButton.size() );
+		Log.i(TAG, "Remove for basket Size " + cacheButton.size());
 		if (cacheButton.size() > 1) {
 			// Delete the tabs
 			cacheBasket.delete(tabId);
@@ -160,7 +163,9 @@ public class RegisterMultiBasketFragment extends Fragment {
 			// NEED TO BE DELETE BEFORE TO FIND NEW
 			if (mCurrentTab == tabId) {
 				int newTab = cacheButton.keyAt(0);
-				Log.i(TAG,  String.format(  "After remove Tab %s need to set new Tab as %s", mCurrentTab, newTab));
+				Log.i(TAG, String.format(
+						"After remove Tab %s need to set new Tab as %s",
+						mCurrentTab, newTab));
 				updateTab(newTab);
 			}
 		} else {
@@ -187,11 +192,11 @@ public class RegisterMultiBasketFragment extends Fragment {
 			final Button btnNew = addNewTab(whichChild, true);
 			if (isNeedtoCreate) {
 				newFrag.setOnBasketSunUpdateListener(new OnBasketSunUpdateListener() {
-					
+
 					@Override
 					public void onBasketSum(long sum) {
 						String sumText = PriceHelper.getToStringPrice(sum);
-						btnNew.setText( String.format(  "Total %s" , sumText));
+						btnNew.setText(String.format("Total %s", sumText));
 					}
 				});
 			}
@@ -202,7 +207,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 			fmt.commit();
 		}
 	}
-	
+
 	private ServiceConnection orderServiceConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			orderService = ((OrderService.LocalBinder) service).getService();
@@ -212,9 +217,6 @@ public class RegisterMultiBasketFragment extends Fragment {
 			orderService = null;
 		}
 	};
-
-	
-	
 
 	private class StatusReceiver extends BroadcastReceiver {
 		@Override

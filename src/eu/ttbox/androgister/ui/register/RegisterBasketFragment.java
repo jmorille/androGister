@@ -1,13 +1,9 @@
 package eu.ttbox.androgister.ui.register;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,29 +30,29 @@ public class RegisterBasketFragment extends Fragment {
 	private TextView sumTextView;
 	private ListView listView;
 
-	private Executor executor = Executors.newSingleThreadExecutor();
+//	private Executor executor = Executors.newSingleThreadExecutor();
 
 	private static final int UI_MSG_SET_BASKET_SUM = 1;
 
 	private OnBasketSunUpdateListener onBasketSunUpdateListener;
 
-	private Handler uiHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case UI_MSG_SET_BASKET_SUM:
-				Long sum = (Long) msg.obj;
-				sumTextView.setText(PriceHelper.getToStringPrice(sum));
-				if (onBasketSunUpdateListener != null) {
-					onBasketSunUpdateListener.onBasketSum(sum);
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
+    // private Handler uiHandler = new Handler() {
+    // @Override
+    // public void handleMessage(Message msg) {
+    // switch (msg.what) {
+    // case UI_MSG_SET_BASKET_SUM:
+    // Long sum = (Long) msg.obj;
+    // sumTextView.setText(PriceHelper.getToStringPrice(sum));
+    // if (onBasketSunUpdateListener != null) {
+    // onBasketSunUpdateListener.onBasketSum(sum);
+    // }
+    // break;
+    //
+    // default:
+    // break;
+    // }
+    // }
+    // };
 	//
 	// private final Runnable doBasketSum = new Runnable() {
 	// @Override

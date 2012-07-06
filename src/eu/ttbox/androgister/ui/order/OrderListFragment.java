@@ -31,7 +31,7 @@ public class OrderListFragment extends Fragment implements
 		public void onItemClick(AdapterView<?> parent, View v, int position,
 				long id) {
 			onListItemClick((ListView) parent, v, position, id);
-		} 
+		}
 	};
 
 	@Override
@@ -65,8 +65,8 @@ public class OrderListFragment extends Fragment implements
 	private void doSearch(String selection, String... selectionArgs) {
 		// String selection = null;
 		// String[] selectionArgs = null; // new String[] { query };
-		String sortOrder = String.format("%s ASC, %s ASC",
-				OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_STATUS);
+		String sortOrder = String
+				.format("%s DESC", OrderColumns.KEY_ORDER_DATE);
 		CursorLoader cursorLoader = new CursorLoader(getActivity(),
 				OrderProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN,
 				selection, selectionArgs, sortOrder);
@@ -85,6 +85,6 @@ public class OrderListFragment extends Fragment implements
 	private void onListItemClick(ListView l, View v, int position, long id) {
 		Cursor item = (Cursor) l.getAdapter().getItem(position);
 		long orderId = item.getLong(item.getColumnIndex(OrderColumns.KEY_ID));
-		
+
 	}
 }

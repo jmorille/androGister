@@ -11,14 +11,13 @@ import android.view.View;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.product.OfferDatabase.Column;
+import eu.ttbox.androgister.database.product.OfferHelper;
 import eu.ttbox.androgister.model.PriceHelper;
 
 public class ProductItemAdapter extends ResourceCursorAdapter {
 
-	private int nameIdx = -1;
-	private int priceIdx = -1;
-	private int tagIdx = -1;
+    private OfferHelper helper;
+     
 	private boolean isNotBinding = true;
 
 	private HashMap<String, GradientDrawable> mapColors;
@@ -39,10 +38,8 @@ public class ProductItemAdapter extends ResourceCursorAdapter {
 		mapColors.put("Boisson",getGradientDrawable( Color.GREEN));
 		mapColors.put("Entrée", getGradientDrawable(Color.BLUE));
 		mapColors.put("Plat", getGradientDrawable(Color.RED));
-		// Init Cursor
-		nameIdx = cursor.getColumnIndex(Column.KEY_NAME);
-		priceIdx = cursor.getColumnIndex(Column.KEY_PRICEHT);
-		tagIdx = cursor.getColumnIndex(Column.KEY_TAG);
+		// Init Cursor 
+		helper = new OfferHelper().initWrapper(cursor); 
 		isNotBinding = false;
 	}
 
@@ -55,10 +52,10 @@ public class ProductItemAdapter extends ResourceCursorAdapter {
 		TextView nameText = (TextView) view.findViewById(R.id.product_list_item_name);
 		TextView priceText = (TextView) view.findViewById(R.id.product_list_item_price);
 		// Bind Value
-		nameText.setText(cursor.getString(nameIdx));
-		priceText.setText(PriceHelper.getToStringPrice(cursor.getLong(priceIdx)));
+		nameText.setText(cursor.getString(helper.nameIdx));
+		priceText.setText(PriceHelper.getToStringPrice(cursor.getLong(helper.priceIdx)));
 		// Bg color
-		String tag = cursor.getString(tagIdx);
+		String tag = cursor.getString(helper.tagIdx);
 		GradientDrawable grad = mapColors.get(tag);
 		if (grad != null) { 
 			view.setBackgroundDrawable(grad); 

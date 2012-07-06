@@ -10,8 +10,8 @@
     
     <style name="order_list_item">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:layout_height">?android:attr/listPreferredItemHeight</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item> 
     </style>
     
     <style name="basket_list_item">

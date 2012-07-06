@@ -18,7 +18,7 @@ import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.OfferProvider;
 import eu.ttbox.androgister.database.product.OfferDatabase.Column;
-import eu.ttbox.androgister.database.product.OfferWrapper;
+import eu.ttbox.androgister.database.product.OfferHelper;
 import eu.ttbox.androgister.model.Offer;
 
 /**
@@ -40,7 +40,7 @@ public class ProductSelectorFragment extends Fragment implements OnLoadCompleteL
 
 	private ListView filterListView;
 
-	private OfferWrapper offerWrapper;
+	private OfferHelper offerWrapper;
 
 	private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -57,7 +57,7 @@ public class ProductSelectorFragment extends Fragment implements OnLoadCompleteL
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		offerWrapper = new OfferWrapper();
+		offerWrapper = new OfferHelper();
 	}
 
 	@Override

@@ -7,14 +7,14 @@ import eu.ttbox.androgister.database.order.OrderDatabase.OrderItemColumns;
 public class OrderItemHelper {
 
 	boolean isNotInit = true;
-	int idIdx = -1;
-	int orderIdIdx = -1; 
-	int nameIdx = -1;
-	int productIdx = -1;
-	int eanIdx = -1;
-	int quantityIdx = -1;
-	int priceUnitIdx = -1;
-	int priceSumIdx = -1;
+	public int idIdx = -1;
+	public int orderIdIdx = -1; 
+	public int nameIdx = -1;
+	public int productIdx = -1;
+	public int eanIdx = -1;
+	public int quantityIdx = -1;
+	public int priceUnitIdx = -1;
+	public int priceSumIdx = -1;
 
 	public static OrderItem createFromProduct(Offer p) {
 		OrderItem item = null;
@@ -25,7 +25,7 @@ public class OrderItemHelper {
 		return item;
 	}
 
-	public void initWrapper(Cursor cursor) {
+	public OrderItemHelper initWrapper(Cursor cursor) {
 		idIdx = cursor.getColumnIndex(OrderItemColumns.KEY_ID);
  		orderIdIdx = cursor.getColumnIndex(OrderItemColumns.KEY_ORDER_ID);
 		nameIdx = cursor.getColumnIndex(OrderItemColumns.KEY_NAME);
@@ -35,6 +35,7 @@ public class OrderItemHelper {
 		priceUnitIdx = cursor.getColumnIndex(OrderItemColumns.KEY_PRICE_UNIT_HT);
 		priceSumIdx = cursor.getColumnIndex(OrderItemColumns.KEY_PRICE_SUM_HT);
 		isNotInit = false;
+		return this;
 	}
 
 	public OrderItem getEntity(Cursor cursor) {

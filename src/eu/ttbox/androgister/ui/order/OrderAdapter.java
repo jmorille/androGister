@@ -9,17 +9,14 @@ import android.view.View;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
+import eu.ttbox.androgister.model.OrderHelper;
 import eu.ttbox.androgister.model.OrderStatusEnum;
 import eu.ttbox.androgister.model.PriceHelper;
 
 public class OrderAdapter extends ResourceCursorAdapter {
 
-	private int dateIdx = -1;
-	private int orderNumberIdx = -1;
-	private int orderUuidIdx = -1;
-	private int priceIdx = -1;
-	private int statusIdx = -1;
+    private OrderHelper helper;
+	 
 	private boolean isNotBinding = true;
 
 	private SimpleDateFormat dateFormat;
@@ -32,11 +29,7 @@ public class OrderAdapter extends ResourceCursorAdapter {
 
 	private void intViewBinding(View view, Context context, Cursor cursor) {
 		// Init Cursor
-		orderNumberIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_NUMBER);
-		orderUuidIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_UUID);
-		dateIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_DATE);
-		priceIdx = cursor.getColumnIndex(OrderColumns.KEY_PRICE_SUM_HT);
-		statusIdx = cursor.getColumnIndex(OrderColumns.KEY_STATUS);
+	    helper = new OrderHelper().initWrapper(cursor); 
 		isNotBinding = false;
 	}
 
@@ -52,18 +45,18 @@ public class OrderAdapter extends ResourceCursorAdapter {
 		TextView statusText = (TextView) view.findViewById(R.id.order_list_item_status);
 		TextView priceText = (TextView) view.findViewById(R.id.order_list_item_price);
 		// Bind Value
-		orderNumText.setText(cursor.getString(orderNumberIdx));
-		orderUuidText.setText(cursor.getString(orderUuidIdx));
+		orderNumText.setText(cursor.getString(helper.orderNumberIdx));
+		orderUuidText.setText(cursor.getString(helper.orderUuidIdx));
 		// Date
-		long dateTime = cursor.getLong(dateIdx);
+		long dateTime = cursor.getLong(helper.orderDateIdx);
 		String dateString = dateFormat.format(new Date(dateTime));
 		dateText.setText(dateString);
 		// Status
-		int statusKey = cursor.getInt(statusIdx);
+		int statusKey = cursor.getInt(helper.statusIdx);
 		OrderStatusEnum status = OrderStatusEnum.getEnumFromKey(statusKey);
 		statusText.setText(status.name());
 		// Price
-		priceText.setText(PriceHelper.getToStringPrice(cursor.getLong(priceIdx)));
+		priceText.setText(PriceHelper.getToStringPrice(cursor.getLong(helper.priceSumIdx)));
 
 	}
 

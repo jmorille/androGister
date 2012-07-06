@@ -27,6 +27,7 @@ public class OrderProvider extends ContentProvider {
 		public static String AUTHORITY = "eu.ttbox.androgister.searchableorder.OrderProvider";
 		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/order");
 		public static final Uri CONTENT_URI_GET_ODRER = Uri.parse("content://" + AUTHORITY + "/order/");
+		public static final Uri CONTENT_URI_GET_ODRER_ITEMS = Uri.parse("content://" + AUTHORITY + "/orderItems/");
 	}
 
 	private OrderDatabase orderDatabase;
@@ -34,7 +35,7 @@ public class OrderProvider extends ContentProvider {
 	// UriMatcher stuff
 	private static final int SEARCH_ORDERS = 0;
 	private static final int GET_ORDER = 1;
-	private static final int GET_ORDER_ITEM = 2;
+	private static final int GET_ORDER_ITEMS = 2;
 	private static final int SEARCH_SUGGEST = 3;
 	private static final int REFRESH_SHORTCUT = 4;
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
@@ -47,6 +48,7 @@ public class OrderProvider extends ContentProvider {
 		// to get definitions...
 		matcher.addURI(Constants.AUTHORITY, "order", SEARCH_ORDERS);
 		matcher.addURI(Constants.AUTHORITY, "order/#", GET_ORDER);
+		matcher.addURI(Constants.AUTHORITY, "orderItems/#", GET_ORDER_ITEMS);
 		// to get suggestions...
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
 		matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
@@ -70,8 +72,8 @@ public class OrderProvider extends ContentProvider {
 			return ORDERS_MIME_TYPE;
 		case GET_ORDER:
 			return ORDER_MIME_TYPE;
-		case GET_ORDER_ITEM:
-			return ORDER_ITEM_MIME_TYPE;
+		case GET_ORDER_ITEMS:
+			return ORDERS_ITEMS_MIME_TYPE;
 		case SEARCH_SUGGEST:
 			return SearchManager.SUGGEST_MIME_TYPE;
 		case REFRESH_SHORTCUT:
@@ -97,7 +99,7 @@ public class OrderProvider extends ContentProvider {
  		case GET_ORDER:
  			String rowId = uri.getLastPathSegment();
  			return getOrder(rowId, projection);
- 		case GET_ORDER_ITEM:
+ 		case GET_ORDER_ITEMS:
  			String orderId = uri.getLastPathSegment();
  			return getOrderItem(orderId, projection); 
  		default:
@@ -111,7 +113,7 @@ public class OrderProvider extends ContentProvider {
 	}
 	private Cursor getOrderItem(String orderId, String[] _projection) {
 		String[] projection = _projection==null? OrderDatabase.OrderColumns.ALL_KEYS : _projection;
-		return orderDatabase.getOrderItem(orderId, projection, null);
+		return orderDatabase.getOrderItems(orderId, projection, null);
  	}
 	private Cursor search(String[] _projection, String _selection, String[] _selectionArgs, String _sortOrder) {
 		String[] projection = _projection==null? OrderDatabase.OrderColumns.ALL_KEYS : _projection;

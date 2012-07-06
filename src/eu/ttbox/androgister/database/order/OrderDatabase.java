@@ -129,9 +129,9 @@ public class OrderDatabase {
 		return queryOrder(selection, selectionArgs, columns, null);
 	}
 
-	public Cursor getOrderItem(String rowId, String[] columns, String sortOrder) {
+	public Cursor getOrderItems(String orderId, String[] columns, String sortOrder) {
 		String selection = String.format("%s = ?", OrderItemColumns.KEY_ORDER_ID);
-		String[] selectionArgs = new String[] { rowId };
+		String[] selectionArgs = new String[] { orderId };
 		return queryOrderItem(selection, selectionArgs, columns, sortOrder);
 	}
 
