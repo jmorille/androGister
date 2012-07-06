@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ import eu.ttbox.androgister.service.OrderService;
 
 public class RegisterBasketFragment extends Fragment {
 
+	private static final String TAG = "RegisterBasketFragment";
+	
 	private BroadcastReceiver mStatusReceiver;
 	private OrderService orderService;
 
@@ -105,7 +108,7 @@ public class RegisterBasketFragment extends Fragment {
 		// Adpater
 		listAdapter = new BasketItemAdapter(getActivity(), basket);
 		// Services
-		mStatusReceiver = new StatusReceiver(); 
+//		mStatusReceiver = new StatusReceiver(); 
 	}
 
 	@Override
@@ -133,10 +136,10 @@ public class RegisterBasketFragment extends Fragment {
 		// Register Service
 //		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
  		// Register Listener
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(Intents.ACTION_ADD_BASKET);
-		filter.addAction(Intents.ACTION_SAVE_BASKET);
-		getActivity().registerReceiver(mStatusReceiver, filter);
+//		IntentFilter filter = new IntentFilter();
+//		filter.addAction(Intents.ACTION_ADD_BASKET);
+//		filter.addAction(Intents.ACTION_SAVE_BASKET);
+//		getActivity().registerReceiver(mStatusReceiver, filter);
 
 	}
 
@@ -145,7 +148,7 @@ public class RegisterBasketFragment extends Fragment {
 		// Service
 //		getActivity().unbindService(orderServiceConnection);
 		// Listener
-		getActivity().unregisterReceiver(mStatusReceiver);
+//		getActivity().unregisterReceiver(mStatusReceiver);
 		super.onPause();
 	}
 
@@ -184,7 +187,8 @@ public class RegisterBasketFragment extends Fragment {
 		executor.execute(doBasketSum);
 	}
 
-	public void saveOrder() {
+	public void askToSaveBasketToOrder() {
+		Log.i(TAG, "Ask to save Basket to Order");
 		// Get Clone of Basket Items
 		ArrayList<OrderItem> items = new ArrayList<OrderItem>(basket);
 		long sumBasket = getComputeBasketSum(items);
@@ -193,26 +197,27 @@ public class RegisterBasketFragment extends Fragment {
 		order.setItems(items);
 		order.setPriceSumHT(sumBasket);
 		// Save It
+		Log.i(TAG, "Ask to save Basket to Order with "+ items.size() + " Items");
 		getActivity().sendBroadcast(Intents.saveOrder(order));
 		// getActivity().getContentResolver().insert(O, values)
 		// Temporay Del
 		clearBasket();
 	}
 
-	private class StatusReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (Intents.ACTION_ADD_BASKET.equals(action)) {
-				Offer status = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
-//				onAddBasketItem(status);
-				context.removeStickyBroadcast(intent);
-			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
-//				saveOrder();
-			}
-		}
-	}
-	
+//	private class StatusReceiver extends BroadcastReceiver {
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//			String action = intent.getAction();
+//			if (Intents.ACTION_ADD_BASKET.equals(action)) {
+//				Offer status = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
+////				onAddBasketItem(status);
+//				context.removeStickyBroadcast(intent);
+//			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
+////				saveOrder();
+//			}
+//		}
+//	}
+//	
 	 public interface OnBasketSunUpdateListener {
 		 void onBasketSum(long sum);
 	 }

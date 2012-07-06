@@ -49,7 +49,7 @@ public class OrderService extends Service implements SharedPreferences.OnSharedP
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.ACTION_SAVE_ORDER);
 		receiver = new StatusReceiver();
-		registerReceiver(receiver, filter);
+		registerReceiver(receiver , filter); //
 	}
 	
 	@Override
@@ -92,6 +92,7 @@ public class OrderService extends Service implements SharedPreferences.OnSharedP
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
+			Log.i(TAG, "Service onReceive action : " + action);
 			if (Intents.ACTION_SAVE_ORDER.equals(action)) {
 				Order order = (Order) intent.getSerializableExtra(Intents.EXTRA_ORDER);
 				saveOrder(order);

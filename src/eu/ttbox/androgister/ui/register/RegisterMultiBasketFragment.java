@@ -4,10 +4,13 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -21,6 +24,7 @@ import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.model.Offer;
 import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.register.RegisterBasketFragment.OnBasketSunUpdateListener;
 
 public class RegisterMultiBasketFragment extends Fragment {
@@ -29,7 +33,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 
 	// Listener
 	private BroadcastReceiver mStatusReceiver;
-
+	private OrderService orderService;
 	
 	// View
 	private LinearLayout viewTabs;
@@ -51,6 +55,14 @@ public class RegisterMultiBasketFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		// Services
 		mStatusReceiver = new StatusReceiver();
+		// Listener
+		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
+
+	}
+	
+	@Override
+	public void onDestroy() {
+		getActivity().unbindService(orderServiceConnection);
 	}
 
 	@Override
@@ -81,14 +93,15 @@ public class RegisterMultiBasketFragment extends Fragment {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.ACTION_ADD_BASKET);
 		filter.addAction(Intents.ACTION_SAVE_BASKET);
+		// Listener
 		getActivity().registerReceiver(mStatusReceiver, filter);
-
-	}
+			}
 
 	@Override
 	public void onPause() {
 		// Listener
 		getActivity().unregisterReceiver(mStatusReceiver);
+		
 		super.onPause();
 	}
 
@@ -186,6 +199,19 @@ public class RegisterMultiBasketFragment extends Fragment {
 			fmt.commit();
 		}
 	}
+	
+	private ServiceConnection orderServiceConnection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			orderService = ((OrderService.LocalBinder) service).getService();
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			orderService = null;
+		}
+	};
+
+	
+	
 
 	private class StatusReceiver extends BroadcastReceiver {
 		@Override
@@ -197,7 +223,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 				currentBasket.onAddBasketItem(status);
 				context.removeStickyBroadcast(intent);
 			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
-				currentBasket.saveOrder();
+				currentBasket.askToSaveBasketToOrder();
 				removeTab(mCurrentTab);
 			}
 		}
