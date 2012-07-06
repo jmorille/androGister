@@ -78,9 +78,9 @@ public class RegisterMultiBasketFragment extends Fragment {
 			}
 		});
 		// add Nav
-		for (int i = 0; i < 3; i++) {
-			addNewTab(i, false);
-		}
+//		for (int i = 0; i < 3; i++) {
+//			addNewTab(i, false);
+//		}
 		updateTab(0);
 
 		return view;
@@ -159,9 +159,12 @@ public class RegisterMultiBasketFragment extends Fragment {
 			// Reaffecte an another tab
 			// NEED TO BE DELETE BEFORE TO FIND NEW
 			if (mCurrentTab == tabId) {
-				int newTab = cacheBasket.keyAt(0);
+				int newTab = cacheButton.keyAt(0);
+				Log.i(TAG,  String.format(  "After remove Tab %s need to set new Tab as %s", mCurrentTab, newTab));
 				updateTab(newTab);
 			}
+		} else {
+			cacheBasket.clear();
 		}
 	}
 
@@ -188,7 +191,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 					@Override
 					public void onBasketSum(long sum) {
 						String sumText = PriceHelper.getToStringPrice(sum);
-						btnNew.setText("Total " + sumText);
+						btnNew.setText( String.format(  "Total %s" , sumText));
 					}
 				});
 			}

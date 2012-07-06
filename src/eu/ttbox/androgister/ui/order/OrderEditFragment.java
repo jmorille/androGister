@@ -1,11 +1,11 @@
 package eu.ttbox.androgister.ui.order;
 
-import eu.ttbox.androgister.R;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import eu.ttbox.androgister.R;
 
 public class OrderEditFragment extends Fragment {
 

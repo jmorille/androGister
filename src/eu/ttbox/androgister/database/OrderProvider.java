@@ -6,10 +6,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import eu.ttbox.androgister.database.order.OrderDatabase;
-import eu.ttbox.androgister.database.product.OfferDatabase;
 
 /**
  * Conent provider tutorial {link http://www.tutos-android.com/contentprovider-android}

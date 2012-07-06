@@ -66,7 +66,7 @@ public class OrderListFragment extends Fragment implements
 		// String selection = null;
 		// String[] selectionArgs = null; // new String[] { query };
 		String sortOrder = String.format("%s ASC, %s ASC",
-				OrderColumns.KEY_ORDER_UUID, OrderColumns.KEY_STATUS);
+				OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_STATUS);
 		CursorLoader cursorLoader = new CursorLoader(getActivity(),
 				OrderProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN,
 				selection, selectionArgs, sortOrder);

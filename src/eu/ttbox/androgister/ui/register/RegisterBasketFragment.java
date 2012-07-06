@@ -5,15 +5,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,14 +23,10 @@ import eu.ttbox.androgister.model.Order;
 import eu.ttbox.androgister.model.OrderItem;
 import eu.ttbox.androgister.model.OrderItemHelper;
 import eu.ttbox.androgister.model.PriceHelper;
-import eu.ttbox.androgister.service.OrderService;
 
 public class RegisterBasketFragment extends Fragment {
 
 	private static final String TAG = "RegisterBasketFragment";
-	
-	private BroadcastReceiver mStatusReceiver;
-	private OrderService orderService;
 
 	private ArrayList<OrderItem> basket = new ArrayList<OrderItem>();
 	private BasketItemAdapter listAdapter;
@@ -48,9 +37,9 @@ public class RegisterBasketFragment extends Fragment {
 	private Executor executor = Executors.newSingleThreadExecutor();
 
 	private static final int UI_MSG_SET_BASKET_SUM = 1;
-	
+
 	private OnBasketSunUpdateListener onBasketSunUpdateListener;
-	
+
 	private Handler uiHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -58,7 +47,7 @@ public class RegisterBasketFragment extends Fragment {
 			case UI_MSG_SET_BASKET_SUM:
 				Long sum = (Long) msg.obj;
 				sumTextView.setText(PriceHelper.getToStringPrice(sum));
-				if (onBasketSunUpdateListener!=null) {
+				if (onBasketSunUpdateListener != null) {
 					onBasketSunUpdateListener.onBasketSum(sum);
 				}
 				break;
@@ -68,35 +57,35 @@ public class RegisterBasketFragment extends Fragment {
 			}
 		}
 	};
+	//
+	// private final Runnable doBasketSum = new Runnable() {
+	// @Override
+	// public void run() {
+	// long sum = getComputeBasketSum();
+	// uiHandler.sendMessage(uiHandler.obtainMessage(
+	// UI_MSG_SET_BASKET_SUM, Long.valueOf(sum)));
+	// }
+	// };
 
-	private final Runnable doBasketSum = new Runnable() {
-		@Override
-		public void run() {
-			long sum = getComputeBasketSum();
-			uiHandler.sendMessage(uiHandler.obtainMessage(UI_MSG_SET_BASKET_SUM, Long.valueOf(sum)));
+	private long basketSum = 0;
+
+	private void setTextSum(long sumPrice) {
+		this.basketSum = sumPrice;
+		sumTextView.setText(PriceHelper.getToStringPrice(sumPrice));
+		if (onBasketSunUpdateListener != null) {
+			onBasketSunUpdateListener.onBasketSum(sumPrice);
 		}
-	};
+	}
 
 	private final OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
 		@Override
-		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				int position, long id) {
 			return onListItemLongClick((ListView) parent, view, position, id);
 		}
 
 	};
 
-	private ServiceConnection orderServiceConnection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			orderService = ((OrderService.LocalBinder) service).getService();
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			orderService = null;
-		}
-	};
-
-	
-	
 	public void setOnBasketSunUpdateListener(
 			OnBasketSunUpdateListener onBasketSunUpdateListener) {
 		this.onBasketSunUpdateListener = onBasketSunUpdateListener;
@@ -108,17 +97,19 @@ public class RegisterBasketFragment extends Fragment {
 		// Adpater
 		listAdapter = new BasketItemAdapter(getActivity(), basket);
 		// Services
-//		mStatusReceiver = new StatusReceiver(); 
+		// mStatusReceiver = new StatusReceiver();
 	}
 
 	@Override
-	public void onDestroy() { 
+	public void onDestroy() {
 		super.onDestroy();
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.register_basket, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater
+				.inflate(R.layout.register_basket, container, false);
 		// Bind
 		listView = (ListView) view.findViewById(R.id.basket_screen_list);
 		listView.setOnItemLongClickListener(mOnLongClickListener);
@@ -126,29 +117,19 @@ public class RegisterBasketFragment extends Fragment {
 		// View
 		sumTextView = (TextView) view.findViewById(R.id.basket_screen_sum);
 		// Compute Initila Values
-		executor.execute(doBasketSum);
+		setTextSum(getComputeBasketSum());
+		// executor.execute(doBasketSum);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		// Register Service
-//		getActivity().bindService(new Intent(getActivity(), OrderService.class), orderServiceConnection, Context.BIND_AUTO_CREATE);
- 		// Register Listener
-//		IntentFilter filter = new IntentFilter();
-//		filter.addAction(Intents.ACTION_ADD_BASKET);
-//		filter.addAction(Intents.ACTION_SAVE_BASKET);
-//		getActivity().registerReceiver(mStatusReceiver, filter);
 
 	}
 
 	@Override
 	public void onPause() {
-		// Service
-//		getActivity().unbindService(orderServiceConnection);
-		// Listener
-//		getActivity().unregisterReceiver(mStatusReceiver);
 		super.onPause();
 	}
 
@@ -166,60 +147,66 @@ public class RegisterBasketFragment extends Fragment {
 		return sum;
 	}
 
-	public void onAddBasketItem(Offer product) {
-		OrderItem item = OrderItemHelper.createFromProduct(product);
-		listAdapter.add(item);
-		// TODO ADD item
-		executor.execute(doBasketSum);
+	public void onAddBasketItem(Offer offer) {
+		OrderItem item = OrderItemHelper.createFromProduct(offer);
+		onAddBasketItem(item);
 	}
 
-	protected boolean onListItemLongClick(ListView list, View view, int position, long id) {
-		OrderItem item = (OrderItem) listAdapter.getItem(position);
+	public void onAddBasketItem(OrderItem item) {
+		listAdapter.add(item);
+		setTextSum(this.basketSum + item.getPriceSumHT());
+		// executor.execute(doBasketSum);
+	}
+
+	public void onRemoveBasketItem(OrderItem item) {
 		listAdapter.remove(item);
-		// TODO Delete Basket
-		executor.execute(doBasketSum);
+		setTextSum(this.basketSum - item.getPriceSumHT());
+		// executor.execute(doBasketSum);
+	}
+
+	protected boolean onListItemLongClick(ListView list, View view,
+			int position, long id) {
+		OrderItem item = (OrderItem) listAdapter.getItem(position);
+		onRemoveBasketItem(item);
 		return true;
 	}
 
-	private void clearBasket() {
+	public void clearBasket() {
 		basket.clear();
 		listAdapter.notifyDataSetChanged();
-		executor.execute(doBasketSum);
+		setTextSum(getComputeBasketSum());
+		// executor.execute(doBasketSum);
 	}
 
+	public boolean isCurrentBasket() {
+		boolean isABasket = !basket.isEmpty();
+		return isABasket;
+	}
+	
 	public void askToSaveBasketToOrder() {
 		Log.i(TAG, "Ask to save Basket to Order");
-		// Get Clone of Basket Items
-		ArrayList<OrderItem> items = new ArrayList<OrderItem>(basket);
-		long sumBasket = getComputeBasketSum(items);
-		// Prepare Object
-		Order order = new Order();
-		order.setItems(items);
-		order.setPriceSumHT(sumBasket);
-		// Save It
-		Log.i(TAG, "Ask to save Basket to Order with "+ items.size() + " Items");
-		getActivity().sendBroadcast(Intents.saveOrder(order));
-		// getActivity().getContentResolver().insert(O, values)
-		// Temporay Del
-		clearBasket();
+		if (isCurrentBasket()) {
+			// Get Clone of Basket Items
+			ArrayList<OrderItem> items = new ArrayList<OrderItem>(basket);
+			long sumBasket = getComputeBasketSum(items);
+			// Prepare Object
+			Order order = new Order();
+			order.setItems(items);
+			order.setPriceSumHT(sumBasket);
+			// Validate Order
+			// TODO
+			// Save It
+			Log.i(TAG, "Ask to save Basket to Order with " + items.size()
+					+ " Items");
+			getActivity().sendBroadcast(Intents.saveOrder(order));
+			// getActivity().getContentResolver().insert(O, values)
+			// Temporay Del
+			clearBasket();
+		}
 	}
 
-//	private class StatusReceiver extends BroadcastReceiver {
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			String action = intent.getAction();
-//			if (Intents.ACTION_ADD_BASKET.equals(action)) {
-//				Offer status = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
-////				onAddBasketItem(status);
-//				context.removeStickyBroadcast(intent);
-//			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
-////				saveOrder();
-//			}
-//		}
-//	}
-//	
-	 public interface OnBasketSunUpdateListener {
-		 void onBasketSum(long sum);
-	 }
+	public interface OnBasketSunUpdateListener {
+		void onBasketSum(long sum);
+	}
 
 }

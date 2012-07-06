@@ -1,6 +1,5 @@
 package eu.ttbox.androgister.database;
 
-import eu.ttbox.androgister.database.product.OfferDatabase;
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -8,6 +7,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import eu.ttbox.androgister.database.product.OfferDatabase;
 
 public class OfferProvider extends ContentProvider {
 	private static final String TAG = "OfferProvider";
