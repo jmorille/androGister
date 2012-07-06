@@ -36,23 +36,23 @@ public class RegisterBasketFragment extends Fragment {
 
 	private OnBasketSunUpdateListener onBasketSunUpdateListener;
 
-    // private Handler uiHandler = new Handler() {
-    // @Override
-    // public void handleMessage(Message msg) {
-    // switch (msg.what) {
-    // case UI_MSG_SET_BASKET_SUM:
-    // Long sum = (Long) msg.obj;
-    // sumTextView.setText(PriceHelper.getToStringPrice(sum));
-    // if (onBasketSunUpdateListener != null) {
-    // onBasketSunUpdateListener.onBasketSum(sum);
-    // }
-    // break;
-    //
-    // default:
-    // break;
-    // }
-    // }
-    // };
+        // private Handler uiHandler = new Handler() {
+        // @Override
+        // public void handleMessage(Message msg) {
+        // switch (msg.what) {
+        // case UI_MSG_SET_BASKET_SUM:
+        // Long sum = (Long) msg.obj;
+        // sumTextView.setText(PriceHelper.getToStringPrice(sum));
+        // if (onBasketSunUpdateListener != null) {
+        // onBasketSunUpdateListener.onBasketSum(sum);
+        // }
+        // break;
+        //
+        // default:
+        // break;
+        // }
+        // }
+        // };
 	//
 	// private final Runnable doBasketSum = new Runnable() {
 	// @Override
