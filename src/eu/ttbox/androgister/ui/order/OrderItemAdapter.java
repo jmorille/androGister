@@ -7,7 +7,6 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.model.OrderItemHelper;
-import eu.ttbox.androgister.model.PriceHelper;
 
 public class OrderItemAdapter extends ResourceCursorAdapter {
 
@@ -34,15 +33,9 @@ public class OrderItemAdapter extends ResourceCursorAdapter {
         TextView nameTextView = (TextView) view.findViewById(R.id.basket_list_item_name);
         TextView priceTextView = (TextView) view.findViewById(R.id.basket_list_item_price);
         // Set value
-        quantityTextView.setText(cursor.getString(helper.quantityIdx));
-        nameTextView.setText(cursor.getString(helper.nameIdx));
-        long price = cursor.getLong(helper.priceUnitIdx);
-        String priceString = null;
-        if (price > -1) {
-            priceString = PriceHelper.getToStringPrice(price);
-        }
-        priceTextView.setText(priceString);
-
+        helper.setTextItemName(nameTextView, cursor) //
+                .setTextItemQuantity(quantityTextView, cursor)//
+                .setTextItemPriceUnit(priceTextView, cursor);
     }
 
 }

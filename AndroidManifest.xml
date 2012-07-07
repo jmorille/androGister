@@ -18,6 +18,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyTheme" >
+
+        <!-- Home -->
         <activity
             android:name=".AndroGisterActivity"
             android:label="@string/app_name" >
@@ -27,20 +29,33 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
+        
+       <!-- Register -->
         <activity
             android:name=".ui.CashRegisterActivity"
             android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.MAIN" /> 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="eu.ttbox.androgister.intent.ADD_BASKET" />
-                <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_BASKET" />
-            </intent-filter>
+<!--             <intent-filter> -->
+<!--                 <action android:name="eu.ttbox.androgister.intent.ADD_BASKET" /> -->
+<!--                 <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_BASKET" /> -->
+<!--             </intent-filter> -->
         </activity>
 
+        <!-- Order -->
+        <activity
+            android:name=".ui.order.OrderEditActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <activity
+            android:name=".ui.order.OrderListActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+         <!-- Service -->
         <service
             android:name=".service.OrderService"
             android:exported="false" >
@@ -56,6 +71,7 @@
             </intent-filter>
         </service>
 
+         <!-- Provider -->
         <provider
             android:name=".database.OfferProvider"
             android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider" />

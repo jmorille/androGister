@@ -10,6 +10,7 @@ import android.widget.Button;
 import eu.ttbox.androgister.AndroGisterActivity;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
+import eu.ttbox.androgister.ui.order.OrderListActivity;
 
 public class RegisterKeyboardFragment extends Fragment {
 
@@ -32,7 +33,7 @@ public class RegisterKeyboardFragment extends Fragment {
 		orderConsultButton.setOnClickListener(new View.OnClickListener() {
  			@Override
 			public void onClick(View v) {
- 				Intent intent = new Intent(getActivity(), AndroGisterActivity.class);
+ 				Intent intent = new Intent(getActivity(), OrderListActivity.class);
  				startActivity(intent);
  			}
 		});

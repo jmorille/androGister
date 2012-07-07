@@ -51,7 +51,7 @@ public class OrderDatabase {
 		public static final String KEY_PRICE_UNIT_HT = "PRICE_UNIT_HT";
 		public static final String KEY_PRICE_SUM_HT = "PRICE_SUM_HT";
 
-		public static final String[] ALL_KEYS = new String[] { KEY_ID, KEY_ORDER_ID, KEY_NAME, KEY_PRODUCT_ID, KEY_EAN, KEY_PRICE_SUM_HT, KEY_PRICE_UNIT_HT };
+		public static final String[] ALL_KEYS = new String[] { KEY_ID, KEY_ORDER_ID, KEY_NAME, KEY_PRODUCT_ID, KEY_EAN, KEY_QUANTITY , KEY_PRICE_UNIT_HT, KEY_PRICE_SUM_HT };
 
 	}
 

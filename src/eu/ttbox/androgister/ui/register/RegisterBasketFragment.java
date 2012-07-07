@@ -22,187 +22,152 @@ import eu.ttbox.androgister.model.PriceHelper;
 
 public class RegisterBasketFragment extends Fragment {
 
-	private static final String TAG = "RegisterBasketFragment";
+    private static final String TAG = "RegisterBasketFragment";
 
-	private ArrayList<OrderItem> basket = new ArrayList<OrderItem>();
-	private BasketItemAdapter listAdapter;
-	// View
-	private TextView sumTextView;
-	private ListView listView;
+    // Binding
+    private TextView sumTextView;
+    private ListView listView;
 
-//	private Executor executor = Executors.newSingleThreadExecutor();
+    // Listener
+    private OnBasketSunUpdateListener onBasketSunUpdateListener;
 
-	private static final int UI_MSG_SET_BASKET_SUM = 1;
+    // Data Instance
+    private ArrayList<OrderItem> basket = new ArrayList<OrderItem>();
+    private BasketItemAdapter listAdapter;
+    private long basketSum = 0;
 
-	private OnBasketSunUpdateListener onBasketSunUpdateListener;
+    private final OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            return onListItemLongClick((ListView) parent, view, position, id);
+        }
 
-        // private Handler uiHandler = new Handler() {
-        // @Override
-        // public void handleMessage(Message msg) {
-        // switch (msg.what) {
-        // case UI_MSG_SET_BASKET_SUM:
-        // Long sum = (Long) msg.obj;
-        // sumTextView.setText(PriceHelper.getToStringPrice(sum));
-        // if (onBasketSunUpdateListener != null) {
-        // onBasketSunUpdateListener.onBasketSum(sum);
-        // }
-        // break;
-        //
-        // default:
-        // break;
-        // }
-        // }
-        // };
-	//
-	// private final Runnable doBasketSum = new Runnable() {
-	// @Override
-	// public void run() {
-	// long sum = getComputeBasketSum();
-	// uiHandler.sendMessage(uiHandler.obtainMessage(
-	// UI_MSG_SET_BASKET_SUM, Long.valueOf(sum)));
-	// }
-	// };
+    };
 
-	private long basketSum = 0;
+    public void setOnBasketSunUpdateListener(OnBasketSunUpdateListener onBasketSunUpdateListener) {
+        this.onBasketSunUpdateListener = onBasketSunUpdateListener;
+    }
 
-	private void setTextSum(long sumPrice) {
-		this.basketSum = sumPrice;
-		sumTextView.setText(PriceHelper.getToStringPrice(sumPrice));
-		if (onBasketSunUpdateListener != null) {
-			onBasketSunUpdateListener.onBasketSum(sumPrice);
-		}
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Adpater
+        listAdapter = new BasketItemAdapter(getActivity(), basket);
+        // Services
+        // mStatusReceiver = new StatusReceiver();
+    }
 
-	private final OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
-		@Override
-		public boolean onItemLongClick(AdapterView<?> parent, View view,
-				int position, long id) {
-			return onListItemLongClick((ListView) parent, view, position, id);
-		}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
-	};
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.register_basket, container, false);
+        // Bind
+        listView = (ListView) view.findViewById(R.id.basket_screen_list);
+        listView.setOnItemLongClickListener(mOnLongClickListener);
+        listView.setAdapter(listAdapter);
+        // View
+        sumTextView = (TextView) view.findViewById(R.id.basket_screen_sum);
+        // Compute Initila Values
+        setTextSum(getComputeBasketSum());
+        // executor.execute(doBasketSum);
+        return view;
+    }
 
-	public void setOnBasketSunUpdateListener(
-			OnBasketSunUpdateListener onBasketSunUpdateListener) {
-		this.onBasketSunUpdateListener = onBasketSunUpdateListener;
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// Adpater
-		listAdapter = new BasketItemAdapter(getActivity(), basket);
-		// Services
-		// mStatusReceiver = new StatusReceiver();
-	}
+    }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater
-				.inflate(R.layout.register_basket, container, false);
-		// Bind
-		listView = (ListView) view.findViewById(R.id.basket_screen_list);
-		listView.setOnItemLongClickListener(mOnLongClickListener);
-		listView.setAdapter(listAdapter);
-		// View
-		sumTextView = (TextView) view.findViewById(R.id.basket_screen_sum);
-		// Compute Initila Values
-		setTextSum(getComputeBasketSum());
-		// executor.execute(doBasketSum);
-		return view;
-	}
+    private void setTextSum(long sumPrice) {
+        this.basketSum = sumPrice;
+        sumTextView.setText(PriceHelper.getToStringPrice(sumPrice));
+        if (onBasketSunUpdateListener != null) {
+            onBasketSunUpdateListener.onBasketSum(sumPrice);
+        }
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
+    private long getComputeBasketSum() {
+        return getComputeBasketSum(basket);
+    }
 
-	}
+    private long getComputeBasketSum(ArrayList<OrderItem> items) {
+        long sum = 0;
+        if (items != null && !items.isEmpty()) {
+            for (OrderItem item : items) {
+                sum += item.getPriceSumHT();
+            }
+        }
+        return sum;
+    }
 
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
+    public void onAddBasketItem(Offer offer) {
+        OrderItem item = OrderItemHelper.createFromProduct(offer);
+        onAddBasketItem(item);
+    }
 
-	private long getComputeBasketSum() {
-		return getComputeBasketSum(basket);
-	}
+    public void onAddBasketItem(OrderItem item) {
+        listAdapter.add(item);
+        setTextSum(this.basketSum + item.getPriceSumHT());
+        // executor.execute(doBasketSum);
+    }
 
-	private long getComputeBasketSum(ArrayList<OrderItem> items) {
-		long sum = 0;
-		if (items != null && !items.isEmpty()) {
-			for (OrderItem item : items) {
-				sum += item.getPriceSumHT();
-			}
-		}
-		return sum;
-	}
+    public void onRemoveBasketItem(OrderItem item) {
+        listAdapter.remove(item);
+        setTextSum(this.basketSum - item.getPriceSumHT());
+        // executor.execute(doBasketSum);
+    }
 
-	public void onAddBasketItem(Offer offer) {
-		OrderItem item = OrderItemHelper.createFromProduct(offer);
-		onAddBasketItem(item);
-	}
+    protected boolean onListItemLongClick(ListView list, View view, int position, long id) {
+        OrderItem item = (OrderItem) listAdapter.getItem(position);
+        onRemoveBasketItem(item);
+        return true;
+    }
 
-	public void onAddBasketItem(OrderItem item) {
-		listAdapter.add(item);
-		setTextSum(this.basketSum + item.getPriceSumHT());
-		// executor.execute(doBasketSum);
-	}
+    public void clearBasket() {
+        basket.clear();
+        listAdapter.notifyDataSetChanged();
+        setTextSum(getComputeBasketSum());
+        // executor.execute(doBasketSum);
+    }
 
-	public void onRemoveBasketItem(OrderItem item) {
-		listAdapter.remove(item);
-		setTextSum(this.basketSum - item.getPriceSumHT());
-		// executor.execute(doBasketSum);
-	}
+    public boolean isCurrentBasket() {
+        boolean isABasket = !basket.isEmpty();
+        return isABasket;
+    }
 
-	protected boolean onListItemLongClick(ListView list, View view,
-			int position, long id) {
-		OrderItem item = (OrderItem) listAdapter.getItem(position);
-		onRemoveBasketItem(item);
-		return true;
-	}
+    public void askToSaveBasketToOrder() {
+        Log.i(TAG, "Ask to save Basket to Order");
+        if (isCurrentBasket()) {
+            // Get Clone of Basket Items
+            ArrayList<OrderItem> items = new ArrayList<OrderItem>(basket);
+            long sumBasket = getComputeBasketSum(items);
+            // Prepare Object
+            Order order = new Order();
+            order.setItems(items);
+            order.setPriceSumHT(sumBasket);
+            // Validate Order
+            // TODO
+            // Save It
+            Log.i(TAG, "Ask to save Basket to Order with " + items.size() + " Items");
+            getActivity().sendBroadcast(Intents.saveOrder(order));
+            // getActivity().getContentResolver().insert(O, values)
+            // Temporay Del
+            clearBasket();
+        }
+    }
 
-	public void clearBasket() {
-		basket.clear();
-		listAdapter.notifyDataSetChanged();
-		setTextSum(getComputeBasketSum());
-		// executor.execute(doBasketSum);
-	}
-
-	public boolean isCurrentBasket() {
-		boolean isABasket = !basket.isEmpty();
-		return isABasket;
-	}
-	
-	public void askToSaveBasketToOrder() {
-		Log.i(TAG, "Ask to save Basket to Order");
-		if (isCurrentBasket()) {
-			// Get Clone of Basket Items
-			ArrayList<OrderItem> items = new ArrayList<OrderItem>(basket);
-			long sumBasket = getComputeBasketSum(items);
-			// Prepare Object
-			Order order = new Order();
-			order.setItems(items);
-			order.setPriceSumHT(sumBasket);
-			// Validate Order
-			// TODO
-			// Save It
-			Log.i(TAG, "Ask to save Basket to Order with " + items.size()
-					+ " Items");
-			getActivity().sendBroadcast(Intents.saveOrder(order));
-			// getActivity().getContentResolver().insert(O, values)
-			// Temporay Del
-			clearBasket();
-		}
-	}
-
-	public interface OnBasketSunUpdateListener {
-		void onBasketSum(long sum);
-	}
+    public interface OnBasketSunUpdateListener {
+        void onBasketSum(long sum);
+    }
 
 }

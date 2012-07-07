@@ -1,24 +1,38 @@
 package eu.ttbox.androgister.ui.order;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.core.Intents;
 
 public class OrderEditActivity extends Activity {
+
+    private static final String TAG = "OrderEditActivity";
+
+    private OrderEditFragment orderEditFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cash_register);
-        // Handle Intent
-        handleIntent(getIntent());
+        setContentView(R.layout.order_edit_activity);
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        if (fragment instanceof OrderEditFragment) {
+            orderEditFragment = (OrderEditFragment) fragment;
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Handle Intent
+        handleIntent(getIntent());
     }
 
     @Override
@@ -37,15 +51,21 @@ public class OrderEditActivity extends Activity {
         }
         // Handel Intent
         String action = intent.getAction();
-        if (Intent.ACTION_EDIT.equals(action)) {
-            Uri uri = intent.getData();
-            String orderIdString = uri.getLastPathSegment();
-//            doSearch(orderIdString);
-        } else if (Intent.ACTION_DELETE.equals(action)) {
-
+        Log.i(TAG, "Handle Intent action " + action);
+        if (Intents.ACTION_VIEW_ORDER_DETAIL.equals(action)) {
+            long orderId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
+            Log.i(TAG, "Handle Intent action ACTION_VIEW_ORDER_DETAIL : orderId = " + orderId);
+            if (orderId != -1) {
+                orderEditFragment.doSearchOrder(orderId);
+                // openOrder(orderId);
+            }
         }
     }
 
-   
-    
+    private void openOrder(long orderId) {
+        Intent viewIntent = Intents.viewOrderDetail(orderId);
+        sendBroadcast(viewIntent);
+        Log.i(TAG, "sendBroadcast Intent : = " + viewIntent);
+    }
+
 }

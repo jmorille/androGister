@@ -10,11 +10,11 @@ public class Intents {
     public static final String ACTION_SAVE_BASKET = "eu.ttbox.androgister.intent.ACTION_SAVE_BASKET";
     public static final String ACTION_SAVE_ORDER = "eu.ttbox.androgister.intent.ACTION_SAVE_ORDER";
 
-    public static final String ACTION_VIEW_ORDER_DETAIL = "eu.ttbox.androgister.intent.ACTION_SAVE_ORDER";
+    public static final String ACTION_VIEW_ORDER_DETAIL = "eu.ttbox.androgister.intent.ACTION_VIEW_ORDER_DETAIL";
 
     public static final String EXTRA_OFFER = "eu.ttbox.androgister.intent.EXTRA_OFFER";
     public static final String EXTRA_ORDER = "eu.ttbox.androgister.intent.EXTRA_ORDER";
-
+ 
     public static Intent addToBasket(Offer status) {
         return new Intent(ACTION_ADD_BASKET).putExtra(EXTRA_OFFER, status);
     }

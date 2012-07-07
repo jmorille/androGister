@@ -2,8 +2,10 @@ package eu.ttbox.androgister.database.product;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.widget.TextView;
 import eu.ttbox.androgister.database.product.OfferDatabase.Column;
 import eu.ttbox.androgister.model.Offer;
+import eu.ttbox.androgister.model.PriceHelper;
 
 public class OfferHelper {
 
@@ -43,6 +45,30 @@ public class OfferHelper {
         long priceHT = cursor.getLong(priceIdx);
         product.setPriceHT(priceIdx > -1 ? priceHT : -1);
         return product;
+    }
+    
+    private OfferHelper setTextWithIdx(TextView view, Cursor cursor, int idx) {
+        view.setText(cursor.getString(idx));
+        return this;
+    }
+
+    public OfferHelper setTextOfferId(TextView view, Cursor cursor) {
+        return setTextWithIdx(view, cursor, idIdx);
+    }
+
+    public OfferHelper setTextOfferName(TextView view, Cursor cursor) {
+        return setTextWithIdx(view, cursor, nameIdx);
+    }
+
+    public OfferHelper setTextOfferDescription(TextView view, Cursor cursor) {
+        return setTextWithIdx(view, cursor, descIdx);
+    }
+    
+    public OfferHelper setTextOfferPrice(TextView view, Cursor cursor) {
+        long priceSum = cursor.getLong(priceIdx);
+        String priceText = PriceHelper.getToStringPrice(priceSum);
+        view.setText(priceText);
+        return this;
     }
 
     public static ContentValues getContentValues(Offer product) {

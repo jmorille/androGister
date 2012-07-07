@@ -112,7 +112,7 @@ public class OrderProvider extends ContentProvider {
 		return orderDatabase.getOrder(rowId, projection);
 	}
 	private Cursor getOrderItem(String orderId, String[] _projection) {
-		String[] projection = _projection==null? OrderDatabase.OrderColumns.ALL_KEYS : _projection;
+		String[] projection = _projection==null? OrderDatabase.OrderItemColumns.ALL_KEYS : _projection;
 		return orderDatabase.getOrderItems(orderId, projection, null);
  	}
 	private Cursor search(String[] _projection, String _selection, String[] _selectionArgs, String _sortOrder) {
