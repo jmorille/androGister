@@ -3,15 +3,22 @@
 
     <string name="hello">Hello World, AndroGisterActivity!</string>
     <string name="app_name">AndroGister</string>
+
+    <!-- Button -->
+    <string name="button_order_edit">Modifier</string>
+    <string name="button_order_delete">Supprimer</string>
+    
+
+    <!-- Basket -->
     <string name="basket_sum">Total</string>
 
+    <!-- Model -->
     <string name="order_number">N°</string>
     <string name="order_uuid">Id</string>
     <string name="order_date">Date</string>
     <string name="order_price">Total</string>
     <string name="order_status">Statut</string>
-    
     <string name="tab_words">Word</string>
     <string name="tab_numbers">Number</string>
-    
+
 </resources>

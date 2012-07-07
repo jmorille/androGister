@@ -8,8 +8,15 @@
         android:minSdkVersion="13"
         android:targetSdkVersion="16" />
 
-    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <!-- <uses-permission android:name="android.permission.BROADCAST_STICKY" /> -->
 
+ 
+    <uses-permission android:name="eu.ttbox.androgister.OFFER_READ" />
+    <uses-permission android:name="eu.ttbox.androgister.OFFER_WRITE" />
+    <uses-permission android:name="eu.ttbox.androgister.ORDER_READ" />
+    <uses-permission android:name="eu.ttbox.androgister.ORDER_WRITE" />
+ 
+    
     <uses-feature android:name="android.hardware.usb.accessory" />
 
     <application
@@ -29,8 +36,8 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        
-       <!-- Register -->
+
+        <!-- Register -->
         <activity
             android:name=".ui.CashRegisterActivity"
             android:label="@string/app_name" >
@@ -38,29 +45,28 @@
                 <action android:name="android.intent.action.MAIN" /> 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-<!--             <intent-filter> -->
-<!--                 <action android:name="eu.ttbox.androgister.intent.ADD_BASKET" /> -->
-<!--                 <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_BASKET" /> -->
-<!--             </intent-filter> -->
-        </activity>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="eu.ttbox.androgister.intent.ADD_BASKET" /> -->
+            <!-- <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_BASKET" /> -->
+            <!-- </intent-filter> -->
+         </activity>
 
         <!-- Order -->
         <activity
             android:name=".ui.order.OrderEditActivity"
             android:label="@string/app_name" >
         </activity>
-        
         <activity
             android:name=".ui.order.OrderListActivity"
             android:label="@string/app_name" >
         </activity>
 
-         <!-- Service -->
+        <!-- Service -->
         <service
             android:name=".service.OrderService"
             android:exported="false" >
             <intent-filter>
-                <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_ORDER" />
+                <action android:name="eu.ttbox.androgister.intent.ACTION_ORDER_ADD" />
             </intent-filter>
         </service>
         <service
@@ -71,13 +77,18 @@
             </intent-filter>
         </service>
 
-         <!-- Provider -->
+        <!-- Provider -->
         <provider
             android:name=".database.OfferProvider"
-            android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider" />
-        <provider
+            android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider"
+            android:readPermission="eu.ttbox.androgister.OFFER_READ"
+            android:writePermission="eu.ttbox.androgister.OFFER_WRITE" />
+         <provider
             android:name=".database.OrderProvider"
-            android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider" />
+            android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider"
+            android:readPermission="eu.ttbox.androgister.ORDER_READ"
+            android:writePermission="eu.ttbox.androgister.ORDER_WRITE" />
+        
     </application>
 
 </manifest>

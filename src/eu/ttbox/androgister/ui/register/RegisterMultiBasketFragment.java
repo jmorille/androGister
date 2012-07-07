@@ -226,7 +226,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 				Offer status = (Offer) intent
 						.getSerializableExtra(Intents.EXTRA_OFFER);
 				currentBasket.onAddBasketItem(status);
-				context.removeStickyBroadcast(intent);
+//				context.removeStickyBroadcast(intent);
 			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
 				currentBasket.askToSaveBasketToOrder();
 				removeTab(mCurrentTab);

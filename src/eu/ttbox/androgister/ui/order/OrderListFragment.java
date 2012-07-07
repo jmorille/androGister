@@ -61,7 +61,7 @@ public class OrderListFragment extends Fragment implements OnLoadCompleteListene
     private void doSearch(String selection, String... selectionArgs) {
         // String selection = null;
         // String[] selectionArgs = null; // new String[] { query };
-        String sortOrder = String.format("%s DESC", OrderColumns.KEY_ORDER_DATE);
+        String sortOrder = String.format("%s DESC, %s DESC", OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_ORDER_NUMBER);
         CursorLoader cursorLoader = new CursorLoader(getActivity(), OrderProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs, sortOrder);
         cursorLoader.registerListener(1, this);
         cursorLoader.startLoading();
@@ -77,7 +77,7 @@ public class OrderListFragment extends Fragment implements OnLoadCompleteListene
         Cursor item = (Cursor) l.getAdapter().getItem(position);
         long orderId = item.getLong(item.getColumnIndex(OrderColumns.KEY_ID));
         Intent intent = new Intent(getActivity(), OrderEditActivity.class);
-        intent.setAction(Intents.ACTION_VIEW_ORDER_DETAIL);
+        intent.setAction(Intents.ACTION_ORDER_VIEW_DETAIL);
         intent.putExtra(Intents.EXTRA_ORDER, orderId); 
         startActivity(intent);
     }
