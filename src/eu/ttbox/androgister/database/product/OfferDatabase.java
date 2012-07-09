@@ -16,14 +16,14 @@ public class OfferDatabase {
 
 	public static class Column {
 
-		public static final String KEY_ID =  BaseColumns._ID;
+		public static final String KEY_ID = BaseColumns._ID;
 		public static final String KEY_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
 		public static final String KEY_DESCRIPTION = SearchManager.SUGGEST_COLUMN_TEXT_2;
 		public static final String KEY_EAN = "EAN";
 		public static final String KEY_PRICEHT = "PRICEHT";
 		public static final String KEY_TAG = "TAG";
-		
-		public static final String[] ALL_KEYS = new String[] {KEY_ID, KEY_NAME, KEY_DESCRIPTION, KEY_EAN, KEY_PRICEHT, KEY_TAG};
+
+		public static final String[] ALL_KEYS = new String[] { KEY_ID, KEY_NAME, KEY_DESCRIPTION, KEY_EAN, KEY_PRICEHT, KEY_TAG };
 
 	}
 
@@ -54,15 +54,13 @@ public class OfferDatabase {
 		// Add Identity Column
 		for (String col : Column.ALL_KEYS) {
 			if (!col.equals(Column.KEY_ID)) {
-			map.put(col, col); 
+				map.put(col, col);
 			}
 		}
-		// Add Suggest Aliases 
-		map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS "
-				+ SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
-		map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS "
-				+ SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
-		// Add Other Aliases 
+		// Add Suggest Aliases
+		map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
+		map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
+		// Add Other Aliases
 		return map;
 	}
 
@@ -100,23 +98,7 @@ public class OfferDatabase {
 		String selection = Column.KEY_NAME + " MATCH ?";
 		String[] selectionArgs = new String[] { query + "*" };
 
-		return query(selection, selectionArgs, columns);
-
-		/*
-		 * This builds a query that looks like: SELECT <columns> FROM <table>
-		 * WHERE <KEY_WORD> MATCH 'query*' which is an FTS3 search for the query
-		 * text (plus a wildcard) inside the word column.
-		 * 
-		 * - "rowid" is the unique id for all rows but we need this value for
-		 * the "_id" column in order for the Adapters to work, so the columns
-		 * need to make "_id" an alias for "rowid" - "rowid" also needs to be
-		 * used by the SUGGEST_COLUMN_INTENT_DATA alias in order for suggestions
-		 * to carry the proper intent data. These aliases are defined in the
-		 * DictionaryProvider when queries are made. - This can be revised to
-		 * also search the definition text with FTS3 by changing the selection
-		 * clause to use FTS_VIRTUAL_TABLE instead of KEY_WORD (to search across
-		 * the entire table, but sorting the relevance could be difficult.
-		 */
+		return query(selection, selectionArgs, columns); 
 	}
 
 	/**
@@ -130,8 +112,7 @@ public class OfferDatabase {
 	 *            The columns to return
 	 * @return A Cursor over all rows matching the query
 	 */
-	public Cursor query(String selection, String[] selectionArgs,
-			String[] columns) {
+	public Cursor query(String selection, String[] selectionArgs, String[] columns) {
 		/*
 		 * The SQLiteBuilder provides a map for all possible columns requested
 		 * to actual columns in the database, creating a simple column alias
@@ -142,9 +123,7 @@ public class OfferDatabase {
 		builder.setTables(TABLE_OFFER_FTS);
 		builder.setProjectionMap(mColumnMap);
 
-		Cursor cursor = builder.query(
-				mDatabaseOpenHelper.getReadableDatabase(), columns, selection,
-				selectionArgs, null, null, null);
+		Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
 
 		if (cursor == null) {
 			return null;

@@ -22,7 +22,7 @@ public class OrderService extends IntentService implements SharedPreferences.OnS
 
 	private static final String TAG = "OrderService";
 
-    private BroadcastReceiver receiver;
+//    private BroadcastReceiver receiver;
     private IBinder localBinder;
     private OrderDatabase orderDatabase;
 
@@ -55,8 +55,8 @@ public class OrderService extends IntentService implements SharedPreferences.OnS
         localBinder = new LocalBinder();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intents.ACTION_ORDER_ADD);
-        receiver = new StatusReceiver();
-        registerReceiver(receiver, filter); //
+//        receiver = new StatusReceiver();
+//        registerReceiver(receiver, filter); //
     }
 
     @Override
@@ -72,7 +72,7 @@ public class OrderService extends IntentService implements SharedPreferences.OnS
         orderDatabase = null;
         // Listener
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-        unregisterReceiver(receiver);
+//        unregisterReceiver(receiver);
         super.onDestroy();
     }
 
@@ -97,10 +97,10 @@ public class OrderService extends IntentService implements SharedPreferences.OnS
             return OrderService.this;
         }
     };
-
-    private class StatusReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
+//
+//    private class StatusReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
 //            String action = intent.getAction();
 //            Log.i(TAG, "Service onReceive action : " + action);
 //            if (Intents.ACTION_ORDER_ADD.equals(action)) {
@@ -112,8 +112,8 @@ public class OrderService extends IntentService implements SharedPreferences.OnS
 //                    deleteOrder(orderId);
 //                }
 //            }
-        }
-    }
+//        }
+//    }
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
