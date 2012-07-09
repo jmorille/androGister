@@ -1,9 +1,6 @@
 package eu.ttbox.androgister.service;
 
 import android.app.IntentService;
-import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
