@@ -159,7 +159,7 @@ public class RegisterBasketFragment extends Fragment {
             // TODO
             // Save It
             Log.i(TAG, "Ask to save Basket to Order with " + items.size() + " Items");
-            getActivity().sendBroadcast(Intents.saveOrder(order));
+            getActivity().startService(Intents.saveOrder(getActivity(),order));
             // getActivity().getContentResolver().insert(O, values)
             // Temporay Del
             clearBasket();

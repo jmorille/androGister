@@ -1,5 +1,6 @@
 package eu.ttbox.androgister.service;
 
+import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -17,7 +18,12 @@ import android.util.Log;
  * @author jmorille
  * 
  */
-public class UsbService extends Service {
+public class UsbService extends IntentService {
+
+	public UsbService(String name) {
+		super(name);
+	 
+	}
 
 	private static final String TAG = "UsbService";
 
@@ -29,6 +35,14 @@ public class UsbService extends Service {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+
+	@Override
+	protected void onHandleIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	@Override
 	public void onCreate() {

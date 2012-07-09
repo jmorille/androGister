@@ -14,6 +14,8 @@ public class OrderHelper {
     public int idIdx = -1;
     public int orderNumberIdx = -1;
     public int orderUuidIdx = -1;
+    public int orderDeleteUuidIdx = -1;
+    
     public int statusIdx = -1;
     public int orderDateIdx = -1;
     public int priceSumIdx = -1;
@@ -41,6 +43,8 @@ public class OrderHelper {
         idIdx = cursor.getColumnIndex(OrderColumns.KEY_ID);
         orderNumberIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_NUMBER);
         orderUuidIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_UUID);
+        orderDeleteUuidIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_DELETE_UUID);
+        
         statusIdx = cursor.getColumnIndex(OrderColumns.KEY_STATUS);
         orderDateIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_DATE);
         priceSumIdx = cursor.getColumnIndex(OrderColumns.KEY_PRICE_SUM_HT);
@@ -76,6 +80,10 @@ public class OrderHelper {
 
     public OrderHelper setTextOrderUuid(TextView view, Cursor cursor) {
         return setTextWithIdx(view, cursor, orderUuidIdx);
+    }
+
+    public OrderHelper setTextOrderDeleteUuid(TextView view, Cursor cursor) {
+        return setTextWithIdx(view, cursor, orderDeleteUuidIdx);
     }
 
     public OrderHelper setTextPersonMatricule(TextView view, Cursor cursor) {
@@ -119,6 +127,7 @@ public class OrderHelper {
         order.setId(idIdx > -1 ? cursor.getLong(idIdx) : -1);
         order.setOrderNumber(orderNumberIdx > -1 ? cursor.getLong(orderNumberIdx) : -1);
         order.setOrderUUID(orderUuidIdx > -1 ? cursor.getString(orderUuidIdx) : null);
+        order.setOrderDeleteUUID(orderDeleteUuidIdx > -1 ? cursor.getString(orderDeleteUuidIdx) : null);
         order.setStatus(statusIdx > -1 ? OrderStatusEnum.getEnumFromKey(cursor.getInt(statusIdx)) : null);
         order.setOrderDate(orderDateIdx > -1 ? cursor.getLong(orderDateIdx) : -1);
         order.setPriceSumHT(priceSumIdx > -1 ? cursor.getLong(priceSumIdx) : 0);
@@ -141,8 +150,17 @@ public class OrderHelper {
         long orderNumber = order.getOrderNumber();
         if (orderNumber > -1) {
             initialValues.put(OrderColumns.KEY_ORDER_NUMBER, Long.valueOf(orderNumber));
-        }
+        } 
+        // UUID
         initialValues.put(OrderColumns.KEY_ORDER_UUID, order.getOrderUUID());
+        // Delete UUID Ref
+        // If not set, shoulb be equal to UUID in order to use database constraints
+        String deleteUUID = order.getOrderDeleteUUID();
+        if (deleteUUID==null || deleteUUID.isEmpty()) {
+        	deleteUUID =order.getOrderUUID();
+        }
+        initialValues.put(OrderColumns.KEY_ORDER_DELETE_UUID, deleteUUID);
+        
         // Other
         initialValues.put(OrderColumns.KEY_STATUS, Integer.valueOf(order.getStatus().getKey()));
         if (order.getOrderDate() > -1) {

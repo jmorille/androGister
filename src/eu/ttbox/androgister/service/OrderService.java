@@ -1,5 +1,6 @@
 package eu.ttbox.androgister.service;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,9 +17,10 @@ import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.order.OrderDatabase;
 import eu.ttbox.androgister.model.Order;
 
-public class OrderService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class OrderService extends IntentService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = "OrderService";
+
+	private static final String TAG = "OrderService";
 
     private BroadcastReceiver receiver;
     private IBinder localBinder;
@@ -29,6 +31,11 @@ public class OrderService extends Service implements SharedPreferences.OnSharedP
     // Instance Data
     private String deviceId;
 
+    public OrderService() {
+		super("OrderService");
+	}
+
+    
     @Override
     public IBinder onBind(Intent intent) {
         return localBinder;
@@ -94,18 +101,33 @@ public class OrderService extends Service implements SharedPreferences.OnSharedP
     private class StatusReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            Log.i(TAG, "Service onReceive action : " + action);
-            if (Intents.ACTION_ORDER_ADD.equals(action)) {
-                Order order = (Order) intent.getSerializableExtra(Intents.EXTRA_ORDER);
-                saveOrder(order);
-            } else if (Intents.ACTION_ORDER_DELETE.equals(action)) {
-                long orderId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
-                if (orderId!=-1) {
-                    deleteOrder(orderId);
-                }
-            }
+//            String action = intent.getAction();
+//            Log.i(TAG, "Service onReceive action : " + action);
+//            if (Intents.ACTION_ORDER_ADD.equals(action)) {
+//                Order order = (Order) intent.getSerializableExtra(Intents.EXTRA_ORDER);
+//                saveOrder(order);
+//            } else if (Intents.ACTION_ORDER_DELETE.equals(action)) {
+//                long orderId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
+//                if (orderId!=-1) {
+//                    deleteOrder(orderId);
+//                }
+//            }
         }
     }
+
+	@Override
+	protected void onHandleIntent(Intent intent) {
+		 String action = intent.getAction();
+         Log.i(TAG, "Service onReceive action : " + action);
+         if (Intents.ACTION_ORDER_ADD.equals(action)) {
+             Order order = (Order) intent.getSerializableExtra(Intents.EXTRA_ORDER);
+             saveOrder(order);
+         } else if (Intents.ACTION_ORDER_DELETE.equals(action)) {
+             long orderId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
+             if (orderId!=-1) {
+                 deleteOrder(orderId);
+             }
+         }
+	}
 
 }

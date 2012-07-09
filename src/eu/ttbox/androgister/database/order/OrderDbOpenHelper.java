@@ -14,10 +14,12 @@ public class OrderDbOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "orderDb";
 
     public static final int DATABASE_VERSION = 1;
-
+   
     private static final String CREATE_TABLE_ORDER = "CREATE TABLE " + OrderDatabase.ORDER_TABLE //
-            + "( " + OrderColumns.KEY_ORDER_NUMBER + " INTEGER NOT NULL" //
+            + "( " + OrderColumns.KEY_ID + " INTEGER PRIMARY KEY" //
+            + ", " + OrderColumns.KEY_ORDER_NUMBER + " INTEGER NOT NULL" //
             + ", " + OrderColumns.KEY_ORDER_UUID + " TEXT NOT NULL" //
+            + ", " + OrderColumns.KEY_ORDER_DELETE_UUID + " TEXT" // 
             + ", " + OrderColumns.KEY_ORDER_DATE + " INTEGER NOT NULL" //
             + ", " + OrderColumns.KEY_STATUS + " INTEGER NOT NULL" //
             + ", " + OrderColumns.KEY_PRICE_SUM_HT + " INTEGER NOT NULL" //
@@ -31,8 +33,13 @@ public class OrderDbOpenHelper extends SQLiteOpenHelper {
     private static final String CREATE_INDEX_AK_UUID = "CREATE UNIQUE INDEX IDX_ORDER_AK_UUID ON " + OrderDatabase.ORDER_TABLE //
             + " (" + OrderColumns.KEY_ORDER_UUID + "," + OrderColumns.KEY_STATUS + " )";
 
+    private static final String CREATE_INDEX_DEL_UUID = "CREATE UNIQUE INDEX IDX_ORDER_DEL_UUID ON " + OrderDatabase.ORDER_TABLE //
+            + " (" + OrderColumns.KEY_ORDER_DELETE_UUID + "," + OrderColumns.KEY_STATUS + " )";
+
+
     private static final String CREATE_TABLE_ORDER_ITEM = "CREATE TABLE " + OrderDatabase.ORDER_ITEM_TABLE //
-            + "( " + OrderItemColumns.KEY_ORDER_ID + " INTEGER NOT NULL" //
+            + "( " + OrderItemColumns.KEY_ID + " INTEGER PRIMARY KEY" //
+            + ", " + OrderItemColumns.KEY_ORDER_ID + " INTEGER NOT NULL" //
             + ", " + OrderItemColumns.KEY_NAME + " TEXT NOT NULL" //
             + ", " + OrderItemColumns.KEY_PRODUCT_ID + " INTEGER NOT NULL" //
             + ", " + OrderItemColumns.KEY_EAN + " TEXT"//
@@ -56,6 +63,7 @@ public class OrderDbOpenHelper extends SQLiteOpenHelper {
         mDatabase = db;
         mDatabase.execSQL(CREATE_TABLE_ORDER);
         mDatabase.execSQL(CREATE_INDEX_AK_UUID);
+        mDatabase.execSQL(CREATE_INDEX_DEL_UUID); 
         mDatabase.execSQL(CREATE_TABLE_ORDER_ITEM);
     }
 
@@ -64,6 +72,7 @@ public class OrderDbOpenHelper extends SQLiteOpenHelper {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + OrderDatabase.ORDER_ITEM_TABLE);
         db.execSQL("DROP INDEX IF EXISTS IDX_ORDER_AK_UUID");
+        db.execSQL("DROP INDEX IF EXISTS IDX_ORDER_DEL_UUID");
         db.execSQL("DROP TABLE IF EXISTS " + OrderDatabase.ORDER_TABLE);
         onCreate(db);
     }

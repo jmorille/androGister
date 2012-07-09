@@ -32,8 +32,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 	private static final String TAG = "RegisterMultiBasketFragment";
 
 	// Listener
-	private BroadcastReceiver mStatusReceiver;
-	private OrderService orderService;
+	private BroadcastReceiver mStatusReceiver; 
 
 	// View
 	private LinearLayout viewTabs;
@@ -53,18 +52,12 @@ public class RegisterMultiBasketFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Services
-		mStatusReceiver = new StatusReceiver();
-		// Listener
-		getActivity().bindService(
-				new Intent(getActivity(), OrderService.class),
-				orderServiceConnection, Context.BIND_AUTO_CREATE);
-
+		// Services 
+		mStatusReceiver = new StatusReceiver(); 
 	}
 
 	@Override
-	public void onDestroy() {
-		getActivity().unbindService(orderServiceConnection);
+	public void onDestroy() { 
 		super.onDestroy();
 	}
 
@@ -207,17 +200,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 			fmt.commit();
 		}
 	}
-
-	private ServiceConnection orderServiceConnection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			orderService = ((OrderService.LocalBinder) service).getService();
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			orderService = null;
-		}
-	};
-
+ 
 	private class StatusReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {

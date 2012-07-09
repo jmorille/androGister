@@ -79,8 +79,9 @@ public class OrderEditFragment extends Fragment {
     }
 
     private void deleteOrder() {
-        Intent intent = Intents.deleteOrderDetail(orderId);
-        getActivity().sendBroadcast(intent);
+        Intent intent = Intents.deleteOrderDetail(getActivity() ,orderId);
+        getActivity().startService(intent);
+//        getActivity().sendBroadcast(intent);
     }
     //
     // @Override
