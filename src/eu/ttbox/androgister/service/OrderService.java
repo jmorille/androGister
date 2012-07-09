@@ -30,14 +30,25 @@ public class OrderService extends IntentService implements SharedPreferences.OnS
 
     public OrderService() {
 		super("OrderService");
+		setIntentRedelivery(true);
 	}
 
     
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent) { 
         return localBinder;
     }
 
+//    private void doInForegroundService() {
+//    	Notification notification = new Notification(R.drawable.icon, getText(R.string.ticker_text),
+//    	        System.currentTimeMillis());
+//    	Intent notificationIntent = new Intent(this, ExampleActivity.class);
+//    	PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+//    	notification.setLatestEventInfo(this, getText(R.string.notification_title),
+//    	        getText(R.string.notification_message), pendingIntent);
+//    	startForeground(ONGOING_NOTIFICATION, notification);
+//    }
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -54,6 +65,9 @@ public class OrderService extends IntentService implements SharedPreferences.OnS
         filter.addAction(Intents.ACTION_ORDER_ADD);
 //        receiver = new StatusReceiver();
 //        registerReceiver(receiver, filter); //
+        Log.i(TAG, "############################################");
+        Log.i(TAG, "###        On Create OrderService       ####");
+        Log.i(TAG, "############################################");
     }
 
     @Override
