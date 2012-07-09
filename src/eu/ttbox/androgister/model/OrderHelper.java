@@ -5,11 +5,14 @@ import java.util.Date;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 import android.widget.TextView;
 import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
 
 public class OrderHelper {
 
+    private static final String TAG = "OrderHelper";
+    
     boolean isNotInit = true;
     public int idIdx = -1;
     public int orderNumberIdx = -1;
@@ -185,5 +188,20 @@ public class OrderHelper {
         String result = String.format("%1$tY%1$tm%1$td-%2$s-%3$s", today, hardwareId, orderNumber);
         return result;
     }
+    
+    public static boolean isOrderDeletePossible(Order order) {
+        boolean isPossible = true;
+        if (isPossible && !OrderStatusEnum.ORDER.equals(order.getStatus())) {
+            isPossible = false;
+            Log.w(TAG, String.format("Order Delete %s is NOT Possible for order status %s", order.getOrderUUID(), order.getStatus()));
+        }
+        if (isPossible && !order.getOrderUUID().equals(order.getOrderDeleteUUID())) {
+            // Already Invalidate, is not impossible to do again
+            isPossible = false;
+            Log.w(TAG, String.format("Order Delete %s is NOT Possible for previous delete by %s", order.getOrderUUID(), order.getOrderDeleteUUID()));
+        }
+        return isPossible;
+    }
+
 
 }
