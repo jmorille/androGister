@@ -165,6 +165,8 @@ public class OrderHelper {
         initialValues.put(OrderColumns.KEY_STATUS, Integer.valueOf(order.getStatus().getKey()));
         if (order.getOrderDate() > -1) {
             initialValues.put(OrderColumns.KEY_ORDER_DATE, Long.valueOf(order.getOrderDate()));
+        } else {
+            initialValues.putNull(OrderColumns.KEY_ORDER_DATE);
         }
         // Price
         initialValues.put(OrderColumns.KEY_PRICE_SUM_HT, Long.valueOf(order.getPriceSumHT()));

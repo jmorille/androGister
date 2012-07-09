@@ -7,13 +7,13 @@
     <Button
         android:id="@+id/register_kb_validate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content" 
         android:text="Validate" />
     
     <Button
         android:id="@+id/register_kb_order_consult"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content" 
         android:text="Order Consult" />
     
     

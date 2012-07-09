@@ -10,6 +10,8 @@ import android.net.Uri;
 import eu.ttbox.androgister.database.product.OfferDatabase;
 
 public class OfferProvider extends ContentProvider {
+    
+    @SuppressWarnings("unused")
     private static final String TAG = "OfferProvider";
 
     // MIME types used for searching words or looking up a single definition

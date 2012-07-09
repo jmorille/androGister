@@ -1,9 +1,9 @@
 package eu.ttbox.androgister.ui.product;
 
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
-import android.content.Loader.OnLoadCompleteListener;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,92 +22,123 @@ import eu.ttbox.androgister.database.product.OfferHelper;
 import eu.ttbox.androgister.model.Offer;
 
 /**
- * TODO {link http://blogingtutorials.blogspot.fr/2010/11/android-listview-header-two-or-more-in.html}
+ * TODO {link
+ * http://blogingtutorials.blogspot.fr/2010/11/android-listview-header
+ * -two-or-more-in.html}
+ * 
  * @author jmorille
- *
+ * 
  */
-public class ProductSelectorFragment extends Fragment implements OnLoadCompleteListener<Cursor> {
+public class ProductSelectorFragment extends Fragment {
 
-	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OfferColumns.KEY_ID, OfferColumns.KEY_NAME, OfferColumns.KEY_PRICEHT, OfferColumns.KEY_TAG };
+    private static final int OFFER_LIST_LOADER = 0x01;
 
-	private static final String SEARCH_SELECTION_TAG = String.format("%s MATCH ?", OfferColumns.KEY_TAG);
+    // Constante
+    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OfferColumns.KEY_ID, OfferColumns.KEY_NAME, OfferColumns.KEY_PRICEHT, OfferColumns.KEY_TAG };
+    private static final String SEARCH_SELECTION_TAG = String.format("%s MATCH ?", OfferColumns.KEY_TAG);
+    private static final String OFFER_SORT_DEFAULT = String.format("%s ASC, %s ASC", OfferColumns.KEY_TAG, OfferColumns.KEY_NAME);
+    
+    // Mock Value
+    private static final String SEARCH_SELECTION_TAG_NO_VALUE = "Tous";
+    private String[] filterValues = new String[] { SEARCH_SELECTION_TAG_NO_VALUE, "Entrée", "Plat", "Dessert", "Boisson" };
 
-	private static final String SEARCH_SELECTION_TAG_NO_VALUE = "Tous";
+    // Search Filter Value
+    private String filterOfferTag = null;
 
-	private String[] filterValues = new String[] { SEARCH_SELECTION_TAG_NO_VALUE, "Entrée", "Plat", "Dessert", "Boisson" };
+    // Binding Values
+    private GridView gridView;
+    private ListView filterListView;
 
-	private GridView gridView;
+    // Helper
+    private OfferHelper offerHelper;
+    private ProductItemAdapter listAdapter;
 
-	private ListView filterListView;
+    // Listener
+    private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            onListItemClick((GridView) parent, v, position, id);
+        }
+    };
 
-	private OfferHelper offerWrapper;
+    private final AdapterView.OnItemClickListener mOnFilterClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            onFilterItemClick((ListView) parent, v, position, id);
+        }
+    };
 
-	private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-			onListItemClick((GridView) parent, v, position, id);
-		}
-	};
+    private final LoaderManager.LoaderCallbacks<Cursor> offerLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 
-	private final AdapterView.OnItemClickListener mOnFilterClickListener = new AdapterView.OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-			onFilterItemClick((ListView) parent, v, position, id);
-		}
-	};
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String sortOrder = OFFER_SORT_DEFAULT;
+            String selection = null;
+            String[] selectionArgs = null;
+            if (filterOfferTag != null) {
+                selection = SEARCH_SELECTION_TAG;
+                selectionArgs = new String[] { filterOfferTag };
+            } 
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), OfferProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs, sortOrder);
+            return cursorLoader;
+        }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		offerWrapper = new OfferHelper();
-	}
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            listAdapter.swapCursor(cursor);
+        }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.product_selector, container, false);
-		// Link search
-		gridView = (GridView) view.findViewById(R.id.product_selector_gridview);
-		gridView.setOnItemClickListener(mOnClickListener);
-		// Filter
-		filterListView = (ListView) view.findViewById(R.id.product_selector_filterList);
-		ArrayAdapter<String> filterAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, filterValues);
-		filterListView.setOnItemClickListener(mOnFilterClickListener);
-		filterListView.setAdapter(filterAdapter);
-		// Init Search
-		doSearch(null, (String[]) null);
-		return view;
-	}
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            listAdapter.swapCursor(null);
+        }
 
-	private void doSearch(String selection, String... selectionArgs) {
-		// String selection = null;
-		// String[] selectionArgs = null; // new String[] { query };
-		String sortOrder = String.format("%s ASC, %s ASC", OfferColumns.KEY_TAG, OfferColumns.KEY_NAME);
-		CursorLoader cursorLoader = new CursorLoader(getActivity(), OfferProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs,
-				sortOrder);
-		cursorLoader.registerListener(1, this);
-		cursorLoader.startLoading();
-	}
+    };
 
-	@Override
-	public void onLoadComplete(Loader<Cursor> loader, Cursor data) {
-		ProductItemAdapter myListAdapter = new ProductItemAdapter(getActivity(), R.layout.product_list_item, data,
-				SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-		gridView.setAdapter(myListAdapter);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        offerHelper = new OfferHelper();
+    }
 
-	private void onFilterItemClick(ListView l, View v, int position, long id) {
-		String filterName = (String) l.getAdapter().getItem(position);
-		if (SEARCH_SELECTION_TAG_NO_VALUE.equals(filterName)) {
-			doSearch(null, (String[])null);
-		} else {
-			doSearch(SEARCH_SELECTION_TAG, filterName);
-		}
-		// ((Filterable)gridView.getAdapter()).getFilter().filter(filterName);
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.product_selector, container, false);
+        // Link search
+        gridView = (GridView) view.findViewById(R.id.product_selector_gridview);
+        gridView.setOnItemClickListener(mOnClickListener);
+        // Filter
+        filterListView = (ListView) view.findViewById(R.id.product_selector_filterList);
+        ArrayAdapter<String> filterAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, filterValues);
+        filterListView.setOnItemClickListener(mOnFilterClickListener);
+        filterListView.setAdapter(filterAdapter);
+        // List Adapter
+        listAdapter = new ProductItemAdapter(getActivity(), R.layout.product_list_item, null, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        gridView.setAdapter(listAdapter);
 
-	public void onListItemClick(GridView l, View v, int position, long id) {
-		Cursor item = (Cursor) l.getAdapter().getItem(position);
-		Offer status = offerWrapper.getEntity(item);
-		getActivity().sendBroadcast(Intents.addToBasket(status));
-		// Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-	}
+        // Init Search
+        getLoaderManager().initLoader(OFFER_LIST_LOADER, null, offerLoaderCallback); 
+        return view;
+    }
+
+  
+
+    private void onFilterItemClick(ListView l, View v, int position, long id) {
+        String filterName = (String) l.getAdapter().getItem(position);
+        if (SEARCH_SELECTION_TAG_NO_VALUE.equals(filterName)) { 
+            filterOfferTag = null;
+        } else {
+            filterOfferTag = filterName; 
+        }
+        getLoaderManager().restartLoader(OFFER_LIST_LOADER, null, offerLoaderCallback);
+        // ((Filterable)gridView.getAdapter()).getFilter().filter(filterName);
+    }
+
+    public void onListItemClick(GridView l, View v, int position, long id) {
+        Cursor item = (Cursor) l.getAdapter().getItem(position);
+        Offer status = offerHelper.getEntity(item);
+        getActivity().sendBroadcast(Intents.addToBasket(status));
+        // Toast.makeText(getActivity(),
+        // getListView().getItemAtPosition(position).toString(),
+        // Toast.LENGTH_LONG).show();
+    }
 
 }

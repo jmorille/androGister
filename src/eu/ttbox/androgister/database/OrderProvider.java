@@ -15,7 +15,9 @@ import eu.ttbox.androgister.database.order.OrderDatabase;
  *
  */
 public class OrderProvider extends ContentProvider {
-	private static final String TAG = "OrderProvider";
+    
+	@SuppressWarnings("unused")
+    private static final String TAG = "OrderProvider";
 
 	// MIME types used for searching words or looking up a single definition
 	public static final String ORDERS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableorder";

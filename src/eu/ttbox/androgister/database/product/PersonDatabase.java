@@ -10,6 +10,7 @@ import android.provider.BaseColumns;
 
 public class PersonDatabase {
 
+    @SuppressWarnings("unused")
     private static final String TAG = "PersonDatabase";
 
     public static final String TABLE_PERSON_FTS = "personFTS";

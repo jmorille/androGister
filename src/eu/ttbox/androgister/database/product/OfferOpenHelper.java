@@ -58,6 +58,7 @@ public class OfferOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         mDatabase = db;
         mDatabase.execSQL(FTS_TABLE_CREATE_OFFER);
+        mDatabase.execSQL(FTS_TABLE_CREATE_PERSON);
         loadDictionary();
     }
 
@@ -65,6 +66,7 @@ public class OfferOpenHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + OfferDatabase.TABLE_OFFER_FTS);
+        db.execSQL("DROP TABLE IF EXISTS " + PersonDatabase.TABLE_PERSON_FTS);
         onCreate(db);
     }
 
