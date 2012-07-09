@@ -17,7 +17,7 @@ import android.widget.SimpleCursorAdapter;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.OfferProvider;
-import eu.ttbox.androgister.database.product.OfferDatabase.Column;
+import eu.ttbox.androgister.database.product.OfferDatabase.OfferColumns;
 import eu.ttbox.androgister.database.product.OfferHelper;
 import eu.ttbox.androgister.model.Offer;
 
@@ -28,9 +28,9 @@ import eu.ttbox.androgister.model.Offer;
  */
 public class ProductSelectorFragment extends Fragment implements OnLoadCompleteListener<Cursor> {
 
-	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Column.KEY_ID, Column.KEY_NAME, Column.KEY_PRICEHT, Column.KEY_TAG };
+	private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OfferColumns.KEY_ID, OfferColumns.KEY_NAME, OfferColumns.KEY_PRICEHT, OfferColumns.KEY_TAG };
 
-	private static final String SEARCH_SELECTION_TAG = String.format("%s MATCH ?", Column.KEY_TAG);
+	private static final String SEARCH_SELECTION_TAG = String.format("%s MATCH ?", OfferColumns.KEY_TAG);
 
 	private static final String SEARCH_SELECTION_TAG_NO_VALUE = "Tous";
 
@@ -79,7 +79,7 @@ public class ProductSelectorFragment extends Fragment implements OnLoadCompleteL
 	private void doSearch(String selection, String... selectionArgs) {
 		// String selection = null;
 		// String[] selectionArgs = null; // new String[] { query };
-		String sortOrder = String.format("%s ASC, %s ASC", Column.KEY_TAG, Column.KEY_NAME);
+		String sortOrder = String.format("%s ASC, %s ASC", OfferColumns.KEY_TAG, OfferColumns.KEY_NAME);
 		CursorLoader cursorLoader = new CursorLoader(getActivity(), OfferProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs,
 				sortOrder);
 		cursorLoader.registerListener(1, this);

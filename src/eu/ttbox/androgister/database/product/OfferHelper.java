@@ -3,7 +3,7 @@ package eu.ttbox.androgister.database.product;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.widget.TextView;
-import eu.ttbox.androgister.database.product.OfferDatabase.Column;
+import eu.ttbox.androgister.database.product.OfferDatabase.OfferColumns;
 import eu.ttbox.androgister.model.Offer;
 import eu.ttbox.androgister.model.PriceHelper;
 
@@ -18,12 +18,12 @@ public class OfferHelper {
     public int priceIdx = -1;
 
     public OfferHelper initWrapper(Cursor cursor) {
-        idIdx = cursor.getColumnIndex(Column.KEY_ID);
-        nameIdx = cursor.getColumnIndex(Column.KEY_NAME);
-        descIdx = cursor.getColumnIndex(Column.KEY_DESCRIPTION);
-        eanIdx = cursor.getColumnIndex(Column.KEY_EAN);
-        tagIdx = cursor.getColumnIndex(Column.KEY_TAG);
-        priceIdx = cursor.getColumnIndex(Column.KEY_PRICEHT);
+        idIdx = cursor.getColumnIndex(OfferColumns.KEY_ID);
+        nameIdx = cursor.getColumnIndex(OfferColumns.KEY_NAME);
+        descIdx = cursor.getColumnIndex(OfferColumns.KEY_DESCRIPTION);
+        eanIdx = cursor.getColumnIndex(OfferColumns.KEY_EAN);
+        tagIdx = cursor.getColumnIndex(OfferColumns.KEY_TAG);
+        priceIdx = cursor.getColumnIndex(OfferColumns.KEY_PRICEHT);
         isNotInit = false;
         return this;
     }
@@ -74,13 +74,13 @@ public class OfferHelper {
     public static ContentValues getContentValues(Offer product) {
         ContentValues initialValues = new ContentValues();
         if (product.getId() > -1) {
-            initialValues.put(Column.KEY_ID, Long.valueOf(product.getId()));
+            initialValues.put(OfferColumns.KEY_ID, Long.valueOf(product.getId()));
         }
-        initialValues.put(Column.KEY_NAME, product.getName());
-        initialValues.put(Column.KEY_DESCRIPTION, product.getDescription());
-        initialValues.put(Column.KEY_EAN, product.getEan());
-        initialValues.put(Column.KEY_TAG, product.getTag());
-        initialValues.put(Column.KEY_PRICEHT, Long.valueOf(product.getPriceHT()));
+        initialValues.put(OfferColumns.KEY_NAME, product.getName());
+        initialValues.put(OfferColumns.KEY_DESCRIPTION, product.getDescription());
+        initialValues.put(OfferColumns.KEY_EAN, product.getEan());
+        initialValues.put(OfferColumns.KEY_TAG, product.getTag());
+        initialValues.put(OfferColumns.KEY_PRICEHT, Long.valueOf(product.getPriceHT()));
 
         return initialValues;
     }
