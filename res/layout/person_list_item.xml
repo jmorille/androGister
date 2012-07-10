@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/product_list_item_bg"
+    android:gravity="center"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:padding="10dip"  >
+
+    <TextView
+        android:id="@+id/person_list_item_lastname"
+        style="@style/product_list_item"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/person_list_item_firstname"
+        style="@style/product_list_item"
+        android:layout_weight="1" />
+    
+
+    <TextView
+        android:id="@+id/person_list_item_matricule"
+        style="@style/product_list_item"
+        android:layout_weight="1" />
+
+</LinearLayout>

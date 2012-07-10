@@ -1,18 +1,11 @@
 package eu.ttbox.androgister.database.product;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.TextUtils;
 import android.util.Log;
-import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.database.bootstrap.OfferDbBootstrap;
+import eu.ttbox.androgister.database.bootstrap.PersonDbBootstrap;
 
 public class OfferOpenHelper extends SQLiteOpenHelper {
 
@@ -59,7 +52,8 @@ public class OfferOpenHelper extends SQLiteOpenHelper {
         mDatabase = db;
         mDatabase.execSQL(FTS_TABLE_CREATE_OFFER);
         mDatabase.execSQL(FTS_TABLE_CREATE_PERSON);
-        loadDictionary();
+        new OfferDbBootstrap(mHelperContext, mDatabase).loadDictionary();
+        new PersonDbBootstrap(mHelperContext, mDatabase).loadDictionary();
     }
 
     @Override
@@ -70,56 +64,6 @@ public class OfferOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    /**
-     * Starts a thread to load the database table with words
-     */
-    private void loadDictionary() {
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    loadProducts();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
-    }
-
-    private void loadProducts() throws IOException {
-        Log.d(TAG, "Loading offers...");
-        final Resources resources = mHelperContext.getResources();
-        InputStream inputStream = resources.openRawResource(R.raw.definitions);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] strings = TextUtils.split(line, "-");
-                if (strings.length < 2)
-                    continue;
-                long id = addOffer(strings[0].trim(), strings[1].trim(), strings[2].trim());
-                Log.i(TAG, String.format("Add Offer id %s : name=%s", id, strings[0]));
-                if (id < 0) {
-                    Log.e(TAG, "unable to add offer: " + strings[0].trim());
-                }
-            }
-        } finally {
-            reader.close();
-        }
-        Log.d(TAG, "DONE loading offers.");
-    }
-
-    /**
-     * Add a word to the dictionary.
-     * 
-     * @return rowId or -1 if failed
-     */
-    public long addOffer(String name, String tag, String price) {
-        ContentValues initialValues = new ContentValues();
-        initialValues.put(OfferDatabase.OfferColumns.KEY_NAME, name);
-        initialValues.put(OfferDatabase.OfferColumns.KEY_TAG, tag);
-        initialValues.put(OfferDatabase.OfferColumns.KEY_PRICEHT, price);
-        return mDatabase.insert(OfferDatabase.TABLE_OFFER_FTS, null, initialValues);
-    }
+    
 
 }

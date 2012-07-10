@@ -4,5 +4,6 @@
     <string name="order_service_notification_started">Order Service Notification</string>
     <string name="config_id_order_list_loader_started">Order List Loader</string>
     <string name="config_id_offer_list_loader_started">Offer List Loader</string>
+    <string name="config_id_person_list_loader_started">Person List Loader</string>
     
 </resources>

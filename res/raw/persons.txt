@@ -1,0 +1,24 @@
+Pomme-Dessert Fruit-125
+Banane-Dessert Fruit-125
+Coupe Fruit-Dessert Fruit-125
+Yahourt Nature-Dessert Fruit-125
+Yahourt Fruit-Dessert Fruit-125
+Activia Nature-Dessert Fruit-125
+Activia Fruit-Dessert Fruit-125
+Crumble Fruit rouge-Dessert-250
+Tarte Tatin-Dessert-190
+Evian 125ml-Boisson-450
+Vittel 125ml-Boisson-50
+Perrier 125ml-Boisson-50
+Minute Maid-Boisson-60
+Coca Cola-Boisson-65
+Biere-Boisson-150
+Vin 33cl-Boisson-120
+Mix Brochette-Plat-320
+Truite Grillé-Plat-410
+Chili Con Carne-Plat-215
+Entrecote-Plat-215
+Petite Salade-Entrée-85
+Grande Salade-Entrée-110
+Soupe Légume-Entrée-60
+Charcuterie-Entrée-90
