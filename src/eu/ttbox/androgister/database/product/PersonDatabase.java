@@ -17,7 +17,7 @@ public class PersonDatabase {
 
     public static class PersonColumns {
 
-        public static final String KEY_ID = "rowid";
+        public static final String KEY_ID = BaseColumns._ID;
         public static final String KEY_LASTNAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
         public static final String KEY_FIRSTNAME = SearchManager.SUGGEST_COLUMN_TEXT_2;
         public static final String KEY_MATRICULE = "MATRICULE";

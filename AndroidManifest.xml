@@ -93,7 +93,7 @@
         
         <provider
             android:name=".database.PersonProvider"
-            android:authorities="eu.ttbox.androgister.searchableoffer.PersonProvider"
+            android:authorities="eu.ttbox.androgister.searchableperson.PersonProvider"
             android:readPermission="eu.ttbox.androgister.PERSON_READ"
             android:writePermission="eu.ttbox.androgister.PERSON_WRITE" />
         
