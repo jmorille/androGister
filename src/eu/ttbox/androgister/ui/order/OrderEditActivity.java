@@ -56,16 +56,11 @@ public class OrderEditActivity extends Activity {
             long orderId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
             Log.i(TAG, "Handle Intent action ACTION_VIEW_ORDER_DETAIL : orderId = " + orderId);
             if (orderId != -1) {
-                orderEditFragment.doSearchOrder(orderId);
-                // openOrder(orderId);
+                orderEditFragment.doSearchOrder(orderId); 
             }
         }
     }
 
-    private void openOrder(long orderId) {
-        Intent viewIntent = Intents.viewOrderDetail(orderId);
-        sendBroadcast(viewIntent);
-        Log.i(TAG, "sendBroadcast Intent : = " + viewIntent);
-    }
+    
 
 }

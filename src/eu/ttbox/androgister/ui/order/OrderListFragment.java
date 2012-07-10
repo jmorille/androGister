@@ -5,7 +5,6 @@ import java.util.Calendar;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.R.raw;
 import eu.ttbox.androgister.core.AppConstants;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.OrderProvider;
@@ -139,11 +137,8 @@ public class OrderListFragment extends Fragment {
 
     private void onListItemClick(ListView l, View v, int position, long id) {
         Cursor item = (Cursor) l.getAdapter().getItem(position);
-        long orderId = item.getLong(item.getColumnIndex(OrderColumns.KEY_ID));
-        Intent intent = new Intent(getActivity(), OrderEditActivity.class);
-        intent.setAction(Intents.ACTION_ORDER_VIEW_DETAIL);
-        intent.putExtra(Intents.EXTRA_ORDER, orderId);
-        startActivity(intent);
+        long orderId = item.getLong(item.getColumnIndex(OrderColumns.KEY_ID)); 
+        startActivity( Intents.viewOrderDetail(getActivity(), orderId));
     }
 
     private Calendar setFilterOrderDate(int year, int monthOfYear, int dayOfMonth) {

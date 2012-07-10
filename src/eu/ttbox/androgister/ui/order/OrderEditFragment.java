@@ -24,6 +24,7 @@ import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.OrderProvider;
 import eu.ttbox.androgister.model.OrderHelper;
+import eu.ttbox.androgister.model.OrderStatusEnum;
 
 public class OrderEditFragment extends Fragment {
 
@@ -35,7 +36,7 @@ public class OrderEditFragment extends Fragment {
     // Bindngs
     private ListView itemList;
     private Button cancelButton, deleteButton, editButton;
-    private TextView orderNum, orderUuid, status, orderDate, price;
+    private TextView orderNumTextView, orderUuidTextView, orderDeleteUuiTextViewd, statusTextView, orderDateTextView, priceTextView;
 
     // Adapters
     private OrderItemAdapter myListAdapter;
@@ -54,11 +55,12 @@ public class OrderEditFragment extends Fragment {
         View v = inflater.inflate(R.layout.order_edit, container, false);
         // View
         itemList = (ListView) v.findViewById(R.id.order_edit_items_list);
-        orderNum = (TextView) v.findViewById(R.id.order_orderNum_input);
-        orderUuid = (TextView) v.findViewById(R.id.order_orderUuid_input);
-        status = (TextView) v.findViewById(R.id.order_status_input);
-        orderDate = (TextView) v.findViewById(R.id.order_date_input);
-        price = (TextView) v.findViewById(R.id.order_price_input);
+        orderNumTextView = (TextView) v.findViewById(R.id.order_orderNum_input);
+        orderUuidTextView = (TextView) v.findViewById(R.id.order_orderUuid_input);
+        orderDeleteUuiTextViewd = (TextView) v.findViewById(R.id.order_orderDeleteUuid_input);
+        statusTextView = (TextView) v.findViewById(R.id.order_status_input);
+        orderDateTextView = (TextView) v.findViewById(R.id.order_date_input);
+        priceTextView = (TextView) v.findViewById(R.id.order_price_input);
         // adapater
         myListAdapter = new OrderItemAdapter(getActivity(), R.layout.register_basket_list_item, null, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         itemList.setAdapter(myListAdapter);
@@ -98,6 +100,7 @@ public class OrderEditFragment extends Fragment {
         // Register Listener
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intents.ACTION_ORDER_VIEW_DETAIL);
+        filter.addAction(Intents.ACTION_ORDER_SAVED); 
         // Listener
         getActivity().registerReceiver(mStatusReceiver, filter);
         Log.i(TAG, "Register Receiver " + mStatusReceiver);
@@ -114,8 +117,8 @@ public class OrderEditFragment extends Fragment {
     public void doSearchOrder(long orderId) {
         this.orderId = orderId;
         this.orderIdString = String.valueOf(orderId);
-        getLoaderManager().initLoader(LOADER_ORDER_DETAILS, null, orderLoaderCallback);
-        getLoaderManager().initLoader(LOADER_ORDER_ITEMS, null, orderItemsLoaderCallback);
+        getLoaderManager().restartLoader(LOADER_ORDER_DETAILS, null, orderLoaderCallback);
+        getLoaderManager().restartLoader(LOADER_ORDER_ITEMS, null, orderItemsLoaderCallback);
     }
 
     private final LoaderManager.LoaderCallbacks<Cursor> orderLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -134,23 +137,39 @@ public class OrderEditFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
             Log.d(TAG, "OnLoadCompleteListener for Order");
-            OrderHelper helper = new OrderHelper().initWrapper(cursor);
-            // TODO HIDE ACTION BUTTON on context
+            OrderHelper helper = new OrderHelper().initWrapper(cursor); 
             // bind Values
-            helper.setTextOrderNumber(orderNum, cursor) //
-                    .setTextOrderUuid(orderUuid, cursor)//
-                    .setTextOrderStatus(status, cursor)//
-                    .setTextOrderDate(orderDate, cursor)//
-                    .setTextOrderPriceSum(price, cursor);
+            helper.setTextOrderNumber(orderNumTextView, cursor) //
+                    .setTextOrderUuid(orderUuidTextView, cursor)//
+                    .setTextOrderStatus(statusTextView, cursor)//
+                    .setTextOrderDate(orderDateTextView, cursor)//
+                    .setTextOrderPriceSum(priceTextView, cursor);
             // Validate
             boolean isDeleteAvailaible = helper.isOrderDeletePossible(cursor);
             deleteButton.setEnabled(isDeleteAvailaible);
             editButton.setEnabled(isDeleteAvailaible);
+            // Display Invalidate
+            OrderStatusEnum status = helper.getOrderStatusEnum(cursor);
+            if (!isDeleteAvailaible && OrderStatusEnum.ORDER.equals(status)) {
+                String orderDelete = cursor.getString(helper.orderDeleteUuidIdx);
+                orderDeleteUuiTextViewd.setText(orderDelete);
+                orderDeleteUuiTextViewd.setVisibility(View.VISIBLE);
+                orderDeleteUuiTextViewd.setOnClickListener(new OnClickListener() {
+                     @Override
+                    public void onClick(View v) {
+                        startActivity( Intents.viewOrderDetail(getActivity(), orderId));
+                     }
+                });
+            } else {
+                orderDeleteUuiTextViewd.setText(null);
+                orderDeleteUuiTextViewd.setVisibility(View.GONE);
+                orderDeleteUuiTextViewd.setOnClickListener(null);
+            }
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            TextView[] textViews = new TextView[] { orderNum, orderUuid, status, orderDate, price };
+            TextView[] textViews = new TextView[] { orderNumTextView, orderUuidTextView, orderDeleteUuiTextViewd, statusTextView, orderDateTextView, priceTextView };
             for (TextView textView : textViews) {
                 textView.setText(null);
             }
@@ -196,6 +215,12 @@ public class OrderEditFragment extends Fragment {
                 if (orderId != -1) {
                     orderIdString = String.valueOf(orderId);
                     doSearchOrder(orderId);
+                }
+            } else  if (Intents.ACTION_ORDER_SAVED.equals(action)) {
+                long orderLocalId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
+                long orderCanceledId = intent.getLongExtra(Intents.EXTRA_ORDER_CANCELED_ID, -1);
+                if (  orderLocalId == orderId || orderCanceledId == orderId ) {
+                    doSearchOrder(orderLocalId); 
                 }
             }
         }

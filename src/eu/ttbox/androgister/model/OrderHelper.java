@@ -101,10 +101,18 @@ public class OrderHelper {
     }
 
     public OrderHelper setTextOrderStatus(TextView view, Cursor cursor) {
-        int statusKey = cursor.getInt(statusIdx);
-        OrderStatusEnum status = OrderStatusEnum.getEnumFromKey(statusKey);
-        view.setText(status.name());
+        OrderStatusEnum status = getOrderStatusEnum(cursor);
+        if (status != null) {
+            view.setText(status.name());
+        } else {
+            view.setText(null);
+        }
         return this;
+    }
+
+    public OrderStatusEnum getOrderStatusEnum(Cursor cursor) {
+        OrderStatusEnum status = statusIdx > -1 ? OrderStatusEnum.getEnumFromKey(cursor.getInt(statusIdx)) : null;
+        return status;
     }
 
     public OrderHelper setTextOrderDate(TextView view, Cursor cursor) {
@@ -130,7 +138,7 @@ public class OrderHelper {
         order.setOrderNumber(orderNumberIdx > -1 ? cursor.getLong(orderNumberIdx) : -1);
         order.setOrderUUID(orderUuidIdx > -1 ? cursor.getString(orderUuidIdx) : null);
         order.setOrderDeleteUUID(orderDeleteUuidIdx > -1 ? cursor.getString(orderDeleteUuidIdx) : null);
-        order.setStatus(statusIdx > -1 ? OrderStatusEnum.getEnumFromKey(cursor.getInt(statusIdx)) : null);
+        order.setStatus( getOrderStatusEnum(cursor));
         order.setOrderDate(orderDateIdx > -1 ? cursor.getLong(orderDateIdx) : -1);
         order.setPriceSumHT(priceSumIdx > -1 ? cursor.getLong(priceSumIdx) : 0);
 
@@ -194,15 +202,15 @@ public class OrderHelper {
             initWrapper(cursor);
         }
         String orderUUID = cursor.getString(orderUuidIdx);
-        OrderStatusEnum status = statusIdx > -1 ? OrderStatusEnum.getEnumFromKey(cursor.getInt(statusIdx)) : null;
+        OrderStatusEnum status =  getOrderStatusEnum(cursor);
         String orderDeleteUUID = cursor.getString(orderDeleteUuidIdx);
         return OrderHelper.isOrderDeletePossible(orderUUID, status, orderDeleteUUID);
     }
 
     public static boolean isOrderDeletePossible(Order order) {
-        String orderUUID =order.getOrderUUID();
+        String orderUUID = order.getOrderUUID();
         OrderStatusEnum status = order.getStatus();
-        String orderDeleteUUID =order.getOrderDeleteUUID();
+        String orderDeleteUUID = order.getOrderDeleteUUID();
         return OrderHelper.isOrderDeletePossible(orderUUID, status, orderDeleteUUID);
     }
 
