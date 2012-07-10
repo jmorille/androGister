@@ -61,7 +61,7 @@ public class OrderEditFragment extends Fragment {
         statusTextView = (TextView) v.findViewById(R.id.order_status_input);
         orderDateTextView = (TextView) v.findViewById(R.id.order_date_input);
         priceTextView = (TextView) v.findViewById(R.id.order_price_input);
-        // adapater
+        // Adpater
         myListAdapter = new OrderItemAdapter(getActivity(), R.layout.register_basket_list_item, null, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         itemList.setAdapter(myListAdapter);
         // Button
@@ -220,7 +220,7 @@ public class OrderEditFragment extends Fragment {
                 long orderLocalId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
                 long orderCanceledId = intent.getLongExtra(Intents.EXTRA_ORDER_CANCELED_ID, -1);
                 if (  orderLocalId == orderId || orderCanceledId == orderId ) {
-                    doSearchOrder(orderLocalId); 
+                    doSearchOrder(orderId); 
                 }
             }
         }
