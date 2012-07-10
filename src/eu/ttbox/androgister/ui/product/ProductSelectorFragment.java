@@ -31,7 +31,7 @@ import eu.ttbox.androgister.model.Offer;
  */
 public class ProductSelectorFragment extends Fragment {
 
-    private static final int OFFER_LIST_LOADER = 0x01;
+    private static final int OFFER_LIST_LOADER = R.string.config_id_offer_list_loader_started;
 
     // Constante
     private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OfferColumns.KEY_ID, OfferColumns.KEY_NAME, OfferColumns.KEY_PRICEHT, OfferColumns.KEY_TAG };

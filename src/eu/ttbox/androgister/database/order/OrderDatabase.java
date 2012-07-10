@@ -78,7 +78,8 @@ public class OrderDatabase {
      */
     public OrderDatabase(Context context) {
         mDatabaseOpenHelper = new OrderDbOpenHelper(context);
-        orderIdGenerator = new OrderIdGenerator();
+        orderIdGenerator = new OrderIdGenerator(  context);
+        
 
     }
 

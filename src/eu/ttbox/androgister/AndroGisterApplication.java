@@ -4,11 +4,15 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import eu.ttbox.androgister.core.AppConstants;
+import eu.ttbox.androgister.database.order.OrderIdSequence;
 
 public class AndroGisterApplication extends Application {
 
 	private String TAG = "AndroGisterApp";
 
+	private OrderIdSequence orderIdSequence = new OrderIdSequence();
+	
+	@Override
 	public void onCreate() {
  		// Create Application
 		super.onCreate();
@@ -16,6 +20,7 @@ public class AndroGisterApplication extends Application {
 		// Increment Counter Lauch
 		int laugthCount = incrementApplicationLaunchCounter();
  	}
+ 
 	
 	private int incrementApplicationLaunchCounter() {
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -28,4 +33,8 @@ public class AndroGisterApplication extends Application {
 		prefEditor.commit();
 		return counter;
 	}
+	
+	
+	
+	
 }

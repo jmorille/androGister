@@ -3,6 +3,7 @@ package eu.ttbox.androgister.database.order;
 import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicLong;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -16,9 +17,12 @@ public class OrderIdGenerator {
  			"SELECT MAX(" + OrderColumns.KEY_ORDER_NUMBER + ") AS max_id FROM " + OrderDatabase.ORDER_TABLE
 			+ " WHERE " + OrderColumns.KEY_ORDER_DATE + " >= %s and "+ OrderColumns.KEY_ORDER_DATE + " < %s";
 
-	private AtomicLong cacheCounter;
-	private long cacheMidnight = -1;
+	private OrderIdSequence orderIdSequence = new OrderIdSequence();
 	
+	public OrderIdGenerator(Context context) {
+//		this.application = (AndroGisterApplication)context.getApplicationContext().getA;
+	}
+
 	public long getNextOrderNum(SQLiteDatabase db, long now) {
 		// Compute Minighth date
 		Calendar cal = Calendar.getInstance();
@@ -29,21 +33,22 @@ public class OrderIdGenerator {
 		cal.clear(Calendar.SECOND);
 		cal.clear(Calendar.MILLISECOND);
 		long dateMidenight = cal.getTimeInMillis();
- 		if (dateMidenight!=cacheMidnight) {
+ 		if (!orderIdSequence.isValidCache( dateMidenight)) {
  			// Compute tomorow day
  			cal.add(Calendar.DATE, 1);
  			long tomorrow = cal.getTimeInMillis();
 			// Read for Db
 			getDbMaxId(db, dateMidenight, tomorrow);
 		}  
-		long nextOrderNum =cacheCounter.incrementAndGet();
+		long nextOrderNum =orderIdSequence.incrementAndGet();
  		Log.i(TAG, String.format("Transform now %s to Date Mightnight %s => Max Number = %s", now, dateMidenight, nextOrderNum));
  		return nextOrderNum;
 	}
  
+ 
+	
 	public void invalidateCacheCounter() {
-		cacheMidnight = -1;
-		cacheCounter = null;
+		orderIdSequence.invalidateCacheCounter();
 	}
 	
 	private long getDbMaxId(SQLiteDatabase db, long dateMightnight, long tomorrow) {
@@ -62,8 +67,7 @@ public class OrderIdGenerator {
 		} finally {
 			cursor.close();
 		}
-		cacheCounter = new AtomicLong(id);
-		cacheMidnight = dateMightnight;
-		return id;
+		orderIdSequence.initCacheCounter(new AtomicLong(id),dateMightnight );
+ 		return id;
 	}
 }
