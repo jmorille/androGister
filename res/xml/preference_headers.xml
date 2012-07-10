@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <header android:fragment="eu.ttbox.androgister.ui.config.GeneralSettingsPreferenceFragment"
+            android:title="General Settings">
+    </header>
+    <header android:fragment="eu.ttbox.androgister.ui.config.NetworkOptionsPreferenceFragment"
+            android:title="Networks Settings"
+            android:summary="Testing networks settings">
+    </header>
+</preference-headers>
