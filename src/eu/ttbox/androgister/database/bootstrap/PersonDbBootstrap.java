@@ -47,7 +47,9 @@ public class PersonDbBootstrap {
 		final Resources resources = mHelperContext.getResources();
 		InputStream inputStream = resources.openRawResource(R.raw.persons);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
+		mDatabase.beginTransaction();
+		int insertCount = 0;
+		long begin = System.currentTimeMillis();
 		try {
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -55,13 +57,20 @@ public class PersonDbBootstrap {
 				if (strings.length < 2)
 					continue;
 				long id = addPerson(strings[0].trim(), strings[1].trim(), strings[2].trim());
-				Log.i(TAG, String.format("Add Person id %s : name=%s", id, strings[0]));
+				Log.d(TAG, String.format("Add Person id %s : name=%s", id, strings[0]));
 				if (id < 0) {
 					Log.e(TAG, "unable to add Person : " + strings[0].trim());
+				} else {
+				    insertCount++;
 				}
 			}
+			mDatabase.setTransactionSuccessful();
+            long end = System.currentTimeMillis();
+            Log.i(TAG, String.format("Insert %s Persons in %s ms", insertCount, (end-begin)));
+
 		} finally {
 			reader.close();
+ 			mDatabase.endTransaction();
 		}
 		Log.d(TAG, "DONE loading persons.");
 	}
@@ -72,6 +81,7 @@ public class PersonDbBootstrap {
 	 * @return rowId or -1 if failed
 	 */
 	public long addPerson(String firstname, String lastname,  String maticule) {
+	    
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(PersonDatabase.PersonColumns.KEY_LASTNAME, lastname);
 		initialValues.put(PersonDatabase.PersonColumns.KEY_FIRSTNAME, firstname);

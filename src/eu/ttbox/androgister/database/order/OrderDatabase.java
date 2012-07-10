@@ -78,8 +78,7 @@ public class OrderDatabase {
      */
     public OrderDatabase(Context context) {
         mDatabaseOpenHelper = new OrderDbOpenHelper(context);
-        orderIdGenerator = new OrderIdGenerator(  context);
-        
+        orderIdGenerator = new OrderIdGenerator(context);
 
     }
 
@@ -180,7 +179,7 @@ public class OrderDatabase {
         try {
             cursor = queryOrder(db, selection, selectionArgs, columns, sortOrder);
         } finally {
-            db.close();
+//            db.close();
         }
         return cursor;
     }
@@ -204,7 +203,13 @@ public class OrderDatabase {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(ORDER_ITEM_TABLE);
         builder.setProjectionMap(mOrderItemColumnMap);
-        Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, sortOrder);
+        SQLiteDatabase db = mDatabaseOpenHelper.getReadableDatabase();
+        Cursor cursor = null;
+        try {
+            cursor = builder.query(db, columns, selection, selectionArgs, null, null, sortOrder);
+        } finally {
+//            db.close();
+        }
         // Read Cursor
         if (cursor == null) {
             return null;
@@ -275,7 +280,6 @@ public class OrderDatabase {
         return result;
     }
 
- 
     public long deleteOrder(String deviceId, long orderId) throws SQLException {
         long result = -1;
         synchronized (lockInsertOrder) {

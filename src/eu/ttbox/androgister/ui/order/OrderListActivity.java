@@ -9,7 +9,7 @@ public class OrderListActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.person_list_activity);
+        setContentView(R.layout.order_list_activity);
     }
     
 }

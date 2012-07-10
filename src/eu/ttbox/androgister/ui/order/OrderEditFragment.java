@@ -1,13 +1,13 @@
 package eu.ttbox.androgister.ui.order;
 
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
-import android.content.Loader.OnLoadCompleteListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,20 +29,25 @@ public class OrderEditFragment extends Fragment {
 
     private static final String TAG = "OrderEditFragment";
 
-    private BroadcastReceiver mStatusReceiver;
+    private static final int LOADER_ORDER_DETAILS = R.string.config_id_order_edit_loader_started;
+    private static final int LOADER_ORDER_ITEMS = R.string.config_id_order_edit_items_loader_started;
 
+    // Bindngs
     private ListView itemList;
     private Button cancelButton, deleteButton, editButton;
     private TextView orderNum, orderUuid, status, orderDate, price;
 
-    private long orderId = -1;
+    // Adapters
+    private OrderItemAdapter myListAdapter;
 
-    // @Override
-    // public void onCreate(Bundle savedInstanceState) {
-    // super.onCreate(savedInstanceState);
-    // // Services
+    // Instance Data
+    private long orderId = -1;
+    private String orderIdString = null;
+
+    // Listeners
+    private BroadcastReceiver mStatusReceiver;
+
     //
-    // }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,19 +59,22 @@ public class OrderEditFragment extends Fragment {
         status = (TextView) v.findViewById(R.id.order_status_input);
         orderDate = (TextView) v.findViewById(R.id.order_date_input);
         price = (TextView) v.findViewById(R.id.order_price_input);
+        // adapater
+        myListAdapter = new OrderItemAdapter(getActivity(), R.layout.register_basket_list_item, null, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        itemList.setAdapter(myListAdapter);
         // Button
         cancelButton = (Button) v.findViewById(R.id.order_edit_button_cancel);
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
-             }
+            }
         });
         deleteButton = (Button) v.findViewById(R.id.order_edit_button_delete);
         deleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                 deleteOrder();
+                deleteOrder();
             }
         });
         editButton = (Button) v.findViewById(R.id.order_edit_button_edit);
@@ -79,15 +87,9 @@ public class OrderEditFragment extends Fragment {
     }
 
     private void deleteOrder() {
-        Intent intent = Intents.deleteOrderDetail(getActivity() ,orderId);
+        Intent intent = Intents.deleteOrderDetail(getActivity(), orderId);
         getActivity().startService(intent);
-//        getActivity().sendBroadcast(intent);
     }
-    //
-    // @Override
-    // public void onDestroy() {
-    // super.onDestroy();
-    // }
 
     @Override
     public void onResume() {
@@ -111,24 +113,27 @@ public class OrderEditFragment extends Fragment {
 
     public void doSearchOrder(long orderId) {
         this.orderId = orderId;
-        String orderIdString = String.valueOf(orderId);
-        doSearch(orderIdString, OrderProvider.Constants.CONTENT_URI_GET_ODRER, orderLoader);
-        doSearch(orderIdString, OrderProvider.Constants.CONTENT_URI_GET_ODRER_ITEMS, itemLoader);
+        this.orderIdString = String.valueOf(orderId);
+        getLoaderManager().initLoader(LOADER_ORDER_DETAILS, null, orderLoaderCallback);
+        getLoaderManager().initLoader(LOADER_ORDER_ITEMS, null, orderItemsLoaderCallback);
     }
 
-    private void doSearch(String orderId, Uri baseUri, OnLoadCompleteListener<Cursor> loader) {
-        Uri orderUri = Uri.withAppendedPath(baseUri, orderId);
-        CursorLoader cursorLoader = new CursorLoader(getActivity(), orderUri, (String[]) null, null, (String[]) null, null);
-        cursorLoader.registerListener(1, loader);
-        cursorLoader.startLoading();
-    }
-
-    private OnLoadCompleteListener<Cursor> orderLoader = new OnLoadCompleteListener<Cursor>() {
+    private final LoaderManager.LoaderCallbacks<Cursor> orderLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 
         @Override
-        public void onLoadComplete(Loader<Cursor> loader, Cursor cursor) {
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String sortOrder = null;
+            String selection = null;
+            String[] selectionArgs = null;
+            // Loader
+            Uri orderUri = Uri.withAppendedPath(OrderProvider.Constants.CONTENT_URI_GET_ODRER, orderIdString);
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), orderUri, null, selection, selectionArgs, sortOrder);
+            return cursorLoader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
             Log.d(TAG, "OnLoadCompleteListener for Order");
-            cursor.moveToFirst();
             OrderHelper helper = new OrderHelper().initWrapper(cursor);
             // TODO HIDE ACTION BUTTON on context
             // bind Values
@@ -137,17 +142,47 @@ public class OrderEditFragment extends Fragment {
                     .setTextOrderStatus(status, cursor)//
                     .setTextOrderDate(orderDate, cursor)//
                     .setTextOrderPriceSum(price, cursor);
+            // Validate
+            boolean isDeleteAvailaible = helper.isOrderDeletePossible(cursor);
+            deleteButton.setEnabled(isDeleteAvailaible);
+            editButton.setEnabled(isDeleteAvailaible);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            TextView[] textViews = new TextView[] { orderNum, orderUuid, status, orderDate, price };
+            for (TextView textView : textViews) {
+                textView.setText(null);
+            }
+
         }
 
     };
 
-    private OnLoadCompleteListener<Cursor> itemLoader = new OnLoadCompleteListener<Cursor>() {
+    private final LoaderManager.LoaderCallbacks<Cursor> orderItemsLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+
         @Override
-        public void onLoadComplete(Loader<Cursor> loader, Cursor data) {
-            Log.d(TAG, "OnLoadCompleteListener for Items");
-            OrderItemAdapter myListAdapter = new OrderItemAdapter(getActivity(), R.layout.register_basket_list_item, data, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-            itemList.setAdapter(myListAdapter);
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String sortOrder = null;
+            String selection = null;
+            String[] selectionArgs = null;
+            // Loader
+            Uri orderUri = Uri.withAppendedPath(OrderProvider.Constants.CONTENT_URI_GET_ODRER_ITEMS, orderIdString);
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), orderUri, null, selection, selectionArgs, sortOrder);
+            return cursorLoader;
         }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            myListAdapter.swapCursor(cursor);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            myListAdapter.swapCursor(null);
+
+        }
+
     };
 
     private class StatusReceiver extends BroadcastReceiver {
@@ -159,6 +194,7 @@ public class OrderEditFragment extends Fragment {
                 long orderId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
                 Log.i(TAG, "onReceive Intent action ACTION_VIEW_ORDER_DETAIL : orderId =" + orderId);
                 if (orderId != -1) {
+                    orderIdString = String.valueOf(orderId);
                     doSearchOrder(orderId);
                 }
             }

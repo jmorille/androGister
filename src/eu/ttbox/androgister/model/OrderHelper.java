@@ -12,13 +12,13 @@ import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
 public class OrderHelper {
 
     private static final String TAG = "OrderHelper";
-    
+
     boolean isNotInit = true;
     public int idIdx = -1;
     public int orderNumberIdx = -1;
     public int orderUuidIdx = -1;
     public int orderDeleteUuidIdx = -1;
-    
+
     public int statusIdx = -1;
     public int orderDateIdx = -1;
     public int priceSumIdx = -1;
@@ -47,7 +47,7 @@ public class OrderHelper {
         orderNumberIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_NUMBER);
         orderUuidIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_UUID);
         orderDeleteUuidIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_DELETE_UUID);
-        
+
         statusIdx = cursor.getColumnIndex(OrderColumns.KEY_STATUS);
         orderDateIdx = cursor.getColumnIndex(OrderColumns.KEY_ORDER_DATE);
         priceSumIdx = cursor.getColumnIndex(OrderColumns.KEY_PRICE_SUM_HT);
@@ -66,7 +66,6 @@ public class OrderHelper {
         isNotInit = false;
         return this;
     }
-     
 
     private OrderHelper setTextWithIdx(TextView view, Cursor cursor, int idx) {
         view.setText(cursor.getString(idx));
@@ -153,17 +152,18 @@ public class OrderHelper {
         long orderNumber = order.getOrderNumber();
         if (orderNumber > -1) {
             initialValues.put(OrderColumns.KEY_ORDER_NUMBER, Long.valueOf(orderNumber));
-        } 
+        }
         // UUID
         initialValues.put(OrderColumns.KEY_ORDER_UUID, order.getOrderUUID());
         // Delete UUID Ref
-        // If not set, shoulb be equal to UUID in order to use database constraints
+        // If not set, shoulb be equal to UUID in order to use database
+        // constraints
         String deleteUUID = order.getOrderDeleteUUID();
-        if (deleteUUID==null || deleteUUID.isEmpty()) {
-        	deleteUUID =order.getOrderUUID();
+        if (deleteUUID == null || deleteUUID.isEmpty()) {
+            deleteUUID = order.getOrderUUID();
         }
         initialValues.put(OrderColumns.KEY_ORDER_DELETE_UUID, deleteUUID);
-        
+
         // Other
         initialValues.put(OrderColumns.KEY_STATUS, Integer.valueOf(order.getStatus().getKey()));
         if (order.getOrderDate() > -1) {
@@ -188,20 +188,36 @@ public class OrderHelper {
         String result = String.format("%1$tY%1$tm%1$td-%2$s-%3$s", today, hardwareId, orderNumber);
         return result;
     }
-    
-    public static boolean isOrderDeletePossible(Order order) {
-        boolean isPossible = true;
-        if (isPossible && !OrderStatusEnum.ORDER.equals(order.getStatus())) {
-            isPossible = false;
-            Log.w(TAG, String.format("Order Delete %s is NOT Possible for order status %s", order.getOrderUUID(), order.getStatus()));
+
+    public boolean isOrderDeletePossible(Cursor cursor) {
+        if (isNotInit) {
+            initWrapper(cursor);
         }
-        if (isPossible && !order.getOrderUUID().equals(order.getOrderDeleteUUID())) {
+        String orderUUID = cursor.getString(orderUuidIdx);
+        OrderStatusEnum status = statusIdx > -1 ? OrderStatusEnum.getEnumFromKey(cursor.getInt(statusIdx)) : null;
+        String orderDeleteUUID = cursor.getString(orderDeleteUuidIdx);
+        return OrderHelper.isOrderDeletePossible(orderUUID, status, orderDeleteUUID);
+    }
+
+    public static boolean isOrderDeletePossible(Order order) {
+        String orderUUID =order.getOrderUUID();
+        OrderStatusEnum status = order.getStatus();
+        String orderDeleteUUID =order.getOrderDeleteUUID();
+        return OrderHelper.isOrderDeletePossible(orderUUID, status, orderDeleteUUID);
+    }
+
+    private static boolean isOrderDeletePossible(String orderUUID, OrderStatusEnum status, String orderDeleteUUID) {
+        boolean isPossible = true;
+        if (isPossible && !OrderStatusEnum.ORDER.equals(status)) {
+            isPossible = false;
+            Log.w(TAG, String.format("Order Delete %s is NOT Possible for order status %s", orderUUID, status));
+        }
+        if (isPossible && !orderUUID.equals(orderDeleteUUID)) {
             // Already Invalidate, is not impossible to do again
             isPossible = false;
-            Log.w(TAG, String.format("Order Delete %s is NOT Possible for previous delete by %s", order.getOrderUUID(), order.getOrderDeleteUUID()));
+            Log.w(TAG, String.format("Order Delete %s is NOT Possible for previous delete by %s", orderUUID, orderDeleteUUID));
         }
         return isPossible;
     }
-
 
 }
