@@ -12,6 +12,10 @@
     <!-- Basket -->
     <string name="basket_sum">Total</string>
 
+     <!-- Basket Keyboard -->
+     <string name="kyb_ask_save_basket">Valider</string>
+     <string name="kyb_order_view_list">Liste des commandes</string>
+      
     <!-- Model -->
     <string name="order_number">N°</string>
     <string name="order_uuid">Id</string>

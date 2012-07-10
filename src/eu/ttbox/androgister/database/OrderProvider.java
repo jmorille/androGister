@@ -15,12 +15,14 @@ import eu.ttbox.androgister.database.order.OrderDatabase;
  *
  */
 public class OrderProvider extends ContentProvider {
-	private static final String TAG = "OrderProvider";
+    
+	@SuppressWarnings("unused")
+    private static final String TAG = "OrderProvider";
 
 	// MIME types used for searching words or looking up a single definition
-	public static final String ORDERS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableorder";
+	public static final String ORDERS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableorder";
 	public static final String ORDER_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableorder";
-	public static final String ORDERS_ITEMS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableordeitemr";
+	public static final String ORDERS_ITEMS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableordeitemr";
 	public static final String ORDER_ITEM_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableordeitemr";
 
 	public static class Constants {
@@ -69,11 +71,11 @@ public class OrderProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		switch (sURIMatcher.match(uri)) {
 		case SEARCH_ORDERS:
-			return ORDERS_MIME_TYPE;
+			return ORDERS_LIST_MIME_TYPE;
 		case GET_ORDER:
 			return ORDER_MIME_TYPE;
 		case GET_ORDER_ITEMS:
-			return ORDERS_ITEMS_MIME_TYPE;
+			return ORDERS_ITEMS_LIST_MIME_TYPE;
 		case SEARCH_SUGGEST:
 			return SearchManager.SUGGEST_MIME_TYPE;
 		case REFRESH_SHORTCUT:

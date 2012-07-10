@@ -4,13 +4,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -24,7 +21,6 @@ import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.model.Offer;
 import eu.ttbox.androgister.model.PriceHelper;
-import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.register.RegisterBasketFragment.OnBasketSunUpdateListener;
 
 public class RegisterMultiBasketFragment extends Fragment {

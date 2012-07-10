@@ -130,6 +130,7 @@ public class OrderEditFragment extends Fragment {
             Log.d(TAG, "OnLoadCompleteListener for Order");
             cursor.moveToFirst();
             OrderHelper helper = new OrderHelper().initWrapper(cursor);
+            // TODO HIDE ACTION BUTTON on context
             // bind Values
             helper.setTextOrderNumber(orderNum, cursor) //
                     .setTextOrderUuid(orderUuid, cursor)//

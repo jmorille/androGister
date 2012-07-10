@@ -1,8 +1,8 @@
 package eu.ttbox.androgister.ui.order;
 
-import eu.ttbox.androgister.R;
 import android.app.Activity;
 import android.os.Bundle;
+import eu.ttbox.androgister.R;
 
 public class OrderListActivity extends Activity {
 
