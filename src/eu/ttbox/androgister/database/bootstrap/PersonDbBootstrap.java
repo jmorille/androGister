@@ -51,7 +51,7 @@ public class PersonDbBootstrap {
 		try {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				String[] strings = TextUtils.split(line, "-");
+				String[] strings = TextUtils.split(line, "_");
 				if (strings.length < 2)
 					continue;
 				long id = addPerson(strings[0].trim(), strings[1].trim(), strings[2].trim());
@@ -71,11 +71,11 @@ public class PersonDbBootstrap {
 	 * 
 	 * @return rowId or -1 if failed
 	 */
-	public long addPerson(String name, String tag, String price) {
+	public long addPerson(String firstname, String lastname,  String maticule) {
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(PersonDatabase.PersonColumns.KEY_LASTNAME, name);
-		initialValues.put(PersonDatabase.PersonColumns.KEY_FIRSTNAME, tag);
-		initialValues.put(PersonDatabase.PersonColumns.KEY_MATRICULE, price);
+		initialValues.put(PersonDatabase.PersonColumns.KEY_LASTNAME, lastname);
+		initialValues.put(PersonDatabase.PersonColumns.KEY_FIRSTNAME, firstname);
+		initialValues.put(PersonDatabase.PersonColumns.KEY_MATRICULE, maticule);
 		return mDatabase.insert(PersonDatabase.TABLE_PERSON_FTS, null, initialValues);
 	}
 
