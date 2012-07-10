@@ -71,9 +71,8 @@ public class PersonListFragment extends Fragment {
 		listView = (ListView) view.findViewById(R.id.person_list_list);
 		listView.setOnItemClickListener(mOnClickListener);
 		// List Header
-		// ViewGroup mTop = (ViewGroup)
-		// inflater.inflate(R.layout.order_list_header, listView, false);
-		// listView.addHeaderView(mTop, null, false);
+		ViewGroup mTop = (ViewGroup) inflater.inflate(R.layout.person_list_header, listView, false);
+		listView.addHeaderView(mTop, null, false);
 
 		// List Adpater
 		listAdapter = new PersonListAdapter(getActivity(), R.layout.person_list_item, null, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);

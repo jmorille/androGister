@@ -7,22 +7,25 @@
     <!-- Button -->
     <string name="button_order_edit">Modifier</string>
     <string name="button_order_delete">Supprimer</string>
-    
 
     <!-- Basket -->
     <string name="basket_sum">Total</string>
 
-     <!-- Basket Keyboard -->
-     <string name="kyb_ask_save_basket">Valider</string>
-     <string name="kyb_order_view_list">Liste des commandes</string>
-      
-    <!-- Model -->
+    <!-- Basket Keyboard -->
+    <string name="kyb_ask_save_basket">Valider</string>
+    <string name="kyb_order_view_list">Liste des commandes</string>
+    <string name="kyb_person_view_list">Liste des personnes</string>
+
+    <!-- Model Order -->
     <string name="order_number">N°</string>
     <string name="order_uuid">Id</string>
     <string name="order_date">Date</string>
     <string name="order_price">Total</string>
     <string name="order_status">Statut</string>
-    <string name="tab_words">Word</string>
-    <string name="tab_numbers">Number</string>
+
+    <!-- Model Person -->
+    <string name="person_firstname">Prénom</string>
+    <string name="person_lastname">Nom de famille</string>
+    <string name="person_matricule">Maticule</string>
 
 </resources>

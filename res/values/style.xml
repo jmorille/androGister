@@ -34,4 +34,10 @@
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
     </style>
 
+   <style name="register_keyboard_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+    
 </resources>
