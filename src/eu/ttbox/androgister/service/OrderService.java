@@ -16,9 +16,10 @@ import eu.ttbox.androgister.core.AppConstants;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.order.OrderDatabase;
 import eu.ttbox.androgister.model.Order;
+import eu.ttbox.androgister.service.core.WorkerService;
 import eu.ttbox.androgister.ui.CashRegisterActivity;
 
-public class OrderService extends IntentService implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class OrderService extends WorkerService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "OrderService";
 

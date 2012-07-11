@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 import android.util.Log;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.model.Order;
 import eu.ttbox.androgister.model.OrderHelper;
 import eu.ttbox.androgister.model.OrderItem;
@@ -77,6 +78,7 @@ public class OrderDatabase {
      *            The Context within which to work, used to create the DB
      */
     public OrderDatabase(Context context) {
+    
         mDatabaseOpenHelper = new OrderDbOpenHelper(context);
         orderIdGenerator = new OrderIdGenerator(context);
 

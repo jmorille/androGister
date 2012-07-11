@@ -41,6 +41,12 @@ public class OrderListAdapter extends ResourceCursorAdapter {
                 .setTextOrderStatus(statusText, cursor)//
                 .setTextOrderPriceSum(priceText, cursor)//
                 .setTextOrderDate(dateText, cursor);
+        // Test Invalid
+        if (helper.isOrderDeletePossible(cursor)) {
+        	view.setBackgroundResource(R.drawable.entity_list_item_bg);
+        } else {
+        	view.setBackgroundResource(R.drawable.order_list_item_cancel_bg);
+        }
     }
 
 }

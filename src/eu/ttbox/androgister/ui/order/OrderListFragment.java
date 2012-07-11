@@ -35,7 +35,7 @@ public class OrderListFragment extends Fragment {
     private static final String TAG = "OrderListFragment";
 
     private static final int ORDER_LIST_LOADER = R.string.config_id_order_list_loader_started;
-    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_ORDER_UUID, OrderColumns.KEY_STATUS,
+    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_ORDER_UUID, OrderColumns.KEY_ORDER_DELETE_UUID, OrderColumns.KEY_STATUS,
             OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_PRICE_SUM_HT };
 
     private static final String ORDER_SORT_DEFAULT = String.format("%s DESC, %s DESC", OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_ORDER_NUMBER);
@@ -103,7 +103,7 @@ public class OrderListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        getLoaderManager().restartLoader(ORDER_LIST_LOADER, null, orderLoaderCallback);
+        getLoaderManager().restartLoader(ORDER_LIST_LOADER, null, orderLoaderCallback);
 
     }
 
@@ -131,7 +131,7 @@ public class OrderListFragment extends Fragment {
         searchDate.init(year, monthOfYear, dayOfMonth, filterOnDateChangedListener);
 
         // Do Search
-        getLoaderManager().initLoader(ORDER_LIST_LOADER, null, orderLoaderCallback);
+//        getLoaderManager().initLoader(ORDER_LIST_LOADER, null, orderLoaderCallback);
         return view;
     }
 

@@ -132,6 +132,7 @@ public class OrderProvider extends ContentProvider {
 	
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		String orderString = uri.getLastPathSegment();
 		throw new RuntimeException("Delete Order Not Implemented");
  	}
 	@Override

@@ -34,7 +34,9 @@ public class AndroGisterApplication extends Application {
 		return counter;
 	}
 	
-	
+	public OrderIdSequence getOrderIdSequence() {
+		 return orderIdSequence;
+	}
 	
 	
 }

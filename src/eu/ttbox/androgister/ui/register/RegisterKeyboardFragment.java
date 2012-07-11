@@ -57,6 +57,15 @@ public class RegisterKeyboardFragment extends Fragment {
 
 	private void onClickViewPersonList(View v) {
 		Intent intent = new Intent(getActivity(), PersonListActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, 1);
 	}
+
+//	@Override
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		super.onActivityResult(requestCode, resultCode, data);
+//		if (resultCode == RESULT_OK && requestCode == 1) {
+//			String msg = data.getStringExtra("returnedData");
+//			textView.setText(msg);
+//		}
+//	}
 }
