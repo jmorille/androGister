@@ -90,6 +90,12 @@ public class OrderItem implements Serializable {
 		return this;
 	}
 
+
+    public OrderItem addQuantity(int quantity2) {
+        this.quantity += quantity2;
+        computePriceSum();
+        return this;
+     }
 	// ### Price Sum
 	// ##############
 
@@ -107,5 +113,6 @@ public class OrderItem implements Serializable {
 	private void computePriceSum() {
 		this.priceSumHT = priceUnitHT * quantity;
 	}
+
 
 }

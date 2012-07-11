@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.model.Offer;
+import eu.ttbox.androgister.model.Person;
 import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.ui.register.RegisterBasketFragment.OnBasketSunUpdateListener;
 
@@ -42,8 +43,8 @@ public class RegisterMultiBasketFragment extends Fragment {
 
 	private RegisterBasketFragment currentBasket;
 
-	SparseArray<RegisterBasketFragment> cacheBasket = new SparseArray<RegisterBasketFragment>();
-	SparseArray<Button> cacheButton = new SparseArray<Button>();
+	private SparseArray<RegisterBasketFragment> cacheBasket = new SparseArray<RegisterBasketFragment>();
+	private SparseArray<Button> cacheButton = new SparseArray<Button>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intents.ACTION_ADD_BASKET);
 		filter.addAction(Intents.ACTION_SAVE_BASKET);
+		filter.addAction(Intents.ACTION_PERSON_SELECT);
 		// Listener
 		getActivity().registerReceiver(mStatusReceiver, filter);
 	}
@@ -209,7 +211,10 @@ public class RegisterMultiBasketFragment extends Fragment {
 			} else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
 				currentBasket.askToSaveBasketToOrder();
 				removeTab(mCurrentTab);
-			}
+			 } else if (Intents.ACTION_PERSON_SELECT.equals(action)) {
+			     Person person = (Person)intent.getSerializableExtra(Intents.EXTRA_PERSON);
+			     currentBasket.setPerson(person);
+			 }
 		}
 	}
 

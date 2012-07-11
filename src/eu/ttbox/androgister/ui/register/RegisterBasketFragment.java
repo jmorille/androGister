@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import eu.ttbox.androgister.model.Offer;
 import eu.ttbox.androgister.model.Order;
 import eu.ttbox.androgister.model.OrderItem;
 import eu.ttbox.androgister.model.OrderItemHelper;
+import eu.ttbox.androgister.model.Person;
 import eu.ttbox.androgister.model.PriceHelper;
 
 public class RegisterBasketFragment extends Fragment {
@@ -30,11 +32,13 @@ public class RegisterBasketFragment extends Fragment {
 
     // Listener
     private OnBasketSunUpdateListener onBasketSunUpdateListener;
+    private BasketItemAdapter listAdapter;
 
     // Data Instance
+    private SparseArray<OrderItem> cacheOrderItemByProductId = new SparseArray<OrderItem>();
     private ArrayList<OrderItem> basket = new ArrayList<OrderItem>();
-    private BasketItemAdapter listAdapter;
     private long basketSum = 0;
+    private Person person;
 
     private final OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
         @Override
@@ -116,15 +120,35 @@ public class RegisterBasketFragment extends Fragment {
     }
 
     public void onAddBasketItem(OrderItem item) {
-        listAdapter.add(item);
+         listAdapter.add(item);
+//        addOrIncrementItem(item);
         setTextSum(this.basketSum + item.getPriceSumHT());
-        // executor.execute(doBasketSum);
+    }
+
+    private void addOrIncrementItem(OrderItem item) {
+        boolean isIncrement = false;
+        // Could cast
+        int productId = (int) item.getProductId();
+        OrderItem order = cacheOrderItemByProductId.get(productId);
+        if (order != null) {
+            if (order.getPriceUnitHT() == item.getPriceUnitHT()) {
+                order.addQuantity(item.getQuantity());
+                isIncrement = true;
+            }
+        } else {
+            cacheOrderItemByProductId.put(productId, item);
+        }
+
+        if (isIncrement) {
+            listAdapter.notifyDataSetChanged();
+        } else {
+            listAdapter.add(item);
+        }
     }
 
     public void onRemoveBasketItem(OrderItem item) {
         listAdapter.remove(item);
         setTextSum(this.basketSum - item.getPriceSumHT());
-        // executor.execute(doBasketSum);
     }
 
     protected boolean onListItemLongClick(ListView list, View view, int position, long id) {
@@ -135,6 +159,8 @@ public class RegisterBasketFragment extends Fragment {
 
     public void clearBasket() {
         basket.clear();
+        cacheOrderItemByProductId.clear();
+        person = null;
         listAdapter.notifyDataSetChanged();
         setTextSum(getComputeBasketSum());
         // executor.execute(doBasketSum);
@@ -159,7 +185,7 @@ public class RegisterBasketFragment extends Fragment {
             // TODO
             // Save It
             Log.i(TAG, "Ask to save Basket to Order with " + items.size() + " Items");
-            getActivity().startService(Intents.saveOrder(getActivity(),order));
+            getActivity().startService(Intents.saveOrder(getActivity(), order));
             // getActivity().getContentResolver().insert(O, values)
             // Temporay Del
             clearBasket();
@@ -168,6 +194,12 @@ public class RegisterBasketFragment extends Fragment {
 
     public interface OnBasketSunUpdateListener {
         void onBasketSum(long sum);
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+        // Define Text
+        // TODO
     }
 
 }

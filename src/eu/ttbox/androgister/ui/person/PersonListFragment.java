@@ -1,11 +1,14 @@
 package eu.ttbox.androgister.ui.person;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +16,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.PersonProvider;
 import eu.ttbox.androgister.database.product.PersonDatabase.PersonColumns;
+import eu.ttbox.androgister.database.product.PersonHelper;
+import eu.ttbox.androgister.model.Person;
 
 public class PersonListFragment extends Fragment {
 
@@ -83,9 +89,13 @@ public class PersonListFragment extends Fragment {
 		return view;
 	}
 
-	protected void onListItemClick(ListView parent, View v, int position, long id) {
-		// TODO Auto-generated method stub
-
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+	    Cursor cursor = (Cursor) l.getAdapter().getItem(position);
+	    PersonHelper helper = new PersonHelper().initWrapper(cursor);
+	    Person person = helper.getEntity(cursor);
+	    // Define result
+	    getActivity().setResult(Activity.RESULT_OK, Intents.selectPerson(person)); 
+	    getActivity().finish();
 	}
 
 }

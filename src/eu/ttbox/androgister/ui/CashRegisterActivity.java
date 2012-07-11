@@ -5,20 +5,21 @@ import android.os.Bundle;
 import eu.ttbox.androgister.R;
 
 /**
- * Sample Fragment {@link http://sberfini.developpez.com/tutoriaux/android/fragments/}
+ * Sample Fragment {@link http
+ * ://sberfini.developpez.com/tutoriaux/android/fragments/}
  * 
  * @author jmorille
  * 
  */
 public class CashRegisterActivity extends Activity {
+    
+    private static final String TAG = "CashRegisterActivity";
 
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.cash_register);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.cash_register);
+    }
 
-	
-
+    
 }

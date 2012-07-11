@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
     android:orientation="horizontal" >
 
     <TextView
@@ -25,7 +24,7 @@
     <TextView
         android:id="@+id/basket_list_item_price"
         style="@style/basket_list_item"
-        android:layout_weight="0.5"
+        android:layout_weight="0.4"
         android:paddingLeft="10dip" />
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import eu.ttbox.androgister.model.Offer;
 import eu.ttbox.androgister.model.Order;
+import eu.ttbox.androgister.model.Person;
 import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.order.OrderEditActivity;
 
@@ -17,10 +18,15 @@ public class Intents {
     public static final String ACTION_ORDER_DELETE = "eu.ttbox.androgister.intent.ACTION_ORDER_DELETE";
     public static final String ACTION_ORDER_SAVED = "eu.ttbox.androgister.intent.ACTION_ORDER_SAVED";
 
+    public static final String ACTION_PERSON_SELECT = "eu.ttbox.androgister.intent.ACTION_PERSON_SELECT";
+    
+
     
     public static final String EXTRA_OFFER = "eu.ttbox.androgister.intent.EXTRA_OFFER";
     public static final String EXTRA_ORDER = "eu.ttbox.androgister.intent.EXTRA_ORDER";
     public static final String EXTRA_ORDER_CANCELED_ID = "eu.ttbox.androgister.intent.EXTRA_ORDER_CANCELED_ID";
+
+    public static final String EXTRA_PERSON = "eu.ttbox.androgister.intent.EXTRA_PERSON";
 
     public static Intent addToBasket(Offer status) {
         return new Intent(ACTION_ADD_BASKET).putExtra(EXTRA_OFFER, status);
@@ -61,6 +67,10 @@ public class Intents {
     
     public static Intent orderSaved(  long orderId, long canceledOrderId) {
         return new Intent(ACTION_ORDER_SAVED).putExtra(EXTRA_ORDER, orderId).putExtra(EXTRA_ORDER_CANCELED_ID, canceledOrderId);
+    }
+
+    public static Intent selectPerson(Person person) {
+        return new Intent(ACTION_PERSON_SELECT).putExtra(EXTRA_PERSON, person);
     }
 
 }

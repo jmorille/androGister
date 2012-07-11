@@ -42,9 +42,8 @@ public class PersonHelper {
         product.setMatricule(matriculeIdx > -1 ? cursor.getString(matriculeIdx) : null);
         // Tag
         product.setTag(tagIdx > -1 ? cursor.getString(tagIdx) : null);
-        // Price
-        long priceHT = cursor.getLong(priceIdx);
-        product.setPriceHT(priceIdx > -1 ? priceHT : -1);
+        // Price 
+        product.setPriceHT(priceIdx > -1 ? cursor.getLong(priceIdx) : -1);
         return product;
     }
     

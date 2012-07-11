@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/basket_bg"
     android:orientation="vertical"
     android:paddingLeft="8dp"
     android:paddingRight="8dp" >
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:id="@+id/basket_screen_list_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="50dp" >
 
-        <TextView
-            style="@style/basket_screen_sum"
-            android:text="@string/basket_sum" 
-            android:paddingRight="8dp"/>
-
-        <TextView
-            android:id="@+id/basket_screen_sum"
-            style="@style/basket_screen_sum" />
-        
+        <ListView
+            android:id="@+id/basket_screen_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="false" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" 
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:gravity="bottom|right"
+        android:paddingRight="10dp" >
 
-        <ListView
-            android:id="@+id/basket_screen:list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:drawSelectorOnTop="false" />
+        <TextView
+            style="@style/basket_screen_sum"
+            android:paddingRight="8dp"
+            android:text="@string/basket_sum" />
 
-         
+        <TextView
+            android:id="@+id/basket_screen_sum"
+            style="@style/basket_screen_sum" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
