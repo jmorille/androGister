@@ -181,6 +181,12 @@ public class RegisterBasketFragment extends Fragment {
             Order order = new Order();
             order.setItems(items);
             order.setPriceSumHT(sumBasket);
+            // Person
+            if (person!=null) {
+            	order.setPersonId(person.getId());
+            	order.setPersonFirstname(person.getFirstname());
+            	order.setPersonLastname(person.getLastname());
+            }
             // Validate Order
             // TODO
             // Save It

@@ -214,7 +214,7 @@ public class RegisterMultiBasketFragment extends Fragment {
 			 } else if (Intents.ACTION_PERSON_SELECT.equals(action)) {
 			     Person person = (Person)intent.getSerializableExtra(Intents.EXTRA_PERSON);
 			     currentBasket.setPerson(person);
-			 }
+			 } 
 		}
 	}
 
