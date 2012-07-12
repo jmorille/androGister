@@ -5,10 +5,16 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/register_kb_validate"
+        android:id="@+id/register_kb_save_basket_credit"
         style="@style/register_keyboard_button"
-        android:text="@string/kyb_ask_save_basket" />
+        android:text="@string/kyb_ask_save_basket_credit" />
 
+   <Button
+        android:id="@+id/register_kb_save_basket_cash"
+        style="@style/register_keyboard_button"
+        android:text="@string/kyb_ask_save_basket_cash" />
+    
+        
     <Button
         android:id="@+id/register_kb_order_consult"
         style="@style/register_keyboard_button"

@@ -13,12 +13,12 @@ public class Order implements Serializable {
     private long orderNumber = -1;
     private String orderUUID;
     private String orderDeleteUUID;
-    
+
     private long orderDate = -1;
     private OrderStatusEnum status = OrderStatusEnum.ORDER;
 
-    private int paymentMode;
-    private long personId;
+    private OrderPaymentModeEnum paymentMode;
+    private long personId = -1;
     private String personMatricule;
     private String personFirstname;
     private String personLastname;
@@ -101,11 +101,11 @@ public class Order implements Serializable {
         return this;
     }
 
-    public int getPaymentMode() {
+    public OrderPaymentModeEnum getPaymentMode() {
         return paymentMode;
     }
 
-    public Order setPaymentMode(int paymentMode) {
+    public Order setPaymentMode(OrderPaymentModeEnum paymentMode) {
         this.paymentMode = paymentMode;
         return this;
     }
@@ -146,37 +146,35 @@ public class Order implements Serializable {
         return this;
     }
 
-	public String getOrderDeleteUUID() {
-		return orderDeleteUUID;
-	}
+    public String getOrderDeleteUUID() {
+        return orderDeleteUUID;
+    }
 
-	public Order setOrderDeleteUUID(String orderDeleteUUID) {
-		this.orderDeleteUUID = orderDeleteUUID;
-		return this;
-	}
+    public Order setOrderDeleteUUID(String orderDeleteUUID) {
+        this.orderDeleteUUID = orderDeleteUUID;
+        return this;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (id ^ (id >>> 32));
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Order other = (Order) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Order other = (Order) obj;
+        if (id != other.id)
+            return false;
+        return true;
+    }
 
-    
-    
 }

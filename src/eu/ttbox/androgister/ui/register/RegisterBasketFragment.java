@@ -2,7 +2,9 @@ package eu.ttbox.androgister.ui.register;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -19,15 +21,20 @@ import eu.ttbox.androgister.model.Offer;
 import eu.ttbox.androgister.model.Order;
 import eu.ttbox.androgister.model.OrderItem;
 import eu.ttbox.androgister.model.OrderItemHelper;
+import eu.ttbox.androgister.model.OrderPaymentModeEnum;
 import eu.ttbox.androgister.model.Person;
 import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.ui.person.PersonListActivity;
 
 public class RegisterBasketFragment extends Fragment {
 
     private static final String TAG = "RegisterBasketFragment";
 
+    private static final int SELECT_PERSON_REQUEST_CODE = 111;
+    private static final int SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET = 112;
+
     // Binding
-    private TextView sumTextView;
+    private TextView sumTextView, personFirstnameTextView, personLastnameTextView, personMatriculeTextView;
     private ListView listView;
 
     // Listener
@@ -38,7 +45,8 @@ public class RegisterBasketFragment extends Fragment {
     private SparseArray<OrderItem> cacheOrderItemByProductId = new SparseArray<OrderItem>();
     private ArrayList<OrderItem> basket = new ArrayList<OrderItem>();
     private long basketSum = 0;
-    private Person person;
+
+    private Order order;
 
     private final OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
         @Override
@@ -57,8 +65,17 @@ public class RegisterBasketFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Adpater
         listAdapter = new BasketItemAdapter(getActivity(), basket);
+        // Restore
+        if (null != savedInstanceState) {
+            order = (Order) savedInstanceState.getSerializable(Intents.EXTRA_ORDER);
+        }
         // Services
         // mStatusReceiver = new StatusReceiver();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle toSave) {
+        toSave.putSerializable(Intents.EXTRA_ORDER, order);
     }
 
     @Override
@@ -75,6 +92,10 @@ public class RegisterBasketFragment extends Fragment {
         listView.setAdapter(listAdapter);
         // View
         sumTextView = (TextView) view.findViewById(R.id.basket_screen_sum);
+        // View Person
+        personFirstnameTextView = (TextView) view.findViewById(R.id.basket_screen_person_firstname);
+        personLastnameTextView = (TextView) view.findViewById(R.id.basket_screen_person_lastname);
+        personMatriculeTextView = (TextView) view.findViewById(R.id.basket_screen_person_matricule);
         // Compute Initila Values
         setTextSum(getComputeBasketSum());
         // executor.execute(doBasketSum);
@@ -84,6 +105,8 @@ public class RegisterBasketFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setPersonData(order);
+        Log.i(TAG, "###  onResume with order " + order);
 
     }
 
@@ -120,8 +143,8 @@ public class RegisterBasketFragment extends Fragment {
     }
 
     public void onAddBasketItem(OrderItem item) {
-         listAdapter.add(item);
-//        addOrIncrementItem(item);
+        listAdapter.add(item);
+        // addOrIncrementItem(item);
         setTextSum(this.basketSum + item.getPriceSumHT());
     }
 
@@ -158,54 +181,118 @@ public class RegisterBasketFragment extends Fragment {
     }
 
     public void clearBasket() {
+        // List Items
         basket.clear();
         cacheOrderItemByProductId.clear();
-        person = null;
         listAdapter.notifyDataSetChanged();
+        // Sum
         setTextSum(getComputeBasketSum());
-        // executor.execute(doBasketSum);
+        // Order Data
+        order = null;
+        setPersonData(null);
     }
 
     public boolean isCurrentBasket() {
-        boolean isABasket = !basket.isEmpty();
-        return isABasket;
+        return (order != null) || (!basket.isEmpty());
     }
 
-    public void askToSaveBasketToOrder() {
-        Log.i(TAG, "Ask to save Basket to Order");
+    public boolean askToSaveBasketToOrder(OrderPaymentModeEnum paymentMode) {
+        Log.i(TAG, "Ask to save Basket to Order " + paymentMode);
+        boolean isValid = false;
         if (isCurrentBasket()) {
             // Get Clone of Basket Items
             ArrayList<OrderItem> items = new ArrayList<OrderItem>(basket);
             long sumBasket = getComputeBasketSum(items);
             // Prepare Object
-            Order order = new Order();
+            Order order = getOrder();
             order.setItems(items);
             order.setPriceSumHT(sumBasket);
-            // Person
-            if (person!=null) {
-            	order.setPersonId(person.getId());
-            	order.setPersonFirstname(person.getFirstname());
-            	order.setPersonLastname(person.getLastname());
-            }
+             
+            order.setPaymentMode(paymentMode);
             // Validate Order
-            // TODO
-            // Save It
-            Log.i(TAG, "Ask to save Basket to Order with " + items.size() + " Items");
-            getActivity().startService(Intents.saveOrder(getActivity(), order));
-            // getActivity().getContentResolver().insert(O, values)
-            // Temporay Del
-            clearBasket();
+            isValid = isValidOrder(order);
+            if (isValid) {
+                // Save It
+                Log.i(TAG, "Ask to save Basket to Order with " + items.size() + " Items");
+                getActivity().startService(Intents.saveOrder(getActivity(), order));
+                clearBasket();
+            }
         }
+        return isValid;
+    }
+
+    private boolean isValidOrder(Order order) {
+        boolean isValid = true;
+        if (order.getPaymentMode() == null) {
+            isValid = false;
+            return isValid;
+        } else if (OrderPaymentModeEnum.CASH == order.getPaymentMode()) {
+            // TODO Open cash Manager
+        } else if (OrderPaymentModeEnum.CREDIT == order.getPaymentMode()) {
+            if (order.getPersonId() == -1) {
+                askOpenSelectPersonList(SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET);
+                return false;
+            }
+        }
+
+        return isValid;
     }
 
     public interface OnBasketSunUpdateListener {
         void onBasketSum(long sum);
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    private Order getOrder() {
+        if (order == null) {
+            order = new Order();
+        }
+        return order;
+    }
+
+    private void setPersonData(Order person) {
         // Define Text
-        // TODO
+        String personFirstname = null;
+        String personLastname = null;
+        String personMatricule = null;
+        if (person != null) {
+            personFirstname = person.getPersonFirstname();
+            personLastname = person.getPersonLastname();
+            personMatricule = person.getPersonMatricule();
+        }
+        personFirstnameTextView.setText(personFirstname);
+        personLastnameTextView.setText(personLastname);
+        personMatriculeTextView.setText(personMatricule);
+    }
+
+    public void askOpenSelectPersonList() {
+        askOpenSelectPersonList(SELECT_PERSON_REQUEST_CODE);
+      }
+
+    private void askOpenSelectPersonList(int requestCode) {
+        Intent intent = new Intent(getActivity(), PersonListActivity.class);
+        startActivityForResult(intent, requestCode);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "#### onActivityResult " + data);
+        // super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK  ) {
+            if (SELECT_PERSON_REQUEST_CODE== requestCode || SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET== requestCode) {
+                Person person = (Person) data.getSerializableExtra(Intents.EXTRA_PERSON);
+                Order localOrder = null;
+                if (person != null) {
+                    localOrder = getOrder().setPersonId(person.getId())//
+                            .setPersonMatricule(person.getMatricule())//
+                            .setPersonLastname(person.getLastname())//
+                            .setPersonFirstname(person.getFirstname());
+                }
+                setPersonData(localOrder);
+                if (  SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET== requestCode) {
+                   askToSaveBasketToOrder(order.getPaymentMode()); 
+                }
+            }
+            
+        }
     }
 
 }

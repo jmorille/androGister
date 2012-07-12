@@ -115,6 +115,11 @@ public class OrderHelper {
         return status;
     }
 
+    public OrderPaymentModeEnum getOrderPaymentModeEnum(Cursor cursor) {
+        OrderPaymentModeEnum status = statusIdx > -1 ? OrderPaymentModeEnum.getEnumFromKey(cursor.getInt(statusIdx)) : null;
+        return status;
+    }
+
     public OrderHelper setTextOrderDate(TextView view, Cursor cursor) {
         long dateTime = cursor.getLong(orderDateIdx);
         String dateString = dateFormat.format(new Date(dateTime));
@@ -138,11 +143,12 @@ public class OrderHelper {
         order.setOrderNumber(orderNumberIdx > -1 ? cursor.getLong(orderNumberIdx) : -1);
         order.setOrderUUID(orderUuidIdx > -1 ? cursor.getString(orderUuidIdx) : null);
         order.setOrderDeleteUUID(orderDeleteUuidIdx > -1 ? cursor.getString(orderDeleteUuidIdx) : null);
-        order.setStatus( getOrderStatusEnum(cursor));
         order.setOrderDate(orderDateIdx > -1 ? cursor.getLong(orderDateIdx) : -1);
         order.setPriceSumHT(priceSumIdx > -1 ? cursor.getLong(priceSumIdx) : 0);
 
-        order.setPaymentMode(paymentModeIdx > -1 ? cursor.getInt(paymentModeIdx) : 0);
+        order.setStatus(getOrderStatusEnum(cursor));
+        order.setPaymentMode(getOrderPaymentModeEnum(cursor));
+
         order.setPersonId(persIdIdx > -1 ? cursor.getLong(persIdIdx) : 0);
         order.setPersonMatricule(persMatriculeIdx > -1 ? cursor.getString(persMatriculeIdx) : null);
         order.setPersonFirstname(persFirstnameIdx > -1 ? cursor.getString(persFirstnameIdx) : null);
@@ -202,7 +208,7 @@ public class OrderHelper {
             initWrapper(cursor);
         }
         String orderUUID = cursor.getString(orderUuidIdx);
-        OrderStatusEnum status =  getOrderStatusEnum(cursor);
+        OrderStatusEnum status = getOrderStatusEnum(cursor);
         String orderDeleteUUID = cursor.getString(orderDeleteUuidIdx);
         return OrderHelper.isOrderDeletePossible(orderUUID, status, orderDeleteUUID);
     }

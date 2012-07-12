@@ -94,7 +94,7 @@ public class PersonListFragment extends Fragment {
 	    PersonHelper helper = new PersonHelper().initWrapper(cursor);
 	    Person person = helper.getEntity(cursor);
 	    // Define result
-	    getActivity().setResult(Activity.RESULT_OK, Intents.selectPerson(person)); 
+	    getActivity().setResult(Activity.RESULT_OK, Intents.selectedPerson(person)); 
 	    getActivity().finish();
 	}
 

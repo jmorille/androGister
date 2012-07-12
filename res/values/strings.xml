@@ -16,7 +16,8 @@
     <string name="basket_sum">Total</string>
 
     <!-- Basket Keyboard -->
-    <string name="kyb_ask_save_basket">Valider</string>
+    <string name="kyb_ask_save_basket_credit">Credit</string>
+    <string name="kyb_ask_save_basket_cash">Cash</string>
     <string name="kyb_order_view_list">Liste des commandes</string>
     <string name="kyb_person_view_list">Liste des personnes</string>
 
