@@ -28,7 +28,7 @@ public class RegisterKeyboardFragment extends Fragment {
                 getActivity().sendBroadcast(Intents.saveBasket(OrderPaymentModeEnum.CASH));
             }
         });
-        saveCreditButton = (Button) view.findViewById(R.id.register_kb_save_basket_cash);
+        saveCreditButton = (Button) view.findViewById(R.id.register_kb_save_basket_credit);
         saveCreditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

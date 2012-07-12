@@ -16,6 +16,7 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.model.Offer;
@@ -93,6 +94,7 @@ public class RegisterMultiBasketFragment extends Fragment {
         filter.addAction(Intents.ACTION_ADD_BASKET);
         filter.addAction(Intents.ACTION_SAVE_BASKET);
         filter.addAction(Intents.ACTION_PERSON_ASK_SELECT_DIALOG);
+        filter.addAction(Intents.ACTION_ORDER_SAVED); 
         // Listener
         getActivity().registerReceiver(mStatusReceiver, filter);
         Log.i(TAG, "###  onResume");
@@ -224,6 +226,8 @@ public class RegisterMultiBasketFragment extends Fragment {
                 }
             } else if (Intents.ACTION_PERSON_ASK_SELECT_DIALOG.equals(action)) {
                 currentBasket.askOpenSelectPersonList();
+            } else if (Intents.ACTION_ORDER_SAVED.equals(action)) {
+                Toast.makeText(getActivity(), "Order Saved", Toast.LENGTH_SHORT).show();
             }
         }
     }

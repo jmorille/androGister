@@ -227,7 +227,7 @@ public class RegisterBasketFragment extends Fragment {
             isValid = false;
             return isValid;
         } else if (OrderPaymentModeEnum.CASH == order.getPaymentMode()) {
-            // TODO Open cash Manager
+            return true;
         } else if (OrderPaymentModeEnum.CREDIT == order.getPaymentMode()) {
             if (order.getPersonId() == -1) {
                 askOpenSelectPersonList(SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET);
