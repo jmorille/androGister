@@ -3,6 +3,7 @@ package eu.ttbox.androgister.ui.order;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
@@ -29,13 +30,31 @@ public class OrderItemAdapter extends ResourceCursorAdapter {
             intViewBinding(view, context, cursor);
         }
         // Bind
-        TextView quantityTextView = (TextView) view.findViewById(R.id.basket_list_item_quantity);
-        TextView nameTextView = (TextView) view.findViewById(R.id.basket_list_item_name);
-        TextView priceTextView = (TextView) view.findViewById(R.id.basket_list_item_price);
+        ViewHolder holder = (ViewHolder) view.getTag();
         // Set value
-        helper.setTextItemName(nameTextView, cursor) //
-                .setTextItemQuantity(quantityTextView, cursor)//
-                .setTextItemPriceUnit(priceTextView, cursor);
+        helper.setTextItemName(holder.nameTextView, cursor) //
+                .setTextItemQuantity(holder.quantityTextView, cursor)//
+                .setTextItemPriceUnit(holder.priceTextView, cursor);
+    }
+
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        View view = super.newView(context, cursor, parent);
+        // Then populate the ViewHolder
+        ViewHolder holder = new ViewHolder();
+        holder.quantityTextView = (TextView) view.findViewById(R.id.basket_list_item_quantity);
+        holder.nameTextView = (TextView) view.findViewById(R.id.basket_list_item_name);
+        holder.priceTextView = (TextView) view.findViewById(R.id.basket_list_item_price);
+        // and store it inside the layout.
+        view.setTag(holder);
+        return view;
+
+    }
+
+    static class ViewHolder {
+        TextView quantityTextView;
+        TextView nameTextView;
+        TextView priceTextView;
     }
 
 }

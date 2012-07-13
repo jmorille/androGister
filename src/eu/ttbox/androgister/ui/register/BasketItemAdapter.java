@@ -14,42 +14,58 @@ import eu.ttbox.androgister.model.PriceHelper;
 
 public class BasketItemAdapter extends ArrayAdapter<OrderItem> {
 
-	private Context context;
-	private LayoutInflater mInflater;
+    private Context context;
+    private LayoutInflater mInflater;
 
-	public BasketItemAdapter(Context context, List<OrderItem> objects) {
-		super(context, R.layout.register_basket_list_item, objects);
-		this.context = context;
-		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	}
+    public BasketItemAdapter(Context context, List<OrderItem> objects) {
+        super(context, R.layout.register_basket_list_item, objects);
+        this.context = context;
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View view;
-		if (convertView == null) {
-			view = mInflater.inflate(R.layout.register_basket_list_item, parent, false);
-		} else {
-			view = convertView;
-		}
-		OrderItem data = getItem(position);
-		bindView(view, context, data);
-		return view;
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view;
+        if (convertView == null) {
+            view = newView(context, parent);
+        } else {
+            view = convertView;
+        }
+        OrderItem data = getItem(position);
+        bindView(view, context, data);
+        return view;
+    }
 
-	public void bindView(View view, Context context, OrderItem data) {
-		// Bind
-		TextView quantityTextView = (TextView) view.findViewById(R.id.basket_list_item_quantity);
-		TextView nameTextView = (TextView) view.findViewById(R.id.basket_list_item_name);
-		TextView priceTextView = (TextView) view.findViewById(R.id.basket_list_item_price);
-		// Set value
-		quantityTextView.setText(String.valueOf(data.getQuantity()));
-		nameTextView.setText(data.getName());
-		long price = data.getPriceSumHT();
-		String priceString = null;
-		if (price > -1) {
-			priceString = PriceHelper.getToStringPrice(price);
-		}
-		priceTextView.setText(priceString);
-	}
+    public void bindView(View view, Context context, OrderItem data) {
+        // Bind
+        ViewHolder holder = (ViewHolder) view.getTag();
+        // Set value
+        holder.quantityTextView.setText(String.valueOf(data.getQuantity()));
+        holder.nameTextView.setText(data.getName());
+        long price = data.getPriceSumHT();
+        String priceString = null;
+        if (price > -1) {
+            priceString = PriceHelper.getToStringPrice(price);
+        }
+        holder.priceTextView.setText(priceString);
+    }
 
+    public View newView(Context context, ViewGroup parent) {
+        View view = mInflater.inflate(R.layout.register_basket_list_item, parent, false);
+        // Then populate the ViewHolder
+        ViewHolder holder = new ViewHolder();
+        holder.quantityTextView = (TextView) view.findViewById(R.id.basket_list_item_quantity);
+        holder.nameTextView = (TextView) view.findViewById(R.id.basket_list_item_name);
+        holder.priceTextView = (TextView) view.findViewById(R.id.basket_list_item_price);
+        // and store it inside the layout.
+        view.setTag(holder);
+        return view;
+
+    }
+
+    static class ViewHolder {
+        TextView quantityTextView;
+        TextView nameTextView;
+        TextView priceTextView;
+    }
 }

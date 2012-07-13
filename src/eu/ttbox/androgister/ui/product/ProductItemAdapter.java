@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
@@ -47,18 +48,34 @@ public class ProductItemAdapter extends ResourceCursorAdapter {
         if (isNotBinding) {
             intViewBinding(view, context, cursor);
         }
-        // Bind View
-        TextView nameText = (TextView) view.findViewById(R.id.product_list_item_name);
-        TextView priceText = (TextView) view.findViewById(R.id.product_list_item_price);
+        // Bind View 
+        ViewHolder holder = ( ViewHolder)view.getTag();
         // Bind Value
-        helper.setTextOfferName(nameText, cursor)//
-                .setTextOfferPrice(priceText, cursor);
+        helper.setTextOfferName(holder.nameText, cursor)//
+                .setTextOfferPrice(holder.priceText, cursor);
         // Bg color
         String tag = cursor.getString(helper.tagIdx);
         GradientDrawable grad = mapColors.get(tag);
         if (grad != null) {
             view.setBackgroundDrawable(grad);
         }
+    }
 
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        View view = super.newView(context, cursor, parent);
+        // Then populate the ViewHolder
+        ViewHolder holder = new ViewHolder();
+        holder.nameText = (TextView) view.findViewById(R.id.product_list_item_name);
+        holder.priceText = (TextView) view.findViewById(R.id.product_list_item_price);
+        // and store it inside the layout.
+        view.setTag(holder);
+        return view;
+
+    }
+
+    static class ViewHolder {
+        TextView nameText;
+        TextView priceText;
     }
 }

@@ -32,4 +32,19 @@ $ adb shell am start -a andoid.intent.action.MAIN -n com.android.settings/.Proxy
 Sinon, il existe une application dans le market pour y accéder :
 https://market.android.com/details?id=org.credil.proxysettings&feature=search_result
 
+# Free Icons
 ##############
+svn checkout svn://svn.services.openoffice.org/ooo/trunk/default_images/chart2/res/ icons
+mkdir types
+cp icons/type*16.png types
+
+# Graph Chart
+##############
+https://github.com/jjoe64/GraphView
+http://androidplot.com/wiki/Home
+http://code.google.com/p/afreechart/
+http://code.google.com/p/droidcharts/
+
+Thread
+http://stackoverflow.com/questions/424752/any-good-graphing-packages-for-android/1856369#1856369
+http://stackoverflow.com/questions/424752/any-good-graphing-packages-for-android
