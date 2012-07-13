@@ -6,17 +6,17 @@ public class Offer implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private long id = -1;
+	public long id = -1;
 	
-	private String name;
+	public String name;
 
-	private String description;
+	public String description;
 
-	private String ean;
+	public String ean;
 
-	private String tag;
+	public String tag;
 
-	private long priceHT = 0l;
+	public long priceHT = 0l;
  
 	public long getId() {
 		return id;

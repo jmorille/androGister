@@ -8,20 +8,22 @@ public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private long id = -1;
-    private long priceSumHT = 0l;
-    private long orderNumber = -1;
-    private String orderUUID;
-    private String orderDeleteUUID;
+    public long id = -1;
+    public long priceSumHT = 0l;
+    public long orderNumber = -1;
+    public String orderUUID;
+    public String orderDeleteUUID;
 
+    public OrderStatusEnum status = OrderStatusEnum.ORDER;
+
+    public OrderPaymentModeEnum paymentMode;
+    public long personId = -1;
+    public String personMatricule;
+    public String personFirstname;
+    public String personLastname;
+
+    // Shoub be private
     private long orderDate = -1;
-    private OrderStatusEnum status = OrderStatusEnum.ORDER;
-
-    private OrderPaymentModeEnum paymentMode;
-    private long personId = -1;
-    private String personMatricule;
-    private String personFirstname;
-    private String personLastname;
 
     // instance Data
     private transient Date cachedOrderDate = null;

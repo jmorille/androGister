@@ -9,53 +9,59 @@
 	<name>AndroGister</name>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-        <android.version>4.0.3_r3</android.version> <!-- 2.3.3 -->
-        <junit.version>4.10</junit.version>  
-         <!-- Release -->
-        <sign.alias>android</sign.alias>
-        <build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
-        <android-maven-plugin.version>3.2.0</android-maven-plugin.version>
-        <maven-jarsigner-plugin.version>1.2</maven-jarsigner-plugin.version>
-       </properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<android.version>4.0.3_r3</android.version> <!-- 2.3.3 -->
+		<junit.version>4.10</junit.version>
+		<!-- Release -->
+		<sign.alias>android</sign.alias>
+		<build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
+		<android-maven-plugin.version>3.2.0</android-maven-plugin.version>
+		<maven-jarsigner-plugin.version>1.2</maven-jarsigner-plugin.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>android</groupId>
 			<artifactId>android</artifactId>
-			<version>${android.version}</version>  
+			<version>${android.version}</version>
 			<scope>provided</scope>
 		</dependency>
-<!--         <dependency> -->
-<!--           <groupId>com.google.android.maps</groupId> -->
-<!--           <artifactId>maps</artifactId> -->
-<!--           <version>${google.maps.version}</version>   -->
-<!--           <scope>provided</scope> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>com.google.android</groupId> -->
-<!--             <artifactId>android-test</artifactId> -->
-<!-- 			<version>${android.version}</version>   -->
-<!--             <scope>provided</scope> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>junit</groupId> -->
-<!--             <artifactId>junit</artifactId> -->
-<!--             <version>${junit.version}</version> -->
-<!--             <scope>test</scope> -->
-<!--         </dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>slf4j-android</artifactId> -->
-<!-- 			<version>${slf4j-android.version}</version>  -->
-<!-- 		</dependency> -->
-  
+		<dependency>
+			<groupId>android.support</groupId>
+			<artifactId>compatibility-v13</artifactId>
+			<version>r9</version>
+		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>com.google.android.maps</groupId> -->
+		<!-- <artifactId>maps</artifactId> -->
+		<!-- <version>${google.maps.version}</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.google.android</groupId> -->
+		<!-- <artifactId>android-test</artifactId> -->
+		<!-- <version>${android.version}</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>junit</groupId> -->
+		<!-- <artifactId>junit</artifactId> -->
+		<!-- <version>${junit.version}</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>slf4j-android</artifactId> -->
+		<!-- <version>${slf4j-android.version}</version> -->
+		<!-- </dependency> -->
+
 	</dependencies>
 
 	<build>
-        <finalName>${project.artifactId}</finalName>
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>test</testSourceDirectory>
+		<finalName>${project.artifactId}</finalName>
+		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>test</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
@@ -67,10 +73,10 @@
 					<resourceDirectory>${project.basedir}/res</resourceDirectory>
 					<nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
 					<sdk>
-						<platform>15</platform> 
-                        <path>${env.ANDROID_HOME}</path>
+						<platform>15</platform>
+						<path>${env.ANDROID_HOME}</path>
 					</sdk>
- 					<deleteConflictingFiles>true</deleteConflictingFiles>
+					<deleteConflictingFiles>true</deleteConflictingFiles>
 					<undeployBeforeDeploy>true</undeployBeforeDeploy>
 				</configuration>
 				<extensions>true</extensions>
@@ -83,132 +89,132 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
- 	</plugins>
+		</plugins>
 	</build>
-     
-    <pluginRepositories>
-        <pluginRepository>
-            <id>oss.sonatype.org-jayway-releases</id>
-            <name>Jayway OpenSource RELEASE on Sonatype.org</name>
-            <url>https://oss.sonatype.org/content/repositories/jayway-releases/</url>
-         </pluginRepository>
-    </pluginRepositories>
-  
 
-   <profiles>
-       <!-- https://github.com/jayway/maven-android-plugin-samples/blob/stable/morseflash/morseflash-app/pom.xml -->
-        <profile>
-            <id>release</id>
-            <!-- via this activation the profile is automatically used when the release is done with the maven release
-            plugin -->
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jarsigner-plugin</artifactId>
-                        <version>${maven-jarsigner-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>signing</id>
-                                <goals>
-                                    <goal>sign</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <phase>package</phase>
-                                <inherited>true</inherited>
-                                <configuration>
-                                    <removeExistingSignatures>true</removeExistingSignatures>
-                                    <archiveDirectory/>
-                                    <includes>
-                                        <include>${project.build.directory}/${project.artifactId}.apk</include>
-                                    </includes>
-                                    <keystore>${sign.keystore}</keystore>
-                                    <alias>${sign.alias}</alias>
-                                    <storepass>${sign.storepass}</storepass>
-                                    <keypass>${sign.keypass}</keypass>
-                                    <verbose>true</verbose>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- the signed apk then needs to be zipaligned and we activate proguard and we run the manifest
-                    update -->
-                    <plugin>
-                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-                        <artifactId>android-maven-plugin</artifactId>
-                        <version>${android-maven-plugin.version}</version>
-                        <inherited>true</inherited>
-                        <configuration>
-                            <sign>
-                                <debug>false</debug>
-                            </sign>
-                            <zipalign>
-                                <verbose>true</verbose>
-                                <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
-                                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk</outputApk>
-                            </zipalign>
-                            <manifest>
-                                <debuggable>false</debuggable>
-                                <versionCodeAutoIncrement>true</versionCodeAutoIncrement>
-                            </manifest>
-                            <proguard>
-                                <skip>false</skip>
-                            </proguard>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>manifestUpdate</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>manifest-update</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>alignApk</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>zipalign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                         <version>${build-helper-maven-plugin.version}</version>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>${project.build.directory}/${project.artifactId}-signed-aligned.apk</file>
-                                    <type>apk</type>
-                                    <classifier>signed-aligned</classifier>
-                                </artifact>
-                                <artifact>
-                                    <file>${project.build.directory}/proguard/mapping.txt</file>
-                                    <type>map</type>
-                                    <classifier>release</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>attach-signed-aligned</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>attach-artifact</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-       
-  </profiles>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>oss.sonatype.org-jayway-releases</id>
+			<name>Jayway OpenSource RELEASE on Sonatype.org</name>
+			<url>https://oss.sonatype.org/content/repositories/jayway-releases/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+
+	<profiles>
+		<!-- https://github.com/jayway/maven-android-plugin-samples/blob/stable/morseflash/morseflash-app/pom.xml -->
+		<profile>
+			<id>release</id>
+			<!-- via this activation the profile is automatically used when the release 
+				is done with the maven release plugin -->
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>${maven-jarsigner-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>signing</id>
+								<goals>
+									<goal>sign</goal>
+									<goal>verify</goal>
+								</goals>
+								<phase>package</phase>
+								<inherited>true</inherited>
+								<configuration>
+									<removeExistingSignatures>true</removeExistingSignatures>
+									<archiveDirectory />
+									<includes>
+										<include>${project.build.directory}/${project.artifactId}.apk</include>
+									</includes>
+									<keystore>${sign.keystore}</keystore>
+									<alias>${sign.alias}</alias>
+									<storepass>${sign.storepass}</storepass>
+									<keypass>${sign.keypass}</keypass>
+									<verbose>true</verbose>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- the signed apk then needs to be zipaligned and we activate proguard 
+						and we run the manifest update -->
+					<plugin>
+						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+						<artifactId>android-maven-plugin</artifactId>
+						<version>${android-maven-plugin.version}</version>
+						<inherited>true</inherited>
+						<configuration>
+							<sign>
+								<debug>false</debug>
+							</sign>
+							<zipalign>
+								<verbose>true</verbose>
+								<inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
+								<outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk</outputApk>
+							</zipalign>
+							<manifest>
+								<debuggable>false</debuggable>
+								<versionCodeAutoIncrement>true</versionCodeAutoIncrement>
+							</manifest>
+							<proguard>
+								<skip>false</skip>
+							</proguard>
+						</configuration>
+						<executions>
+							<execution>
+								<id>manifestUpdate</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>manifest-update</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>alignApk</id>
+								<phase>package</phase>
+								<goals>
+									<goal>zipalign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>${build-helper-maven-plugin.version}</version>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>${project.build.directory}/${project.artifactId}-signed-aligned.apk</file>
+									<type>apk</type>
+									<classifier>signed-aligned</classifier>
+								</artifact>
+								<artifact>
+									<file>${project.build.directory}/proguard/mapping.txt</file>
+									<type>map</type>
+									<classifier>release</classifier>
+								</artifact>
+							</artifacts>
+						</configuration>
+						<executions>
+							<execution>
+								<id>attach-signed-aligned</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 </project>

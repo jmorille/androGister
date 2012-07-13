@@ -3,6 +3,11 @@ androGister
 
 TODO: http://android.cyrilmottier.com/
 
+# Update Site
+##############
+m2e release : http://rgladwell.github.com/m2e-android/ 
+m2e master : http://rgladwell.github.com/m2e-android/updates/master
+
 # Wifi Deploy
 ##############
 According to a post on xda-developers, you can enable ADB over WiFi from the device with the commands  
@@ -32,6 +37,10 @@ $ adb shell am start -a andoid.intent.action.MAIN -n com.android.settings/.Proxy
 Sinon, il existe une application dans le market pour y accéder :
 https://market.android.com/details?id=org.credil.proxysettings&feature=search_result
 
+# Support Library
+##############
+http://developer.android.com/tools/extras/support-library.html
+
 # Free Icons
 ##############
 svn checkout svn://svn.services.openoffice.org/ooo/trunk/default_images/chart2/res/ icons
@@ -45,6 +54,7 @@ http://androidplot.com/wiki/Home
 http://code.google.com/p/afreechart/
 http://code.google.com/p/droidcharts/
 
-Thread
+# Thread
 http://stackoverflow.com/questions/424752/any-good-graphing-packages-for-android/1856369#1856369
 http://stackoverflow.com/questions/424752/any-good-graphing-packages-for-android
+##############

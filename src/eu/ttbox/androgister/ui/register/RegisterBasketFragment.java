@@ -24,6 +24,7 @@ import eu.ttbox.androgister.model.OrderItemHelper;
 import eu.ttbox.androgister.model.OrderPaymentModeEnum;
 import eu.ttbox.androgister.model.Person;
 import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.person.PersonListActivity;
 
 public class RegisterBasketFragment extends Fragment {
@@ -81,6 +82,7 @@ public class RegisterBasketFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getActivity().stopService( new Intent(getActivity(), OrderService.class));
     }
 
     @Override
@@ -112,9 +114,10 @@ public class RegisterBasketFragment extends Fragment {
 
     @Override
     public void onPause() {
-        super.onPause();
+        super.onPause(); 
     }
 
+    
     private void setTextSum(long sumPrice) {
         this.basketSum = sumPrice;
         sumTextView.setText(PriceHelper.getToStringPrice(sumPrice));

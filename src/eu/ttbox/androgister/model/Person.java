@@ -6,17 +6,17 @@ public class Person implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private long id = -1;
+	public long id = -1;
 	
-	private String lastname;
+	public String lastname;
 
-	private String firstname;
+	public String firstname;
 
-	private String matricule;
+	public String matricule;
 
-	private String tag;
+	public String tag;
 
-	private long priceHT = 0l;
+	public long priceHT = 0l;
  
 	public long getId() {
 		return id;

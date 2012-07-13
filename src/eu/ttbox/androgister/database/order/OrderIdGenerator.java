@@ -10,6 +10,11 @@ import android.util.Log;
 import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
 
+/**
+ * Android Identifier {link http://android-developers.blogspot.fr/2011/03/identifying-app-installations.html}
+ * @author jmorille
+ *
+ */
 public class OrderIdGenerator {
 
 	private final static String TAG = "OrderIdGenerator";

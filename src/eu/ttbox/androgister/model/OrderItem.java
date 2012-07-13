@@ -6,13 +6,14 @@ public class OrderItem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long id = -1;
-	private long orderId = -1;
-	private long productId = -1;
+	public long id = -1;
+	public long orderId = -1;
+	public long productId = -1;
 
-	private String name;
-	private String ean;
+	public String name;
+	public String ean;
 
+	// SHoub be private
 	int quantity = 1;
 	long priceUnitHT = 0l;
 	long priceSumHT = 0l;
