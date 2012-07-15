@@ -20,8 +20,11 @@ public class EditTextSummaryPreference extends EditTextPreference {
 
     public void setText(String text) {
         String savedText = text;
-        if (text == null || text.trim().isEmpty()) {
-            savedText = null;
+        if (text != null  ) {
+            savedText = text.trim();
+            if (savedText.isEmpty()) {
+                savedText = null;
+            }
         }
         super.setText(savedText);
         setSummary(text);
