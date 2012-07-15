@@ -37,7 +37,7 @@ public class ProductSelectorFragment extends Fragment {
     private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OfferColumns.KEY_ID, OfferColumns.KEY_NAME, OfferColumns.KEY_PRICEHT, OfferColumns.KEY_TAG };
     private static final String SEARCH_SELECTION_TAG = String.format("%s MATCH ?", OfferColumns.KEY_TAG);
     private static final String OFFER_SORT_DEFAULT = String.format("%s ASC, %s ASC", OfferColumns.KEY_TAG, OfferColumns.KEY_NAME);
-    
+
     // Mock Value
     private static final String SEARCH_SELECTION_TAG_NO_VALUE = "Tous";
     private String[] filterValues = new String[] { SEARCH_SELECTION_TAG_NO_VALUE, "Entrée", "Plat", "Dessert", "Boisson" };
@@ -53,6 +53,8 @@ public class ProductSelectorFragment extends Fragment {
     private OfferHelper offerHelper;
     private ProductItemAdapter listAdapter;
 
+    // Registered Listeenr
+    private OnOfferSelectedListener onOfferSelectedListener;
     // Listener
     private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -76,7 +78,7 @@ public class ProductSelectorFragment extends Fragment {
             if (filterOfferTag != null) {
                 selection = SEARCH_SELECTION_TAG;
                 selectionArgs = new String[] { filterOfferTag };
-            } 
+            }
             CursorLoader cursorLoader = new CursorLoader(getActivity(), OfferProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs, sortOrder);
             return cursorLoader;
         }
@@ -115,18 +117,16 @@ public class ProductSelectorFragment extends Fragment {
         gridView.setAdapter(listAdapter);
 
         // Init Search
-        getLoaderManager().initLoader(OFFER_LIST_LOADER, null, offerLoaderCallback); 
+        getLoaderManager().initLoader(OFFER_LIST_LOADER, null, offerLoaderCallback);
         return view;
     }
 
-  
-
     private void onFilterItemClick(ListView l, View v, int position, long id) {
         String filterName = (String) l.getAdapter().getItem(position);
-        if (SEARCH_SELECTION_TAG_NO_VALUE.equals(filterName)) { 
+        if (SEARCH_SELECTION_TAG_NO_VALUE.equals(filterName)) {
             filterOfferTag = null;
         } else {
-            filterOfferTag = filterName; 
+            filterOfferTag = filterName;
         }
         getLoaderManager().restartLoader(OFFER_LIST_LOADER, null, offerLoaderCallback);
         // ((Filterable)gridView.getAdapter()).getFilter().filter(filterName);
@@ -134,11 +134,20 @@ public class ProductSelectorFragment extends Fragment {
 
     public void onListItemClick(GridView l, View v, int position, long id) {
         Cursor item = (Cursor) l.getAdapter().getItem(position);
-        Offer status = offerHelper.getEntity(item);
-        getActivity().sendBroadcast(Intents.addToBasket(status));
-        // Toast.makeText(getActivity(),
-        // getListView().getItemAtPosition(position).toString(),
-        // Toast.LENGTH_LONG).show();
+        Offer offer = offerHelper.getEntity(item);
+        if (onOfferSelectedListener != null) {
+            onOfferSelectedListener.onOfferSelected(offer);
+        } else {
+            getActivity().sendBroadcast(Intents.addToBasket(offer));
+        }
+    }
+
+    public void setOnOfferSelectedListener(OnOfferSelectedListener listener) {
+        this.onOfferSelectedListener = listener;
+    }
+    
+    public static interface OnOfferSelectedListener {
+        public void onOfferSelected(Offer offer);
     }
 
 }

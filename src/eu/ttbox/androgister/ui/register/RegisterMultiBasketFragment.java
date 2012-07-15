@@ -209,6 +209,11 @@ public class RegisterMultiBasketFragment extends Fragment {
         }
     }
 
+    
+    public void onAddBasketItem(Offer offer) {
+        currentBasket.onAddBasketItem(offer);
+    }
+    
     private class StatusReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -216,7 +221,7 @@ public class RegisterMultiBasketFragment extends Fragment {
             Log.i(TAG, "onReceive Intent action : " + action);
             if (Intents.ACTION_ADD_BASKET.equals(action)) {
                 Offer status = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
-                currentBasket.onAddBasketItem(status);
+               onAddBasketItem(status);
                 // context.removeStickyBroadcast(intent);
             } else if (Intents.ACTION_SAVE_BASKET.equals(action)) {
                 OrderPaymentModeEnum paymentMode = OrderPaymentModeEnum.getEnumFromKey(intent.getIntExtra(Intents.EXTRA_ORDER_PAYMENT_MODE, -1));
