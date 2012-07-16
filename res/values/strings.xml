@@ -6,7 +6,8 @@
 
     <!-- Menu  -->
     <string name="menu_preference">Préférence</string>
-
+    <string name="menu_search">Rechercher</string>
+    
     <!-- Search -->
     <string name="search_person_label">Rechercher une personne</string>
     <string name="search_person_hint">Rechercher nom ou un matricule</string>

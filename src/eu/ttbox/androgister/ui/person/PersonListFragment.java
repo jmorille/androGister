@@ -3,6 +3,8 @@ package eu.ttbox.androgister.ui.person;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -10,10 +12,12 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -58,6 +62,12 @@ public class PersonListFragment extends Fragment {
             String selection = null;
             String[] selectionArgs = null;
             String queryString = searchNameTextView.getText().toString();
+            if (args!=null) {
+                queryString = args.getString(SearchManager.QUERY, null);
+            } else {
+                queryString = searchNameTextView.getText().toString();
+            }
+           
             if (queryString != null) {
                 queryString = queryString.trim();
                 if (!queryString.isEmpty()) {
@@ -101,15 +111,23 @@ public class PersonListFragment extends Fragment {
         listView.setOnItemClickListener(mOnClickListener);
         // Search Criteria
         searchNameTextView = (EditText) view.findViewById(R.id.person_list_search_name_input);
-        searchNameTextView.setOnEditorActionListener(new OnEditorActionListener() {
-
+//        searchNameTextView.setOnEditorActionListener(new OnEditorActionListener() {
+//
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
+//                return true;
+//            }
+//        });
+        searchNameTextView.setOnKeyListener(new OnKeyListener() {
+            
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
                 getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
                 return true;
             }
         });
-        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+         // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
         // android.R.layout.simple_dropdown_item_1line, COUNTRIES);
         // searchNameTextView.setAdapter(adapter);
         // List Header
@@ -134,9 +152,9 @@ public class PersonListFragment extends Fragment {
         getActivity().finish();
     }
 
-    public void doSearch(String query) {
-        // TODO Better
-        searchNameTextView.setText(query);
-        getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
+    public void doSearch(String query) { 
+        Bundle args = new Bundle();
+        args.putString(SearchManager.QUERY, query); 
+        getLoaderManager().restartLoader(PERSON_LIST_LOADER, args, orderLoaderCallback);
     }
 }
