@@ -4,6 +4,9 @@
     <string name="hello">Hello World, AndroGisterActivity!</string>
     <string name="app_name">AndroGister</string>
 
+    <!-- Menu  -->
+    <string name="menu_preference">Préférence</string>
+
     <!-- Preference -->
     <string name="pref_category_general">Général</string>
     <string name="pref_device_id">Identifiant Machine</string>
