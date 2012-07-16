@@ -33,18 +33,18 @@ public class PersonHelper {
         if (isNotInit) {
             initWrapper(cursor);
         }
-        Person product = new Person();
-        product.setId(idIdx > -1 ? cursor.getLong(idIdx) : -1);
-        product.setLastname(lastnameIdx > -1 ? cursor.getString(lastnameIdx) : null);
+        Person person = new Person();
+        person.setId(idIdx > -1 ? cursor.getLong(idIdx) : -1);
+        person.setLastname(lastnameIdx > -1 ? cursor.getString(lastnameIdx) : null);
         // Description
-        product.setFirstname(firstnameIdx > -1 ? cursor.getString(firstnameIdx) : null);
+        person.setFirstname(firstnameIdx > -1 ? cursor.getString(firstnameIdx) : null);
         // Ean
-        product.setMatricule(matriculeIdx > -1 ? cursor.getString(matriculeIdx) : null);
+        person.setMatricule(matriculeIdx > -1 ? cursor.getString(matriculeIdx) : null);
         // Tag
-        product.setTag(tagIdx > -1 ? cursor.getString(tagIdx) : null);
+        person.setTag(tagIdx > -1 ? cursor.getString(tagIdx) : null);
         // Price 
-        product.setPriceHT(priceIdx > -1 ? cursor.getLong(priceIdx) : -1);
-        return product;
+        person.setPriceHT(priceIdx > -1 ? cursor.getLong(priceIdx) : -1);
+        return person;
     }
     
     private PersonHelper setTextWithIdx(TextView view, Cursor cursor, int idx) {
@@ -78,12 +78,12 @@ public class PersonHelper {
     public static ContentValues getContentValues(Person person) {
         ContentValues initialValues = new ContentValues();
         if (person.getId() > -1) {
-            initialValues.put(PersonColumns.KEY_ID, Long.valueOf(person.getId()));
+            initialValues.put(PersonColumns.KEY_ID, Long.valueOf(person.id));
         }
-        initialValues.put(PersonColumns.KEY_LASTNAME, person.getLastname());
-        initialValues.put(PersonColumns.KEY_FIRSTNAME, person.getFirstname());
-        initialValues.put(PersonColumns.KEY_MATRICULE, person.getMatricule());
-        initialValues.put(PersonColumns.KEY_TAG, person.getTag());
+        initialValues.put(PersonColumns.KEY_LASTNAME, person.lastname);
+        initialValues.put(PersonColumns.KEY_FIRSTNAME, person.firstname);
+        initialValues.put(PersonColumns.KEY_MATRICULE, person.matricule);
+        initialValues.put(PersonColumns.KEY_TAG, person.tag);
         initialValues.put(PersonColumns.KEY_PRICEHT, Long.valueOf(person.getPriceHT())); 
         return initialValues;
     }
