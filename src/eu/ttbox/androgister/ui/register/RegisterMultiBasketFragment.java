@@ -20,8 +20,8 @@ import android.widget.Toast;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.model.Offer;
-import eu.ttbox.androgister.model.OrderPaymentModeEnum;
 import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.model.order.OrderPaymentModeEnum;
 import eu.ttbox.androgister.ui.register.RegisterBasketFragment.OnBasketSunUpdateListener;
 
 /**

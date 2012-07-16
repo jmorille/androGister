@@ -5,6 +5,7 @@ import java.util.HashMap;
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 
@@ -14,6 +15,7 @@ public class PersonDatabase {
     private static final String TAG = "PersonDatabase";
 
     public static final String TABLE_PERSON_FTS = "personFTS";
+    private static final String SQL_OPTIMIZE_TABLE = String.format("INSERT INTO %1$s(%1$s) VALUES('optimize')", TABLE_PERSON_FTS);
 
     public static class PersonColumns {
 
@@ -90,9 +92,9 @@ public class PersonDatabase {
      * @return Cursor over all words that match, or null if none found.
      */
     public Cursor getPersonMatches(String query, String[] columns, String order) {
-        String selection = String.format("%s MATCH ? or %s MATCH ?", PersonColumns.KEY_LASTNAME, PersonColumns.KEY_FIRSTNAME);
-        String queryString = query + "*";
-        String[] selectionArgs = new String[] { queryString, queryString };
+        String selection = String.format("%s MATCH ?", PersonDatabase.TABLE_PERSON_FTS);
+        String queryString = new StringBuilder(query).append("*").toString();
+        String[] selectionArgs = new String[] { queryString };
         return queryPerson(selection, selectionArgs, columns, order);
     }
 
@@ -110,10 +112,8 @@ public class PersonDatabase {
     public Cursor queryPerson(String selection, String[] selectionArgs, String[] columns, String order) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(TABLE_PERSON_FTS);
-        builder.setProjectionMap(mPersonColumnMap);
-
+        builder.setProjectionMap(mPersonColumnMap); 
         Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, order);
-
         if (cursor == null) {
             return null;
         } else if (!cursor.moveToFirst()) {
@@ -121,5 +121,12 @@ public class PersonDatabase {
             return null;
         }
         return cursor;
+    }
+    
+    public void optimize() {
+        SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(SQL_OPTIMIZE_TABLE, null);
+        cursor.close();
+        db.close();
     }
 }

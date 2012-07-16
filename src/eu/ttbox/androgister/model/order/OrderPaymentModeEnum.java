@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.model;
+package eu.ttbox.androgister.model.order;
 
 public enum OrderPaymentModeEnum {
     CASH, CREDIT;

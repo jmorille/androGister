@@ -12,16 +12,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.product.PersonDatabase;
+import eu.ttbox.androgister.database.user.UserDatabase;
 
-public class PersonDbBootstrap {
+public class UserDbBootstrap {
 
-	private static final String TAG = "PersonDbBootstrap";
+	private static final String TAG = "UserDbBootstrap";
 
 	private final Context mHelperContext;
 	private SQLiteDatabase mDatabase;
 
-	public PersonDbBootstrap(Context mHelperContext, SQLiteDatabase mDatabase) {
+	public UserDbBootstrap(Context mHelperContext, SQLiteDatabase mDatabase) {
 		super();
 		this.mHelperContext = mHelperContext;
 		this.mDatabase = mDatabase;
@@ -43,9 +43,9 @@ public class PersonDbBootstrap {
 	}
 
 	private void loadProducts() throws IOException {
-		Log.d(TAG, "Loading persons...");
+		Log.d(TAG, "Loading users...");
 		final Resources resources = mHelperContext.getResources();
-		InputStream inputStream = resources.openRawResource(R.raw.persons);
+		InputStream inputStream = resources.openRawResource(R.raw.users);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		mDatabase.beginTransaction();
 		int insertCount = 0;
@@ -56,23 +56,23 @@ public class PersonDbBootstrap {
 				String[] strings = TextUtils.split(line, "_");
 				if (strings.length < 2)
 					continue;
-				long id = addPerson(strings[0].trim(), strings[1].trim(), strings[2].trim());
-				Log.d(TAG, String.format("Add Person id %s : name=%s", id, strings[0]));
+				long id = addUser(strings[0].trim(), strings[1].trim(), strings[2].trim());
+				Log.d(TAG, String.format("Add User id %s : name=%s", id, strings[0]));
 				if (id < 0) {
-					Log.e(TAG, "unable to add Person : " + strings[0].trim());
+					Log.e(TAG, "unable to add User : " + strings[0].trim());
 				} else {
 				    insertCount++;
 				}
 			}
 			mDatabase.setTransactionSuccessful();
             long end = System.currentTimeMillis();
-            Log.i(TAG, String.format("Insert %s Persons in %s ms", insertCount, (end-begin)));
+            Log.i(TAG, String.format("Insert %s Users in %s ms", insertCount, (end-begin)));
 
 		} finally {
 			reader.close();
  			mDatabase.endTransaction();
 		} 
-		Log.d(TAG, "DONE loading persons.");
+		Log.d(TAG, "DONE loading users.");
 	}
 
 	/**
@@ -80,13 +80,13 @@ public class PersonDbBootstrap {
 	 * 
 	 * @return rowId or -1 if failed
 	 */
-	public long addPerson(String firstname, String lastname,  String maticule) {
+	public long addUser(String firstname, String lastname,  String maticule) {
 	    
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(PersonDatabase.PersonColumns.KEY_LASTNAME, lastname);
-		initialValues.put(PersonDatabase.PersonColumns.KEY_FIRSTNAME, firstname);
-		initialValues.put(PersonDatabase.PersonColumns.KEY_MATRICULE, maticule);
-		return mDatabase.insert(PersonDatabase.TABLE_PERSON_FTS, null, initialValues);
+		initialValues.put(UserDatabase.UserColumns.KEY_LASTNAME, lastname);
+		initialValues.put(UserDatabase.UserColumns.KEY_FIRSTNAME, firstname);
+		initialValues.put(UserDatabase.UserColumns.KEY_LOGIN, maticule);
+		return mDatabase.insert(UserDatabase.TABLE_USER_FTS, null, initialValues);
 	}
 
 }

@@ -1,6 +1,8 @@
-package eu.ttbox.androgister.model;
+package eu.ttbox.androgister.model.order;
 
 import java.io.Serializable;
+
+import eu.ttbox.androgister.model.PriceHelper;
 
 public class OrderItem implements Serializable {
 

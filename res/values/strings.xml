@@ -7,6 +7,10 @@
     <!-- Menu  -->
     <string name="menu_preference">Préférence</string>
 
+    <!-- Search -->
+    <string name="search_person_label">Rechercher une personne</string>
+    <string name="search_person_hint">Rechercher nom ou un matricule</string>
+    
     <!-- Preference -->
     <string name="pref_category_general">Général</string>
     <string name="pref_device_id">Identifiant Machine</string>

@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.model;
+package eu.ttbox.androgister.model.order;
 
 import java.io.Serializable;
 import java.util.ArrayList;

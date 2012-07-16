@@ -23,8 +23,8 @@ import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.OrderProvider;
-import eu.ttbox.androgister.model.OrderHelper;
-import eu.ttbox.androgister.model.OrderStatusEnum;
+import eu.ttbox.androgister.model.order.OrderHelper;
+import eu.ttbox.androgister.model.order.OrderStatusEnum;
 
 public class OrderEditFragment extends Fragment {
 

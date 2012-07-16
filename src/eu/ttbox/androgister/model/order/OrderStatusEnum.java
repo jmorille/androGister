@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.model;
+package eu.ttbox.androgister.model.order;
 
 public enum OrderStatusEnum {
 	ORDER(1), ORDER_CANCEL(-1);

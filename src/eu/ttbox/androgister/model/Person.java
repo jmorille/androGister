@@ -9,14 +9,11 @@ public class Person implements Serializable {
 	public long id = -1;
 	
 	public String lastname;
-
-	public String firstname;
-
-	public String matricule;
-
-	public String tag;
-
-	public long priceHT = 0l;
+ 	public String firstname;
+ 	public String matricule;
+ 	
+ 	public String tag;
+ 	public long priceHT = 0l;
  
 	public long getId() {
 		return id;

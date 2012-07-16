@@ -1,9 +1,11 @@
-package eu.ttbox.androgister.model;
+package eu.ttbox.androgister.model.order;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.widget.TextView;
 import eu.ttbox.androgister.database.order.OrderDatabase.OrderItemColumns;
+import eu.ttbox.androgister.model.Offer;
+import eu.ttbox.androgister.model.PriceHelper;
 
 public class OrderItemHelper {
 

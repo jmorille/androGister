@@ -3,9 +3,9 @@ package eu.ttbox.androgister.core;
 import android.content.Context;
 import android.content.Intent;
 import eu.ttbox.androgister.model.Offer;
-import eu.ttbox.androgister.model.Order;
-import eu.ttbox.androgister.model.OrderPaymentModeEnum;
 import eu.ttbox.androgister.model.Person;
+import eu.ttbox.androgister.model.order.Order;
+import eu.ttbox.androgister.model.order.OrderPaymentModeEnum;
 import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.order.OrderEditActivity;
 

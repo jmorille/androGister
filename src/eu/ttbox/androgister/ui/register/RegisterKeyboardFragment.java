@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.model.OrderPaymentModeEnum;
+import eu.ttbox.androgister.model.order.OrderPaymentModeEnum;
 import eu.ttbox.androgister.ui.order.OrderListActivity;
 
 public class RegisterKeyboardFragment extends Fragment {

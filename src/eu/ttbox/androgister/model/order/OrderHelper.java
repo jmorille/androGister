@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.model;
+package eu.ttbox.androgister.model.order;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.TextView;
 import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
+import eu.ttbox.androgister.model.PriceHelper;
 
 public class OrderHelper {
 

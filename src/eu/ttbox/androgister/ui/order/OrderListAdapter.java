@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.model.OrderHelper;
+import eu.ttbox.androgister.model.order.OrderHelper;
 
 public class OrderListAdapter extends ResourceCursorAdapter {
 

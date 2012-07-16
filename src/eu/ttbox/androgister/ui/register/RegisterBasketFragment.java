@@ -18,12 +18,12 @@ import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.model.Offer;
-import eu.ttbox.androgister.model.Order;
-import eu.ttbox.androgister.model.OrderItem;
-import eu.ttbox.androgister.model.OrderItemHelper;
-import eu.ttbox.androgister.model.OrderPaymentModeEnum;
 import eu.ttbox.androgister.model.Person;
 import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.model.order.Order;
+import eu.ttbox.androgister.model.order.OrderItem;
+import eu.ttbox.androgister.model.order.OrderItemHelper;
+import eu.ttbox.androgister.model.order.OrderPaymentModeEnum;
 import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.person.PersonListActivity;
 

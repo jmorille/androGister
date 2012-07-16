@@ -12,11 +12,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 import android.util.Log;
-import eu.ttbox.androgister.model.Order;
-import eu.ttbox.androgister.model.OrderHelper;
-import eu.ttbox.androgister.model.OrderItem;
-import eu.ttbox.androgister.model.OrderItemHelper;
-import eu.ttbox.androgister.model.OrderStatusEnum;
+import eu.ttbox.androgister.model.order.Order;
+import eu.ttbox.androgister.model.order.OrderHelper;
+import eu.ttbox.androgister.model.order.OrderItem;
+import eu.ttbox.androgister.model.order.OrderItemHelper;
+import eu.ttbox.androgister.model.order.OrderStatusEnum;
 
 public class OrderDatabase {
 
