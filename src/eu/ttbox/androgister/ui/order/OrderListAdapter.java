@@ -37,6 +37,9 @@ public class OrderListAdapter extends ResourceCursorAdapter {
                 .setTextOrderUuid(holder.orderUuidText, cursor)//
                 .setTextOrderStatus(holder.statusText, cursor)//
                 .setTextOrderPriceSum(holder.priceText, cursor)//
+                .setTextPersonFirstname(holder.personFirstnameText, cursor) //
+                .setTextPersonLastname(holder.personLastnameText, cursor) //
+                .setTextPersonMatricule(holder.personMatriculeText, cursor) //
                 .setTextOrderDate(holder.dateText, cursor);
         // Test Invalid
         if (helper.isOrderDeletePossible(cursor)) {
@@ -56,6 +59,10 @@ public class OrderListAdapter extends ResourceCursorAdapter {
         holder.dateText = (TextView) view.findViewById(R.id.order_list_item_date);
         holder.statusText = (TextView) view.findViewById(R.id.order_list_item_status);
         holder.priceText = (TextView) view.findViewById(R.id.order_list_item_price);
+        // Person
+        holder.personFirstnameText = (TextView) view.findViewById(R.id.order_list_item_person_firstname);
+        holder.personLastnameText = (TextView) view.findViewById(R.id.order_list_item_person_lastname);
+        holder.personMatriculeText = (TextView) view.findViewById(R.id.order_list_item_person_matricule);
         // and store it inside the layout.
         view.setTag(holder);
         return view;
@@ -68,6 +75,11 @@ public class OrderListAdapter extends ResourceCursorAdapter {
         TextView dateText;
         TextView statusText;
         TextView priceText;
+        // Person
+        TextView personFirstnameText;
+        TextView personLastnameText;
+        TextView personMatriculeText;
+        
     }
 
 }

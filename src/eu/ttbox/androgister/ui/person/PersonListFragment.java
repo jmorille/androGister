@@ -8,14 +8,17 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.PersonProvider;
@@ -23,8 +26,6 @@ import eu.ttbox.androgister.database.product.PersonDatabase;
 import eu.ttbox.androgister.database.product.PersonDatabase.PersonColumns;
 import eu.ttbox.androgister.database.product.PersonHelper;
 import eu.ttbox.androgister.model.Person;
-import eu.ttbox.androgister.widget.EventEditText;
-import eu.ttbox.androgister.widget.EventEditText.OnInputEvent;
 
 /**
  * Autocompletion {link
@@ -47,52 +48,11 @@ public class PersonListFragment extends Fragment {
     private PersonListAdapter listAdapter;
 
     // Binding
+    private TextView searchResultTextView;
     private ListView listView;
-    private EventEditText searchNameTextView;
+    private EditText searchNameTextView;
 
     // Listener
-    private final LoaderManager.LoaderCallbacks<Cursor> orderLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
-
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            String sortOrder = PERSON_SORT_DEFAULT;
-            String selection = null;
-            String[] selectionArgs = null;
-            String queryString = searchNameTextView.getText().toString();
-            if (args!=null) {
-                queryString = args.getString(SearchManager.QUERY, null);
-            } else {
-                queryString = searchNameTextView.getText().toString();
-            }
-           
-            if (queryString != null) {
-                queryString = queryString.trim();
-                if (!queryString.isEmpty()) {
-                    queryString = queryString + "*";
-//                    selection = String.format("%s MATCH ? or %s MATCH ?", PersonColumns.KEY_LASTNAME, PersonColumns.KEY_FIRSTNAME);
-//                    selectionArgs = new String[] { queryString, queryString };
-                    selection = String.format("%s MATCH ?",  PersonDatabase.TABLE_PERSON_FTS );
-                    selectionArgs = new String[] { queryString  };
-                }
-            }
-
-            // Filter
-            // Loader
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), PersonProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs, sortOrder);
-            return cursorLoader;
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-            listAdapter.swapCursor(cursor);
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-            listAdapter.swapCursor(null);
-        }
-
-    };
 
     private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -107,26 +67,29 @@ public class PersonListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.person_list_list);
         listView.setOnItemClickListener(mOnClickListener);
         // Search Criteria
-        searchNameTextView = (EventEditText) view.findViewById(R.id.person_list_search_name_input);
-//        searchNameTextView.setOnEditorActionListener(new OnEditorActionListener() {
-//
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//        Log.i(TAG, "On EditorAction searchNameTextView");
-//                getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
-//                return true;
-//            }
-//        });
-        searchNameTextView.setOnInputEvent(new OnInputEvent() {
-			
-			@Override
-			public void onKeyUp(int keyCode, KeyEvent event) {
-				 Log.i(TAG, "On Key searchNameTextView");
-	                getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
-			}
-		}); 
-        
-         // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        searchResultTextView = (TextView) view.findViewById(R.id.person_search_result);
+        searchNameTextView = (EditText) view.findViewById(R.id.person_list_search_name_input); 
+        searchNameTextView.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.i(TAG, "On onKeyUp searchNameTextView");
+                getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
+            }
+
+        });
+
+        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
         // android.R.layout.simple_dropdown_item_1line, COUNTRIES);
         // searchNameTextView.setAdapter(adapter);
         // List Header
@@ -151,9 +114,69 @@ public class PersonListFragment extends Fragment {
         getActivity().finish();
     }
 
-    public void doSearch(String query) { 
+    public void doSearch(String query) {
         Bundle args = new Bundle();
-        args.putString(SearchManager.QUERY, query); 
+        args.putString(SearchManager.QUERY, query);
         getLoaderManager().restartLoader(PERSON_LIST_LOADER, args, orderLoaderCallback);
     }
+
+    private final LoaderManager.LoaderCallbacks<Cursor> orderLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+        
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String sortOrder = PERSON_SORT_DEFAULT;
+            String selection = null;
+            String[] selectionArgs = null;
+            String queryString = searchNameTextView.getText().toString();
+            if (args != null) {
+                queryString = args.getString(SearchManager.QUERY, null);
+            } else {
+                queryString = searchNameTextView.getText().toString();
+            }
+
+            if (queryString != null) {
+                queryString = queryString.trim();
+                if (!queryString.isEmpty()) {
+                    queryString = queryString + "*";
+                    // selection = String.format("%s MATCH ? or %s MATCH ?",
+                    // PersonColumns.KEY_LASTNAME, PersonColumns.KEY_FIRSTNAME);
+                    // selectionArgs = new String[] { queryString, queryString
+                    // };
+                    selection = String.format("%s MATCH ?", PersonDatabase.TABLE_PERSON_FTS);
+                    selectionArgs = new String[] { queryString };
+                }
+            }
+           
+            // Filter
+            // Loader
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), PersonProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs, sortOrder);
+            return cursorLoader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            // Display List
+            listAdapter.swapCursor(cursor);
+            // Display Counter
+            int count = 0;
+            if (cursor != null) {
+                count = cursor.getCount();
+            } 
+            if (count < 1) {
+                searchResultTextView.setText( R.string.search_no_results );
+            } else {
+                String countString = getResources().getQuantityString(R.plurals.search_results, count, new Object[] { count });
+                searchResultTextView.setText(countString);
+            }
+          
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            searchResultTextView.setText(R.string.search_instructions);
+            listAdapter.swapCursor(null);
+        }
+
+    };
+
 }

@@ -188,13 +188,14 @@ public class OrderHelper {
         }
         // Price
         initialValues.put(OrderColumns.KEY_PRICE_SUM_HT, Long.valueOf(order.getPriceSumHT()));
+        OrderPaymentModeEnum paymentMode = order.getPaymentMode();
+        initialValues.put(OrderColumns.KEY_PAYMENT_MODE, paymentMode != null ? paymentMode.getKey() : null);
 
         // Pers
-        initialValues.put(OrderColumns.KEY_PAYMENT_MODE, Long.valueOf(order.getPriceSumHT()));
-        initialValues.put(OrderColumns.KEY_PERS_ID, Long.valueOf(order.getPriceSumHT()));
-        initialValues.put(OrderColumns.KEY_PERS_MATRICULE, Long.valueOf(order.getPriceSumHT()));
-        initialValues.put(OrderColumns.KEY_PERS_FIRSTNAME, Long.valueOf(order.getPriceSumHT()));
-        initialValues.put(OrderColumns.KEY_PERS_LASTNAME, Long.valueOf(order.getPriceSumHT()));
+        initialValues.put(OrderColumns.KEY_PERS_ID, Long.valueOf(order.getPersonId()));
+        initialValues.put(OrderColumns.KEY_PERS_MATRICULE, order.getPersonMatricule());
+        initialValues.put(OrderColumns.KEY_PERS_FIRSTNAME, order.getPersonFirstname());
+        initialValues.put(OrderColumns.KEY_PERS_LASTNAME, order.getPersonLastname());
 
         return initialValues;
     }

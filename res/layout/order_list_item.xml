@@ -10,7 +10,7 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
-        android:paddingLeft="10dip" />
+        android:paddingLeft="2dip" />
 
     <TextView
         android:id="@+id/order_list_item_orderUuid"
@@ -18,7 +18,7 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
-        android:paddingLeft="10dip" />
+        android:paddingLeft="2dip" />
 
     <TextView
         android:id="@+id/order_list_item_status"
@@ -26,7 +26,31 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
-        android:paddingLeft="10dip" />
+        android:paddingLeft="2dip" />
+
+    <TextView
+        android:id="@+id/order_list_item_person_lastname"
+        style="@style/entity_list_item"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:paddingLeft="2dip" />
+
+    <TextView
+        android:id="@+id/order_list_item_person_firstname"
+        style="@style/entity_list_item"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:paddingLeft="2dip" />
+
+    <TextView
+        android:id="@+id/order_list_item_person_matricule"
+        style="@style/entity_list_item"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:paddingLeft="2dip" />
 
     <TextView
         android:id="@+id/order_list_item_date"
@@ -34,12 +58,12 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
-        android:paddingLeft="10dip" />
+        android:paddingLeft="2dip" />
 
     <TextView
         android:id="@+id/order_list_item_price"
         style="@style/entity_list_item"
         android:layout_weight="0.2"
-        android:paddingLeft="10dip" />
+        android:paddingLeft="2dip" />
 
 </LinearLayout>

@@ -11,6 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
+        <EditText
+            android:id="@+id/order_list_search_name_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="20"
+            android:inputType="textNoSuggestions" />
+        
         <DatePicker
             android:id="@+id/order_list_search_date"
             android:layout_width="wrap_content"
@@ -20,6 +27,15 @@
 
      </LinearLayout>
 
+     <TextView
+        android:id="@+id/order_search_result"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/title_bar"
+        android:text="@string/search_instructions"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="17dp" />
+     
     <ListView
         android:id="@+id/order_list:list"
         android:layout_width="match_parent"

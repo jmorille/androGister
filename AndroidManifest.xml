@@ -14,6 +14,8 @@
     <uses-permission android:name="eu.ttbox.androgister.OFFER_WRITE" />
     <uses-permission android:name="eu.ttbox.androgister.ORDER_READ" />
     <uses-permission android:name="eu.ttbox.androgister.ORDER_WRITE" />
+    <uses-permission android:name="eu.ttbox.androgister.PERSON_READ" />
+    <uses-permission android:name="eu.ttbox.androgister.PERSON_WRITE" />
 
     <uses-feature android:name="android.hardware.usb.accessory" />
 
@@ -78,7 +80,8 @@
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
-            </intent-filter> 
+            </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable_person" />
@@ -100,7 +103,7 @@
             </intent-filter>
         </service>
 
-        <!-- Provider -->
+        <!--  Provider  -->
         <provider
             android:name=".database.OfferProvider"
             android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider"

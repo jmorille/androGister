@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.AppConstants;
 import eu.ttbox.androgister.core.Intents;
@@ -35,8 +36,11 @@ public class OrderListFragment extends Fragment {
     private static final String TAG = "OrderListFragment";
 
     private static final int ORDER_LIST_LOADER = R.string.config_id_order_list_loader_started;
-    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_ORDER_UUID, OrderColumns.KEY_ORDER_DELETE_UUID, OrderColumns.KEY_STATUS,
-            OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_PRICE_SUM_HT };
+    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, //
+            OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_STATUS, OrderColumns.KEY_ORDER_DATE, //
+            OrderColumns.KEY_ORDER_UUID, OrderColumns.KEY_ORDER_DELETE_UUID, //
+            OrderColumns.KEY_PERS_LASTNAME, OrderColumns.KEY_PERS_FIRSTNAME, OrderColumns.KEY_PERS_MATRICULE, //
+            OrderColumns.KEY_PRICE_SUM_HT };
 
     private static final String ORDER_SORT_DEFAULT = String.format("%s DESC, %s DESC", OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_ORDER_NUMBER);
 
@@ -48,6 +52,7 @@ public class OrderListFragment extends Fragment {
     private OrderListAdapter listAdapter;
 
     // Binding
+    private TextView searchResultTextView;
     private ListView listView;
     private DatePicker searchDate;
 
@@ -71,11 +76,22 @@ public class OrderListFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            int count = 0;
+            if (cursor != null) {
+                count = cursor.getCount();
+            }
+            if (count < 1) {
+                searchResultTextView.setText(R.string.search_no_results);
+            } else {
+                String countString = getResources().getQuantityString(R.plurals.search_results, count, new Object[] { count });
+                searchResultTextView.setText(countString);
+            }
             listAdapter.swapCursor(cursor);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
+            searchResultTextView.setText(R.string.search_instructions);
             listAdapter.swapCursor(null);
         }
 
@@ -114,6 +130,7 @@ public class OrderListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.order_list_list);
         listView.setOnItemClickListener(mOnClickListener);
         searchDate = (DatePicker) view.findViewById(R.id.order_list_search_date);
+        searchResultTextView = (TextView) view.findViewById(R.id.order_search_result);
         // List Header
         ViewGroup mTop = (ViewGroup) inflater.inflate(R.layout.order_list_header, listView, false);
         listView.addHeaderView(mTop, null, false);
@@ -131,14 +148,15 @@ public class OrderListFragment extends Fragment {
         searchDate.init(year, monthOfYear, dayOfMonth, filterOnDateChangedListener);
 
         // Do Search
-//        getLoaderManager().initLoader(ORDER_LIST_LOADER, null, orderLoaderCallback);
+        // getLoaderManager().initLoader(ORDER_LIST_LOADER, null,
+        // orderLoaderCallback);
         return view;
     }
 
     private void onListItemClick(ListView l, View v, int position, long id) {
         Cursor item = (Cursor) l.getAdapter().getItem(position);
-        long orderId = item.getLong(item.getColumnIndex(OrderColumns.KEY_ID)); 
-        startActivity( Intents.viewOrderDetail(getActivity(), orderId));
+        long orderId = item.getLong(item.getColumnIndex(OrderColumns.KEY_ID));
+        startActivity(Intents.viewOrderDetail(getActivity(), orderId));
     }
 
     private Calendar setFilterOrderDate(int year, int monthOfYear, int dayOfMonth) {

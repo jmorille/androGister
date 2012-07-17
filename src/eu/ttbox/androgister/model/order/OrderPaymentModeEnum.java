@@ -10,7 +10,7 @@ public enum OrderPaymentModeEnum {
         return OrderPaymentModeEnum.values()[key];
      }
 
-    public int getKey() {
-         return this.ordinal();
+    public Integer getKey() {
+         return  Integer.valueOf(  this.ordinal());
     }
 }

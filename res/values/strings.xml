@@ -4,14 +4,14 @@
     <string name="hello">Hello World, AndroGisterActivity!</string>
     <string name="app_name">AndroGister</string>
 
-    <!-- Menu  -->
+    <!-- Menu -->
     <string name="menu_preference">Préférence</string>
     <string name="menu_search">Rechercher</string>
-    
+
     <!-- Search -->
     <string name="search_person_label">Rechercher une personne</string>
     <string name="search_person_hint">Rechercher nom ou un matricule</string>
-    
+
     <!-- Preference -->
     <string name="pref_category_general">Général</string>
     <string name="pref_device_id">Identifiant Machine</string>
@@ -36,9 +36,20 @@
     <string name="order_price">Total</string>
     <string name="order_status">Statut</string>
 
+       <!-- Search Forms --> 
+    <string name="search_instructions">Utiliser la zone de saisie pour affiner la recherche</string>
+    <string name="search_no_results">Aucune résultat trouvé</string>
+
+    <plurals name="search_results">
+        <item quantity="one">Un résultat trouvé: </item>
+        <item quantity="other">%1$d résultats trouvés: </item>
+    </plurals>
+    
     <!-- Model Person -->
     <string name="person_firstname">Prénom</string>
     <string name="person_lastname">Nom de famille</string>
     <string name="person_matricule">Maticule</string>
+
+   
 
 </resources>

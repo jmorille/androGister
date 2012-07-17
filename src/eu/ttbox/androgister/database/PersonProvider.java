@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import eu.ttbox.androgister.database.product.PersonDatabase;
 
 public class PersonProvider extends ContentProvider {
@@ -74,7 +75,7 @@ public class PersonProvider extends ContentProvider {
 	 */
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-
+	    Log.i(TAG, "query for uri : " + uri);
 		// Use the UriMatcher to see what kind of query we have and format the
 		// db query accordingly
 		switch (sURIMatcher.match(uri)) {
@@ -128,9 +129,13 @@ public class PersonProvider extends ContentProvider {
 	}
 
 	private Cursor refreshShortcut(Uri uri) {
+	    Log.i(TAG, "refreshShortcut uri " + uri);
 		String rowId = uri.getLastPathSegment();
-		String[] columns = new String[] { PersonDatabase.PersonColumns.KEY_ID, PersonDatabase.PersonColumns.KEY_LASTNAME, PersonDatabase.PersonColumns.KEY_FIRSTNAME,
-				SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
+		String[] columns = new String[] { PersonDatabase.PersonColumns.KEY_ID, //
+		        PersonDatabase.PersonColumns.KEY_LASTNAME,
+		        PersonDatabase.PersonColumns.KEY_FIRSTNAME //
+//		        ,  SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID
+		        };
 
 		return personDatabase.getPerson(rowId, columns);
 	}
