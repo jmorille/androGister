@@ -20,8 +20,8 @@ public class PersonDatabase {
     public static class PersonColumns {
 
         public static final String KEY_ID = BaseColumns._ID;
-        public static final String KEY_LASTNAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
-        public static final String KEY_FIRSTNAME = SearchManager.SUGGEST_COLUMN_TEXT_2;
+        public static final String KEY_LASTNAME = "LASTNAME";
+        public static final String KEY_FIRSTNAME = "FIRSTNAME";
         public static final String KEY_MATRICULE = "MATRICULE";
         public static final String KEY_PRICEHT = "PRICEHT";
         public static final String KEY_TAG = "TAG";
@@ -61,6 +61,8 @@ public class PersonDatabase {
             }
         }
         // Add Suggest Aliases
+        map.put(SearchManager.SUGGEST_COLUMN_TEXT_1, String.format("%s || ', ' || %s AS %s", PersonColumns.KEY_LASTNAME,PersonColumns.KEY_FIRSTNAME, SearchManager.SUGGEST_COLUMN_TEXT_1));
+        map.put(SearchManager.SUGGEST_COLUMN_TEXT_2, String.format("%s AS %s", PersonColumns.KEY_MATRICULE, SearchManager.SUGGEST_COLUMN_TEXT_2));
         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
         map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
         // Add Other Aliases
@@ -112,7 +114,7 @@ public class PersonDatabase {
     public Cursor queryPerson(String selection, String[] selectionArgs, String[] columns, String order) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(TABLE_PERSON_FTS);
-        builder.setProjectionMap(mPersonColumnMap); 
+        builder.setProjectionMap(mPersonColumnMap);
         Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, order);
         if (cursor == null) {
             return null;
@@ -122,7 +124,7 @@ public class PersonDatabase {
         }
         return cursor;
     }
-    
+
     public void optimize() {
         SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(SQL_OPTIMIZE_TABLE, null);
