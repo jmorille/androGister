@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.PersonProvider;
@@ -115,6 +112,7 @@ public class PersonListFragment extends Fragment {
 //
 //            @Override
 //            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//        Log.i(TAG, "On EditorAction searchNameTextView");
 //                getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
 //                return true;
 //            }
@@ -123,6 +121,7 @@ public class PersonListFragment extends Fragment {
             
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.i(TAG, "On Key searchNameTextView");
                 getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
                 return true;
             }
