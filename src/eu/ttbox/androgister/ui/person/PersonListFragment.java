@@ -12,10 +12,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import eu.ttbox.androgister.R;
@@ -25,6 +23,8 @@ import eu.ttbox.androgister.database.product.PersonDatabase;
 import eu.ttbox.androgister.database.product.PersonDatabase.PersonColumns;
 import eu.ttbox.androgister.database.product.PersonHelper;
 import eu.ttbox.androgister.model.Person;
+import eu.ttbox.androgister.widget.EventEditText;
+import eu.ttbox.androgister.widget.EventEditText.OnInputEvent;
 
 /**
  * Autocompletion {link
@@ -48,7 +48,7 @@ public class PersonListFragment extends Fragment {
 
     // Binding
     private ListView listView;
-    private EditText searchNameTextView;
+    private EventEditText searchNameTextView;
 
     // Listener
     private final LoaderManager.LoaderCallbacks<Cursor> orderLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -107,7 +107,7 @@ public class PersonListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.person_list_list);
         listView.setOnItemClickListener(mOnClickListener);
         // Search Criteria
-        searchNameTextView = (EditText) view.findViewById(R.id.person_list_search_name_input);
+        searchNameTextView = (EventEditText) view.findViewById(R.id.person_list_search_name_input);
 //        searchNameTextView.setOnEditorActionListener(new OnEditorActionListener() {
 //
 //            @Override
@@ -117,15 +117,15 @@ public class PersonListFragment extends Fragment {
 //                return true;
 //            }
 //        });
-        searchNameTextView.setOnKeyListener(new OnKeyListener() {
-            
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.i(TAG, "On Key searchNameTextView");
-                getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
-                return true;
-            }
-        });
+        searchNameTextView.setOnInputEvent(new OnInputEvent() {
+			
+			@Override
+			public void onKeyUp(int keyCode, KeyEvent event) {
+				 Log.i(TAG, "On Key searchNameTextView");
+	                getLoaderManager().restartLoader(PERSON_LIST_LOADER, null, orderLoaderCallback);
+			}
+		}); 
+        
          // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
         // android.R.layout.simple_dropdown_item_1line, COUNTRIES);
         // searchNameTextView.setAdapter(adapter);
