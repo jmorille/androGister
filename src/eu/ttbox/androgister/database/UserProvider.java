@@ -9,28 +9,28 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
-import eu.ttbox.androgister.database.product.PersonDatabase;
+import eu.ttbox.androgister.database.user.UserDatabase;
 
-public class PersonProvider extends ContentProvider {
+public class UserProvider extends ContentProvider {
 
     @SuppressWarnings("unused")
-    private static final String TAG = "PersonProvider";
+    private static final String TAG = "UserProvider";
 
     // MIME types used for searching words or looking up a single definition
-    public static final String PERSONS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableperson";
-    public static final String PERSON_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableperson";
+    public static final String USERS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableuser";
+    public static final String USER_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableuser";
 
     public static class Constants {
-        public static String AUTHORITY = "eu.ttbox.androgister.searchableperson.PersonProvider";
-        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/person");
-        public static final Uri CONTENT_URI_GET_PRODUCT = Uri.parse("content://" + AUTHORITY + "/person/");
+        public static String AUTHORITY = "eu.ttbox.androgister.searchableuser.UserProvider";
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/user");
+        public static final Uri CONTENT_URI_GET_USER = Uri.parse("content://" + AUTHORITY + "/user/");
     }
 
-    private PersonDatabase personDatabase;
+    private UserDatabase userDatabase;
 
     // UriMatcher stuff
-    private static final int SEARCH_PERSONS = 0;
-    private static final int GET_PERSON = 1;
+    private static final int SEARCH_USERS = 0;
+    private static final int GET_USER = 1;
     private static final int SEARCH_SUGGEST = 2;
     private static final int REFRESH_SHORTCUT = 3;
     private static final UriMatcher sURIMatcher = buildUriMatcher();
@@ -42,8 +42,8 @@ public class PersonProvider extends ContentProvider {
     private static UriMatcher buildUriMatcher() {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         // to get definitions...
-        matcher.addURI(Constants.AUTHORITY, "person", SEARCH_PERSONS);
-        matcher.addURI(Constants.AUTHORITY, "person/#", GET_PERSON);
+        matcher.addURI(Constants.AUTHORITY, "user", SEARCH_USERS);
+        matcher.addURI(Constants.AUTHORITY, "user/#", GET_USER);
         // to get suggestions...
         matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
         matcher.addURI(Constants.AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
@@ -63,7 +63,7 @@ public class PersonProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        personDatabase = new PersonDatabase(getContext());
+        userDatabase = new UserDatabase(getContext());
         return true;
     }
 
@@ -85,7 +85,7 @@ public class PersonProvider extends ContentProvider {
                 throw new IllegalArgumentException("selectionArgs must be provided for the Uri: " + uri);
             }
             return getSuggestions(selectionArgs[0]);
-        case SEARCH_PERSONS:
+        case SEARCH_USERS:
             return search(projection, selection, selectionArgs, sortOrder);
             // if (selectionArgs == null) {
             // throw new
@@ -93,8 +93,8 @@ public class PersonProvider extends ContentProvider {
             // + uri);
             // }
             // return search(selectionArgs[0]);
-        case GET_PERSON:
-            return getPerson(uri);
+        case GET_USER:
+            return getUser(uri);
         case REFRESH_SHORTCUT:
             return refreshShortcut(uri);
         default:
@@ -104,8 +104,8 @@ public class PersonProvider extends ContentProvider {
 
     private Cursor getSuggestions(String query) {
         query = query.toLowerCase();
-        String[] columns = new String[] { PersonDatabase.PersonColumns.KEY_ID,  //
-                PersonDatabase.PersonColumns.KEY_LASTNAME, PersonDatabase.PersonColumns.KEY_FIRSTNAME, //
+        String[] columns = new String[] { UserDatabase.UserColumns.KEY_ID,  //
+                UserDatabase.UserColumns.KEY_LASTNAME, UserDatabase.UserColumns.KEY_FIRSTNAME, //
                 SearchManager.SUGGEST_COLUMN_TEXT_1,  SearchManager.SUGGEST_COLUMN_TEXT_2, //
         /*
          * SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, (only if you want to
@@ -113,35 +113,32 @@ public class PersonProvider extends ContentProvider {
          */
         SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
 
-        return personDatabase.getPersonMatches(query, columns, null);
+        return userDatabase.getUserMatches(query, columns, null);
     }
 
     private Cursor search(String[] _projection, String _selection, String[] _selectionArgs, String _sortOrder) {
-        String[] projection = _projection == null ? PersonDatabase.PersonColumns.ALL_KEYS : _projection;
+        String[] projection = _projection == null ? UserDatabase.UserColumns.ALL_KEYS : _projection;
         String selection = _selection;
         String[] selectionArgs = _selectionArgs;
         String sortOrder = _sortOrder;
-        return personDatabase.queryPerson(selection, selectionArgs, projection, sortOrder);
+        return userDatabase.queryUser(selection, selectionArgs, projection, sortOrder);
     }
 
-    private Cursor getPerson(Uri uri) {
+    private Cursor getUser(Uri uri) {
         String rowId = uri.getLastPathSegment();
-        String[] columns = PersonDatabase.PersonColumns.ALL_KEYS;
-        return personDatabase.getPerson(rowId, columns);
+        String[] columns =  UserDatabase.UserColumns.ALL_KEYS;
+        return userDatabase.getUser(rowId, columns);
     }
 
     private Cursor refreshShortcut(Uri uri) {
         Log.i(TAG, "refreshShortcut uri " + uri);
         String rowId = uri.getLastPathSegment();
-        String[] columns = new String[] { PersonDatabase.PersonColumns.KEY_ID //
-                , BaseColumns._ID //
-//                , PersonDatabase.PersonColumns.KEY_LASTNAME, PersonDatabase.PersonColumns.KEY_FIRSTNAME //
-                , SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2 //
-        // , SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
-        // SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID
+        String[] columns = new String[] { UserDatabase.UserColumns.KEY_ID //
+                , BaseColumns._ID // 
+                , SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2 // 
         };
 
-        return personDatabase.getPerson(rowId, columns);
+        return userDatabase.getUser(rowId, columns);
     }
 
     /**
@@ -151,10 +148,10 @@ public class PersonProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (sURIMatcher.match(uri)) {
-        case SEARCH_PERSONS:
-            return PERSONS_LIST_MIME_TYPE;
-        case GET_PERSON:
-            return PERSON_MIME_TYPE;
+        case SEARCH_USERS:
+            return USERS_LIST_MIME_TYPE;
+        case GET_USER:
+            return USER_MIME_TYPE;
         case SEARCH_SUGGEST:
             return SearchManager.SUGGEST_MIME_TYPE;
         case REFRESH_SHORTCUT:

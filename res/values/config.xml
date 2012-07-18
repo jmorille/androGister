@@ -7,5 +7,7 @@
     <string name="config_id_order_edit_items_loader_started">Order Edit Items Loader</string>
     <string name="config_id_offer_list_loader_started">Offer List Loader</string>
     <string name="config_id_person_list_loader_started">Person List Loader</string>
-
+    <string name="config_id_admin_user_list_loader_started">User List Loader</string>
+    <string name="config_id_admin_user_view_loader_started">User List Loader</string>
+    
 </resources>

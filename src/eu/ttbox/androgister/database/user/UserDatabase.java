@@ -2,6 +2,8 @@ package eu.ttbox.androgister.database.user;
 
 import java.util.HashMap;
 
+import eu.ttbox.androgister.database.product.PersonDatabase.PersonColumns;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,13 +20,13 @@ public class UserDatabase {
     public static class UserColumns {
 
         public static final String KEY_ID = BaseColumns._ID;
-        public static final String KEY_LASTNAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
-        public static final String KEY_FIRSTNAME = SearchManager.SUGGEST_COLUMN_TEXT_2;
-        public static final String KEY_LOGIN = "LOGIN";
+        public static final String KEY_LASTNAME =  "LASTNAME";
+        public static final String KEY_FIRSTNAME = "FIRSTNAME";
+        public static final String KEY_MATRICULE = "MATRICULE";
         public static final String KEY_PASSWORD = "PASSWORD";
         public static final String KEY_TAG = "TAG";
 
-        public static final String[] ALL_KEYS = new String[] { KEY_ID, KEY_LASTNAME, KEY_FIRSTNAME, KEY_LOGIN, KEY_PASSWORD, KEY_TAG };
+        public static final String[] ALL_KEYS = new String[] { KEY_ID, KEY_LASTNAME, KEY_FIRSTNAME, KEY_MATRICULE, KEY_PASSWORD, KEY_TAG };
 
     }
 
@@ -59,7 +61,9 @@ public class UserDatabase {
             }
         }
         // Add Suggest Aliases
-        map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
+        map.put(SearchManager.SUGGEST_COLUMN_TEXT_1, String.format("%s || ', ' || %s AS %s", PersonColumns.KEY_LASTNAME,PersonColumns.KEY_FIRSTNAME, SearchManager.SUGGEST_COLUMN_TEXT_1));
+        map.put(SearchManager.SUGGEST_COLUMN_TEXT_2, String.format("%s AS %s", PersonColumns.KEY_MATRICULE, SearchManager.SUGGEST_COLUMN_TEXT_2));
+         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
         map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
         // Add Other Aliases
         return map;

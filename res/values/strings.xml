@@ -6,6 +6,7 @@
 
     <!-- Menu -->
     <string name="menu_preference">Préférence</string>
+    <string name="menu_admin_user">Utilisateurs</string>
     <string name="menu_search">Rechercher</string>
 
     <!-- Search -->

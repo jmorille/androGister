@@ -85,7 +85,7 @@ public class UserDbBootstrap {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(UserDatabase.UserColumns.KEY_LASTNAME, lastname);
 		initialValues.put(UserDatabase.UserColumns.KEY_FIRSTNAME, firstname);
-		initialValues.put(UserDatabase.UserColumns.KEY_LOGIN, maticule);
+		initialValues.put(UserDatabase.UserColumns.KEY_MATRICULE, maticule);
 		return mDatabase.insert(UserDatabase.TABLE_USER_FTS, null, initialValues);
 	}
 

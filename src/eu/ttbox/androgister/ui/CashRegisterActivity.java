@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.CoreHelper;
 import eu.ttbox.androgister.model.Offer;
+import eu.ttbox.androgister.ui.admin.user.UserAdminActivity;
 import eu.ttbox.androgister.ui.config.MyPreferencesActivity;
 import eu.ttbox.androgister.ui.product.ProductSelectorFragment;
 import eu.ttbox.androgister.ui.register.RegisterMultiBasketFragment;
@@ -50,7 +51,7 @@ public class CashRegisterActivity extends Activity {
 			ActionBar actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
-		// displayDensity();
+		 displayDensity();
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class CashRegisterActivity extends Activity {
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		Log.i(TAG, dm.toString());
-		int[] fragWidth = CoreHelper.getTwoFragmentOr(dm.widthPixels - 120);
+		int[] fragWidth = CoreHelper.getTwoFragmentOr(dm.widthPixels  );
 		int[] fragHeight = CoreHelper.getTwoFragmentOr(dm.heightPixels);
 	}
 
@@ -85,12 +86,20 @@ public class CashRegisterActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_preference:
+		case R.id.menu_preference:{
 			// app icon in action bar clicked; go home
 			Intent intent = new Intent(this, MyPreferencesActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
+		}
+	    case R.id.menu_admin_user: {
+            // app icon in action bar clicked; go home
+            Intent intent  = new Intent(this, UserAdminActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            return true;		
+	    }
 		default:
 			return super.onOptionsItemSelected(item);
 		}

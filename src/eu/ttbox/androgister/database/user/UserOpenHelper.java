@@ -24,7 +24,7 @@ public class UserOpenHelper extends SQLiteOpenHelper {
             " USING fts3 " //
             + "( " + UserDatabase.UserColumns.KEY_LASTNAME //
             + ", " + UserDatabase.UserColumns.KEY_FIRSTNAME //
-            + ", " + UserDatabase.UserColumns.KEY_LOGIN //
+            + ", " + UserDatabase.UserColumns.KEY_MATRICULE //
             + ", " + UserDatabase.UserColumns.KEY_PASSWORD //
             + ", " + UserDatabase.UserColumns.KEY_TAG //
             + ");";
@@ -43,8 +43,7 @@ public class UserOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         mDatabase = db;
         mDatabase.execSQL(FTS_TABLE_CREATE_USER); 
-        new UserDbBootstrap(mHelperContext, mDatabase).loadDictionary();
-        new PersonDbBootstrap(mHelperContext, mDatabase).loadDictionary();
+        new UserDbBootstrap(mHelperContext, mDatabase).loadDictionary(); 
     }
 
     @Override

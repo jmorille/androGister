@@ -12,7 +12,7 @@ public class UserHelper {
     public int idIdx = -1;
     public int lastnameIdx = -1;
     public int firstnameIdx = -1;
-    public int loginIdx = -1;
+    public int matriculeIdx = -1;
     public int tagIdx = -1;
     public int passwordIdx = -1;
 
@@ -20,7 +20,7 @@ public class UserHelper {
         idIdx = cursor.getColumnIndex(UserColumns.KEY_ID);
         lastnameIdx = cursor.getColumnIndex(UserColumns.KEY_LASTNAME);
         firstnameIdx = cursor.getColumnIndex(UserColumns.KEY_FIRSTNAME);
-        loginIdx = cursor.getColumnIndex(UserColumns.KEY_LOGIN);
+        matriculeIdx = cursor.getColumnIndex(UserColumns.KEY_MATRICULE);
         
         tagIdx = cursor.getColumnIndex(UserColumns.KEY_TAG);
         passwordIdx = cursor.getColumnIndex(UserColumns.KEY_PASSWORD);
@@ -38,7 +38,7 @@ public class UserHelper {
         // Description
         user.setFirstname(firstnameIdx > -1 ? cursor.getString(firstnameIdx) : null);
         // Ean
-        user.setLogin(loginIdx > -1 ? cursor.getString(loginIdx) : null);
+        user.setLogin(matriculeIdx > -1 ? cursor.getString(matriculeIdx) : null);
         // Tag
         user.setTag(tagIdx > -1 ? cursor.getString(tagIdx) : null);
         // Price 
@@ -63,8 +63,8 @@ public class UserHelper {
         return setTextWithIdx(view, cursor, firstnameIdx);
     }
     
-    public UserHelper setTextUserLogin(TextView view, Cursor cursor) {
-        return setTextWithIdx(view, cursor, loginIdx);
+    public UserHelper setTextUserMatricule(TextView view, Cursor cursor) {
+        return setTextWithIdx(view, cursor, matriculeIdx);
     }
     
     public UserHelper setTextUserPassword(TextView view, Cursor cursor) {
@@ -82,7 +82,7 @@ public class UserHelper {
         }
         initialValues.put(UserColumns.KEY_LASTNAME, user.lastname);
         initialValues.put(UserColumns.KEY_FIRSTNAME, user.firstname);
-        initialValues.put(UserColumns.KEY_LOGIN, user.login);
+        initialValues.put(UserColumns.KEY_MATRICULE, user.login);
         initialValues.put(UserColumns.KEY_TAG, user.tag);
         initialValues.put(UserColumns.KEY_PASSWORD, user.password); 
         return initialValues;

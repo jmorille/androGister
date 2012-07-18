@@ -87,6 +87,13 @@
                 android:resource="@xml/searchable_person" />
         </activity>
 
+        <!-- Admin  -->
+        <activity
+            android:name=".ui.admin.user.UserAdminActivity"
+            android:label="@string/app_name"  > 
+        </activity>
+        
+        
         <!-- Service -->
         <service
             android:name=".service.OrderService"
@@ -119,6 +126,12 @@
             android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider"
             android:readPermission="eu.ttbox.androgister.ORDER_READ"
             android:writePermission="eu.ttbox.androgister.ORDER_WRITE" />
+        <provider
+            android:name=".database.UserProvider"
+            android:authorities="eu.ttbox.androgister.searchableuser.UserProvider"
+            android:readPermission="eu.ttbox.androgister.USER_READ"
+            android:writePermission="eu.ttbox.androgister.USER_WRITE" />
+        
     </application>
 
 </manifest>
