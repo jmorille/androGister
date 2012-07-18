@@ -11,21 +11,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <TextView
+        <EditText
             android:id="@+id/user_lastname"
-            style="@style/entity_view" />
+            style="@style/entity_edit"
+            android:hint="@string/user_lastname" />
 
-        <TextView
+        <EditText
             android:id="@+id/user_firstname"
-            style="@style/entity_view"
-            android:layout_toRightOf="@id/user_lastname"  />
+            style="@style/entity_edit"
+            android:layout_toRightOf="@id/user_lastname"
+            android:hint="@string/user_firstname" />
 
-        <TextView
+        <EditText
             android:id="@+id/user_matricule"
-            style="@style/entity_view"
+            style="@style/entity_edit"
+            android:layout_alignLeft="@id/user_lastname"
             android:layout_below="@id/user_lastname"
-            android:layout_alignLeft="@id/user_lastname" />
- 
+            android:hint="@string/user_matricule" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -38,7 +38,8 @@ public class UserViewFragment extends Fragment {
         userMatriculeTextView = (TextView) v.findViewById(R.id.user_matricule);
         return v;
     }
-
+    
+ 
     @Override
     public void onResume() {
         super.onResume();

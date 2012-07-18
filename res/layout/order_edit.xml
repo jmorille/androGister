@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/order_orderDeleteUuid_input"
-        style="@style/order_edit" />
+        style="@style/entity_edit" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,25 +22,25 @@
 
             <TextView
                 android:id="@+id/order_orderNum"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:ems="6"
                 android:text="@string/order_number" />
 
             <TextView
                 android:id="@+id/order_orderNum_input"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_toRightOf="@id/order_orderNum"
                 android:hint="@string/order_number" />
 
             <TextView
                 android:id="@+id/order_orderUuid"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_below="@id/order_orderNum"
                 android:text="@string/order_uuid" />
 
             <TextView
                 android:id="@+id/order_orderUuid_input"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_alignLeft="@id/order_orderNum_input"
                 android:layout_below="@id/order_orderNum_input"
                 android:layout_toRightOf="@id/order_orderUuid"
@@ -48,13 +48,13 @@
 
             <TextView
                 android:id="@+id/order_status"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_below="@id/order_orderUuid"
                 android:text="@string/order_status" />
 
             <TextView
                 android:id="@+id/order_status_input"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_alignLeft="@id/order_orderUuid_input"
                 android:layout_below="@id/order_orderUuid_input"
                 android:layout_toRightOf="@id/order_status"
@@ -62,13 +62,13 @@
 
             <TextView
                 android:id="@+id/order_date"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_below="@id/order_status"
                 android:text="@string/order_date" />
 
             <TextView
                 android:id="@+id/order_date_input"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_alignLeft="@id/order_status_input"
                 android:layout_below="@id/order_status_input"
                 android:layout_toRightOf="@id/order_status"
@@ -76,13 +76,13 @@
 
             <TextView
                 android:id="@+id/order_price"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_below="@id/order_date"
                 android:text="@string/order_price" />
 
             <TextView
                 android:id="@+id/order_price_input"
-                style="@style/order_edit"
+                style="@style/entity_edit"
                 android:layout_alignLeft="@id/order_date_input"
                 android:layout_below="@id/order_date_input"
                 android:layout_toRightOf="@id/order_date"

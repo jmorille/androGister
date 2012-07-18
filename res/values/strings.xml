@@ -37,7 +37,7 @@
     <string name="order_price">Total</string>
     <string name="order_status">Statut</string>
 
-       <!-- Search Forms --> 
+    <!-- Search Forms -->
     <string name="search_instructions">Utiliser la zone de saisie pour affiner la recherche</string>
     <string name="search_no_results">Aucune résultat trouvé</string>
 
@@ -45,12 +45,15 @@
         <item quantity="one">Un résultat trouvé: </item>
         <item quantity="other">%1$d résultats trouvés: </item>
     </plurals>
-    
+
+    <!-- Model User -->
+    <string name="user_firstname">Prénom</string>
+    <string name="user_lastname">Nom de famille</string>
+    <string name="user_matricule">Maticule</string>
+
     <!-- Model Person -->
     <string name="person_firstname">Prénom</string>
     <string name="person_lastname">Nom de famille</string>
     <string name="person_matricule">Maticule</string>
-
-   
 
 </resources>
