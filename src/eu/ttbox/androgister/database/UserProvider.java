@@ -170,6 +170,7 @@ public class UserProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+    	String id = uri.getLastPathSegment();
         throw new UnsupportedOperationException();
     }
 
