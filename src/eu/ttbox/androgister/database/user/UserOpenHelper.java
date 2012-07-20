@@ -43,7 +43,7 @@ public class UserOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         mDatabase = db;
         mDatabase.execSQL(FTS_TABLE_CREATE_USER); 
-        new UserDbBootstrap(mHelperContext, mDatabase).loadDictionary(); 
+//        new UserDbBootstrap(mHelperContext, mDatabase).loadDictionary(); 
     }
 
     @Override

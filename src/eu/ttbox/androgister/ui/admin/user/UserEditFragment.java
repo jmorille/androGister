@@ -83,6 +83,7 @@ public class UserEditFragment extends DialogFragment {
 	    
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	    builder.setCancelable(true);
+	     
 //	    builder.setCustomTitle(true)
 	    builder.setTitle("le titre");
  	    builder.setView(v);
@@ -98,7 +99,7 @@ public class UserEditFragment extends DialogFragment {
                     }
                 }
             )   ;
-	    AlertDialog dialog = builder.create();
+	    AlertDialog dialog = builder.create(); 
  //	    return alert;
 //		Dialog dialog = super.onCreateDialog(savedInstanceState);
  // 		// dialog.setTitle("My Title");
