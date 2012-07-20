@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -18,10 +20,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,27 +59,49 @@ public class UserEditFragment extends DialogFragment {
 		return f;
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.admin_user_edit, container, false);
-		// View
-		userLastnameTextView = (EditText) v.findViewById(R.id.user_lastname);
-		userFirstnameTextView = (EditText) v.findViewById(R.id.user_firstname);
-		userMatriculeTextView = (EditText) v.findViewById(R.id.user_matricule);
-		// imageView = (ImageView) v.findViewById(R.id.user_image);
-		if (getArguments() != null) {
-			long userId = getArguments().getLong(USER_ID);
-			doSearchUser(userId);
-		}
-		// Title
-
-		return v;
-	}
+//	@Override
+//	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//		View v = inflater.inflate(R.layout.admin_user_edit, container, false);
+//		// View
+//		userLastnameTextView = (EditText) v.findViewById(R.id.user_lastname);
+//		userFirstnameTextView = (EditText) v.findViewById(R.id.user_firstname);
+//		userMatriculeTextView = (EditText) v.findViewById(R.id.user_matricule);
+//		// imageView = (ImageView) v.findViewById(R.id.user_image);
+//		if (getArguments() != null) {
+//			long userId = getArguments().getLong(USER_ID);
+//			doSearchUser(userId);
+//		}
+//		// Title
+//
+//		return v;
+//	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Dialog dialog = super.onCreateDialog(savedInstanceState);
-		// dialog.setTitle("My Title");
+	    LayoutInflater factory = LayoutInflater.from(getActivity());
+	    final View v = factory.inflate(R.layout.admin_user_edit, null);
+	    
+	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	    builder.setCancelable(true);
+//	    builder.setCustomTitle(true)
+	    builder.setTitle("le titre");
+ 	    builder.setView(v);
+	    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+//	                MyActivity.this.finish();
+	           }
+	       })
+	     .setNegativeButton(android.R.string.cancel,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                    }
+                }
+            )   ;
+	    AlertDialog dialog = builder.create();
+ //	    return alert;
+//		Dialog dialog = super.onCreateDialog(savedInstanceState);
+ // 		// dialog.setTitle("My Title");
 		return dialog;
 	}
 
