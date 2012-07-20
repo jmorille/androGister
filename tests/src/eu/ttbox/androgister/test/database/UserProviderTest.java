@@ -1,21 +1,15 @@
 package eu.ttbox.androgister.test.database;
 
-import java.util.ArrayList;
-
-import android.content.ContentProvider;
-import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.OperationApplicationException;
-import android.database.Cursor;
 import android.net.Uri;
 import android.test.ProviderTestCase2;
 import eu.ttbox.androgister.database.UserProvider;
 import eu.ttbox.androgister.database.user.UserDatabase.UserColumns;
 
 /**
- * {link http://vikasdp.wordpress.com/2011/01/09/writing-test-for-android-
- * contentprovider/}
+ * {link http://developer.android.com/tools/testing/index.html}
  * 
  * @author a000cqp
  * 
