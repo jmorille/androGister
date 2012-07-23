@@ -59,29 +59,29 @@ public class UserEditFragment extends DialogFragment {
 		return f;
 	}
 
-//	@Override
-//	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//		View v = inflater.inflate(R.layout.admin_user_edit, container, false);
-//		// View
-//		userLastnameTextView = (EditText) v.findViewById(R.id.user_lastname);
-//		userFirstnameTextView = (EditText) v.findViewById(R.id.user_firstname);
-//		userMatriculeTextView = (EditText) v.findViewById(R.id.user_matricule);
-//		// imageView = (ImageView) v.findViewById(R.id.user_image);
-//		if (getArguments() != null) {
-//			long userId = getArguments().getLong(USER_ID);
-//			doSearchUser(userId);
-//		}
-//		// Title
-//
-//		return v;
-//	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.admin_user_edit, container, false);
+		// View
+		userLastnameTextView = (EditText) v.findViewById(R.id.user_lastname);
+		userFirstnameTextView = (EditText) v.findViewById(R.id.user_firstname);
+		userMatriculeTextView = (EditText) v.findViewById(R.id.user_matricule);
+		// imageView = (ImageView) v.findViewById(R.id.user_image);
+		if (getArguments() != null) {
+			long userId = getArguments().getLong(USER_ID);
+			doSearchUser(userId);
+		}
+		// Title
+
+		return v;
+	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 	    LayoutInflater factory = LayoutInflater.from(getActivity());
 	    final View v = factory.inflate(R.layout.admin_user_edit, null);
 	    
-	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity() ,  android.R.style.Theme_Holo_Dialog_NoActionBar);
 	    builder.setCancelable(true);
 	     
 //	    builder.setCustomTitle(true)
