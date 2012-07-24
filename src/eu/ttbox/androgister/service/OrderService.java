@@ -22,7 +22,7 @@ public class OrderService extends WorkerService implements SharedPreferences.OnS
 
     private static final String TAG = "OrderService";
 
-    private int ORDER_SERVICE_NOTIFICATION = R.string.order_service_notification_started;
+    private int ORDER_SERVICE_NOTIFICATION = R.id.order_service_notification_started;
 
     // private BroadcastReceiver receiver;
     private IBinder localBinder;

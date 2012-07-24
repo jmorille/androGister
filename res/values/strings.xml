@@ -3,15 +3,15 @@
 
     <string name="hello">Hello World, AndroGisterActivity!</string>
     <string name="app_name">AndroGister</string>
-    
-    
     <string name="pickerNewEntityText">"Créer un nouveau enregistrement"</string>
-    
+
     <!-- Action -->
     <string name="add">Ajouter</string>
-     <string name="edit">Editer</string>
+    <string name="edit">Editer</string>
     <string name="delete">Supprimer</string>
-    
+    <string name="menu_done">"OK"</string>
+    <string name="menu_doNotSave">"Annuler"</string>
+
     <!-- Menu -->
     <string name="menu_preference">Préférence</string>
     <string name="menu_admin_user">Utilisateurs</string>
@@ -21,6 +21,10 @@
     <string name="search_person_label">Rechercher une personne</string>
     <string name="search_person_hint">Rechercher nom ou un matricule</string>
 
+    
+   <!-- Notification -->
+    <string name="order_service_notification_started">Androgister Service démarré</string>
+   
     <!-- Preference -->
     <string name="pref_category_general">Général</string>
     <string name="pref_device_id">Identifiant Machine</string>

@@ -15,8 +15,8 @@ public class OfferProvider extends ContentProvider {
     private static final String TAG = "OfferProvider";
 
     // MIME types used for searching words or looking up a single definition
-    public static final String OFFERS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableoffer";
-    public static final String OFFER_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableoffer";
+    public static final String OFFERS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ttbox.cursor.item/offer";
+    public static final String OFFER_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ttbox.cursor.item/offer";
 
     public static class Constants {
         public static String AUTHORITY = "eu.ttbox.androgister.searchableoffer.OfferProvider";

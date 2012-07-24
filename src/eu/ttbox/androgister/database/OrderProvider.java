@@ -20,10 +20,10 @@ public class OrderProvider extends ContentProvider {
     private static final String TAG = "OrderProvider";
 
 	// MIME types used for searching words or looking up a single definition
-	public static final String ORDERS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableorder";
-	public static final String ORDER_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableorder";
-	public static final String ORDERS_ITEMS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.example.android.searchableordeitemr";
-	public static final String ORDER_ITEM_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.example.android.searchableordeitemr";
+	public static final String ORDERS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ttbox.cursor.item/order";
+	public static final String ORDER_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ttbox.cursor.item/order";
+	public static final String ORDERS_ITEMS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ttbox.cursor.item/ordeitemr";
+	public static final String ORDER_ITEM_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ttbox.cursor.item/ordeitemr";
 
 	public static class Constants {
 		public static String AUTHORITY = "eu.ttbox.androgister.searchableorder.OrderProvider";

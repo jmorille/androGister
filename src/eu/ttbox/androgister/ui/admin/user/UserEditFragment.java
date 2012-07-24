@@ -3,14 +3,13 @@ package eu.ttbox.androgister.ui.admin.user;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -31,23 +30,27 @@ import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.database.UserProvider;
 import eu.ttbox.androgister.database.user.UserHelper;
 
-public class UserEditFragment extends DialogFragment {
+public class UserEditFragment extends  Fragment {
 
 	private static final String TAG = "UserEditFragment";
 
 	private static final String USER_ID = "userId";
 
 	private static final int REQUEST_CODE = 435;
-	private static final int LOADER_USER_DETAILS = R.id.config_id_admin_user_edit_loader_started;
+	private static final int LOADER_DATA = R.id.config_id_admin_user_edit_loader_started;
 
 	// Bindings
 	private EditText userFirstnameTextView, userLastnameTextView, userMatriculeTextView;
 	private ImageView imageView;
 
 	// Instance Data
-	private long userId = -1;
-	private String userIdString = null;
+    private Uri mLookupUri;
+    private String mAction;
+	private Status mStatus ;
 
+	// Listener
+	private UserEditListener userEditListener;
+	
 	static UserEditFragment newInstance(long userId) {
 		UserEditFragment f = new UserEditFragment();
 
@@ -69,43 +72,16 @@ public class UserEditFragment extends DialogFragment {
 		// imageView = (ImageView) v.findViewById(R.id.user_image);
 		if (getArguments() != null) {
 			long userId = getArguments().getLong(USER_ID);
-			doSearchUser(userId);
+			String userIdString = String.valueOf(userId);
+			Uri userUri = Uri.withAppendedPath(UserProvider.Constants.CONTENT_URI_GET_USER, userIdString);
+			load("", userUri, null);
 		}
 		// Title
 
 		return v;
 	}
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-	    LayoutInflater factory = LayoutInflater.from(getActivity());
-	    final View v = factory.inflate(R.layout.admin_user_edit, null);
-	    
-	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity() ,  android.R.style.Theme_Holo_Dialog_NoActionBar);
-	    builder.setCancelable(true);
-	     
-//	    builder.setCustomTitle(true)
-	    builder.setTitle("le titre");
- 	    builder.setView(v);
-	    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	           public void onClick(DialogInterface dialog, int id) {
-//	                MyActivity.this.finish();
-	           }
-	       })
-	     .setNegativeButton(android.R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                    }
-                }
-            )   ;
-	    AlertDialog dialog = builder.create(); 
- //	    return alert;
-//		Dialog dialog = super.onCreateDialog(savedInstanceState);
- // 		// dialog.setTitle("My Title");
-		return dialog;
-	}
-
+	 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -130,12 +106,12 @@ public class UserEditFragment extends DialogFragment {
 		super.onPause();
 	}
 
-	public void doSearchUser(long userId) {
-		this.userId = userId;
-		this.userIdString = String.valueOf(userId);
-		Log.i(TAG, "do Search User " + userIdString);
-		getLoaderManager().restartLoader(LOADER_USER_DETAILS, null, userLoaderCallback);
-	}
+//	public void doSearchUser(long userId) {
+//		this.userId = userId;
+//		this.userIdString = String.valueOf(userId);
+//		Log.i(TAG, "do Search User " + userIdString);
+//		getLoaderManager().restartLoader(LOADER_DATA, null, userLoaderCallback);
+//	}
 
 	private final LoaderManager.LoaderCallbacks<Cursor> userLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 
@@ -144,9 +120,8 @@ public class UserEditFragment extends DialogFragment {
 			String sortUser = null;
 			String selection = null;
 			String[] selectionArgs = null;
-			// Loader
-			Uri userUri = Uri.withAppendedPath(UserProvider.Constants.CONTENT_URI_GET_USER, userIdString);
-			CursorLoader cursorLoader = new CursorLoader(getActivity(), userUri, null, selection, selectionArgs, sortUser);
+			// Loader 
+			CursorLoader cursorLoader = new CursorLoader(getActivity(), mLookupUri, null, selection, selectionArgs, sortUser);
 			return cursorLoader;
 		}
 
@@ -198,5 +173,75 @@ public class UserEditFragment extends DialogFragment {
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	public static interface UserEditListener {
+        void onEntityNotFound();
+        /**
+         * User has tapped Revert, close the fragment now.
+         */
+        void onReverted();
+
+        /**
+         * Contact was saved and the Fragment can now be closed safely.
+         */
+        void onSaveFinished(Intent resultIntent);
+
+        /**
+         * User switched to editing a different contact (a suggestion from the
+         * aggregation engine).
+         */
+        void onEditOtherEntityRequested(
+                Uri contactLookupUri, ArrayList<ContentValues> contentValues);
+  
+    }
+
+	 /**
+     * Modes that specify what the AsyncTask has to perform after saving
+     */
+    public enum SaveMode {
+        /**
+         * Close the editor after saving
+         */
+        CLOSE,
+
+        /**
+         * Reload the data so that the user can continue editing
+         */
+        RELOAD ,
+
+        /**
+         * Navigate to Contacts Home activity after saving.
+         */
+       HOME ;
+    }
+    
+
+    private enum Status { 
+        LOADING, EDITING , SAVING , CLOSING , SUB_ACTIVITY;
+    }
+    
+
+    
+	public void load(String action, Uri lookupUri, Bundle extras) {
+		mAction = action;
+        mLookupUri = lookupUri;
+		getLoaderManager().restartLoader(LOADER_DATA, null, userLoaderCallback);
+		
+	}
+
+	public void setListener(UserEditListener userEditListener) {
+		this.userEditListener = userEditListener;
+		
+	}
+	public boolean save(SaveMode saveMode) {
+		  // If we are about to close the editor - there is no need to refresh the data
+        if (saveMode == SaveMode.CLOSE ) {
+            getLoaderManager().destroyLoader(LOADER_DATA);
+        }
+
+        mStatus = Status.SAVING;
+        
+        return true;
 	}
 }
