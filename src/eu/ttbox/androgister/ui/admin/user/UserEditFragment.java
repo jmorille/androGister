@@ -38,7 +38,7 @@ public class UserEditFragment extends DialogFragment {
 	private static final String USER_ID = "userId";
 
 	private static final int REQUEST_CODE = 435;
-	private static final int LOADER_USER_DETAILS = R.string.config_id_admin_user_edit_loader_started;
+	private static final int LOADER_USER_DETAILS = R.id.config_id_admin_user_edit_loader_started;
 
 	// Bindings
 	private EditText userFirstnameTextView, userLastnameTextView, userMatriculeTextView;

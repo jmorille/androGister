@@ -35,7 +35,7 @@ public class OrderListFragment extends Fragment {
 
     private static final String TAG = "OrderListFragment";
 
-    private static final int ORDER_LIST_LOADER = R.string.config_id_order_list_loader_started;
+    private static final int ORDER_LIST_LOADER = R.id.config_id_order_list_loader_started;
     private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, //
             OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_STATUS, OrderColumns.KEY_ORDER_DATE, //
             OrderColumns.KEY_ORDER_UUID, OrderColumns.KEY_ORDER_DELETE_UUID, //

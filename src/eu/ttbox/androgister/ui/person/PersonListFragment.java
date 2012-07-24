@@ -38,7 +38,7 @@ public class PersonListFragment extends Fragment {
 
     private static final String TAG = "PersonListFragment";
 
-    private static final int PERSON_LIST_LOADER = R.string.config_id_person_list_loader_started;
+    private static final int PERSON_LIST_LOADER = R.id.config_id_person_list_loader_started;
 
     private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { PersonColumns.KEY_ID, PersonColumns.KEY_LASTNAME, PersonColumns.KEY_FIRSTNAME, PersonColumns.KEY_MATRICULE };
 

@@ -4,6 +4,9 @@
     <string name="hello">Hello World, AndroGisterActivity!</string>
     <string name="app_name">AndroGister</string>
     
+    
+    <string name="pickerNewEntityText">"Créer un nouveau enregistrement"</string>
+    
     <!-- Action -->
     <string name="add">Ajouter</string>
      <string name="edit">Editer</string>

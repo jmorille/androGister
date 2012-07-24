@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="order_service_notification_started">Order Service Notification</string>
-    <string name="config_id_order_list_loader_started">Order List Loader</string>
-    <string name="config_id_order_edit_loader_started">Order Edit Loader</string>
-    <string name="config_id_order_edit_items_loader_started">Order Edit Items Loader</string>
-    <string name="config_id_offer_list_loader_started">Offer List Loader</string>
-    <string name="config_id_person_list_loader_started">Person List Loader</string>
-    <string name="config_id_admin_user_list_loader_started">User List Loader</string>
-    <string name="config_id_admin_user_view_loader_started">User View Loader</string>
-    <string name="config_id_admin_user_edit_loader_started">User Edit Loader</string>
-    
+   
 </resources>

@@ -20,7 +20,7 @@ public class UserViewFragment extends Fragment {
 
     private static final String TAG = "UserViewFragment";
 
-    private static final int LOADER_USER_DETAILS = R.string.config_id_admin_user_view_loader_started;
+    private static final int LOADER_USER_DETAILS = R.id.config_id_admin_user_view_loader_started;
 
     // Bindings
     private TextView userFirstnameTextView, userLastnameTextView, userMatriculeTextView;

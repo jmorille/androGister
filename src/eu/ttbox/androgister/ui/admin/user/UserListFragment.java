@@ -6,6 +6,7 @@ import android.app.SearchManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +30,7 @@ public class UserListFragment extends Fragment {
 
     private static final String TAG = "UserListFragment";
 
-    private static final int USER_LIST_LOADER = R.string.config_id_admin_user_list_loader_started;
+    private static final int USER_LIST_LOADER = R.id.config_id_admin_user_list_loader_started;
 
     private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { UserColumns.KEY_ID, UserColumns.KEY_LASTNAME, UserColumns.KEY_FIRSTNAME, UserColumns.KEY_MATRICULE };
 
@@ -37,7 +38,7 @@ public class UserListFragment extends Fragment {
 
     // Adapter
     private UserListAdapter listAdapter;
-
+    private UserHelper helper;
     // Binding
     private TextView searchResultTextView;
     private ListView listView;
@@ -56,30 +57,30 @@ public class UserListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.admin_user_list, container, false);
         // Bind
-        listView = (ListView) view.findViewById(R.id.user_list_list);
+        listView = (ListView) view.findViewById(R.id.entity_list);
         listView.setOnItemClickListener(mOnClickListener);
         // Search Criteria
-        searchResultTextView = (TextView) view.findViewById(R.id.user_search_result);
-        searchNameTextView = (EditText) view.findViewById(R.id.user_list_search_name_input);
-        searchNameTextView.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Log.i(TAG, "On onKeyUp searchNameTextView");
-                getLoaderManager().restartLoader(USER_LIST_LOADER, null, orderLoaderCallback);
-            }
-
-        });
+//        searchResultTextView = (TextView) view.findViewById(R.id.user_search_result);
+//        searchNameTextView = (EditText) view.findViewById(R.id.user_list_search_name_input);
+//        searchNameTextView.addTextChangedListener(new TextWatcher() {
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                Log.i(TAG, "On onKeyUp searchNameTextView");
+//                getLoaderManager().restartLoader(USER_LIST_LOADER, null, orderLoaderCallback);
+//            }
+//
+//        });
 
         // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
         // android.R.layout.simple_dropdown_item_1line, COUNTRIES);
@@ -97,13 +98,20 @@ public class UserListFragment extends Fragment {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if (onSelectUserListener != null) {
             Cursor cursor = (Cursor) l.getAdapter().getItem(position);
-            UserHelper helper = new UserHelper().initWrapper(cursor);
-            User user = helper.getEntity(cursor);
-            // Define result
-            // TODO
-            onSelectUserListener.onSelectUser(user);
+            if (cursor != null) {
+                if (helper == null) { 
+                    helper = new UserHelper().initWrapper(cursor);
+                }
+                String userId = helper.getUserId(cursor);
+                Uri uri = Uri.withAppendedPath( UserProvider.Constants.CONTENT_URI, userId);
+                 User user = helper.getEntity(cursor);
+                // Define result
+                // TODO
+                onSelectUserListener.onSelectUser(user);
+            }
         }
     }
+ 
 
     public void doSearch(String query) {
         Bundle args = new Bundle();
@@ -170,12 +178,10 @@ public class UserListFragment extends Fragment {
 
     };
 
-    
-    
     public void setOnSelectUserListener(OnSelectUserListener onSelectUserListener) {
         this.onSelectUserListener = onSelectUserListener;
     }
- 
+
     public interface OnSelectUserListener {
 
         void onSelectUser(User user);

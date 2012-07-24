@@ -30,8 +30,8 @@ public class OrderEditFragment extends Fragment {
 
     private static final String TAG = "OrderEditFragment";
 
-    private static final int LOADER_ORDER_DETAILS = R.string.config_id_order_edit_loader_started;
-    private static final int LOADER_ORDER_ITEMS = R.string.config_id_order_edit_items_loader_started;
+    private static final int LOADER_ORDER_DETAILS = R.id.config_id_order_edit_loader_started;
+    private static final int LOADER_ORDER_ITEMS = R.id.config_id_order_edit_items_loader_started;
 
     // Bindngs
     private ListView itemList;

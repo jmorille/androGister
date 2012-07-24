@@ -92,6 +92,10 @@
             android:name=".ui.admin.user.UserAdminActivity" 
             android:label="@string/app_name"  > 
         </activity>
+        <activity
+            android:name=".ui.admin.user.UserEditActivity" 
+            android:label="@string/app_name"  > 
+        </activity>
         
         
         <!-- Service -->
