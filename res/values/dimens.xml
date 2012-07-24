@@ -10,4 +10,8 @@
     <dimen name="text_default">17sp</dimen>
     <dimen name="list_item_height">30dp</dimen>
 
+    <!-- Padding to be used between a visible scrollbar and the contact list -->
+    <dimen name="list_visible_scrollbar_padding">32dip</dimen>
+    <dimen name="entity_picker_search_view_max_width">550dip</dimen>
+    <dimen name="entity_picker_list_min_height">550dip</dimen>
 </resources>

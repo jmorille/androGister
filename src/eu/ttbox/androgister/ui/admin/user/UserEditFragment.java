@@ -38,7 +38,7 @@ public class UserEditFragment extends DialogFragment {
 	private static final String USER_ID = "userId";
 
 	private static final int REQUEST_CODE = 435;
-	private static final int LOADER_USER_DETAILS = R.string.config_id_admin_user_edit_loader_started;
+	private static final int LOADER_USER_DETAILS = R.id.config_id_admin_user_edit_loader_started;
 
 	// Bindings
 	private EditText userFirstnameTextView, userLastnameTextView, userMatriculeTextView;
@@ -59,29 +59,29 @@ public class UserEditFragment extends DialogFragment {
 		return f;
 	}
 
-//	@Override
-//	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//		View v = inflater.inflate(R.layout.admin_user_edit, container, false);
-//		// View
-//		userLastnameTextView = (EditText) v.findViewById(R.id.user_lastname);
-//		userFirstnameTextView = (EditText) v.findViewById(R.id.user_firstname);
-//		userMatriculeTextView = (EditText) v.findViewById(R.id.user_matricule);
-//		// imageView = (ImageView) v.findViewById(R.id.user_image);
-//		if (getArguments() != null) {
-//			long userId = getArguments().getLong(USER_ID);
-//			doSearchUser(userId);
-//		}
-//		// Title
-//
-//		return v;
-//	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.admin_user_edit, container, false);
+		// View
+		userLastnameTextView = (EditText) v.findViewById(R.id.user_lastname);
+		userFirstnameTextView = (EditText) v.findViewById(R.id.user_firstname);
+		userMatriculeTextView = (EditText) v.findViewById(R.id.user_matricule);
+		// imageView = (ImageView) v.findViewById(R.id.user_image);
+		if (getArguments() != null) {
+			long userId = getArguments().getLong(USER_ID);
+			doSearchUser(userId);
+		}
+		// Title
+
+		return v;
+	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 	    LayoutInflater factory = LayoutInflater.from(getActivity());
 	    final View v = factory.inflate(R.layout.admin_user_edit, null);
 	    
-	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity() ,  android.R.style.Theme_Holo_Dialog_NoActionBar);
 	    builder.setCancelable(true);
 	     
 //	    builder.setCustomTitle(true)

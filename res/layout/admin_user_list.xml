@@ -6,35 +6,49 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp" >
 
+    <view
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dip"
+        android:layout_marginRight="@dimen/list_visible_scrollbar_padding"
+        class="android.widget.SearchView"
+        android:iconifiedByDefault="false"
+        android:maxWidth="@dimen/entity_picker_search_view_max_width"
+        android:paddingRight="0dip" />
+
+    <fragment
+        android:id="@+id/fragment_admin_user_list"
+        android:name="eu.ttbox.androgister.ui.admin.user.UserListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:minHeight="@dimen/entity_picker_list_min_height" >
+    </fragment>
+ 
+    <!-- This should look like a menu on the split action bar. -->
+
     <LinearLayout
+        android:id="@+id/new_entity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:background="@drawable/gray_action_bar_background"
+        android:minHeight="48dip"
+        android:paddingLeft="16dip"
+        android:paddingRight="16dip" >
 
-        <EditText
-            android:id="@+id/user_list_search_name_input"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@android:id/title"
+            style="@android:style/Widget.Holo.ActionBar.TabText"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:ems="20"
-            android:inputType="textNoSuggestions" />
-
-       
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:duplicateParentState="true"
+            android:gravity="center"
+            android:text="@string/pickerNewEntityText"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/action_bar_button_text_color" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/user_search_result"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/title_bar"
-        android:text="@string/search_instructions"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="17dp" />
-
-    <ListView
-        android:id="@+id/user_list:list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:drawSelectorOnTop="true"
-        android:headerDividersEnabled="true" />
 
 </LinearLayout>

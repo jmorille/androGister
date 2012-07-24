@@ -55,6 +55,10 @@ public class UserHelper {
         return setTextWithIdx(view, cursor, idIdx);
     }
 
+    public String getUserId( Cursor cursor) {
+        return cursor.getString(idIdx);
+    }
+    
     public UserHelper setTextUserLastname(TextView view, Cursor cursor) {
         return setTextWithIdx(view, cursor, lastnameIdx);
     }
