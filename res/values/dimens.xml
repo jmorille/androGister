@@ -14,4 +14,5 @@
     <dimen name="list_visible_scrollbar_padding">32dip</dimen>
     <dimen name="entity_picker_search_view_max_width">550dip</dimen>
     <dimen name="entity_picker_list_min_height">550dip</dimen>
+     <dimen name="list_section_divider_min_height">32dip</dimen>
 </resources>
