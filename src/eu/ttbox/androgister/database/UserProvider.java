@@ -8,7 +8,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
@@ -16,7 +15,7 @@ import eu.ttbox.androgister.database.user.UserDatabase;
 
 public class UserProvider extends ContentProvider {
 
-	@SuppressWarnings("unused")
+ 
 	private static final String TAG = "UserProvider";
 
 	// MIME types used for searching words or looking up a single definition

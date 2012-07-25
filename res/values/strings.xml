@@ -19,8 +19,11 @@
 
     <!-- Search -->
     <string name="search_person_label">Rechercher une personne</string>
-    <string name="search_person_hint">Rechercher nom ou un matricule</string>
+    <string name="search_person_hint">Rech. nom ou un matricule</string>
 
+    <string name="search_user_label">Rechercher un utilisateur</string>
+    <string name="search_user_hint">Rech. un utilisateur</string>
+   
     
    <!-- Notification -->
     <string name="order_service_notification_started">Androgister Service démarré</string>

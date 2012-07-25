@@ -16,6 +16,7 @@
 
         <TextView
             android:id="@+id/entity_filter_header"
+            android:text="ssssssss"
             style="@style/EntityListSeparatorTextViewStyle" />
     </LinearLayout>
 
