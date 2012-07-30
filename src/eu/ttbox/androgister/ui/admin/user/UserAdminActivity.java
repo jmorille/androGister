@@ -5,9 +5,12 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.database.UserProvider;
 import eu.ttbox.androgister.ui.admin.user.UserListFragment.OnSelectUserListener;
@@ -18,7 +21,8 @@ public class UserAdminActivity extends Activity {
 
 	private UserListFragment userListFragment;
 	private UserViewFragment userViewFragment;
-
+    private SearchView searchView;
+    
 	private static final int SUBACTIVITY_NEW_CONTACT = 2;
 	private static final int SUBACTIVITY_EDIT_CONTACT = 3;
 
@@ -48,11 +52,19 @@ public class UserAdminActivity extends Activity {
 	private void handleIntent(Intent intent) {
 
 	}
-
+	 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.admin_user_menu, menu);
+		SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+		if (searchView!=null) { 
+		    searchView.setIconifiedByDefault(true);
+//		    searchView.setQueryHint(this.getString(R.string.hint_findContacts));
+		    searchView.setOnQueryTextListener(userListFragment);
+//		    searchView.setOnCloseListener(this);
+//		    searchView.setQuery(mQueryString, false);
+		}
 		return true;
 	}
 

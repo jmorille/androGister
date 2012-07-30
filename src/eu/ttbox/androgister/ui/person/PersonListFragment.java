@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.SearchView.OnQueryTextListener;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.database.PersonProvider;
@@ -34,7 +35,7 @@ import eu.ttbox.androgister.model.Person;
  * @author jmorille
  * 
  */
-public class PersonListFragment extends Fragment {
+public class PersonListFragment extends Fragment implements OnQueryTextListener {
 
     private static final String TAG = "PersonListFragment";
 
@@ -178,5 +179,17 @@ public class PersonListFragment extends Fragment {
         }
 
     };
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+       doSearch(newText);
+        return true;
+    }
 
 }
