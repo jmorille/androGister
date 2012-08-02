@@ -1,12 +1,16 @@
 package eu.ttbox.androgister.ui.admin.user;
 
+import com.android.contacts.list.ContactListAdapter.ContactQuery;
+
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.database.user.UserDatabase.UserColumns;
 import eu.ttbox.androgister.database.user.UserHelper;
 
 public class UserListAdapter extends ResourceCursorAdapter {
@@ -30,8 +34,19 @@ public class UserListAdapter extends ResourceCursorAdapter {
         // Init Cursor
         helper = new UserHelper().initWrapper(cursor);
         isNotBinding = false;
+ 
     }
 
+    public Uri getContactUri(int position) { 
+        Cursor item = (Cursor)getItem(position);
+        return item != null ? getEntityUri(item) : null;
+    }
+    public Uri getEntityUri( Cursor cursor) {
+    	long contactId = helper.getUserId(cursor);
+    	Uri uri =null;
+    	
+    	return uri;
+    }
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
