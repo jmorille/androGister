@@ -8,11 +8,20 @@
 	<packaging>apk</packaging>
 	<name>AndroGister</name>
 
+
+	<scm>
+		<connection>scm:git@github.com:jmorille/androGister.git</connection>
+		<url>scm:git@github.com:jmorille/androGister.git</url>
+		<developerConnection>scm:git@github.com:jmorille/androGister.git</developerConnection>
+	</scm>
+
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<android.version>4.0.3_r3</android.version> <!-- 2.3.3 -->
 		<junit.version>4.10</junit.version>
 		<!-- Release -->
+		<github.global.server>github</github.global.server>
 		<sign.alias>android</sign.alias>
 		<build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
 		<android-maven-plugin.version>3.2.0</android-maven-plugin.version>
@@ -87,6 +96,16 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>downloads-maven-plugin</artifactId>
+				<version>0.5</version>
+				<configuration>
+					<description>${project.version} release of ${project.name}</description>
+					<override>true</override>
+					<includeAttached>true</includeAttached>
 				</configuration>
 			</plugin>
 		</plugins>

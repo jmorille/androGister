@@ -15,11 +15,18 @@ public class UserListAdapter extends ResourceCursorAdapter {
 
     private boolean isNotBinding = true;
 
+    private long selectedEntity = -1;
+    
     public UserListAdapter(Context context, int layout, Cursor c, int flags) {
         super(context, layout, c, flags);
     }
+ 
+    public void setSelectedEntity(long selectedEntity) {
+		this.selectedEntity = selectedEntity;
+	}
+ 
 
-    private void intViewBinding(View view, Context context, Cursor cursor) {
+	private void intViewBinding(View view, Context context, Cursor cursor) {
         // Init Cursor
         helper = new UserHelper().initWrapper(cursor);
         isNotBinding = false;

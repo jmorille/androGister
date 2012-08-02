@@ -1,6 +1,5 @@
 package eu.ttbox.androgister.ui.admin.user;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.SearchManager;
@@ -9,12 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,7 +22,7 @@ import eu.ttbox.androgister.database.UserProvider;
 import eu.ttbox.androgister.database.user.UserDatabase;
 import eu.ttbox.androgister.database.user.UserDatabase.UserColumns;
 import eu.ttbox.androgister.database.user.UserHelper;
-import eu.ttbox.androgister.model.user.User;
+import eu.ttbox.androgister.widget.AutoScrollListView;
 
 public class UserListFragment extends Fragment implements OnQueryTextListener {
 
@@ -43,6 +37,11 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
     // Adapter
     private UserListAdapter listAdapter;
     private UserHelper helper;
+
+    // Config
+    private boolean mSelectionToScreenRequested;
+    private boolean mSmoothScrollRequested;
+    
     // Binding
     private TextView searchResultTextView;
     private ListView listView;
@@ -105,6 +104,19 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
         // Do Search
         getLoaderManager().initLoader(USER_LIST_LOADER, null, orderLoaderCallback);
         return view;
+    }
+    
+    public ListView getListView() {
+        return listView;
+    }
+    
+    protected void requestSelectionToScreen(int selectedPosition) {
+        if (selectedPosition != -1) {
+            AutoScrollListView listView = (AutoScrollListView)getListView();
+            listView.requestPositionToScreen(
+                    selectedPosition + listView.getHeaderViewsCount(), mSmoothScrollRequested);
+            mSelectionToScreenRequested = false;
+        }
     }
 
     protected void onListItemClick(ListView l, View v, int position, long id) {
