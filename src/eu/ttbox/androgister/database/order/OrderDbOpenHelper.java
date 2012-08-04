@@ -24,10 +24,10 @@ public class OrderDbOpenHelper extends SQLiteOpenHelper {
             + ", " + OrderColumns.KEY_STATUS + " INTEGER NOT NULL" //
             + ", " + OrderColumns.KEY_PRICE_SUM_HT + " INTEGER NOT NULL" //
             + ", " + OrderColumns.KEY_PAYMENT_MODE + " INTEGER NOT NULL" //
-            + ", " + OrderColumns.KEY_PERS_ID + " TEXT NOT NULL" //
-            + ", " + OrderColumns.KEY_PERS_MATRICULE + " TEXT NOT NULL" //
-            + ", " + OrderColumns.KEY_PERS_FIRSTNAME + " TEXT NOT NULL" //
-            + ", " + OrderColumns.KEY_PERS_LASTNAME + " TEXT NOT NULL" //
+            + ", " + OrderColumns.KEY_PERS_ID + " INTEGER" //
+            + ", " + OrderColumns.KEY_PERS_MATRICULE + " TEXT" //
+            + ", " + OrderColumns.KEY_PERS_FIRSTNAME + " TEXT" //
+            + ", " + OrderColumns.KEY_PERS_LASTNAME + " TEXT" //
             + ");";
 
     private static final String CREATE_INDEX_AK_UUID = "CREATE UNIQUE INDEX IDX_ORDER_AK_UUID ON " + OrderDatabase.ORDER_TABLE //
