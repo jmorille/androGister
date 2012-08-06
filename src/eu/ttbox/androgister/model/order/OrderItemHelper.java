@@ -19,7 +19,7 @@ public class OrderItemHelper {
     public int priceUnitIdx = -1;
     public int priceSumIdx = -1;
 
-    public static OrderItem createFromProduct(Offer p) {
+    public static OrderItem createFromOffer(Offer p) {
         OrderItem item = null;
         if (p != null) {
             item = new OrderItem();

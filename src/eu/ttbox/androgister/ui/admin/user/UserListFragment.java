@@ -52,6 +52,7 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
 
     private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+          
             onListItemClick((ListView) parent, v, position, id);
         }
     };
@@ -64,7 +65,7 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
         // Bind
         listView = (ListView) view.findViewById(android.R.id.list);
         listView.setOnItemClickListener(mOnClickListener);
-
+//        listView.setOnItemSelectedListener(listener)
         // Search Criteria
         // searchResultTextView = (TextView)
         // view.findViewById(R.id.user_search_result);
@@ -126,11 +127,12 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
                 if (helper == null) {
                     helper = new UserHelper().initWrapper(cursor);
                 }
-                String userId = helper.getUserId(cursor);
+                String userId = helper.getUserIdAsString(cursor);
                 Uri uri = Uri.withAppendedPath(UserProvider.Constants.CONTENT_URI, userId);
                 // User user = helper.getEntity(cursor);
                 // Define result
                 // TODO
+                listAdapter.setSelectedId(Long.valueOf(userId));
                 onSelectUserListener.onViewAction(uri);
             }
         }

@@ -17,14 +17,15 @@ public class UserListAdapter extends ResourceCursorAdapter {
 
     private boolean isNotBinding = true;
 
-    private long selectedEntity = -1;
+    private long selectedId = -1;
     
     public UserListAdapter(Context context, int layout, Cursor c, int flags) {
         super(context, layout, c, flags);
     }
  
-    public void setSelectedEntity(long selectedEntity) {
-		this.selectedEntity = selectedEntity;
+    public void setSelectedId(long selectedEntity) {
+		this.selectedId = selectedEntity; 
+		notifyDataSetChanged();
 	}
  
 
@@ -41,7 +42,7 @@ public class UserListAdapter extends ResourceCursorAdapter {
     }
     
     public Uri getEntityUri( Cursor cursor) {
-    	String contactId = helper.getUserId(cursor);
+    	String contactId = helper.getUserIdAsString(cursor);
     	Uri uri =Uri.withAppendedPath(UserProvider.Constants.CONTENT_URI, contactId); 
     	return uri;
     }
@@ -57,6 +58,9 @@ public class UserListAdapter extends ResourceCursorAdapter {
         helper.setTextUserLastname(holder.lastnameText, cursor)//
                 .setTextUserFirstname(holder.firstnameText, cursor)//
                 .setTextUserMatricule(holder.matriculeText, cursor);
+        // String
+       long currentId =  helper.getUserId (cursor);
+       boolean selected = currentId==selectedId;
 
     }
 

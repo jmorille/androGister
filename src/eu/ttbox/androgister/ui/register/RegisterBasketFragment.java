@@ -139,11 +139,7 @@ public class RegisterBasketFragment extends Fragment {
         }
         return sum;
     }
-
-    public void onAddBasketItem(Offer offer) {
-        OrderItem item = OrderItemHelper.createFromProduct(offer);
-        onAddBasketItem(item);
-    }
+ 
 
     public void onAddBasketItem(OrderItem item) {
         listAdapter.add(item);

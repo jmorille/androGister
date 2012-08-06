@@ -46,7 +46,7 @@ public class OfferHelper {
         product.setPriceHT(priceIdx > -1 ? priceHT : -1);
         return product;
     }
-    
+     
     private OfferHelper setTextWithIdx(TextView view, Cursor cursor, int idx) {
         view.setText(cursor.getString(idx));
         return this;

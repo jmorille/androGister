@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.CoreHelper;
 import eu.ttbox.androgister.model.Offer;
+import eu.ttbox.androgister.model.order.OrderItem;
+import eu.ttbox.androgister.model.order.OrderItemHelper;
 import eu.ttbox.androgister.ui.admin.user.UserAdminActivity;
 import eu.ttbox.androgister.ui.config.MyPreferencesActivity;
 import eu.ttbox.androgister.ui.product.ProductSelectorFragment;
@@ -38,7 +40,8 @@ public class CashRegisterActivity extends Activity {
 
 		@Override
 		public void onOfferSelected(Offer offer) {
-			basketFragment.onAddBasketItem(offer);
+		    OrderItem item = OrderItemHelper.createFromOffer(offer);
+			basketFragment.onAddBasketItem( item);
 		}
 
 	};
