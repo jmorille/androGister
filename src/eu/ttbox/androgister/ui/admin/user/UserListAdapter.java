@@ -3,6 +3,7 @@ package eu.ttbox.androgister.ui.admin.user;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
@@ -13,6 +14,8 @@ import eu.ttbox.androgister.database.user.UserHelper;
 
 public class UserListAdapter extends ResourceCursorAdapter {
 
+    private static final String TAG = "UserListAdapter";
+    
     private UserHelper helper;
 
     private boolean isNotBinding = true;
@@ -61,7 +64,9 @@ public class UserListAdapter extends ResourceCursorAdapter {
         // String
        long currentId =  helper.getUserId (cursor);
        boolean selected = currentId==selectedId;
-
+       Log.i(TAG, "Is selected for userid = " + currentId + " ==> "+ selected);
+       view.setSelected(selected);
+       view.setActivated(selected);
     }
 
     @Override

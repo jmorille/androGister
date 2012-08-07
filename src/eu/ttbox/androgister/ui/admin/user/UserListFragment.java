@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,12 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
         // Bind
         listView = (ListView) view.findViewById(android.R.id.list);
         listView.setOnItemClickListener(mOnClickListener);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setFastScrollEnabled(true);
+        listView.setFastScrollAlwaysVisible(true);
+        listView.setVerticalScrollbarPosition(0);
+        listView.setScrollBarStyle(ListView.SCROLLBARS_OUTSIDE_OVERLAY);
+        
 //        listView.setOnItemSelectedListener(listener)
         // Search Criteria
         // searchResultTextView = (TextView)
@@ -132,6 +139,9 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
                 // User user = helper.getEntity(cursor);
                 // Define result
                 // TODO
+                listView.requestFocusFromTouch();
+                listView.setSelection(position);
+                Log.i(TAG, "listView.setSelection = " + position );
                 listAdapter.setSelectedId(Long.valueOf(userId));
                 onSelectUserListener.onViewAction(uri);
             }

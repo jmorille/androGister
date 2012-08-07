@@ -123,7 +123,9 @@ public class UserProvider extends ContentProvider {
 		String selection = _selection;
 		String[] selectionArgs = _selectionArgs;
 		String sortOrder = _sortOrder;
-		return userDatabase.queryUser(selection, selectionArgs, projection, sortOrder);
+		Cursor cursor = userDatabase.queryUser(selection, selectionArgs, projection, sortOrder);
+//		Log.i(TAG, "search for _selection : " + _selection + " => result count " + cursor.getCount() );
+		return cursor;
 	}
 
 	private Cursor getUser(Uri uri) {
