@@ -10,6 +10,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,18 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
 
 	private static final String USER_SORT_DEFAULT = String.format("%s DESC, %s DESC", UserColumns.KEY_LASTNAME, UserColumns.KEY_FIRSTNAME);
 
+	 /**
+     * The id for a delayed message that triggers automatic selection of the first
+     * found contact in search mode.
+     */
+    private static final int MESSAGE_AUTOSELECT_FIRST_FOUND_CONTACT = 1;
+
+    /**
+     * The delay that is used for automatically selecting the first found contact.
+     */
+    private static final int DELAY_AUTOSELECT_FIRST_FOUND_CONTACT_MILLIS = 500;
+
+    
 	// Adapter
 	private UserListAdapter listAdapter;
 	private UserHelper helper;
@@ -51,17 +65,32 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
 	private EditText searchNameTextView;
 
 	// Instance Data
-	Uri selectedEntityUri;
+	private Uri selectedEntityUri;
+	private int mLastSelectedPosition = -1;
 
 	// Listener
 	private OnSelectUserListener onSelectUserListener;
-
+	
+	private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MESSAGE_AUTOSELECT_FIRST_FOUND_CONTACT:
+                    selectDefaultContact();
+                    break;
+            }
+        }
+    };
+	 
 	private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
 			onListItemClick((ListView) parent, v, position, id);
 		}
 	};
+	
+  
+    
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,6 +156,25 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
 			listView.requestPositionToScreen(selectedPosition + listView.getHeaderViewsCount(), mSmoothScrollRequested);
 			mSelectionToScreenRequested = false;
 		}
+	}
+
+	protected void selectDefaultContact() {
+		Uri contactUri = null;
+		UserListAdapter adapter = getAdapter();
+		if (mLastSelectedPosition != -1) {
+			int count = adapter.getCount();
+			int pos = mLastSelectedPosition;
+			if (pos >= count && count > 0) {
+				pos = count - 1;
+			}
+			contactUri = adapter.getContactUri(pos);
+		}
+
+		if (contactUri == null) {
+			contactUri = adapter.getFirstEntityUri();
+		}
+
+		setSelectedEntityUri(contactUri, false, mSmoothScrollRequested, false, false);
 	}
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -260,19 +308,23 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
 		mSelectionToScreenRequested = true;
 		if ((selectedEntityUri == null && uri != null) || (selectedEntityUri != null && !selectedEntityUri.equals(uri))) {
 			selectedEntityUri = uri;
-			// parseSelectedEntityUri();
+			long selectedEntityId = parseSelectedEntityUri(uri);
 			if (!willReloadData) {
-				  UserListAdapter adapter = getAdapter();
-				   if (adapter != null) {
-	                    adapter.setSelectedId(mSelectedContactDirectoryId,
-	                            mSelectedContactLookupKey, mSelectedContactId);
-	                    getListView().invalidateViews();
-	                }
+				UserListAdapter adapter = getAdapter();
+				if (adapter != null) {
+					adapter.setSelectedId(selectedEntityId);
+					getListView().invalidateViews();
+				}
 			}
 		}
 	}
 
-	private UserListAdapter getAdapter() { 
+	private long parseSelectedEntityUri(Uri uri) {
+		String entityId = uri.getLastPathSegment();
+		return Long.valueOf(entityId).longValue();
+	}
+
+	private UserListAdapter getAdapter() {
 		return listAdapter;
 	}
 }
