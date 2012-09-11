@@ -101,6 +101,7 @@
         <activity
             android:name=".ui.admin.user.UserEditActivity"
             android:label="@string/app_name"
+              android:theme="@style/EditorActivityTheme"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" /> 

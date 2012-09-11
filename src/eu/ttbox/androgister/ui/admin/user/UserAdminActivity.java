@@ -76,7 +76,7 @@ public class UserAdminActivity extends Activity {
 			return true;
 		}
 		case R.id.menu_admin_user_edit: {
-			Uri entityUri= userListFragment.getSelectedEntityUri();
+			Uri entityUri = userListFragment.getSelectedEntityUri();
 			actionEditEntity(entityUri);
 			// if (userId != -1) {
 			// showUserEditDialog(userId);
@@ -87,10 +87,10 @@ public class UserAdminActivity extends Activity {
 
 			return true;
 		}
-		  case R.id.menu_search: {
-              onSearchRequested();
-              return true;
-          }
+		case R.id.menu_search: {
+			onSearchRequested();
+			return true;
+		}
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -148,12 +148,13 @@ public class UserAdminActivity extends Activity {
 	private void actionViewEntity(Uri entityUri) {
 		if (userViewFragment != null) {
 			userViewFragment.loadUri(entityUri);
-		} 
+		}
 	}
 
-	
 	private void actionEditEntity(Uri entityUri) {
-		Intent intent = new Intent(Intent.ACTION_EDIT, entityUri);
+
+		// Intent intent = new Intent(Intent.ACTION_EDIT, entityUri);
+		Intent intent = new Intent(this, UserEditActivity.class).setAction(Intent.ACTION_EDIT).setData(entityUri);
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			intent.putExtras(extras);
@@ -161,7 +162,7 @@ public class UserAdminActivity extends Activity {
 		intent.putExtra(UserEditActivity.INTENT_KEY_FINISH_ACTIVITY_ON_SAVE_COMPLETED, true);
 		startActivityForResult(intent, SUBACTIVITY_EDIT_CONTACT);
 	}
-	 
+
 	private void actionNewEntity() {
 		Intent intent = new Intent(Intent.ACTION_INSERT, UserProvider.Constants.CONTENT_URI);
 		Bundle extras = getIntent().getExtras();
@@ -170,7 +171,7 @@ public class UserAdminActivity extends Activity {
 		}
 		startActivity(intent);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
@@ -178,7 +179,7 @@ public class UserAdminActivity extends Activity {
 		case SUBACTIVITY_EDIT_CONTACT: {
 			if (resultCode == RESULT_OK) {
 				// mRequest.setActionCode(ContactsRequest.ACTION_VIEW_CONTACT);
-//				 userViewFragment.setSelectionRequired(true);
+				// userViewFragment.setSelectionRequired(true);
 				userListFragment.setSelectedEntityUri(data.getData());
 				// Suppress IME if in search mode
 				// if (mActionBarAdapter != null) {

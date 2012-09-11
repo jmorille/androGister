@@ -33,21 +33,20 @@ public class OrderIdGenerator {
 		// Compute Minighth date
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(now);
-		cal.clear(Calendar.HOUR);
-		cal.clear(Calendar.HOUR_OF_DAY);
-		cal.clear(Calendar.MINUTE);
-		cal.clear(Calendar.SECOND);
-		cal.clear(Calendar.MILLISECOND);
-		long dateMidenight = cal.getTimeInMillis();
-		if (! getOrderIdSequence().isValidCache(dateMidenight)) {
+		cal.set(Calendar.HOUR_OF_DAY, 0);  
+		cal.set(Calendar.MINUTE, 0);  
+		cal.set(Calendar.SECOND, 0);  
+		cal.set(Calendar.MILLISECOND, 0);   
+		long dateMidnight = cal.getTimeInMillis();
+		if (! getOrderIdSequence().isValidCache(dateMidnight)) {
 			// Compute tomorow day
 			cal.add(Calendar.DATE, 1);
 			long tomorrow = cal.getTimeInMillis();
 			// Read for Db
-			getDbMaxId(db, dateMidenight, tomorrow);
+			getDbMaxId(db, dateMidnight, tomorrow);
 		}
 		long nextOrderNum =  getOrderIdSequence().incrementAndGet();
-		Log.i(TAG, String.format("Transform now %s to Date Mightnight %s => Max Number = %s", now, dateMidenight, nextOrderNum));
+		Log.i(TAG, String.format("Transform now %s to Date Mightnight %s => Max Number = %s", now, dateMidnight, nextOrderNum));
 		return nextOrderNum;
 	}
 
@@ -61,6 +60,7 @@ public class OrderIdGenerator {
 
 	private long getDbMaxId(SQLiteDatabase db, long dateMightnight, long tomorrow) {
 		// Do Database Request
+		
 		String query = String.format(QUERY_SELECT_MAX_ORDER_NUMBER, dateMightnight, tomorrow);
 		Log.i(TAG, String.format("Check for max Order Number in range of %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS,%1$tL to Tomorrow %2$tY-%2$tm-%2$td %2$tH:%2$tM:%2$tS,%2$tL", dateMightnight, tomorrow));
 		Log.i(TAG, query);
