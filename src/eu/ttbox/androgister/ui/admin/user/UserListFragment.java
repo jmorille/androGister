@@ -1,7 +1,5 @@
 package eu.ttbox.androgister.ui.admin.user;
 
-import org.apache.http.client.UserTokenHandler;
-
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.SearchManager;
