@@ -51,6 +51,7 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
     // Binding
     private TextView searchResultTextView;
     private ListView listView;
+//    private TextView emptyListView;
     private EditText searchNameTextView;
 
     // Listener
@@ -67,6 +68,8 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
         // Bind
         listView = (ListView) view.findViewById(R.id.person_list_list);
         listView.setOnItemClickListener(mOnClickListener);
+//        emptyListView = (TextView) view.findViewById(android.R.id.empty);
+//        listView.setEmptyView(emptyListView);
         // Search Criteria
         searchResultTextView = (TextView) view.findViewById(R.id.person_search_result);
         searchNameTextView = (EditText) view.findViewById(R.id.person_list_search_name_input); 

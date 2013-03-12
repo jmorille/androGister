@@ -124,7 +124,7 @@ public class PersonProvider extends ContentProvider {
         return personDatabase.queryPerson(selection, selectionArgs, projection, sortOrder);
     }
 
-    private Cursor getPerson(Uri uri) {
+    private Cursor getPerson(Uri uri) { 
         String rowId = uri.getLastPathSegment();
         String[] columns = PersonDatabase.PersonColumns.ALL_KEYS;
         return personDatabase.getPerson(rowId, columns);

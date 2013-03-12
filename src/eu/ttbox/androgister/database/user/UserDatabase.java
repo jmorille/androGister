@@ -66,8 +66,8 @@ public class UserDatabase {
 			}
 		}
 		// Add Suggest Aliases
-		map.put(SearchManager.SUGGEST_COLUMN_TEXT_1, String.format("%s || ', ' || %s AS %s", PersonColumns.KEY_LASTNAME, PersonColumns.KEY_FIRSTNAME, SearchManager.SUGGEST_COLUMN_TEXT_1));
-		map.put(SearchManager.SUGGEST_COLUMN_TEXT_2, String.format("%s AS %s", PersonColumns.KEY_MATRICULE, SearchManager.SUGGEST_COLUMN_TEXT_2));
+		map.put(SearchManager.SUGGEST_COLUMN_TEXT_1, String.format("%s || ', ' || %s AS %s", UserColumns.KEY_LASTNAME, UserColumns.KEY_FIRSTNAME, SearchManager.SUGGEST_COLUMN_TEXT_1));
+		map.put(SearchManager.SUGGEST_COLUMN_TEXT_2, String.format("%s AS %s", UserColumns.KEY_MATRICULE, SearchManager.SUGGEST_COLUMN_TEXT_2));
 		map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
 		map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
 		// Add Other Aliases
