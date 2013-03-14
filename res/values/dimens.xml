@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Largeur 1280 => Or A=791 B=489  -->
+    <!-- Sliding menu -->
+    <dimen name="slidingmenu_offset">60dp</dimen>
+    <dimen name="slidingmenu_list_padding">10dp</dimen>
+
+    <!-- Largeur 1280 => Or A=791 B=489 -->
     <dimen name="tab_height">40dp</dimen>
     <dimen name="tab_padding">10dp</dimen>
     <dimen name="tab_topLeftRadius">16dp</dimen>
@@ -14,5 +18,6 @@
     <dimen name="list_visible_scrollbar_padding">32dip</dimen>
     <dimen name="entity_picker_search_view_max_width">550dip</dimen>
     <dimen name="entity_picker_list_min_height">550dip</dimen>
-     <dimen name="list_section_divider_min_height">32dip</dimen>
+    <dimen name="list_section_divider_min_height">32dip</dimen>
+
 </resources>
