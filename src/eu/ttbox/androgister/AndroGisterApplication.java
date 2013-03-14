@@ -19,10 +19,8 @@ public class AndroGisterApplication extends Application {
     @Override
     public void onCreate() {
         // Create Application
-        super.onCreate();
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
-        }
+        super.onCreate(); 
+        
         // Perform the initialization that doesn't have to finish immediately.
         // We use an async task here just to avoid creating a new thread.
         (new DelayedInitializer()).execute();
