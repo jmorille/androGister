@@ -4,6 +4,7 @@
     <!-- Sliding menu -->
     <dimen name="slidingmenu_offset">60dp</dimen>
     <dimen name="slidingmenu_list_padding">10dp</dimen>
+     <dimen name="slidingmenu_shadow_width">15dp</dimen>
 
     <!-- Largeur 1280 => Or A=791 B=489 -->
     <dimen name="tab_height">40dp</dimen>
