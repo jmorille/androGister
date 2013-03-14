@@ -2,6 +2,7 @@ package eu.ttbox.androgister;
 
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.CanvasTransformer;
@@ -19,6 +20,20 @@ public class AndroGisterActivity extends SlidingActivity {
         SlidingMenu sm = customizeSlidingMenu();
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    // ===========================================================
+    // Menu Overide
+    // ===========================================================
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            toggle();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public SlidingMenu customizeSlidingMenu() {
