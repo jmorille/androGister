@@ -22,8 +22,7 @@ public class GreenDaoInitializer {
         Schema schema = new Schema(1, "eu.ttbox.androgister");
         addProduct(schema);
         addOffer(schema);
-        String outDir = "";
-        new DaoGenerator().generateAll(schema, outDir);
+        String outDir = ""; 
     }
 
     private static void addProduct(Schema schema) {
