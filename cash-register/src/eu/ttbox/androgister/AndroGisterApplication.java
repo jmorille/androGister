@@ -3,24 +3,28 @@ package eu.ttbox.androgister;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import eu.ttbox.androgister.core.AppConstants;
 import eu.ttbox.androgister.database.order.OrderIdSequence;
+import eu.ttbox.androgister.domain.DaoMaster;
+import eu.ttbox.androgister.domain.DaoSession;
+import eu.ttbox.androgister.domain.dao.RegisterDbOpenHelper;
 
 public class AndroGisterApplication extends Application {
 
     private String TAG = "AndroGisterApp";
 
     private OrderIdSequence orderIdSequence = new OrderIdSequence();
+    private DaoSession daoSession;
 
     @Override
     public void onCreate() {
         // Create Application
-        super.onCreate(); 
-        
+        super.onCreate();
+
         // Perform the initialization that doesn't have to finish immediately.
         // We use an async task here just to avoid creating a new thread.
         (new DelayedInitializer()).execute();
@@ -33,7 +37,7 @@ public class AndroGisterApplication extends Application {
             final Context context = AndroGisterApplication.this;
             // Increment Counter Lauch
             int laugthCount = incrementApplicationLaunchCounter(context);
-            Log.i(TAG, "Laugth count "+ laugthCount);
+            Log.i(TAG, "Laugth count " + laugthCount);
             return null;
         }
 
@@ -56,6 +60,21 @@ public class AndroGisterApplication extends Application {
 
     public OrderIdSequence getOrderIdSequence() {
         return orderIdSequence;
+    }
+
+    public DaoSession getDaoSession() {
+        if (daoSession == null) {
+            daoSession = initDaoSession();
+        }
+        return daoSession;
+    }
+
+    private synchronized DaoSession initDaoSession() {
+        RegisterDbOpenHelper helper = new RegisterDbOpenHelper(AndroGisterApplication.this, null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession;
     }
 
 }

@@ -1,6 +1,8 @@
-package eu.ttbox.androgister.model;
+package eu.ttbox.androgister.model.product;
 
 import java.io.Serializable;
+
+import eu.ttbox.androgister.model.PriceHelper;
 
 public class Product implements Serializable {
 	

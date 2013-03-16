@@ -3,35 +3,32 @@ package eu.ttbox.androgister.ui.admin.product;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import de.greenrobot.dao.query.LazyList;
+import android.widget.EditText;
 import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.DaoSession;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.ProductDao;
-import eu.ttbox.androgister.domain.ProductDao.Properties;
 
-public class ProductAdminFragment extends Fragment {
+public class ProductEditFragment extends Fragment {
 
-
+    private static final String TAG = "ProductEditFragment";
     // Service
     private DaoSession daoSession;
     private ProductDao productDao;
 
     // Binding
-    ListView productList;
+    private EditText nameText;
 
     // Instance
-    ProductListAdapter listAdapter;
+    private Product entity;
 
     // ===========================================================
     // Constructors
@@ -39,9 +36,9 @@ public class ProductAdminFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.admin_product_list, container, false);
+        View v = inflater.inflate(R.layout.product_edit, container, false);
         // Binding
-        productList = (ListView) v.findViewById(R.id.product_list);
+        // nameText = (EditText) v.findViewById(R.id.product_edit);
         // Menu on Fragment
         setHasOptionsMenu(true);
         return v;
@@ -54,31 +51,8 @@ public class ProductAdminFragment extends Fragment {
         AndroGisterApplication app = (AndroGisterApplication) getActivity().getApplication();
         daoSession = app.getDaoSession();
         productDao = daoSession.getProductDao();
-        // List
-        LazyList<Product> products = productDao.queryBuilder() //
-                .orderAsc(Properties.Tag, Properties.Description) //
-                .listLazy();
-        ProductListAdapter listAdapter = new ProductListAdapter(getActivity(), products);
-        productList.setAdapter(listAdapter);
-        // Listener
-        productList.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Product item = (Product) parent.getItemAtPosition(position);
-                onProductEditClick(item.getId());
-            }
-        });
-    }
-
-    @Override
-    public void onDestroyView() {
-        if (listAdapter != null) {
-            // Close LazyListAdpater for closing LazyList
-            listAdapter.close();
-            listAdapter = null;
-        }
-        super.onDestroyView();
+        // Load Data
+        loadEntity(getArguments());
     }
 
     // ===========================================================
@@ -95,27 +69,56 @@ public class ProductAdminFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_admin_product_add:
-            onProductEditClick();
+            onSaveClick();
             return true;
         }
         return false;
     }
 
     // ===========================================================
-    // Business
+    // Load
     // ===========================================================
 
-    private void onProductEditClick(Long entityId) {
-        Intent intent = new Intent(getActivity(), ProductEditActivity.class);
-        intent.setAction(Intent.ACTION_EDIT);
-        intent.putExtra(Intent.EXTRA_UID , entityId);
-        getActivity().startActivity(intent);
-    }
-    
-    private void onProductEditClick() {
-        Intent intent = new Intent(getActivity(), ProductEditActivity.class);
-        intent.setAction(Intent.ACTION_INSERT);
-        getActivity().startActivity(intent);
+    private void loadEntity(Bundle args) {
+        if (args != null && args.containsKey(Intent.EXTRA_UID)) {
+            Long entityId = args.getLong(Intent.EXTRA_UID);
+            Log.d(TAG, "Edit Entity Id : " + entityId);
+            entity = productDao.load(entityId);
+            bindView(entity);
+        } else {
+            Log.d(TAG, "Prepare new Entity" );
+            // prepare for insert
+            prepareInsert();
+        }
     }
 
+    private void prepareInsert() {
+          
+    }
+
+    private void bindView(Product entity) {
+        
+    }
+    
+    // ===========================================================
+    // Action
+    // ===========================================================
+
+    
+    public void onDeleteClick() {
+        
+    }
+    
+    public void onSaveClick() {
+        
+    }
+    
+    public void onCancelClick() {
+        
+    }
+    
+    // ===========================================================
+    // Business
+    // ===========================================================
+ 
 }

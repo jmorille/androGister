@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.widget.TextView;
 import eu.ttbox.androgister.database.product.ProductDatabase.ProductColumns;
-import eu.ttbox.androgister.model.Product;
 import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.model.product.Product;
 
 public class ProductHelper {
 

@@ -30,8 +30,7 @@
         <!-- Home -->
         <activity
             android:name=".AndroGisterActivity"
-            android:label="@string/app_name" >
-
+            android:label="@string/app_name" > 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
@@ -39,29 +38,39 @@
         </activity>
 
         <!-- Preference -->
-        <activity
+        <activity android:exported="false"
             android:name=".ui.config.MyPreferencesActivity"
-            android:label="@string/app_name" >
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+            android:label="@string/app_name" >  
         </activity>
         <!-- Register -->
         <activity
             android:name=".ui.CashRegisterActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" /> 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--             <intent-filter> -->
+<!--                 <action android:name="android.intent.action.MAIN" />  -->
+<!--                 <category android:name="android.intent.category.LAUNCHER" /> -->
+<!--             </intent-filter> -->
             <!-- <intent-filter> -->
             <!-- <action android:name="eu.ttbox.androgister.intent.ADD_BASKET" /> -->
             <!-- <action android:name="eu.ttbox.androgister.intent.ACTION_SAVE_BASKET" /> -->
             <!-- </intent-filter> -->
         </activity>
 
+        <!-- Product Admin -->
+        <activity
+            android:name=".ui.admin.offer.OfferCreatorActivity"
+            android:label="@string/app_name" > 
+            <intent-filter>
+               <action android:name="android.intent.action.MAIN" />
+               <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.admin.product.ProductEditActivity"
+            android:label="@string/app_name"> 
+        </activity>
+        
+        
         <!-- Order -->
         <activity
             android:name=".ui.order.OrderEditActivity"

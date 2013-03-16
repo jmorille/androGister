@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.database;
+package eu.ttbox.androgister.domain.generator;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
@@ -6,7 +6,7 @@ import de.greenrobot.daogenerator.Schema;
  
  
 
-public class GreenDaoInitializer {
+public class RegisterDaoGenerator {
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(Integer.parseInt(args[0]), args[1]);
@@ -17,25 +17,21 @@ public class GreenDaoInitializer {
         new DaoGenerator().generateAll(schema, args[2]);
     }
 
-    
-    public static void init() {
-        Schema schema = new Schema(1, "eu.ttbox.androgister");
-        addProduct(schema);
-        addOffer(schema);
-        String outDir = ""; 
-    }
+     
 
     private static void addProduct(Schema schema) {
         Entity product = schema.addEntity("Product");
+        product.implementsInterface("eu.ttbox.androgister.domain.DomainModel");
+        
         product.addIdProperty();
         product.addStringProperty("name").notNull();
         product.addStringProperty("description");
-        product.addIntProperty("priceHT");
+        product.addLongProperty("priceHT");
         product.addStringProperty("tag"); 
     }
     
     private static void addOffer(Schema schema) {
-        Entity offer = schema.addEntity("Product");
+        Entity offer = schema.addEntity("Offer");
         offer.addIdProperty();
         offer.addStringProperty("name").notNull();
         offer.addStringProperty("description");

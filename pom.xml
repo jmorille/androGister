@@ -95,8 +95,8 @@
 	</dependencyManagement>
  
    <modules>
+		<module>domain-generator</module>
 		<module>cash-register</module>
-		<module>model-generator</module>
 	</modules>
 
 	<build> 

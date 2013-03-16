@@ -26,8 +26,14 @@ public class AndroGisterActivity extends SlidingActivity {
     // Menu Overide
     // ===========================================================
 
+ 
+    public AndroGisterApplication getAndroGisterApplication() {
+       return (AndroGisterApplication)  super.getApplication();
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+     
         switch (item.getItemId()) {
         case android.R.id.home:
             toggle();

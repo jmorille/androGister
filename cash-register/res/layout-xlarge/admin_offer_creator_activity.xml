@@ -3,20 +3,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:baselineAligned="false"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
     <fragment
         android:id="@+id/fragment_offer_list"
         android:name="eu.ttbox.androgister.ui.admin.offer.OfferCreatorFragment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="0dp" />
+        android:layout_height="match_parent" />
 
     <fragment
         android:id="@+id/fragment_offer_referential_list"
         android:name="eu.ttbox.androgister.ui.admin.product.ProductAdminFragment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="0dp" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

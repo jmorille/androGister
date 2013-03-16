@@ -13,7 +13,7 @@ public class OfferCreatorFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { 
-        View v = null;// inflater.inflate(R.layout.order_list, container, false);
+        View v =  inflater.inflate(R.layout.admin_offer_creator, container, false);
         return v;
     }
 

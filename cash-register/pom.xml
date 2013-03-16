@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-		
+
+
 	<parent>
 		<groupId>eu.ttbox.androgister</groupId>
 		<artifactId>androgister</artifactId>
 		<version>0.0.1</version>
- 	</parent>
+	</parent>
 
 
 	<groupId>eu.ttbox.androgister</groupId>
@@ -17,7 +17,7 @@
 	<packaging>apk</packaging>
 	<name>AndroGister</name>
 
- 
+
 
 	<dependencies>
 		<!-- Android -->
@@ -44,10 +44,9 @@
 			<type>apklib</type>
 			<exclusions>
 				<exclusion>
-					<artifactId>actionbarsherlock</artifactId>
 					<groupId>com.actionbarsherlock</groupId>
+					<artifactId>actionbarsherlock</artifactId>
 				</exclusion>
-				 
 			</exclusions>
 		</dependency>
 
@@ -58,9 +57,15 @@
 			<version>${greendao.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>de.greenrobot</groupId>
-			<artifactId>greendao-generator</artifactId>
-			<version>${greendao-generator.version}</version>
+			<groupId>eu.ttbox.androgister.domain</groupId>
+			<artifactId>product-model</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>de.greenrobot</groupId>
+					<artifactId>greendao-generator</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>

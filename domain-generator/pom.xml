@@ -9,7 +9,7 @@
 		<version>0.0.1</version>
  	</parent>
  	
-	<groupId>eu.ttbox.androgister</groupId>
+	<groupId>eu.ttbox.androgister.domain</groupId>
 	<artifactId>model-generator</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1</version>

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>eu.ttbox.androgister</groupId>
+		<groupId>eu.ttbox.androgister.domain</groupId>
 		<artifactId>model-generator</artifactId>
 		<version>0.0.1</version>
  	</parent>
