@@ -1,6 +1,5 @@
-package eu.ttbox.androgister.ui.admin.offer;
+package eu.ttbox.androgister.ui.admin.product;
 
-import eu.ttbox.androgister.R;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class OfferCreatorFragment extends Fragment {
+public class ProductAdminFragment  extends Fragment {
 
 
     @Override
@@ -27,5 +26,4 @@ public class OfferCreatorFragment extends Fragment {
         super.onAttach(activity);
     }
 
-    
 }
