@@ -6,83 +6,28 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp" >
 
- 
+    <EditText
+        android:id="@+id/product_name"
+        style="@style/entity_edit"
+        android:ems="6"
+        android:hint="@string/product_name" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+    <EditText
+        android:id="@+id/product_description"
+        style="@style/entity_edit"
+        android:gravity="top"
+        android:hint="@string/product_description"
+        android:lines="5" />
 
-            <TextView
-                android:id="@+id/order_orderNum"
-                style="@style/entity_edit"
-                android:ems="6"
-                android:text="@string/order_number" />
+    <EditText
+        android:id="@+id/product_price_ht"
+        style="@style/entity_edit"
+        android:hint="@string/product_price_ht"
+        android:inputType="number" />
 
-            <TextView
-                android:id="@+id/order_orderNum_input"
-                style="@style/entity_edit"
-                android:layout_toRightOf="@id/order_orderNum"
-                android:hint="@string/order_number" />
-
-            <TextView
-                android:id="@+id/order_orderUuid"
-                style="@style/entity_edit"
-                android:layout_below="@id/order_orderNum"
-                android:text="@string/order_uuid" />
-
-            <TextView
-                android:id="@+id/order_orderUuid_input"
-                style="@style/entity_edit"
-                android:layout_alignLeft="@id/order_orderNum_input"
-                android:layout_below="@id/order_orderNum_input"
-                android:layout_toRightOf="@id/order_orderUuid"
-                android:hint="@string/order_uuid" />
-
-            <TextView
-                android:id="@+id/order_status"
-                style="@style/entity_edit"
-                android:layout_below="@id/order_orderUuid"
-                android:text="@string/order_status" />
-
-            <TextView
-                android:id="@+id/order_status_input"
-                style="@style/entity_edit"
-                android:layout_alignLeft="@id/order_orderUuid_input"
-                android:layout_below="@id/order_orderUuid_input"
-                android:layout_toRightOf="@id/order_status"
-                android:hint="@string/order_status" />
-
-            <TextView
-                android:id="@+id/order_date"
-                style="@style/entity_edit"
-                android:layout_below="@id/order_status"
-                android:text="@string/order_date" />
-
-            <TextView
-                android:id="@+id/order_date_input"
-                style="@style/entity_edit"
-                android:layout_alignLeft="@id/order_status_input"
-                android:layout_below="@id/order_status_input"
-                android:layout_toRightOf="@id/order_status"
-                android:hint="@string/order_date" />
-
-            <TextView
-                android:id="@+id/order_price"
-                style="@style/entity_edit"
-                android:layout_below="@id/order_date"
-                android:text="@string/order_price" />
-
-            <TextView
-                android:id="@+id/order_price_input"
-                style="@style/entity_edit"
-                android:layout_alignLeft="@id/order_date_input"
-                android:layout_below="@id/order_date_input"
-                android:layout_toRightOf="@id/order_date"
-                android:hint="@string/order_price" />
-        </RelativeLayout>
-
-   
- 
+    <EditText
+        android:id="@+id/product_tag"
+        style="@style/entity_edit"
+        android:hint="@string/product_tag" />
 
 </LinearLayout>

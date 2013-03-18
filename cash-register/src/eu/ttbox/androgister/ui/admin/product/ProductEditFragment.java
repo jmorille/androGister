@@ -16,6 +16,7 @@ import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.DaoSession;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.ProductDao;
+import eu.ttbox.androgister.model.PriceHelper;
 
 public class ProductEditFragment extends Fragment {
 
@@ -26,6 +27,9 @@ public class ProductEditFragment extends Fragment {
 
     // Binding
     private EditText nameText;
+    private EditText descText;
+    private EditText priceHTText;
+    private EditText tagText;
 
     // Instance
     private Product entity;
@@ -38,7 +42,11 @@ public class ProductEditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.product_edit, container, false);
         // Binding
-        // nameText = (EditText) v.findViewById(R.id.product_edit);
+        nameText = (EditText) v.findViewById(R.id.product_name);
+        descText = (EditText) v.findViewById(R.id.product_description);
+        priceHTText = (EditText) v.findViewById(R.id.product_price_ht);
+        tagText = (EditText) v.findViewById(R.id.product_tag);
+
         // Menu on Fragment
         setHasOptionsMenu(true);
         return v;
@@ -86,39 +94,47 @@ public class ProductEditFragment extends Fragment {
             entity = productDao.load(entityId);
             bindView(entity);
         } else {
-            Log.d(TAG, "Prepare new Entity" );
+            Log.d(TAG, "Prepare new Entity");
             // prepare for insert
             prepareInsert();
         }
     }
 
     private void prepareInsert() {
-          
+
     }
 
     private void bindView(Product entity) {
-        
+        nameText.setText(entity.getName());
+        descText.setText(entity.getDescription());
+        String priceString = PriceHelper.getToStringPrice(entity.getPriceHT());
+        priceHTText.setText(priceString);
+        tagText.setText(entity.getTag());
     }
-    
+
     // ===========================================================
     // Action
     // ===========================================================
 
-    
     public void onDeleteClick() {
-        
+
     }
-    
+
     public void onSaveClick() {
-        
+        entity.setName(nameText.getText().toString());
+        entity.setDescription(descText.getText().toString());
+        entity.setTag(tagText.getText().toString());
+        String priceString = priceHTText.getText().toString();
+        // save
+        productDao.update(entity);
     }
-    
+
     public void onCancelClick() {
-        
+
     }
-    
+
     // ===========================================================
     // Business
     // ===========================================================
- 
+
 }
