@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>eu.ttbox.androgister</groupId>
+		<artifactId>androgister</artifactId>
+		<version>0.0.1</version>
+ 	</parent>
+ 	
+	<groupId>eu.ttbox.androgister.domain</groupId>
+	<artifactId>model-generator</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1</version>
+ 	
+	<name>AndroGister - Model</name>
+ 
+
+	<properties>
+		<schema.version>1</schema.version>
+		<schema.package>${project.groupId}</schema.package>
+		<schema.output>${project.build.directory}/generated-model-sources</schema.output>
+		<schema.mainClass>eu.ttbox.androgister.database.GreenDaoInitializer</schema.mainClass>
+		<!-- Plugins -->
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
+		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version> 
+		
+	</properties>
+ 
+
+	<dependencies>
+		<!-- Android -->
+		<dependency>
+			<groupId>android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android.maps</groupId>
+			<artifactId>maps</artifactId>
+			<scope>provided</scope>
+		</dependency>
+ 
+		<!-- Database -->
+		<dependency>
+			<groupId>de.greenrobot</groupId>
+			<artifactId>greendao</artifactId>
+			<version>${greendao.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.greenrobot</groupId>
+			<artifactId>greendao-generator</artifactId>
+			<version>${greendao-generator.version}</version>
+		</dependency>
+
+	</dependencies>
+
+   <modules>
+		<module>model-builder</module>
+		<module>product-model</module>
+	</modules>
+	
+	 
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+				<configuration>
+					<show>public</show>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>

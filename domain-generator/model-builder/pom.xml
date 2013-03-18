@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>eu.ttbox.androgister.domain</groupId>
+		<artifactId>model-generator</artifactId>
+		<version>0.0.1</version>
+ 	</parent>
+ 	 
+	<artifactId>model-builder</artifactId>
+	<version>0.0.1</version>
+ 	
+	<name>AndroGister - Model Builder</name>
+ 
+ 
+ 
+
+	<dependencies>
+		<!-- Android -->
+		<dependency>
+			<groupId>android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency> 
+ 
+		<!-- Database --> 
+		<dependency>
+			<groupId>de.greenrobot</groupId>
+			<artifactId>greendao-generator</artifactId>
+			<version>${greendao-generator.version}</version>
+		</dependency>
+
+	</dependencies>
+
+ 
+</project>

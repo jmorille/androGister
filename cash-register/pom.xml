@@ -2,108 +2,96 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
+
+	<parent>
+		<groupId>eu.ttbox.androgister</groupId>
+		<artifactId>androgister</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+
 	<groupId>eu.ttbox.androgister</groupId>
-	<artifactId>androgister</artifactId>
+	<artifactId>cash-register</artifactId>
 	<version>0.0.1</version>
-	<packaging>pom</packaging>
-	
+	<packaging>apk</packaging>
 	<name>AndroGister</name>
 
 
-	<scm>
-		<connection>scm:git@github.com:jmorille/androGister.git</connection>
-		<url>scm:git@github.com:jmorille/androGister.git</url>
-		<developerConnection>scm:git@github.com:jmorille/androGister.git</developerConnection>
-	</scm>
 
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<dependencies>
 		<!-- Android -->
-		<android.version>4.2.2_r2</android.version> <!-- 4.1.2_r3 2.3.3 -->
-		<google.maps.version>17_r2</google.maps.version>
+		<dependency>
+			<groupId>android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android.maps</groupId>
+			<artifactId>maps</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-		<!-- Compatibility Api -->
-		<compatibility-v13.version>12</compatibility-v13.version>
-		<slidingmenu.version>1.2</slidingmenu.version>
+
+		<!-- Compatibility -->
+		<!-- <dependency> -->
+		<!-- <groupId>android.support</groupId> -->
+		<!-- <artifactId>compatibility-v13</artifactId> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>com.slidingmenu</groupId>
+			<artifactId>slidingmenu</artifactId>
+			<type>apklib</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.actionbarsherlock</groupId>
+					<artifactId>actionbarsherlock</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 		<!-- Database -->
-		<greendao.version>1.3.1</greendao.version>
-		<greendao-generator.version>1.3.0</greendao-generator.version>
+		<dependency>
+			<groupId>de.greenrobot</groupId>
+			<artifactId>greendao</artifactId>
+			<version>${greendao.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.ttbox.androgister.domain</groupId>
+			<artifactId>product-model</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>de.greenrobot</groupId>
+					<artifactId>greendao-generator</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-		<!-- Test -->
-		<junit.version>4.10</junit.version>
-
-		<!-- Release <github.global.server>github</github.global.server> <sign.alias>android</sign.alias> 
-			<build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version> 
-			<android-maven-plugin.version>3.3.0</android-maven-plugin.version> <maven-jarsigner-plugin.version>1.2</maven-jarsigner-plugin.version> -->
-
-
-		<!-- Release -->
-		<android-maven-plugin.version>3.5.1</android-maven-plugin.version> <!-- 3.5.1 -->
-		<android.sdk.platform>17</android.sdk.platform>
-		<sign.alias>android</sign.alias>
-
-	</properties>
-
-	<dependencyManagement>
-		<dependencies>
-			<!-- Android -->
-			<dependency>
-				<groupId>android</groupId>
-				<artifactId>android</artifactId>
-				<version>${android.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.google.android.maps</groupId>
-				<artifactId>maps</artifactId>
-				<version>${google.maps.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<!-- Compatibility -->
-			<!-- <dependency> -->
-			<!-- <groupId>android.support</groupId> -->
-			<!-- <artifactId>compatibility-v13</artifactId> -->
-			<!-- <version>${compatibility-v13.version}</version> -->
-			<!-- </dependency> -->
-			<!-- Sliding Memu -->
-			<dependency>
-				<groupId>com.slidingmenu</groupId>
-				<artifactId>slidingmenu</artifactId>
-				<version>${slidingmenu.version}</version>
-				<type>apklib</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>support-v4</artifactId>
-						<groupId>com.google.android</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>android</artifactId>
-						<groupId>com.google.android</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>maps</artifactId>
-						<groupId>com.google.android.maps</groupId>
-					</exclusion>
-				</exclusions>
-			</dependency>
+	</dependencies>
 
 
-		</dependencies>
-	</dependencyManagement>
- 
-   <modules>
-		<module>domain-generator</module>
-		<module>cash-register</module>
-	</modules>
-
-	<build> 
-
-		<pluginManagement>
-			<plugins>
-				<!-- Compiler -->
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<configuration>
+					<androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
+					<assetsDirectory>${project.basedir}/assets</assetsDirectory>
+					<resourceDirectory>${project.basedir}/res</resourceDirectory>
+					<!-- <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory> -->
+					<sdk>
+						<platform>${android.sdk.platform}</platform>
+						<path>${env.ANDROID_HOME}</path>
+					</sdk>
+					<deleteConflictingFiles>true</deleteConflictingFiles>
+					<undeployBeforeDeploy>true</undeployBeforeDeploy>
+				</configuration>
+				<extensions>true</extensions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
@@ -112,7 +100,10 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
 				<!-- http://maven-android-plugin-m2site.googlecode.com/svn/plugin-info.html -->
 				<plugin>
 					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
