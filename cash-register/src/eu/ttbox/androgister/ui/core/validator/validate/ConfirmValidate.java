@@ -39,7 +39,8 @@ public class ConfirmValidate implements ValidateField {
 
 
 	@Override
-	public void addValidator(Validator validator) {
+	public ConfirmValidate addValidator(Validator validator) {
+	    return this;
 	}
 
 	@Override

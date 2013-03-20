@@ -10,7 +10,7 @@ public interface ValidateField {
      * @param validator
      *            {@link Validator} : The validator to attach
      */
-    void addValidator(Validator validator);
+    ValidateField addValidator(Validator validator);
 
     /**
      * Function called when the {@link Form} validation

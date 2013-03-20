@@ -55,7 +55,8 @@ public class OrTwoRequiredValidate implements ValidateField {
     }
 
     @Override
-    public void addValidator(Validator validator) {
+    public OrTwoRequiredValidate addValidator(Validator validator) {
+        return this;
     }
 
     @Override

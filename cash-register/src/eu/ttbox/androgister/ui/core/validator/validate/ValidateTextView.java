@@ -28,7 +28,7 @@ public class ValidateTextView implements ValidateField {
     protected TextView mSource;
 
     public ValidateTextView(TextView source) {
-        this(source, false);
+        this(source, true);
     }
 
     public ValidateTextView(TextView source, boolean isTextWatcher) {
@@ -63,9 +63,9 @@ public class ValidateTextView implements ValidateField {
      * 
      * @param validator
      */
-    public void addValidator(Validator validator) {
+    public ValidateTextView addValidator(Validator validator) {
         this.mValidators.add(validator);
-        return;
+        return this;
     }
 
     public boolean isValid(CharSequence value) {
