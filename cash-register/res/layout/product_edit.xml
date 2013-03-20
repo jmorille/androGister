@@ -6,16 +6,17 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp" >
 
- 
     <EditText
         android:id="@+id/product_name"
         style="@style/entity_edit"
-        android:ems="6"
+        android:ems="25"
         android:hint="@string/product_name" />
 
     <EditText
         android:id="@+id/product_description"
         style="@style/entity_edit"
+        android:layout_height="wrap_content" 
+        android:ems="25"
         android:gravity="top"
         android:hint="@string/product_description"
         android:lines="5" />
@@ -24,11 +25,11 @@
         android:id="@+id/product_price_ht"
         style="@style/entity_edit"
         android:hint="@string/product_price_ht"
-        android:inputType="number" />
+        android:inputType="numberDecimal" />
 
     <EditText
         android:id="@+id/product_tag"
         style="@style/entity_edit"
-        android:hint="@string/product_tag" /> 
+        android:hint="@string/product_tag" />
 
 </LinearLayout>

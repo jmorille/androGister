@@ -1,30 +1,32 @@
 package eu.ttbox.androgister.ui.core.validator.validator;
 
-import android.content.Context;
-import eu.ttbox.androgister.ui.core.validator.AbstractValidator;
-import eu.ttbox.androgister.R;
-
 import java.util.regex.Pattern;
+
+import android.content.Context;
+import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.ui.core.validator.Validator;
 
 /**
  * Validator to check if a field contains only numbers and letters.
  * Avoids having special characters like accents.
  */
-public class AlnumValidator extends AbstractValidator{
+public class AlnumValidator implements Validator{
 
     /**
      * This si Alnum Pattern to verify value.
      */
     private static final Pattern mPattern = Pattern.compile("^[A-Za-z0-9]+$");
 
+    protected Context mContext;
     private int mErrorMessage = R.string.validator_alnum;
 
     public AlnumValidator(Context c) {
-        super(c);
+        super();
+        this.mContext = c;
     }
-
+ 
     @Override
-    public boolean isValid(String value) {
+    public boolean isValid(CharSequence value) {
         return mPattern.matcher(value).matches();
     }
 

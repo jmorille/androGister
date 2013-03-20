@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <fragment
-        android:id="@+id/fragment_register_person_list"
-        android:name="eu.ttbox.androgister.ui.person.PersonListFragment"
+        android:id="@+id/fragment_product_edit"
+        android:name="eu.ttbox.androgister.ui.admin.product.ProductEditFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
- 
+
 </LinearLayout>

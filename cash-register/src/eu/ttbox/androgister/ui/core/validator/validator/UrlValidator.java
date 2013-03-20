@@ -3,21 +3,23 @@ package eu.ttbox.androgister.ui.core.validator.validator;
 
 import android.content.Context;
 import android.webkit.URLUtil;
-
-import eu.ttbox.androgister.ui.core.validator.AbstractValidator;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.ui.core.validator.Validator;
 
-public class UrlValidator extends AbstractValidator {
+public class UrlValidator implements Validator {
 	private int mErrorMessage = R.string.validator_url;
 	
+	protected Context mContext;
+	
 	public UrlValidator(Context c) {
-		super(c);
+		super();
+		this.mContext = c;
 	}
 	
 	@Override
-	public boolean isValid(String url) {
+	public boolean isValid(CharSequence url) {
 		if(url.length() > 0){
-			if(URLUtil.isValidUrl(url))
+			if(URLUtil.isValidUrl(url.toString()))
 				return true;
 			else
 				return false;

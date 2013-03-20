@@ -1,79 +1,55 @@
 package eu.ttbox.androgister.ui.core.validator.validator;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.Context;
-
-import eu.ttbox.androgister.ui.core.validator.AbstractValidator;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.ui.core.validator.Validator;
 
-public class EmailValidator extends AbstractValidator {
+public class EmailValidator implements Validator {
 
-	private int mErrorMessage = R.string.validator_email;
-	
+    private int mErrorMessage = R.string.validator_email;
 
-	private String mDomainName = "";
-	
-	public EmailValidator(Context c) {
-		super(c);
-	}
-	
-	@Override
-	public boolean isValid(String charseq) {
-		if(charseq.length() > 0 ){
-			boolean matchFound = false;
-			
-			//Input the string for validation
-			String email = charseq.toString();
-			 
-			if(mDomainName != null && mDomainName.length() > 0){
-				//Test avec le domaine
-				
-			    //Set the email pattern string
-			    Pattern p = Pattern.compile(".+@"+mDomainName);
-			    //Match the given string with the pattern
-			    Matcher m = p.matcher(email);
-			    //check whether match is found 
-			    matchFound = m.matches();
-		
-			    if (matchFound)
-			        return true;
-			    else
-			        return false;
-			}else{
-				//test sans le domaine
-				
-			    //Set the email pattern string
-			    Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
-			    //Match the given string with the pattern
-			    Matcher m = p.matcher(email);
-			    //check whether match is found 
-			    matchFound = m.matches();
-			}
-			
-			if (matchFound)
-		        return true;
-		    else
-		        return false;
-		}else{
-			return true;
-		}
-	}
-	
-	@Override
-	public String getMessage() {
-		return mContext.getString(mErrorMessage);
-	}
-	
-	/**
-	 * Lets say that the email address must be valid for such domain.
-     * This function only accepts strings of Regexp
-	 * @param name Regexp Domain Name
-	 * 
-	 * example : gmail.com
-	 */
-	public void setDomainName(String name){
-		mDomainName = name;
-	}
+    protected Context mContext;
+    private String mDomainName = "";
+
+    Pattern mPattern;
+
+    public EmailValidator(Context c) {
+        super();
+        this.mContext = c;
+    }
+
+    /**
+     * Lets say that the email address must be valid for such domain. This
+     * function only accepts strings of Regexp
+     * 
+     * @param name
+     *            Regexp Domain Name
+     * 
+     *            example : gmail.com
+     */
+    public void setDomainName(String name) {
+        mDomainName = name;
+        if (mDomainName != null && mDomainName.length() > 0) {
+            mPattern = Pattern.compile(".+@" + mDomainName);
+        } else {
+            mPattern = Pattern.compile(".+@.+\\.[a-z]+");
+        }
+    }
+
+    @Override
+    public boolean isValid(CharSequence charseq) {
+        if (charseq.length() > 0) {
+            return mPattern.matcher(charseq).matches();
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public String getMessage() {
+        return mContext.getString(mErrorMessage);
+    }
+
 }

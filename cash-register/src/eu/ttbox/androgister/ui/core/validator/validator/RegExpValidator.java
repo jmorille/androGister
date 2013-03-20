@@ -1,7 +1,7 @@
 package eu.ttbox.androgister.ui.core.validator.validator;
 
 import android.content.Context;
-import eu.ttbox.androgister.ui.core.validator.AbstractValidator;
+import eu.ttbox.androgister.ui.core.validator.Validator;
 import eu.ttbox.androgister.ui.core.validator.ValidatorException;
 import eu.ttbox.androgister.R;
 
@@ -10,15 +10,17 @@ import java.util.regex.Pattern;
 /**
  * This validator test value with custom Regex Pattern.
  */
-public class RegExpValidator extends AbstractValidator {
+public class RegExpValidator implements Validator {
 
-
+    protected Context mContext;
+    
     private Pattern mPattern;
 
     private int mErrorMessage = R.string.validator_regexp;
 
     public RegExpValidator(Context c) {
-        super(c);
+        super();
+        this.mContext = c;
     }
 
     public void setPattern(String pattern){
@@ -26,7 +28,7 @@ public class RegExpValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean isValid(String value) throws ValidatorException {
+    public boolean isValid(CharSequence value) throws ValidatorException {
         if(mPattern != null){
             return mPattern.matcher(value).matches();
         }else{

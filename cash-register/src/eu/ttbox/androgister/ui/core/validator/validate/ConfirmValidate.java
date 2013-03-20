@@ -3,11 +3,11 @@ package eu.ttbox.androgister.ui.core.validator.validate;
 import android.content.Context;
 import android.widget.TextView;
 
-import eu.ttbox.androgister.ui.core.validator.AbstractValidate;
-import eu.ttbox.androgister.ui.core.validator.AbstractValidator;
+import eu.ttbox.androgister.ui.core.validator.ValidateField;
+import eu.ttbox.androgister.ui.core.validator.Validator;
 import eu.ttbox.androgister.R;
 
-public class ConfirmValidate extends AbstractValidate {
+public class ConfirmValidate implements ValidateField {
 
 	private TextView _field1;
 	private TextView _field2;
@@ -23,8 +23,8 @@ public class ConfirmValidate extends AbstractValidate {
 	}
 
 	@Override
-	public boolean isValid(String value) {
-		if(_field1.getText().toString().length() > 0 && _field1.getText().toString().equals(_field2.getText().toString())){
+	public boolean isValid(CharSequence value) {
+		if(_field1.getText().length() > 0 && _field1.getText().equals(_field2.getText() )){
 			return true;
 		}else{
 			return false;
@@ -33,14 +33,13 @@ public class ConfirmValidate extends AbstractValidate {
 
 
 	@Override
-	public String getMessages() {
-		// TODO Auto-generated method stub
+	public String getMessages() { 
 		return mContext.getString(_errorMessage);
 	}
 
 
 	@Override
-	public void addValidator(AbstractValidator validator) {
+	public void addValidator(Validator validator) {
 	}
 
 	@Override

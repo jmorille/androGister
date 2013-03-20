@@ -34,7 +34,7 @@ public class ProductAdminFragment extends Fragment {
     ProductListAdapter listAdapter;
 
     // ===========================================================
-    // Constructors
+    // Constructor
     // ===========================================================
 
     @Override

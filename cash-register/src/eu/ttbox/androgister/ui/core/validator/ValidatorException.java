@@ -1,6 +1,6 @@
 package eu.ttbox.androgister.ui.core.validator;
 
-public class ValidatorException extends java.lang.Exception{
+public class ValidatorException extends java.lang.Exception {
     private static final long serialVersionUID = 1L;
 
     public ValidatorException() {
