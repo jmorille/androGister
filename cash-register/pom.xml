@@ -15,7 +15,8 @@
 	<artifactId>cash-register</artifactId>
 	<version>0.0.1</version>
 	<packaging>apk</packaging>
-	<name>AndroGister</name>
+   
+	<name>AndroGister - Cash Register</name>
 
 
 
@@ -34,9 +35,9 @@
 
 
 		<!-- Compatibility -->
-		<dependency>
+		<dependency> 
 			<groupId>android.support</groupId>
-			<artifactId>compatibility-v13</artifactId>
+			<artifactId>compatibility-v13</artifactId> 
 		</dependency>
 		<dependency>
 			<groupId>com.slidingmenu</groupId>

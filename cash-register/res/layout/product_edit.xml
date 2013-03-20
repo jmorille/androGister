@@ -6,6 +6,7 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp" >
 
+ 
     <EditText
         android:id="@+id/product_name"
         style="@style/entity_edit"
@@ -28,6 +29,6 @@
     <EditText
         android:id="@+id/product_tag"
         style="@style/entity_edit"
-        android:hint="@string/product_tag" />
+        android:hint="@string/product_tag" /> 
 
 </LinearLayout>

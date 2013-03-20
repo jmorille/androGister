@@ -5,8 +5,7 @@ import android.view.View;
 import eu.ttbox.androgister.R;
 
 /**
- * {link http://developer.android.com/guide/topics/text/creating-input-method.html}
- * @author a000cqp
+ * {link http://developer.android.com/guide/topics/text/creating-input-method.html} 
  *
  */
 public class BasketInputMethodService extends InputMethodService {

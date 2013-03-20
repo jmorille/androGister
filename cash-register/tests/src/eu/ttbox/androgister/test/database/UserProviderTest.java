@@ -10,9 +10,7 @@ import eu.ttbox.androgister.database.user.UserDatabase.UserColumns;
 
 /**
  * {link http://developer.android.com/tools/testing/index.html}
- * 
- * @author a000cqp
- * 
+ *  
  */
 public class UserProviderTest extends ProviderTestCase2<UserProvider> {
 

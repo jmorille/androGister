@@ -62,7 +62,7 @@
 				<version>${google.maps.version}</version>
 				<scope>provided</scope>
 			</dependency>
-			<!-- Compatibility -->
+			<!-- Compatibility --> 
 			<dependency>
 			<groupId>android.support</groupId>  
 			<artifactId>compatibility-v13</artifactId>  

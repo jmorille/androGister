@@ -70,12 +70,12 @@
     <string name="person_firstname">Prénom</string>
     <string name="person_lastname">Nom de famille</string>
     <string name="person_matricule">Maticule</string>
-
-     <!-- Model Product -->
-    <string name="product_name">Nom du produit</string>
-    <string name="product_description">Desc du produit</string>
-    <string name="product_price_ht">Prix Hors Taxe</string>
-    <string name="product_tag">Tag du Produit</string>
+ 
     
+    <!-- Model Product -->
+    <string name="product_name">Nom du Produit</string>
+    <string name="product_description">Description du Produit</string>
+    <string name="product_price_ht">Prix HT</string>
+    <string name="product_tag">Etiquette du produit</string> 
     
 </resources>
