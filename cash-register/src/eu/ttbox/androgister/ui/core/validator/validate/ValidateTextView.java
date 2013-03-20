@@ -14,11 +14,11 @@ import android.widget.TextView;
 
 public class ValidateTextView implements ValidateField {
 
-    private static final String TAG = "Validate";
+    private static final String TAG = "ValidateTextView";
     /**
      * Validator chain
      */
-    protected ArrayList<Validator> _validators = new ArrayList<Validator>();
+    protected ArrayList<Validator> mValidators = new ArrayList<Validator>();
 
     /**
      * Validation failure messages
@@ -64,7 +64,7 @@ public class ValidateTextView implements ValidateField {
      * @param validator
      */
     public void addValidator(Validator validator) {
-        this._validators.add(validator);
+        this.mValidators.add(validator);
         return;
     }
 
@@ -72,7 +72,7 @@ public class ValidateTextView implements ValidateField {
         boolean result = true;
         this.mMessage = "";
 
-        Iterator<Validator> it = this._validators.iterator();
+        Iterator<Validator> it = this.mValidators.iterator();
         while (it.hasNext()) {
             Validator validator = it.next();
             try {

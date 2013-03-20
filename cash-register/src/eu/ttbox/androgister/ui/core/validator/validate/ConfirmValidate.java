@@ -9,22 +9,22 @@ import eu.ttbox.androgister.R;
 
 public class ConfirmValidate implements ValidateField {
 
-	private TextView _field1;
-	private TextView _field2;
+	private TextView mField1;
+	private TextView mField2;
 	private Context mContext;
 	private TextView source;
-	private int _errorMessage = R.string.validator_confirm;
+	private int mErrorMessage = R.string.validator_confirm;
 	
 	public ConfirmValidate(TextView field1, TextView field2){
-		this._field1 = field1;
-		this._field2 = field2;
-		source = _field2;
+		this.mField1 = field1;
+		this.mField2 = field2;
+		source = mField2;
 		mContext = field1.getContext();
 	}
 
 	@Override
 	public boolean isValid(CharSequence value) {
-		if(_field1.getText().length() > 0 && _field1.getText().equals(_field2.getText() )){
+		if(mField1.getText().length() > 0 && mField1.getText().equals(mField2.getText() )){
 			return true;
 		}else{
 			return false;
@@ -34,7 +34,7 @@ public class ConfirmValidate implements ValidateField {
 
 	@Override
 	public String getMessages() { 
-		return mContext.getString(_errorMessage);
+		return mContext.getString(mErrorMessage);
 	}
 
 
