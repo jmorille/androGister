@@ -17,7 +17,7 @@ import android.widget.TextView;
  */
 public class Form {
 
-	protected ArrayList<ValidateField> _validates = new ArrayList<ValidateField>();
+	protected ArrayList<ValidateField> mValidates = new ArrayList<ValidateField>();
 	
 	/**
 	 * Function adding Validates to our form
@@ -25,7 +25,7 @@ public class Form {
      *   {@link ValidateField} Validate to add
 	 */
 	public void addValidates(ValidateField validate){
-		this._validates.add(validate);
+		this.mValidates.add(validate);
 		return;
 	}
 	
@@ -38,12 +38,12 @@ public class Form {
 	 */
 	public boolean validate(){
 		boolean result = true;
-		Iterator<ValidateField> it = this._validates.iterator();
+		Iterator<ValidateField> it = this.mValidates.iterator();
 		while(it.hasNext()){
 			ValidateField validator = it.next();
 			TextView field = validator.getSource();
 			field.setError(null);
-			if(!validator.isValid(field.getText().toString())){
+			if(!validator.isValid(field.getText() )){
 				result = false;
 				field.setError(validator.getMessages());
 			}

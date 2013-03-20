@@ -1,10 +1,10 @@
 package eu.ttbox.androgister.ui.core.validator.validator;
 
-import android.content.Context;
-import eu.ttbox.androgister.ui.core.validator.Validator;
-import eu.ttbox.androgister.R;
-
 import java.util.regex.Pattern;
+
+import android.content.Context;
+import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.ui.core.validator.Validator;
 
 
 public class HexValidator implements Validator {
