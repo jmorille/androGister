@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/fragment_offer_referential_list"
-        android:name="eu.ttbox.androgister.ui.admin.product.ProductAdminFragment"
+        android:name="eu.ttbox.androgister.ui.admin.product.ProductListFragment"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent" />

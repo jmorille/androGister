@@ -291,7 +291,8 @@ public class RegisterBasketFragment extends Fragment {
                 }
             }
             
-        }
+        } 
+        super.onActivityResult(requestCode, resultCode, data);
     }
  
 

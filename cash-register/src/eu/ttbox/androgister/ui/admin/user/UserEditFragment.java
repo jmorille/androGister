@@ -168,10 +168,8 @@ public class UserEditFragment extends  Fragment {
 				Log.e(TAG, "onActivityResult pickImage FileNotFoundException : " + e.getMessage(), e);
 			} catch (IOException e) {
 				Log.e(TAG, "onActivityResult pickImage IOException : " + e.getMessage(), e);
-			}
-
-		}
-
+			} 
+		} 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	

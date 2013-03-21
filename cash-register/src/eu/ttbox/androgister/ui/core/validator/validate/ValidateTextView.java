@@ -1,6 +1,7 @@
 package eu.ttbox.androgister.ui.core.validator.validate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import android.content.Context;
@@ -27,13 +28,14 @@ public class ValidateTextView implements ValidateField {
 
     protected TextView mSource;
     private Context mContext;
-    
+
     public ValidateTextView(TextView source) {
         this(source, true);
     }
 
     public ValidateTextView(TextView source, boolean isTextWatcher) {
         this.mSource = source;
+        this.mContext = source.getContext();
         if (isTextWatcher) {
             this.mSource.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -66,6 +68,13 @@ public class ValidateTextView implements ValidateField {
      */
     public ValidateTextView addValidator(Validator validator) {
         this.mValidators.add(validator);
+        return this;
+    }
+
+    public ValidateTextView addValidator(Validator... validator) {
+        if (validator != null && validator.length > 0) {
+            this.mValidators.addAll(Arrays.asList(validator));
+        }
         return this;
     }
 
