@@ -32,14 +32,12 @@ public class OrTwoRequiredValidate implements ValidateField {
     }
 
     @Override
-    public boolean isValid(CharSequence value) {
-        NotEmptyValidator notEmptyValidator =   new NotEmptyValidator(mContext);
-        
+    public boolean isValid(CharSequence value) { 
         ValidateTextView field1Validator = new ValidateTextView(mField1);
-        field1Validator.addValidator(notEmptyValidator);
+        field1Validator.addValidator(new NotEmptyValidator(mContext));
 
         ValidateTextView field2Validator = new ValidateTextView(mField2);
-        field2Validator.addValidator(notEmptyValidator);
+        field2Validator.addValidator(new NotEmptyValidator(mContext));
 
         if (field1Validator.isValid(mField1.getText() ) || field2Validator.isValid(mField2.getText() )) {
             return true;
