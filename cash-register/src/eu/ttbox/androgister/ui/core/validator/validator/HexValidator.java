@@ -14,12 +14,11 @@ public class HexValidator implements Validator {
      */
     private static final Pattern mPattern = Pattern.compile("^(#|)[0-9A-Fa-f]+$");
 
-    protected Context mContext;
+  
     private int mErrorMessage = R.string.validator_alnum;
 
-    public HexValidator(Context c) {
-        super();
-        this.mContext = c;
+    public HexValidator( ) {
+        super(); 
     }
 
     @Override
@@ -28,7 +27,7 @@ public class HexValidator implements Validator {
     }
 
     @Override
-    public String getMessage() {
-        return mContext.getString(mErrorMessage);
+    public String getMessage(Context context) {
+        return context.getString(mErrorMessage);
     }
 }

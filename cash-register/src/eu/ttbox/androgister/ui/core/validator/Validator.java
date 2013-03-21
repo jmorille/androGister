@@ -1,5 +1,7 @@
 package eu.ttbox.androgister.ui.core.validator;
 
+import android.content.Context;
+
 /**
  * Class for creating new Validators
  * 
@@ -22,5 +24,5 @@ public interface Validator {
      * 
      * @return String : the error message
      */
-    String getMessage();
+    String getMessage(Context context);
 }

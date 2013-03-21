@@ -61,29 +61,28 @@ public class ProductEditFragment extends Fragment {
         return v;
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-       
+
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.d(TAG, "onActivityCreated BEGIN");
         super.onActivityCreated(savedInstanceState);
- 
+
         // Service
         AndroGisterApplication app = (AndroGisterApplication) getActivity().getApplication();
         daoSession = app.getDaoSession();
         productDao = daoSession.getProductDao();
         // Form
         createValidator(getActivity());
-        
+
         // Load Data
         // Bundle args = getArguments();
         // loadEntity(args);
     }
-
 
     // ===========================================================
     // Menu
@@ -152,7 +151,8 @@ public class ProductEditFragment extends Fragment {
         mForm = new Form();
         Log.d(TAG, " Validate nameTextField : " + nameText);
         ValidateTextView nameTextField = new ValidateTextView(nameText);
-        nameTextField.addValidator(new NotEmptyValidator(context));
+        nameTextField//
+                .addValidator(new NotEmptyValidator());
         mForm.addValidates(nameTextField);
     }
 

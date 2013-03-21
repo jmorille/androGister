@@ -9,11 +9,10 @@ import eu.ttbox.androgister.ui.core.validator.Validator;
 public class UrlValidator implements Validator {
 	private int mErrorMessage = R.string.validator_url;
 	
-	protected Context mContext;
+	 
 	
-	public UrlValidator(Context c) {
-		super();
-		this.mContext = c;
+	public UrlValidator( ) {
+		super(); 
 	}
 	
 	@Override
@@ -29,8 +28,8 @@ public class UrlValidator implements Validator {
 	}
 
 	@Override
-	public String getMessage() {
-		return mContext.getString(mErrorMessage);
+	public String getMessage(Context context) {
+		return context.getString(mErrorMessage);
 	}
 
 }

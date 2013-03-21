@@ -24,9 +24,9 @@ public class Form {
 	 * @param validate
      *   {@link ValidateField} Validate to add
 	 */
-	public void addValidates(ValidateField validate){
+	public Form addValidates(ValidateField validate){
 		this.mValidates.add(validate);
-		return;
+		return this;
 	}
 	
 	/**

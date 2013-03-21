@@ -3,14 +3,14 @@ package eu.ttbox.androgister.ui.core.validator.validate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import eu.ttbox.androgister.ui.core.validator.ValidateField;
-import eu.ttbox.androgister.ui.core.validator.Validator;
-import eu.ttbox.androgister.ui.core.validator.ValidatorException;
-
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.TextView;
+import eu.ttbox.androgister.ui.core.validator.ValidateField;
+import eu.ttbox.androgister.ui.core.validator.Validator;
+import eu.ttbox.androgister.ui.core.validator.ValidatorException;
 
 public class ValidateTextView implements ValidateField {
 
@@ -26,7 +26,8 @@ public class ValidateTextView implements ValidateField {
     protected String mMessage = "";
 
     protected TextView mSource;
-
+    private Context mContext;
+    
     public ValidateTextView(TextView source) {
         this(source, true);
     }
@@ -77,7 +78,7 @@ public class ValidateTextView implements ValidateField {
             Validator validator = it.next();
             try {
                 if (!validator.isValid(value)) {
-                    this.mMessage = validator.getMessage();
+                    this.mMessage = validator.getMessage(mContext);
                     result = false;
                     break;
                 }

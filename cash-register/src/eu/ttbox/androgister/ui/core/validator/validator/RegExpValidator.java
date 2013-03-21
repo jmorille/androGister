@@ -1,26 +1,23 @@
 package eu.ttbox.androgister.ui.core.validator.validator;
 
+import java.util.regex.Pattern;
+
 import android.content.Context;
+import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.ui.core.validator.Validator;
 import eu.ttbox.androgister.ui.core.validator.ValidatorException;
-import eu.ttbox.androgister.R;
-
-import java.util.regex.Pattern;
 
 /**
  * This validator test value with custom Regex Pattern.
  */
 public class RegExpValidator implements Validator {
-
-    protected Context mContext;
-    
+   
     private Pattern mPattern;
 
     private int mErrorMessage = R.string.validator_regexp;
 
-    public RegExpValidator(Context c) {
-        super();
-        this.mContext = c;
+    public RegExpValidator( ) {
+        super(); 
     }
 
     public void setPattern(String pattern){
@@ -37,7 +34,7 @@ public class RegExpValidator implements Validator {
     }
 
     @Override
-    public String getMessage() {
-        return mContext.getString(mErrorMessage);
+    public String getMessage(Context context) {
+        return context.getString(mErrorMessage);
     }
 }

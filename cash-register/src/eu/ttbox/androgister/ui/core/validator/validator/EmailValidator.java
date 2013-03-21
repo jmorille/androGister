@@ -9,15 +9,13 @@ import eu.ttbox.androgister.ui.core.validator.Validator;
 public class EmailValidator implements Validator {
 
     private int mErrorMessage = R.string.validator_email;
-
-    protected Context mContext;
+ 
     private String mDomainName = "";
 
     Pattern mPattern;
 
-    public EmailValidator(Context c) {
-        super();
-        this.mContext = c;
+    public EmailValidator( ) {
+        super(); 
     }
 
     /**
@@ -48,8 +46,8 @@ public class EmailValidator implements Validator {
     }
 
     @Override
-    public String getMessage() {
-        return mContext.getString(mErrorMessage);
+    public String getMessage(Context context) {
+        return context.getString(mErrorMessage);
     }
 
 }

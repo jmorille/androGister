@@ -9,11 +9,10 @@ public class NotEmptyValidator implements Validator {
 
     private int mErrorMessage = R.string.validator_empty;
 
-    protected Context mContext;
+   
 
-    public NotEmptyValidator(Context c) {
-        super();
-        this.mContext = c;
+    public NotEmptyValidator( ) {
+        super(); 
     }
 
     @Override
@@ -22,8 +21,8 @@ public class NotEmptyValidator implements Validator {
     }
 
     @Override
-    public String getMessage() {
-        return mContext.getString(mErrorMessage);
+    public String getMessage(Context context) {
+        return context.getString(mErrorMessage);
     }
 
 }
