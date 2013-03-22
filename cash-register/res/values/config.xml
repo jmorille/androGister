@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    
+     <!-- Release SHA1 : 0E:56:F0:32:85:A7:71:0B:87:7E:2C:14:9A:26:0F:7A:81:43:75:FA -->
+     <!--   <string name="oauth2_apiKey">id=514141166810</string> --> 
+
+        
+    <!-- Mac 95:A3:F6:38:01:EB:76:C8:9D:BE:9B:43:D7:8A:31:7D -->
+    <string name="oauth2_apiKey"></string>
+    
+    
+    <!-- Job SHA1 : 52:C5:BA:52:D4:49:A7:03:62:11:D2:F2:56:E2:E2:06:98:83:79:B1 -->
+<!--     <string name="oauth2_apiKey"></string> -->
    
 </resources>

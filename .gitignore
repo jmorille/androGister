@@ -22,3 +22,6 @@ local.properties
 .project
 .settings/
 lint.xml
+
+# Google 
+.google_apis
