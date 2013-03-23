@@ -6,6 +6,9 @@
     <string name="pickerNewEntityText">"Créer un nouveau enregistrement"</string>
 
     <!-- Action -->
+
+
+    <!-- Action -->
     <string name="add">Ajouter</string>
     <string name="edit">Editer</string>
     <string name="delete">Supprimer</string>
@@ -20,14 +23,12 @@
     <!-- Search -->
     <string name="search_person_label">Rechercher une personne</string>
     <string name="search_person_hint">Rech. nom ou un matricule</string>
-
     <string name="search_user_label">Rechercher un utilisateur</string>
     <string name="search_user_hint">Rech. un utilisateur</string>
-   
-    
-   <!-- Notification -->
+
+    <!-- Notification -->
     <string name="order_service_notification_started">Androgister Service démarré</string>
-   
+
     <!-- Preference -->
     <string name="pref_category_general">Général</string>
     <string name="pref_device_id">Identifiant Machine</string>
@@ -60,6 +61,11 @@
         <item quantity="one">Un résultat trouvé: </item>
         <item quantity="other">%1$d résultats trouvés: </item>
     </plurals>
+    <string name="item_selected_title">Items Sélectionnés</string>
+    <plurals name="item_selected">
+        <item quantity="one">1 sélectionné</item>
+        <item quantity="other">%d sélectionnés</item>
+    </plurals>
 
     <!-- Model User -->
     <string name="user_firstname">Prénom</string>
@@ -70,12 +76,11 @@
     <string name="person_firstname">Prénom</string>
     <string name="person_lastname">Nom de famille</string>
     <string name="person_matricule">Maticule</string>
- 
-    
+
     <!-- Model Product -->
     <string name="product_name">Nom du Produit</string>
     <string name="product_description">Description du Produit</string>
     <string name="product_price_ht">Prix HT</string>
-    <string name="product_tag">Etiquette du produit</string> 
-    
+    <string name="product_tag">Etiquette du produit</string>
+
 </resources>
