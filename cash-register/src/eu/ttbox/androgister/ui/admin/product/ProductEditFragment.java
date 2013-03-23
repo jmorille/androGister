@@ -111,9 +111,9 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         formValidator.addValidates(priceTextField);
 
         // Tag
-//        ValidateTextView tagTextField = new ValidateTextView(tagSpinner)//
-//        .addValidator(new NotEmptyValidator());
-        
+        // ValidateTextView tagTextField = new ValidateTextView(tagSpinner)//
+        // .addValidator(new NotEmptyValidator());
+
         return formValidator;
     }
 
@@ -129,9 +129,9 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         // PriceHelper.getToStringPrice(entity.getPriceHT());
         String priceString = entity.getPriceHT() != null ? entity.getPriceHT().toString() : null;
         priceHTText.setText(priceString);
-        
-        // Tag 
-         if (entity.getTagId() != null) {
+
+        // Tag
+        if (entity.getTagId() != null) {
             long tagId = entity.getTagId().longValue();
             for (int i = 0; i < tagListAdapter.getCount(); i++) {
                 if (tagListAdapter.getItemId(i) == tagId) {
@@ -150,6 +150,10 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         String priceString = priceHTText.getText().toString();
         Long priceHt = Long.parseLong(priceString);
         entity.setPriceHT(priceHt);
+        //
+        Long selectedTagId = Long.valueOf(tagSpinner.getSelectedItemId());
+        entity.setTagId(selectedTagId);
+
         return entity;
     }
 
