@@ -5,15 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.util.Log;
 import eu.ttbox.androgister.domain.DaoMaster.DevOpenHelper;
-import eu.ttbox.androgister.domain.dao.bootstrap.ProductDbBootstrap;
+import eu.ttbox.androgister.domain.dao.bootstrap.DbBootstrapLoader;
 
 public class RegisterDbOpenHelper extends DevOpenHelper {
 
     private static final String TAG = "RegisterDbOpenHelper";
-    
+
     // Config
     public static final String DATABASE_NAME = "register-db";
-    
+
     // Instance
     private Context context;
 
@@ -27,7 +27,7 @@ public class RegisterDbOpenHelper extends DevOpenHelper {
         super.onCreate(db);
         // Bootstrap
         Log.d(TAG, "onCreate : init ProductDbBootstrap");
-        new ProductDbBootstrap(context, db).loadDataInDb();
+        DbBootstrapLoader.loadData(context, db);
     }
 
     @Override

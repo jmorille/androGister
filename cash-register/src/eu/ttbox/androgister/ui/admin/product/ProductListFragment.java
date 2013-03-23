@@ -40,6 +40,13 @@ public class ProductListFragment extends EntityLazyListFragment<Product> {
     // Instance
     ProductListAdapter listAdapter;
 
+    
+
+    // ===========================================================
+    // Event
+    // ===========================================================
+
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.w(TAG, "onActivityResult :  requestCode = " + requestCode + "  ==> resultCode = " + resultCode);
@@ -186,7 +193,7 @@ public class ProductListFragment extends EntityLazyListFragment<Product> {
         ProductListAdapter oldListAdapter = listAdapter;
         // Search The List
         LazyList<Product> products = productDao.queryBuilder() //
-                .orderAsc(Properties.Tag, Properties.Description) //
+                .orderAsc(Properties.Name, Properties.Description) //
                 .listLazy();
         listAdapter = new ProductListAdapter(getActivity(), products);
         productList.setAdapter(listAdapter);

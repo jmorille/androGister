@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.ProductDao;
+import eu.ttbox.androgister.domain.TagDao;
 import eu.ttbox.androgister.ui.core.crud.EntityEditFragment;
 import eu.ttbox.androgister.ui.core.validator.Form;
 import eu.ttbox.androgister.ui.core.validator.validate.ValidateTextView;
@@ -20,11 +22,16 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
     private static final String TAG = "ProductEditFragment";
 
+    // service
+    private TagDao tagDao;
+
     // Binding
     private EditText nameText;
     private EditText descText;
     private EditText priceHTText;
     private EditText tagText;
+
+    private Spinner tagSpinner;
 
     // ===========================================================
     // Constructors
@@ -39,6 +46,10 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         descText = (EditText) v.findViewById(R.id.product_description);
         priceHTText = (EditText) v.findViewById(R.id.product_price_ht);
         tagText = (EditText) v.findViewById(R.id.product_tag);
+        tagSpinner = (Spinner) v.findViewById(R.id.product_tag_spinner);
+
+        // Load Spinner
+        tagDao = getDaoSession().getTagDao();
 
         // Menu on Fragment
         setHasOptionsMenu(true);
@@ -71,7 +82,7 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
                 .addValidator(new NumberValidator());
         formValidator.addValidates(nameTextField);
         formValidator.addValidates(priceTextField);
-        
+
         return formValidator;
     }
 
@@ -87,14 +98,14 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         // PriceHelper.getToStringPrice(entity.getPriceHT());
         String priceString = entity.getPriceHT() != null ? entity.getPriceHT().toString() : null;
         priceHTText.setText(priceString);
-        tagText.setText(entity.getTag());
+        // tagText.setText(entity.getTag());
     }
 
     @Override
     public Product bindValue(Product entity) {
         entity.setName(nameText.getText().toString());
         entity.setDescription(descText.getText().toString());
-        entity.setTag(tagText.getText().toString());
+        // entity.setTag(tagText.getText().toString());
         String priceString = priceHTText.getText().toString();
         Long priceHt = Long.parseLong(priceString);
         entity.setPriceHT(priceHt);

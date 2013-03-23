@@ -24,9 +24,13 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
         mLayout = mDropDownLayout = layout;
         this.lazyList = lazyList;
         this.dataValid = lazyList != null;
-        this.context = context; 
+        this.context = context;
     }
-    
+
+    public void setDropDownViewResource(int dropDownLayout) {
+        this.mDropDownLayout = dropDownLayout;
+    }
+
     public void close() {
         lazyList.close();
     }
@@ -101,7 +105,7 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
 
         View v;
         if (convertView == null) {
-            v = newView(context, item, parent);
+            v = newView(context, item, parent, mLayout);
         } else {
             v = convertView;
         }
@@ -138,8 +142,9 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
      *            The parent to which the new view is attached to
      * @return the newly created view.
      */
-    public View newView(Context context, T item, ViewGroup parent) {
-        View view = mInflater.inflate(mLayout, parent, false);
+
+    public View newView(Context context, T item, ViewGroup parent, int layoutResourceId) {
+        View view = mInflater.inflate(layoutResourceId, parent, false);
         VIEW_HOLDER holder = newViewHolder(view, context, item, parent);
         view.setTag(holder);
         return view;
@@ -159,7 +164,7 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
      * @return the newly created view.
      */
     public View newDropDownView(Context context, T item, ViewGroup parent) {
-        return newView(context, item, parent);
+        return newView(context, item, parent, mDropDownLayout);
     }
 
     /**
@@ -172,8 +177,9 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
      * @param cursor
      *            The object that contains the data
      */
+    @SuppressWarnings("unchecked")
     public void bindView(View view, Context context, T item) {
-        VIEW_HOLDER holder = (VIEW_HOLDER)view.getTag();
+        VIEW_HOLDER holder = (VIEW_HOLDER) view.getTag();
         bindView(view, holder, context, item);
     }
 

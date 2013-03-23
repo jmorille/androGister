@@ -34,4 +34,10 @@
         android:ems="25"
         android:hint="@string/product_tag" />
 
+    <Spinner
+        android:id="@+id/product_tag_spinner"
+         android:ems="25"
+          android:hint="@string/product_tag"
+        style="@style/entity_edit" />
+
 </LinearLayout>

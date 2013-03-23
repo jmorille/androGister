@@ -1,0 +1,24 @@
+Pomme-301-125
+Banane-301-125
+Coupe Fruit-301-125
+Yahourt Nature-301-125
+Yahourt Fruit-301-125
+Activia Nature-301-125
+Activia Fruit-301-125
+Crumble Fruit rouge-300-250
+Tarte Tatin-300-190
+Evian 125ml-400-450
+Vittel 125ml-400-50
+Perrier 125ml-400-50
+Minute Maid-400-60
+Coca Cola-400-65
+Biere-400-150
+Vin 33cl-400-120
+Mix Brochette-200-320
+Truite Grillé-200-410
+Chili Con Carne-200-215
+Entrecote-200-215
+Petite Salade-100-85
+Grande Salade-100-110
+Soupe Légume-100-60
+Charcuterie-100-90
