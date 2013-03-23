@@ -6,12 +6,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.Spinner;
+import de.greenrobot.dao.query.LazyList;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.ProductDao;
+import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
+import eu.ttbox.androgister.ui.admin.tag.TagListAdapter;
 import eu.ttbox.androgister.ui.core.crud.EntityEditFragment;
 import eu.ttbox.androgister.ui.core.validator.Form;
 import eu.ttbox.androgister.ui.core.validator.validate.ValidateTextView;
@@ -33,6 +38,9 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
     private Spinner tagSpinner;
 
+    // Instance
+    TagListAdapter tagListAdapter;
+
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -48,12 +56,30 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         tagText = (EditText) v.findViewById(R.id.product_tag);
         tagSpinner = (Spinner) v.findViewById(R.id.product_tag_spinner);
 
+        // Listener
+        tagSpinner.setOnItemSelectedListener(tagOnItemSelectedListener);
+
         // Load Spinner
         tagDao = getDaoSession().getTagDao();
+        LazyList<Tag> tags = tagDao.queryBuilder()//
+                .orderAsc(TagDao.Properties.Name) //
+                .listLazy();
+        tagListAdapter = new TagListAdapter(getActivity(), tags);
+        tagSpinner.setAdapter(tagListAdapter);
 
         // Menu on Fragment
         setHasOptionsMenu(true);
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (tagListAdapter != null) {
+            // Close LazyListAdpater for closing LazyList
+            tagListAdapter.close();
+            tagListAdapter = null;
+        }
+        super.onDestroyView();
     }
 
     @Override
@@ -76,13 +102,18 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         // Name
         ValidateTextView nameTextField = new ValidateTextView(nameText)//
                 .addValidator(new NotEmptyValidator());
+        formValidator.addValidates(nameTextField);
+
         // Price
         ValidateTextView priceTextField = new ValidateTextView(priceHTText)//
                 .addValidator(new NotEmptyValidator()) //
                 .addValidator(new NumberValidator());
-        formValidator.addValidates(nameTextField);
         formValidator.addValidates(priceTextField);
 
+        // Tag
+//        ValidateTextView tagTextField = new ValidateTextView(tagSpinner)//
+//        .addValidator(new NotEmptyValidator());
+        
         return formValidator;
     }
 
@@ -98,7 +129,17 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         // PriceHelper.getToStringPrice(entity.getPriceHT());
         String priceString = entity.getPriceHT() != null ? entity.getPriceHT().toString() : null;
         priceHTText.setText(priceString);
-        // tagText.setText(entity.getTag());
+        
+        // Tag 
+         if (entity.getTagId() != null) {
+            long tagId = entity.getTagId().longValue();
+            for (int i = 0; i < tagListAdapter.getCount(); i++) {
+                if (tagListAdapter.getItemId(i) == tagId) {
+                    this.tagSpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -111,5 +152,21 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         entity.setPriceHT(priceHt);
         return entity;
     }
+
+    private OnItemSelectedListener tagOnItemSelectedListener = new OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            // TODO Auto-generated method stub
+
+        }
+
+    };
 
 }
