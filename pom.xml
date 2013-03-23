@@ -24,7 +24,13 @@
       <android.version>4.2.2_r2</android.version> <!-- 4.1.2_r3 2.3.3 -->
       <google.maps.version>17_r2</google.maps.version>
       <google-play-services.version>5</google-play-services.version>
-      <google-api-services-drive.version>v2-rev33-1.12.0-beta</google-api-services-drive.version>
+      
+      <!-- Google Apis : https://code.google.com/p/google-api-java-client/ -->
+	  <!-- Oauth2 : google-api-services-oauth2 -->
+	 <google-api-services-oauth2.version>v2-rev32-1.13.2-beta</google-api-services-oauth2.version>
+	
+     <!-- Drive Version :  http://google-api-client-libraries.appspot.com/mavenrepo/com/google/apis/google-api-services-drive/maven-metadata.xml -->
+      <google-api-services-drive.version>v2-rev62-1.13.2-beta</google-api-services-drive.version>
 
       <!-- Compatibility Api -->
       <compatibility-v13.version>12</compatibility-v13.version>
