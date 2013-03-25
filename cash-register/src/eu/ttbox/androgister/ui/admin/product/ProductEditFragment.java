@@ -48,7 +48,7 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView BEGIN");
-        View v = inflater.inflate(R.layout.product_edit, container, false);
+        View v = inflater.inflate(R.layout.admin_product_edit, container, false);
         // Binding
         nameText = (EditText) v.findViewById(R.id.product_name);
         descText = (EditText) v.findViewById(R.id.product_description);

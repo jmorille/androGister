@@ -21,7 +21,7 @@ public class ProductEditActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.product_edit_activity); 
+        setContentView(R.layout.admin_product_edit_activity); 
     }
 
     @Override

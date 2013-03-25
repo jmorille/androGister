@@ -1,6 +1,7 @@
 package eu.ttbox.androgister.ui.admin.product;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,9 +24,8 @@ import eu.ttbox.androgister.domain.DaoSession;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.ProductDao;
 import eu.ttbox.androgister.domain.ProductDao.Properties;
-import eu.ttbox.androgister.ui.core.crud.EntityLazyListFragment;
 
-public class ProductListFragment extends EntityLazyListFragment<Product> {
+public class ProductListFragment extends Fragment {
 
     private static final String TAG = "ProductAdminFragment";
 
@@ -89,7 +89,7 @@ public class ProductListFragment extends EntityLazyListFragment<Product> {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Product item = (Product) parent.getItemAtPosition(position);
-                onProductEditClick(item.getId());
+                onEntityClick(item.getId());
             }
         });
     }
@@ -221,7 +221,7 @@ public class ProductListFragment extends EntityLazyListFragment<Product> {
 //        productDao.load(key)
     }
 
-    private void onProductEditClick(Long entityId) {
+    public void onEntityClick(Long entityId) {
         Intent intent = new Intent(getActivity(), ProductEditActivity.class);
         intent.setAction(Intent.ACTION_EDIT);
         intent.putExtra(Intent.EXTRA_UID, entityId);

@@ -1,6 +1,7 @@
 package eu.ttbox.androgister.domain.core;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
 
     private LayoutInflater mInflater;
 
-    protected boolean dataValid;
+    protected boolean mDataValid;
     protected LazyList<T> lazyList;
     protected Context context;
 
@@ -23,8 +24,46 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mLayout = mDropDownLayout = layout;
         this.lazyList = lazyList;
-        this.dataValid = lazyList != null;
+        this.mDataValid = lazyList != null;
         this.context = context;
+    }
+    
+    /**
+     * Swap in a new Cursor, returning the old Cursor.  Unlike
+     * {@link #changeCursor(Cursor)}, the returned old Cursor is <em>not</em>
+     * closed.
+     *
+     * @param newCursor The new cursor to be used.
+     * @return Returns the previously set Cursor, or null if there wasa not one.
+     * If the given new Cursor is the same instance is the previously set
+     * Cursor, null is also returned.
+     */
+    public LazyList<T> swapCursor(LazyList<T> newCursor) {
+        if (newCursor == lazyList) {
+            return null;
+        }
+        LazyList<T> oldCursor = lazyList;
+        // Unregister cursor listener
+        
+        // Swap
+        lazyList = newCursor;
+        if (newCursor!=null) {
+            mDataValid = true;
+            // notify the observers about the new cursor
+            notifyDataSetChanged();
+        } else {
+            mDataValid = false;
+            // notify the observers about the lack of a data set
+            notifyDataSetInvalidated();
+        } 
+        return oldCursor;
+    }
+    
+    public void changeCursor( LazyList<T>  cursor) {
+        LazyList<T>  old = swapCursor(cursor);
+        if (old != null) {
+            old.close();
+        }
     }
 
     public void setDropDownViewResource(int dropDownLayout) {
@@ -49,7 +88,7 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
      */
     @Override
     public int getCount() {
-        if (dataValid && lazyList != null) {
+        if (mDataValid && lazyList != null) {
             return lazyList.size();
         } else {
             return 0;
@@ -61,7 +100,7 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
      */
     @Override
     public T getItem(int position) {
-        if (dataValid && lazyList != null) {
+        if (mDataValid && lazyList != null) {
             return lazyList.get(position);
         } else {
             return null;
@@ -72,7 +111,7 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
      */
     @Override
     public long getItemId(int position) {
-        if (dataValid && lazyList != null) {
+        if (mDataValid && lazyList != null) {
             T item = lazyList.get(position);
             if (item != null) {
                 return item.getId();
@@ -94,7 +133,7 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
      */
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (!dataValid) {
+        if (!mDataValid) {
             throw new IllegalStateException("this should only be called when lazylist is populated");
         }
 
@@ -116,7 +155,7 @@ public abstract class LazyListAdapter<T extends DomainModel, VIEW_HOLDER> extend
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
 
-        if (dataValid) {
+        if (mDataValid) {
             T item = lazyList.get(position);
             View v;
             if (convertView == null) {

@@ -113,7 +113,7 @@ public class ProductSelectorFragment extends Fragment {
         filterListView.setOnItemClickListener(mOnFilterClickListener);
         filterListView.setAdapter(filterAdapter);
         // List Adapter
-        listAdapter = new ProductItemAdapter(getActivity(), R.layout.product_list_item, null, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        listAdapter = new ProductItemAdapter(getActivity(), R.layout.admin_product_list_item, null, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         gridView.setAdapter(listAdapter);
 
         // Init Search

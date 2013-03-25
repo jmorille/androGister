@@ -14,7 +14,7 @@ import eu.ttbox.androgister.ui.admin.product.ProductListAdapter.ViewHolder;
 public class ProductListAdapter extends LazyListAdapter<Product, ViewHolder> {
 
     public ProductListAdapter(Context context, LazyList<Product> lazyList) {
-        super(context, R.layout.product_list_item, lazyList);
+        super(context, R.layout.admin_product_list_item, lazyList);
     }
 
     @Override
