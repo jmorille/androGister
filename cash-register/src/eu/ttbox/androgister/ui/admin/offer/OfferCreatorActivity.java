@@ -2,7 +2,6 @@ package eu.ttbox.androgister.ui.admin.offer;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import eu.ttbox.androgister.R;
@@ -17,14 +16,11 @@ public class OfferCreatorActivity extends Activity {
 
     private static final String TAG = "OfferCreatorActivity";
 
-    private static final int PRODUCT_EDIT_REQUEST_CODE = 0;
-
+   
+    // Fragment
     private ProductListFragment productListFragment;
-
     private TagListFragment tagListFragment;
-
     private CatalogListFragment catalogListFragment;
-
     private CatalogProductListFragment catalogProductListFragment;
 
     // Instance
@@ -51,31 +47,17 @@ public class OfferCreatorActivity extends Activity {
         Log.d(TAG, "onAttachFragment : " + fragment.getClass().getSimpleName());
 
         if (fragment instanceof CatalogProductListFragment) {
-            catalogProductListFragment = (CatalogProductListFragment) fragment;
-
+            catalogProductListFragment = (CatalogProductListFragment) fragment; 
         } else if (fragment instanceof ProductListFragment) {
-            productListFragment = (ProductListFragment) fragment;
-
+            productListFragment = (ProductListFragment) fragment; 
         } else if (fragment instanceof TagListFragment) {
-            tagListFragment = (TagListFragment) fragment;
-
+            tagListFragment = (TagListFragment) fragment; 
         } else if (fragment instanceof CatalogListFragment) {
-            catalogListFragment = (CatalogListFragment) fragment;
-
+            catalogListFragment = (CatalogListFragment) fragment; 
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.w(TAG, "onActivityResult :  requestCode = " + requestCode + "  ==> resultCode = " + resultCode);
-        // if (requestCode == PRODUCT_EDIT_REQUEST_CODE && resultCode ==
-        // Activity.RESULT_OK) {
-        // // productListFragment.onActivityResult(requestCode, resultCode,
-        // // data);
-        // Toast.makeText(this, "Success Edit", Toast.LENGTH_LONG).show();
-        // }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+    
 
     // ===========================================================
     // Constructors

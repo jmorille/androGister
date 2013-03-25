@@ -12,8 +12,6 @@ import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.CatalogProduct;
 import eu.ttbox.androgister.domain.CatalogProductDao;
-import eu.ttbox.androgister.domain.CatalogProductDao.Properties;
-import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
 import eu.ttbox.androgister.ui.core.crud.EntityLazyListFragment;
 

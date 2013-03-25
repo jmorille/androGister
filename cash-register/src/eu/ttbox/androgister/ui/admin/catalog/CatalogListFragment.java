@@ -12,6 +12,7 @@ import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.Catalog;
 import eu.ttbox.androgister.domain.CatalogDao;
+import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.CatalogDao.Properties;
 import eu.ttbox.androgister.ui.core.crud.EntityLazyListFragment;
 
@@ -20,6 +21,9 @@ public class CatalogListFragment extends EntityLazyListFragment<Catalog, Catalog
     private static final String TAG = "CatalogListFragment";
 
     public static final int PRODUCT_EDIT_REQUEST_CODE = 111;
+
+    private static final Long UNSET_ID = Long.MIN_VALUE;
+    private static final Long ADD_ID = Long.MAX_VALUE;
 
     // Binding
     ListView listView;
@@ -51,7 +55,18 @@ public class CatalogListFragment extends EntityLazyListFragment<Catalog, Catalog
         View v = inflater.inflate(R.layout.admin_calatog_list, container, false);
         // Binding
         listView = (ListView) v.findViewById(R.id.calalog_list);
-
+     // ListView Header
+        View listViewHeader = inflater.inflate(R.layout.admin_calatog_list_item, container, false);
+        Catalog headerData = new Catalog();
+        headerData.setId(UNSET_ID);
+        headerData.setName("All");
+        listView.addHeaderView(listViewHeader, headerData, true);
+        // ListView Footer
+        View listViewFooter = inflater.inflate(R.layout.admin_footer_list_item_add, container, false);
+        Catalog footerData = new Catalog();
+        footerData.setId(ADD_ID);
+        footerData.setName("Add");
+        listView.addFooterView(listViewFooter, footerData, true);
         return v;
     }
 

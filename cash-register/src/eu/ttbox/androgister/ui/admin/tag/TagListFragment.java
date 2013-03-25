@@ -21,6 +21,9 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
     private static final String TAG = "TagListFragment";
 
     public static final int PRODUCT_EDIT_REQUEST_CODE = 111;
+    
+    private static final Long UNSET_ID = Long.MIN_VALUE;
+    private static final Long ADD_ID = Long.MAX_VALUE;
 
     // Binding
     ListView listView;
@@ -52,7 +55,18 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
         View v = inflater.inflate(R.layout.admin_calatog_list, container, false);
         // Binding
         listView = (ListView) v.findViewById(R.id.calalog_list);
-
+        // ListView Header
+        View listViewHeader = inflater.inflate(R.layout.admin_calatog_list_item, container, false);
+        Tag headerData = new Tag();
+        headerData.setId(UNSET_ID);
+        headerData.setName("All");
+        listView.addHeaderView(listViewHeader, headerData, true);
+        // ListView Footer
+        View listViewFooter = inflater.inflate(R.layout.admin_footer_list_item_add, container, false);
+        Tag footerData = new Tag();
+        footerData.setId(ADD_ID);
+        footerData.setName("Add");
+        listView.addFooterView(listViewFooter, footerData, true);
         return v;
     }
 
@@ -86,9 +100,15 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
     // ===========================================================
 
     @Override
-    public void onEntityClick(Long tagId) {
-        Log.d(TAG, "onSelectTagId : " + tagId + " / with listener = " + (mOnSelectTagListener != null));
-        if (mOnSelectTagListener != null) {
+    public void onEntityClick(Long selectTagId) {
+        Log.d(TAG, "onSelectTagId : " + selectTagId + " / with listener = " + (mOnSelectTagListener != null));
+        if (ADD_ID.equals(selectTagId)) {
+//            TODO Add
+        } else  if (mOnSelectTagListener != null) {
+            Long tagId = selectTagId;
+            if (UNSET_ID.equals(tagId)) {
+                tagId = null;
+            }  
             mOnSelectTagListener.onSelectTagId(tagId);
         }
 

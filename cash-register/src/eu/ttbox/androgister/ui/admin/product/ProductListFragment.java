@@ -186,9 +186,11 @@ public class ProductListFragment extends EntityLazyListFragment<Product, Product
     private void shareSelectedItems() {
         long[] checkedIds = productList.getCheckedItemIds();
         Toast.makeText(getActivity(), "Shared " + checkedIds.length + " items", Toast.LENGTH_SHORT).show();
-
-        // productDao.load(key)
-    }
+        if (onSelectProductListener!=null) {
+            Long[] productIds = CoreHelper.convertToLongArray(checkedIds);
+            onSelectProductListener.onSelectProductId(productIds);
+        }
+     }
 
     public void onEntityClick(Long entityId) {
         Intent intent = new Intent(getActivity(), ProductEditActivity.class);

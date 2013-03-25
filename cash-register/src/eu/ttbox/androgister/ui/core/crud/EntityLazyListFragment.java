@@ -52,7 +52,10 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 T item = (T) parent.getItemAtPosition(position);
-                onEntityClick(item.getId());
+                if (item != null) {
+                    Long entityId = item != null ? item.getId() : null;
+                    onEntityClick(entityId);
+                }
             }
 
         });
