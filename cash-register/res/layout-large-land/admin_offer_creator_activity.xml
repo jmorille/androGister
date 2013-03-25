@@ -30,7 +30,7 @@
     
     <fragment
         android:id="@+id/fragment_tag_list"
-        android:name="eu.ttbox.androgister.ui.admin.catalog.TagListFragment"
+        android:name="eu.ttbox.androgister.ui.admin.tag.TagListFragment"
         android:layout_width="100dp"
         android:layout_height="match_parent"
         tools:layout="@layout/admin_calatog_list" />

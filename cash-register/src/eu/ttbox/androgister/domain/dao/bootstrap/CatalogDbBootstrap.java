@@ -27,6 +27,7 @@ public class CatalogDbBootstrap extends AbstractEntityDbBootstrap {
         ContentValues initialValues = new ContentValues();
         initialValues.put(Properties.Id.columnName, id);
         initialValues.put(Properties.Name.columnName, name); 
+        initialValues.put(Properties.Enabled.columnName, Boolean.TRUE); 
         return mDatabase.insert(CatalogDao.TABLENAME, null, initialValues);
     }
 

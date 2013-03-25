@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.query.LazyList;
@@ -16,7 +16,6 @@ import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.domain.DaoSession;
 import eu.ttbox.androgister.domain.DomainModel;
-import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
 
 public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends AbstractDao<T, Long>> extends Fragment {
@@ -29,7 +28,7 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
     private DAO entityDao;
 
     // Binding
-    ListView entitiesList;
+    AdapterView<ListAdapter> entitiesList;
 
     LazyListAdapter<T,? extends Object> listAdapter;
 
@@ -42,6 +41,9 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
         super.onActivityCreated(savedInstanceState);
         // Service
         entityDao = getEntityDao();
+        entitiesList = getAdapterContainer();
+        listAdapter = createListAdapter(null);
+        entitiesList.setAdapter(listAdapter);
         // List
         loadData(null);
         // Listener
@@ -49,7 +51,7 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Product item = (Product) parent.getItemAtPosition(position);
+                T item = (T) parent.getItemAtPosition(position);
                 onEntityClick(item.getId());
             }
 
@@ -94,7 +96,7 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
         QueryBuilder<T> query = createSearchQuery(entityDao);
         LazyList<T> entities = query.listLazy();
         listAdapter.changeCursor(entities);
-        entitiesList.setAdapter(listAdapter);
+      
 
     }
 
@@ -102,6 +104,7 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
 
     public abstract LazyListAdapter<T, ? extends Object> createListAdapter(LazyList<T> lazyList);
 
+    public abstract AdapterView<ListAdapter> getAdapterContainer();
     // ===========================================================
     // Services
     // ===========================================================

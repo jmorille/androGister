@@ -87,6 +87,7 @@ public class RegisterDaoGenerator {
         // Properties
 
         catalog.addStringProperty("name").notNull();
+        catalog.addBooleanProperty("enabled").notNull();
         return catalog;
     }
 

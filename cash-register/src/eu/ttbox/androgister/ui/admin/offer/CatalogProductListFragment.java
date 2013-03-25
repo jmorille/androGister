@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.R;
@@ -17,7 +20,7 @@ import eu.ttbox.androgister.ui.core.crud.EntityLazyListFragment;
 public class CatalogProductListFragment extends   EntityLazyListFragment<CatalogProduct,CatalogProductDao>  {
 
     
-    
+    private ListView listView;
 
     // ===========================================================
     // Constructor
@@ -27,9 +30,17 @@ public class CatalogProductListFragment extends   EntityLazyListFragment<Catalog
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { 
         View v =  inflater.inflate(R.layout.admin_offer_creator, container, false);
+        // Binding
+        listView = (ListView)v.findViewById(R.id.calalog_product_list);
         return v;
     }
 
+
+
+    @Override
+    public AdapterView<ListAdapter> getAdapterContainer() { 
+        return listView;
+    }
 
 
     // ===========================================================
@@ -57,7 +68,7 @@ public class CatalogProductListFragment extends   EntityLazyListFragment<Catalog
 //                .orderAsc(Properties.Name); //
                 ;
 //        query.
-        query.join(Product.class, Properties.ProductId);
+      
         return query;
     }
 
@@ -79,6 +90,8 @@ public class CatalogProductListFragment extends   EntityLazyListFragment<Catalog
         // TODO Auto-generated method stub
         
     }
+
+
 
 
 
