@@ -35,6 +35,8 @@ public class RegisterDaoGenerator {
 
     private static Entity addCatalogProduct(Schema schema, Entity catalog, Entity product) {
         Entity catalogProduct = schema.addEntity("CatalogProduct");
+        implementsDomainModel(catalogProduct);
+        // Add Property
         Property catalogFk = catalogProduct.addLongProperty("catalogId") //
                 .getProperty();
         Property productFk = catalogProduct.addLongProperty("productId") //

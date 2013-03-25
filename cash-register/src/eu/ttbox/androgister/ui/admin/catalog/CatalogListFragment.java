@@ -24,6 +24,24 @@ public class CatalogListFragment extends EntityLazyListFragment<Catalog, Catalog
     // Binding
     ListView listView;
 
+    // Listener
+
+    private OnSelectCatalogListener onSelectCatalogListener;
+
+    // ===========================================================
+    // Listener
+    // ===========================================================
+
+    public void setOnSelectCatalogListener(OnSelectCatalogListener onSelectCatalogListener) {
+        this.onSelectCatalogListener = onSelectCatalogListener;
+    }
+
+    public interface OnSelectCatalogListener {
+
+        void onSelectCalalogId(Long catalogId);
+
+    }
+
     // ===========================================================
     // Constructor
     // ===========================================================
@@ -37,10 +55,10 @@ public class CatalogListFragment extends EntityLazyListFragment<Catalog, Catalog
         return v;
     }
 
-    
     public AdapterView<ListAdapter> getAdapterContainer() {
         return listView;
     }
+
     // ===========================================================
     // Service
     // ===========================================================
@@ -67,8 +85,9 @@ public class CatalogListFragment extends EntityLazyListFragment<Catalog, Catalog
     // ===========================================================
 
     @Override
-    public void onEntityClick(Long id) {
-        // TODO Auto-generated method stub
-
+    public void onEntityClick(Long catalogId) {
+        if (onSelectCatalogListener != null) {
+            onSelectCatalogListener.onSelectCalalogId(  catalogId);
+        } 
     }
 }

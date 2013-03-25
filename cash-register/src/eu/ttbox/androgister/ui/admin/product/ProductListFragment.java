@@ -234,4 +234,9 @@ public class ProductListFragment extends Fragment {
         startActivityForResult(intent, PRODUCT_EDIT_REQUEST_CODE);
     }
 
+    public void onSelectTagId(Long tagId) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

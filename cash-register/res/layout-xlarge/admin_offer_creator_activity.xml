@@ -3,20 +3,35 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:baselineAligned="false"
-    android:orientation="horizontal" >
+    android:orientation="horizontal" xmlns:tools="http://schemas.android.com/tools">
 
     <fragment
+        android:id="@+id/fragment_catalog_list"
+        android:name="eu.ttbox.androgister.ui.admin.catalog.CatalogListFragment"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        tools:layout="@layout/admin_calatog_list" />
+    
+    <fragment
         android:id="@+id/fragment_offer_list"
-        android:name="eu.ttbox.androgister.ui.admin.offer.OfferCreatorFragment"
+        android:name="eu.ttbox.androgister.ui.admin.offer.CatalogProductListFragment"
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <fragment
         android:id="@+id/fragment_offer_referential_list"
         android:name="eu.ttbox.androgister.ui.admin.product.ProductListFragment"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent" tools:layout="@layout/admin_product_list"/>
+ 
+    
+    <fragment
+        android:id="@+id/fragment_tag_list"
+        android:name="eu.ttbox.androgister.ui.admin.catalog.TagListFragment"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        tools:layout="@layout/admin_calatog_list" />
+    
 </LinearLayout>

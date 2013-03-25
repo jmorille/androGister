@@ -131,8 +131,12 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         priceHTText.setText(priceString);
 
         // Tag
-        if (entity.getTagId() != null) {
-            long tagId = entity.getTagId().longValue();
+        selectSpinnerToTagId(entity.getTagId()); 
+    }
+    
+    private void selectSpinnerToTagId(Long wantedTagId) {
+        if (wantedTagId != null) {
+            long tagId = wantedTagId.longValue();
             for (int i = 0; i < tagListAdapter.getCount(); i++) {
                 if (tagListAdapter.getItemId(i) == tagId) {
                     this.tagSpinner.setSelection(i);
