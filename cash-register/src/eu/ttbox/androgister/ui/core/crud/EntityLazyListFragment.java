@@ -22,15 +22,15 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
 
     private static final String TAG = "EntityLazyListFragment";
 
-    private static final int ENTITY_EDIT_REQUEST_CODE = 192;
+    public static final int ENTITY_EDIT_REQUEST_CODE = 192;
 
     // Service
-    private DAO entityDao;
+    public DAO entityDao;
 
     // Binding
-    AdapterView<ListAdapter> entitiesList;
+    public AdapterView<ListAdapter> entitiesList;
 
-    LazyListAdapter<T,? extends Object> listAdapter;
+    public LazyListAdapter<T, ? extends Object> listAdapter;
 
     // ===========================================================
     // Constructors
@@ -96,7 +96,6 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
         QueryBuilder<T> query = createSearchQuery(entityDao);
         LazyList<T> entities = query.listLazy();
         listAdapter.changeCursor(entities);
-      
 
     }
 
@@ -105,6 +104,7 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
     public abstract LazyListAdapter<T, ? extends Object> createListAdapter(LazyList<T> lazyList);
 
     public abstract AdapterView<ListAdapter> getAdapterContainer();
+
     // ===========================================================
     // Services
     // ===========================================================

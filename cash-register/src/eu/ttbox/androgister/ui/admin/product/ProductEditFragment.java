@@ -14,6 +14,7 @@ import de.greenrobot.dao.query.LazyList;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.ProductDao;
+import eu.ttbox.androgister.domain.ProductDao.Properties;
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
 import eu.ttbox.androgister.ui.admin.tag.TagListAdapter;
@@ -88,7 +89,15 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
     }
 
     @Override
-    public Product prepareInsert() {
+    public Product prepareInsert(Bundle args) {
+        Log.d(TAG, "prepareInsert with args : " + (args != null));
+        if (args != null) {
+            Long tagId = args.getLong(Properties.TagId.columnName);
+            Log.d(TAG, "prepareInsert with tagId : " + tagId);
+            if (tagId != null) {
+                selectSpinnerToTagId(tagId);
+            }
+        }
         return new Product();
     }
 
@@ -131,9 +140,9 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         priceHTText.setText(priceString);
 
         // Tag
-        selectSpinnerToTagId(entity.getTagId()); 
+        selectSpinnerToTagId(entity.getTagId());
     }
-    
+
     private void selectSpinnerToTagId(Long wantedTagId) {
         if (wantedTagId != null) {
             long tagId = wantedTagId.longValue();

@@ -111,11 +111,11 @@ public abstract class EntityEditFragment<T extends DomainModel> extends Fragment
         } else {
             Log.d(TAG, "Prepare new Entity");
             // prepare for insert
-            prepareInsert();
+            entity = prepareInsert(args);
         }
     }
 
-    public abstract T prepareInsert();
+    public abstract T prepareInsert(Bundle args);
 
     // ===========================================================
     // Action
@@ -133,10 +133,7 @@ public abstract class EntityEditFragment<T extends DomainModel> extends Fragment
     }
 
     public void onSaveClick() {
-        if (formValidator.validate()) {
-            if (entity == null) {
-                entity = prepareInsert();
-            }
+        if (formValidator.validate()) { 
             bindValue(entity);
             // save
             if (entity.getId() != null) {

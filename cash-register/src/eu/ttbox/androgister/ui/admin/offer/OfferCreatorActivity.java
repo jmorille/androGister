@@ -9,6 +9,7 @@ import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.ui.admin.catalog.CatalogListFragment;
 import eu.ttbox.androgister.ui.admin.catalog.CatalogListFragment.OnSelectCatalogListener;
 import eu.ttbox.androgister.ui.admin.product.ProductListFragment;
+import eu.ttbox.androgister.ui.admin.product.ProductListFragment.OnSelectProductListener;
 import eu.ttbox.androgister.ui.admin.tag.TagListFragment;
 import eu.ttbox.androgister.ui.admin.tag.TagListFragment.OnSelectTagListener;
 
@@ -25,10 +26,10 @@ public class OfferCreatorActivity extends Activity {
     private CatalogListFragment catalogListFragment;
 
     private CatalogProductListFragment catalogProductListFragment;
-    
+
     // Instance
     private OfferCreateListener offerCreateListener;
-    
+
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -39,22 +40,28 @@ public class OfferCreatorActivity extends Activity {
         setContentView(R.layout.admin_offer_creator_activity);
         // Listener
         offerCreateListener = new OfferCreateListener();
+        productListFragment.setOnSelectProductListener(offerCreateListener);
+        tagListFragment.setOnSelectTagListener(offerCreateListener);
+        catalogListFragment.setOnSelectCatalogListener(offerCreateListener);
     }
 
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
-        if (fragment instanceof ProductListFragment) {
+        Log.d(TAG, "onAttachFragment : " + fragment.getClass().getSimpleName());
+
+        if (fragment instanceof CatalogProductListFragment) {
+            catalogProductListFragment = (CatalogProductListFragment) fragment;
+
+        } else if (fragment instanceof ProductListFragment) {
             productListFragment = (ProductListFragment) fragment;
-            Log.d(TAG, "onAttachFragment ProductListFragment");
-        } else if (fragment instanceof CatalogProductListFragment) {
-            catalogProductListFragment  = (CatalogProductListFragment)fragment;
+
         } else if (fragment instanceof TagListFragment) {
             tagListFragment = (TagListFragment) fragment;
-            tagListFragment.setOnSelectTagListener(offerCreateListener);
+
         } else if (fragment instanceof CatalogListFragment) {
             catalogListFragment = (CatalogListFragment) fragment;
-            catalogListFragment.setOnSelectCatalogListener(offerCreateListener);
+
         }
     }
 
@@ -69,32 +76,41 @@ public class OfferCreatorActivity extends Activity {
         // }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    
+
     // ===========================================================
     // Constructors
     // ===========================================================
 
-    private class OfferCreateListener implements OnSelectCatalogListener,  OnSelectTagListener {
+    private class OfferCreateListener implements OnSelectCatalogListener, OnSelectTagListener, OnSelectProductListener {
 
         private Long tagId;
         private Long catalogId;
-        
+
         @Override
         public void onSelectTagId(Long tagId) {
-          this.tagId = tagId;
-          if (productListFragment!=null) {
-              productListFragment.onSelectTagId(tagId);
-          }
+            this.tagId = tagId;
+            Log.d(TAG, "onSelectTagId : " + tagId);
+            if (productListFragment != null) {
+                productListFragment.onSelectTagId(tagId);
+            }
         }
 
         @Override
         public void onSelectCalalogId(Long catalogId) {
             this.catalogId = catalogId;
-            if (catalogProductListFragment!=null) {
+            if (catalogProductListFragment != null) {
                 catalogProductListFragment.onSelectCalalogId(catalogId);
             }
         }
-        
+
+        @Override
+        public void onSelectProductId(Long... productIds) {
+            if (catalogListFragment != null && productIds != null) {
+                catalogListFragment.onSelectProductId(productIds);
+            }
+
+        }
+
     }
-    
+
 }

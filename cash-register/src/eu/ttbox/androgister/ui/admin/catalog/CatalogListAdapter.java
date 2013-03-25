@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import de.greenrobot.dao.query.LazyList;
+import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.Catalog;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
 import eu.ttbox.androgister.ui.admin.catalog.CatalogListAdapter.ViewHolder;
@@ -12,8 +13,7 @@ import eu.ttbox.androgister.ui.admin.catalog.CatalogListAdapter.ViewHolder;
 public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
 
     public CatalogListAdapter(Context context, LazyList<Catalog> lazyList) {
-        super(context, android.R.layout.simple_spinner_item, lazyList);
-        setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        super(context, R.layout.admin_calatog_list_item, lazyList); 
     }
 
     @Override

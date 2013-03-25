@@ -1,7 +1,5 @@
 package eu.ttbox.androgister.ui.admin.product;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import de.greenrobot.dao.query.LazyList;
+import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.CoreHelper;
@@ -24,37 +23,33 @@ import eu.ttbox.androgister.domain.DaoSession;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.ProductDao;
 import eu.ttbox.androgister.domain.ProductDao.Properties;
+import eu.ttbox.androgister.domain.core.LazyListAdapter;
+import eu.ttbox.androgister.ui.core.crud.EntityLazyListFragment;
 
-public class ProductListFragment extends Fragment {
+public class ProductListFragment extends EntityLazyListFragment<Product, ProductDao> {
 
     private static final String TAG = "ProductAdminFragment";
-
-    public static final int PRODUCT_EDIT_REQUEST_CODE = 111;
-
-    // Service
-    private ProductDao productDao;
-
+ 
     // Binding
     ListView productList;
 
+    private OnSelectProductListener onSelectProductListener;
+
     // Instance
-    ProductListAdapter listAdapter;
-
-    
+    private Long tagId;
 
     // ===========================================================
-    // Event
+    // Listener
     // ===========================================================
 
-    
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.w(TAG, "onActivityResult :  requestCode = " + requestCode + "  ==> resultCode = " + resultCode);
-        if (requestCode == PRODUCT_EDIT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Toast.makeText(getActivity(), "Success Edit", Toast.LENGTH_LONG).show();
-            reloadData();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+    public void setOnSelectProductListener(OnSelectProductListener onSelectTagListener) {
+        this.onSelectProductListener = onSelectTagListener;
+    }
+
+    public interface OnSelectProductListener {
+
+        void onSelectProductId(Long... productIds);
+
     }
 
     // ===========================================================
@@ -77,31 +72,13 @@ public class ProductListFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Service
-        productDao = getEntityDao();
-        // List
-        loadData(null);
-        // Listener
-        productList.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Product item = (Product) parent.getItemAtPosition(position);
-                onEntityClick(item.getId());
-            }
-        });
+    public LazyListAdapter<Product, ? extends Object> createListAdapter(LazyList<Product> lazyList) {
+        return new ProductListAdapter(getActivity(), null);
     }
 
     @Override
-    public void onDestroyView() {
-        if (listAdapter != null) {
-            // Close LazyListAdpater for closing LazyList
-            listAdapter.close();
-            listAdapter = null;
-        }
-        super.onDestroyView();
+    public AdapterView<ListAdapter> getAdapterContainer() {
+        return productList;
     }
 
     // ===========================================================
@@ -165,10 +142,10 @@ public class ProductListFragment extends Fragment {
             switch (checkedCount) {
             case 0:
                 mode.setSubtitle(null);
-                break; 
+                break;
             default:
                 String subtitlesSelected = getResources().getQuantityString(R.plurals.item_selected, checkedCount, checkedCount);
-                mode.setSubtitle( subtitlesSelected);
+                mode.setSubtitle(subtitlesSelected);
                 break;
             }
         }
@@ -185,22 +162,14 @@ public class ProductListFragment extends Fragment {
         return daoSession.getProductDao();
     }
 
-    public void reloadData() {
-        loadData(null);
-    }
-    
-    public void loadData(Bundle bundle) {
-        ProductListAdapter oldListAdapter = listAdapter;
-        // Search The List
-        LazyList<Product> products = productDao.queryBuilder() //
-                .orderAsc(Properties.Name, Properties.Description) //
-                .listLazy();
-        listAdapter = new ProductListAdapter(getActivity(), products);
-        productList.setAdapter(listAdapter);
-        // Close Previous Adapter
-        if (oldListAdapter != null) {
-            oldListAdapter.close();
+    @Override
+    public QueryBuilder<Product> createSearchQuery(ProductDao entityDao) {
+        QueryBuilder<Product> query = entityDao.queryBuilder() //
+                .orderAsc(Properties.Name, Properties.Description);
+        if (tagId != null) {
+            query.where(Properties.TagId.eq(tagId));
         }
+        return query;
     }
 
     // ===========================================================
@@ -210,33 +179,38 @@ public class ProductListFragment extends Fragment {
     private void deleteSelectedItems() {
         long[] checkedIds = productList.getCheckedItemIds();
         Long[] deleteIds = CoreHelper.convertToLongArray(checkedIds);
-        productDao.deleteByKeyInTx(deleteIds);
+        entityDao.deleteByKeyInTx(deleteIds);
         reloadData();
     }
 
     private void shareSelectedItems() {
         long[] checkedIds = productList.getCheckedItemIds();
         Toast.makeText(getActivity(), "Shared " + checkedIds.length + " items", Toast.LENGTH_SHORT).show();
-        
-//        productDao.load(key)
+
+        // productDao.load(key)
     }
 
     public void onEntityClick(Long entityId) {
         Intent intent = new Intent(getActivity(), ProductEditActivity.class);
         intent.setAction(Intent.ACTION_EDIT);
         intent.putExtra(Intent.EXTRA_UID, entityId);
-        startActivityForResult(intent, PRODUCT_EDIT_REQUEST_CODE);
+       
+        startActivityForResult(intent, ENTITY_EDIT_REQUEST_CODE);
     }
 
     private void onProductEditClick() {
         Intent intent = new Intent(getActivity(), ProductEditActivity.class);
         intent.setAction(Intent.ACTION_INSERT);
-        startActivityForResult(intent, PRODUCT_EDIT_REQUEST_CODE);
+        if (tagId!=null) {
+            intent.putExtra(Properties.TagId.columnName, tagId);
+        }
+        startActivityForResult(intent, ENTITY_EDIT_REQUEST_CODE);
     }
 
     public void onSelectTagId(Long tagId) {
-        // TODO Auto-generated method stub
-        
+        this.tagId = tagId;
+        Log.d(TAG, "onSelectTagId : " + tagId);
+        reloadData();
     }
 
 }

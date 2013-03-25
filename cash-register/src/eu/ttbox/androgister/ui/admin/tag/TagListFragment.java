@@ -1,6 +1,7 @@
 package eu.ttbox.androgister.ui.admin.tag;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import eu.ttbox.androgister.domain.TagDao;
 import eu.ttbox.androgister.domain.TagDao.Properties;
 import eu.ttbox.androgister.ui.core.crud.EntityLazyListFragment;
 
-public class TagListFragment  extends EntityLazyListFragment<Tag, TagDao> {
+public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
 
     private static final String TAG = "TagListFragment";
 
@@ -24,16 +25,16 @@ public class TagListFragment  extends EntityLazyListFragment<Tag, TagDao> {
     // Binding
     ListView listView;
 
- // Listener
+    // Listener
 
-    private OnSelectTagListener onSelectTagListener;
+    private OnSelectTagListener mOnSelectTagListener;
 
     // ===========================================================
     // Listener
     // ===========================================================
 
     public void setOnSelectTagListener(OnSelectTagListener onSelectTagListener) {
-        this.onSelectTagListener = onSelectTagListener;
+        this.mOnSelectTagListener = onSelectTagListener;
     }
 
     public interface OnSelectTagListener {
@@ -42,7 +43,6 @@ public class TagListFragment  extends EntityLazyListFragment<Tag, TagDao> {
 
     }
 
-    
     // ===========================================================
     // Constructor
     // ===========================================================
@@ -56,10 +56,10 @@ public class TagListFragment  extends EntityLazyListFragment<Tag, TagDao> {
         return v;
     }
 
-    
     public AdapterView<ListAdapter> getAdapterContainer() {
         return listView;
     }
+
     // ===========================================================
     // Service
     // ===========================================================
@@ -87,9 +87,10 @@ public class TagListFragment  extends EntityLazyListFragment<Tag, TagDao> {
 
     @Override
     public void onEntityClick(Long tagId) {
-        if (onSelectTagListener != null) {
-            onSelectTagListener.onSelectTagId(  tagId);
-        } 
+        Log.d(TAG, "onSelectTagId : " + tagId + " / with listener = " + (mOnSelectTagListener != null));
+        if (mOnSelectTagListener != null) {
+            mOnSelectTagListener.onSelectTagId(tagId);
+        }
 
     }
 }

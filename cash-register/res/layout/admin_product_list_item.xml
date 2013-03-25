@@ -6,13 +6,12 @@
     android:gravity="center"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="vertical"
-    android:padding="10dip"  >
- 
+    android:padding="10dip" >
+
     <TextView
         android:id="@+id/product_list_item_name"
         style="@style/product_list_item"
         android:layout_weight="1" />
- 
 
     <TextView
         android:id="@+id/product_list_item_price"
