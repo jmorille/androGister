@@ -170,6 +170,7 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
                 toInsert.add(catProd);
             }
             entityDao.insertOrReplaceInTx(toInsert);
+            reloadData();
         }
 
     }

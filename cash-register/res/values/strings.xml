@@ -6,7 +6,7 @@
     <string name="pickerNewEntityText">"Créer un nouveau enregistrement"</string>
 
     <!-- Action -->
-
+   <string name="all">Tous</string>
 
     <!-- Action -->
     <string name="add">Ajouter</string>
@@ -85,6 +85,11 @@
     <string name="product_price_ht">Prix HT</string>
     <string name="product_tag">Etiquette du produit</string>
 
+      <plurals name="product_delete_constraints">
+        <item quantity="one">Suppression impossible : 1 produit lié</item>
+        <item quantity="other">Suppression impossible : %d produits liés</item>
+    </plurals>
+    
     <!-- Model Tag -->
     <string name="tag_name">Nom du Tag</string>
     <string name="tag_color">Couleur du Tag</string>

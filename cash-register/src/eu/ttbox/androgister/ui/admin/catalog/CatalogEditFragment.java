@@ -8,9 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 import de.greenrobot.dao.AbstractDao;
+import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.Catalog;
+import eu.ttbox.androgister.domain.CatalogProduct;
+import eu.ttbox.androgister.domain.CatalogProductDao;
+import eu.ttbox.androgister.domain.CatalogProductDao.Properties;
 import eu.ttbox.androgister.ui.core.crud.EntityEditFragment;
 import eu.ttbox.androgister.ui.core.validator.Form;
 import eu.ttbox.androgister.ui.core.validator.validate.ValidateTextView;
@@ -85,7 +90,33 @@ public class CatalogEditFragment  extends EntityEditFragment<Catalog> {
 
     @Override
     public Catalog prepareInsert(Bundle args) {
-        return new Catalog();
+        Catalog entity =  new Catalog();
+        enabledSwitch.setChecked(true);
+        return entity;
     }
+    // ===========================================================
+    // Action
+    // ===========================================================
 
+    public CatalogProductDao getCatalogProductDao() {
+        return getDaoSession().getCatalogProductDao();
+    }
+    
+    @Override
+    public void onDeleteClick() {
+        //   validate Deps
+        long productCount = 0;
+        if (entity != null && entity.getId() != null) {
+            QueryBuilder<CatalogProduct> queryCount = getCatalogProductDao().queryBuilder();
+            queryCount.where(Properties.CatalogId.eq(entity.getId()));
+            productCount = queryCount.count();
+        }
+        if (productCount < 1) {
+            super.onDeleteClick();
+        } else {
+            String text = getResources().getQuantityString(R.plurals.product_delete_constraints, (int)productCount,  productCount);            
+            Log.w(TAG, "Could not delete entity for " + productCount + " Products");
+            Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        }
+    }
 }

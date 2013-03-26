@@ -1,13 +1,16 @@
 package eu.ttbox.androgister.ui.admin.tag;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.R;
@@ -21,7 +24,7 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
     private static final String TAG = "TagListFragment";
 
     public static final int PRODUCT_EDIT_REQUEST_CODE = 111;
-    
+
     private static final Long UNSET_ID = Long.MIN_VALUE;
     private static final Long ADD_ID = Long.MAX_VALUE;
 
@@ -55,17 +58,35 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
         View v = inflater.inflate(R.layout.admin_calatog_list, container, false);
         // Binding
         listView = (ListView) v.findViewById(R.id.calalog_list);
+        listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Tag item = (Tag) parent.getItemAtPosition(position);
+                Long entityId = item != null ? item.getId() : null;
+                if (item != null && !UNSET_ID.equals(entityId) && !ADD_ID.equals(entityId)) {
+                    onEntityEditClick(item.getId());
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
         // ListView Header
         View listViewHeader = inflater.inflate(R.layout.admin_calatog_list_item, container, false);
         Tag headerData = new Tag();
         headerData.setId(UNSET_ID);
-        headerData.setName("All");
+        String allLabel = getString(R.string.all);
+        headerData.setName(allLabel);
+        ((TextView) listViewHeader).setText(allLabel);
         listView.addHeaderView(listViewHeader, headerData, true);
         // ListView Footer
         View listViewFooter = inflater.inflate(R.layout.admin_footer_list_item_add, container, false);
         Tag footerData = new Tag();
         footerData.setId(ADD_ID);
-        footerData.setName("Add");
+        String addLabel = getString(R.string.add);
+        footerData.setName(addLabel);
         listView.addFooterView(listViewFooter, footerData, true);
         return v;
     }
@@ -99,18 +120,34 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
     // Action
     // ===========================================================
 
+    public void onEntityEditClick(Long entityId) {
+        if (!UNSET_ID.equals(entityId) && !ADD_ID.equals(entityId)) {
+            Intent intent = new Intent(getActivity(), TagEditActivity.class);
+            intent.setAction(Intent.ACTION_EDIT);
+            intent.putExtra(Intent.EXTRA_UID, entityId);
+            startActivityForResult(intent, ENTITY_EDIT_REQUEST_CODE);
+        }
+    }
+
     @Override
     public void onEntityClick(Long selectTagId) {
         Log.d(TAG, "onSelectTagId : " + selectTagId + " / with listener = " + (mOnSelectTagListener != null));
         if (ADD_ID.equals(selectTagId)) {
-//            TODO Add
-        } else  if (mOnSelectTagListener != null) {
-            Long tagId = selectTagId;
-            if (UNSET_ID.equals(tagId)) {
-                tagId = null;
-            }  
-            mOnSelectTagListener.onSelectTagId(tagId);
+            // Add
+            Intent intent = new Intent(getActivity(), TagEditActivity.class);
+            intent.setAction(Intent.ACTION_EDIT);
+            // intent.putExtra(Intent.EXTRA_UID, entityId);
+            startActivityForResult(intent, ENTITY_EDIT_REQUEST_CODE);
+        } else if (mOnSelectTagListener != null) {
+            Long entityId = selectTagId;
+            if (UNSET_ID.equals(entityId)) {
+                entityId = null;
+            }
+            mOnSelectTagListener.onSelectTagId(entityId);
         }
 
     }
+    
+
+  
 }

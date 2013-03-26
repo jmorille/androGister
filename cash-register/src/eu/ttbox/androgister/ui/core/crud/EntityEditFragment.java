@@ -26,7 +26,7 @@ public abstract class EntityEditFragment<T extends DomainModel> extends Fragment
     private Form formValidator;
 
     // Instance
-    T entity;
+    public T entity;
 
     // ===========================================================
     // Constructors
@@ -133,7 +133,7 @@ public abstract class EntityEditFragment<T extends DomainModel> extends Fragment
     }
 
     public void onSaveClick() {
-        if (formValidator.validate()) { 
+        if (formValidator.validate()) {
             bindValue(entity);
             // save
             if (entity.getId() != null) {

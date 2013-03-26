@@ -65,7 +65,7 @@ public class RegisterDaoGenerator {
 
         // Tag
         Property tagFk = product.addLongProperty("tagId")//
-                .index() //
+                .index() //  
                 .getProperty();
         product.addToOne(tag, tagFk);
 

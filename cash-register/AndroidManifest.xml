@@ -75,6 +75,15 @@
             android:label="@string/app_name" > 
         </activity>
         
+          <activity  
+            android:name=".ui.admin.catalog.CatalogEditActivity"
+            android:label="@string/app_name" > 
+        </activity>
+          <activity  
+            android:name=".ui.admin.tag.TagEditActivity"
+            android:label="@string/app_name" > 
+        </activity>
+        
         <!--  Product google Drive -->
         <activity
             android:name=".ui.admin.product.ProductDriveExporterActivity"

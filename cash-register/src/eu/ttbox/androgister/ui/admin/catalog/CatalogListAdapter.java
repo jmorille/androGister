@@ -13,7 +13,7 @@ import eu.ttbox.androgister.ui.admin.catalog.CatalogListAdapter.ViewHolder;
 public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
 
     public CatalogListAdapter(Context context, LazyList<Catalog> lazyList) {
-        super(context, R.layout.admin_calatog_list_item, lazyList); 
+        super(context, R.layout.admin_calatog_list_item, lazyList);
     }
 
     @Override

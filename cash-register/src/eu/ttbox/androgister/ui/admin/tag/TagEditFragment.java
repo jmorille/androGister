@@ -12,8 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import de.greenrobot.dao.AbstractDao;
+import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.domain.Product;
+import eu.ttbox.androgister.domain.ProductDao;
+import eu.ttbox.androgister.domain.ProductDao.Properties;
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.ui.admin.tag.holocolorpicker.ColorPicker.OnColorChangedListener;
 import eu.ttbox.androgister.ui.admin.tag.holocolorpicker.HoloColorPickerDialog;
@@ -22,19 +27,18 @@ import eu.ttbox.androgister.ui.core.validator.Form;
 import eu.ttbox.androgister.ui.core.validator.validate.ValidateTextView;
 import eu.ttbox.androgister.ui.core.validator.validator.NotEmptyValidator;
 
-public class TagEditFragment  extends EntityEditFragment<Tag> implements OnColorChangedListener {
+public class TagEditFragment extends EntityEditFragment<Tag> implements OnColorChangedListener {
 
     private static final String TAG = "TagEditFragment";
 
     private static final int PICK_COLOR = 325;
 
     private EditText nameText;
-    
-    // Instance 
-    private   Paint colorPaint = new Paint();
+
+    // Instance
+    private Paint colorPaint = new Paint();
     private Button colorPickerButton;
 
-    
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -44,7 +48,7 @@ public class TagEditFragment  extends EntityEditFragment<Tag> implements OnColor
         Log.d(TAG, "onCreateView BEGIN");
         View v = inflater.inflate(R.layout.admin_tag_edit, container, false);
         // Binding
-        nameText = (EditText) v.findViewById(R.id.tag_name); 
+        nameText = (EditText) v.findViewById(R.id.tag_name);
         // Color
         colorPickerButton = (Button) v.findViewById(R.id.tag_color_picker_button);
         colorPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -54,18 +58,16 @@ public class TagEditFragment  extends EntityEditFragment<Tag> implements OnColor
                 onColorPickerClick(v);
             }
         });
-        
+
         // Menu on Fragment
         setHasOptionsMenu(true);
         return v;
     }
-    
-    
+
     @Override
     public AbstractDao<Tag, Long> getEntityDao() {
         return getDaoSession().getTagDao();
     }
-
 
     // ===========================================================
     // Validator
@@ -77,35 +79,34 @@ public class TagEditFragment  extends EntityEditFragment<Tag> implements OnColor
         // Name
         ValidateTextView nameTextField = new ValidateTextView(nameText)//
                 .addValidator(new NotEmptyValidator());
-        formValidator.addValidates(nameTextField); 
+        formValidator.addValidates(nameTextField);
 
         return formValidator;
     }
-
 
     // ===========================================================
     // Bindings
     // ===========================================================
 
-    
     @Override
     public void bindView(Tag entity) {
         nameText.setText(entity.getName());
-        colorPaint.setColor(entity.getColor());
+        onColorChanged(entity.getColor());
     }
 
     @Override
     public Tag bindValue(Tag entity) {
         entity.setName(nameText.getText().toString());
+        entity.setColor(colorPaint.getColor());
         return entity;
     }
 
     @Override
     public Tag prepareInsert(Bundle args) {
-        doColorChangeRamdom() ;
+        doColorChangeRamdom();
         return new Tag();
     }
-    
+
     // ===========================================================
     // Color Picker
     // ===========================================================
@@ -115,7 +116,7 @@ public class TagEditFragment  extends EntityEditFragment<Tag> implements OnColor
         colorPicker.setTargetFragment(this, PICK_COLOR);
         colorPicker.show(getFragmentManager(), "colorPickerDialog");
     }
-    
+
     private void doColorChangeRamdom() {
         Random rand = new Random();
         int r = rand.nextInt(255);
@@ -124,7 +125,7 @@ public class TagEditFragment  extends EntityEditFragment<Tag> implements OnColor
         int ramdomColor = Color.rgb(r, g, b);
         onColorChanged(ramdomColor);
     }
-    
+
     @Override
     public void onColorChanged(int color) {
         Log.d(TAG, "Choose Color : " + color);
@@ -132,4 +133,29 @@ public class TagEditFragment  extends EntityEditFragment<Tag> implements OnColor
         colorPickerButton.setBackgroundColor(color);
     }
 
+    // ===========================================================
+    // Action
+    // ===========================================================
+
+    public ProductDao getProductDao() {
+        return getDaoSession().getProductDao();
+    }
+
+    @Override
+    public void onDeleteClick() {
+        // Validate Deps
+        long productCount = 0;
+        if (entity != null && entity.getId() != null) {
+            QueryBuilder<Product> queryCount = getProductDao().queryBuilder();
+            queryCount.where(Properties.TagId.eq(entity.getId()));
+            productCount = queryCount.count();
+        }
+        if (productCount < 1) {
+            super.onDeleteClick();
+        } else {
+            String text = getResources().getQuantityString(R.plurals.product_delete_constraints, (int)productCount,  productCount);
+             Log.w(TAG, "Could not delete entity for " + productCount + " Products");
+            Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        }
+    }
 }
