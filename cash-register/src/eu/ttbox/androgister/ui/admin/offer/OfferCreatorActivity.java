@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import eu.ttbox.androgister.AndroGisterActivity;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.ui.admin.catalog.CatalogListFragment;
 import eu.ttbox.androgister.ui.admin.catalog.CatalogListFragment.OnSelectCatalogListener;
@@ -12,7 +13,7 @@ import eu.ttbox.androgister.ui.admin.product.ProductListFragment.OnSelectProduct
 import eu.ttbox.androgister.ui.admin.tag.TagListFragment;
 import eu.ttbox.androgister.ui.admin.tag.TagListFragment.OnSelectTagListener;
 
-public class OfferCreatorActivity extends Activity {
+public class OfferCreatorActivity extends AndroGisterActivity {
 
     private static final String TAG = "OfferCreatorActivity";
 

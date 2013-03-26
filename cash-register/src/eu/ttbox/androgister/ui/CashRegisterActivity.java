@@ -1,7 +1,6 @@
 package eu.ttbox.androgister.ui;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import eu.ttbox.androgister.AndroGisterActivity;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.CoreHelper;
 import eu.ttbox.androgister.model.Offer;
@@ -28,7 +28,7 @@ import eu.ttbox.androgister.ui.register.RegisterMultiBasketFragment;
  * @author jmorille
  * 
  */
-public class CashRegisterActivity extends Activity {
+public class CashRegisterActivity extends AndroGisterActivity {
 
 	private static final String TAG = "CashRegisterActivity";
 
@@ -104,8 +104,9 @@ public class CashRegisterActivity extends Activity {
             return true;		
 	    }
 		default:
-			return super.onOptionsItemSelected(item);
+			
 		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	// ### Other

@@ -2,11 +2,10 @@ package eu.ttbox.androgister.ui.slidingmenu;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -14,7 +13,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
+
+import com.slidingmenu.lib.app.SlidingActivityBase;
+
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.ui.CashRegisterActivity;
+import eu.ttbox.androgister.ui.admin.offer.OfferCreatorActivity;
 import eu.ttbox.androgister.ui.config.MyPreferencesActivity;
 
 /**
@@ -29,8 +33,8 @@ public class SlidingMenuFragment extends Fragment {
 
     private SparseArray<SlindingMenuItemView> menuItems;
     private static int[] menuIds = new int[] { //
-    // R.id.menuMap, R.id.menu_track_person, R.id.menu_pairing,
-    // R.id.menu_smslog, R.id.menu_settings, R.id.menu_extra_feature
+    R.id.menu_cash_register, R.id.menu_catalog_manager //
+            , R.id.menu_preference //
     };
 
     // ===========================================================
@@ -77,7 +81,7 @@ public class SlidingMenuFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // Binding Menu
-        FragmentActivity activity = getActivity();
+        Activity activity = getActivity();
         Class<? extends Activity> activityClass = (Class<? extends Activity>) activity.getClass();
         for (int menuId : menuIds) {
             Class<? extends Activity> menuItemClass = getActivityClassByItemId(menuId);
@@ -121,6 +125,8 @@ public class SlidingMenuFragment extends Fragment {
         boolean isRootActivity = false;
         switch (itemId) {
         case R.id.menu_preference:
+        case R.id.menu_cash_register:
+        case R.id.menu_catalog_manager:
             // case R.id.menu_pairing:
             // case R.id.menu_track_person:
             // case R.id.menu_smslog:
@@ -146,6 +152,10 @@ public class SlidingMenuFragment extends Fragment {
 
     private Class<? extends Activity> getActivityClassByItemId(int itemId) {
         switch (itemId) {
+        case R.id.menu_cash_register:
+            return CashRegisterActivity.class;
+        case R.id.menu_catalog_manager:
+            return OfferCreatorActivity.class;
         case R.id.menu_preference:
             return MyPreferencesActivity.class;
             // case R.id.menuGeotracker:
@@ -170,10 +180,10 @@ public class SlidingMenuFragment extends Fragment {
         if (getActivity() == null)
             return;
 
-        // if (getActivity() instanceof SlidingActivityBase) {
-        // SlidingActivityBase fca = (SlidingActivityBase) getActivity();
-        // fca.showContent();
-        // }
+        if (getActivity() instanceof SlidingActivityBase) {
+            SlidingActivityBase fca = (SlidingActivityBase) getActivity();
+            fca.showContent();
+        }
     }
 
 }

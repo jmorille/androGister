@@ -12,13 +12,25 @@
         android:orientation="vertical" >
 
         <eu.ttbox.androgister.ui.slidingmenu.SlindingMenuItemView
+            android:id="@+id/menu_cash_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:src="@android:drawable/ic_menu_day"
+            app:text="Cash Register" />
+
+           <eu.ttbox.androgister.ui.slidingmenu.SlindingMenuItemView
+            android:id="@+id/menu_catalog_manager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:src="@android:drawable/ic_menu_gallery"
+            app:text="Catalog manager" />
+           
+        <eu.ttbox.androgister.ui.slidingmenu.SlindingMenuItemView
             android:id="@+id/menu_preference"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:src="@android:drawable/ic_menu_preferences"
             app:text="@string/menu_preference" />
-
-         
     </LinearLayout>
 
 </ScrollView>
