@@ -105,9 +105,4 @@ public class CatalogListFragment extends EntityLazyListFragment<Catalog, Catalog
             onSelectCatalogListener.onSelectCalalogId(  catalogId);
         } 
     }
-
-    public void onSelectProductId(Long[] productIds) {
-        // TODO Auto-generated method stub
-        
-    }
 }

@@ -91,6 +91,12 @@ public class CatalogProductListFragment extends   EntityLazyListFragment<Catalog
 
 
 
+    public void onSelectProductId(Long[] productIds) {
+       for (Long productId : productIds) {
+           
+       }
+        
+    }
 
 
 

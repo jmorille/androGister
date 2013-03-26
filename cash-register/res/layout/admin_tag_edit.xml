@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" >
+
+    <EditText
+        android:id="@+id/tag_name"
+        style="@style/entity_edit"
+        android:ems="25"
+        android:hint="@string/tag_name" />
+
+    <Button
+        android:id="@+id/tag_color_picker_button"
+        style="@style/entity_edit"
+        android:text="@string/tag_color_picker" />
+
+</LinearLayout>

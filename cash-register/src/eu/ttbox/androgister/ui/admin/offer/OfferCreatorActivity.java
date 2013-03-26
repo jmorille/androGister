@@ -75,6 +75,9 @@ public class OfferCreatorActivity extends Activity {
             if (productListFragment != null) {
                 productListFragment.onSelectTagId(tagId);
             }
+            if (catalogProductListFragment != null  ) {
+//                catalogsProductListFragment.onSelectTagId(tagId);
+            }
         }
 
         @Override
@@ -87,8 +90,8 @@ public class OfferCreatorActivity extends Activity {
 
         @Override
         public void onSelectProductId(Long... productIds) {
-            if (catalogListFragment != null && productIds != null) {
-                catalogListFragment.onSelectProductId(productIds);
+            if (catalogProductListFragment != null && productIds != null) {
+                catalogProductListFragment.onSelectProductId(productIds);
             }
 
         }

@@ -61,7 +61,9 @@
         <item quantity="one">Un résultat trouvé: </item>
         <item quantity="other">%1$d résultats trouvés: </item>
     </plurals>
+
     <string name="item_selected_title">Items Sélectionnés</string>
+
     <plurals name="item_selected">
         <item quantity="one">1 sélectionné</item>
         <item quantity="other">%d sélectionnés</item>
@@ -83,4 +85,13 @@
     <string name="product_price_ht">Prix HT</string>
     <string name="product_tag">Etiquette du produit</string>
 
+    <!-- Model Tag -->
+    <string name="tag_name">Nom du Tag</string>
+    <string name="tag_color">Couleur du Tag</string>
+    <string name="tag_color_picker">Palette de couleur</string>
+    
+    <!-- Model Catalog -->
+    <string name="catalog_name">Nom du Catalogue</string>
+    <string name="catalog_enabled">Activé</string>
+    
 </resources>
