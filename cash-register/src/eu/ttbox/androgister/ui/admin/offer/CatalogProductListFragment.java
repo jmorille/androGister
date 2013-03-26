@@ -2,6 +2,8 @@ package eu.ttbox.androgister.ui.admin.offer;
 
 import java.util.ArrayList;
 
+import android.content.ClipData;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -10,8 +12,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -46,12 +50,51 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new ModeCallback());
 
+//        listView.setOnItemLongClickListener(new DragAndDropListener());
         return v;
     }
 
     @Override
     public AdapterView<ListAdapter> getAdapterContainer() {
         return listView;
+    }
+
+    // ===========================================================
+    // Multi Choice Listener
+    // ===========================================================
+
+    // http://developer.android.com/guide/topics/ui/drag-drop.html
+    private class DragAndDropListener implements OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+           
+            // Create a new ClipData.Item from the ImageView object's tag
+            // ClipData.Item item = new ClipData.Item("Tag");
+            // ClipData dragData = new
+            // ClipData(v.getTag(),ClipData.MIMETYPE_TEXT_PLAIN,item);
+
+            ClipData data = ClipData.newPlainText("dot", "Dot : " + v.toString());
+
+            v.startDrag(data, new ANRShadowBuilder(v), (Object) v, 0);
+            return true;
+        }
+
+        // Shadow builder that can ANR if desired
+        class ANRShadowBuilder extends DragShadowBuilder {
+
+            public ANRShadowBuilder(View view) {
+                super(view);
+            }
+
+            @Override
+            public void onDrawShadow(Canvas canvas) {
+
+                super.onDrawShadow(canvas);
+            }
+        }
+
+   
     }
 
     // ===========================================================
