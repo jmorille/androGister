@@ -3,6 +3,7 @@ package eu.ttbox.androgister.ui.admin.offer;
 import java.util.ArrayList;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -47,10 +49,10 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
         View v = inflater.inflate(R.layout.admin_offer_creator, container, false);
         // Binding
         listView = (ListView) v.findViewById(R.id.calalog_product_list);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        listView.setMultiChoiceModeListener(new ModeCallback());
-
-//        listView.setOnItemLongClickListener(new DragAndDropListener());
+//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+//        listView.setMultiChoiceModeListener(new ModeCallback());
+//        listView.setOnItemClickListener(new DragAndDropListener());
+        listView.setOnItemLongClickListener(new DragAndDropListener());
         return v;
     }
 
@@ -64,19 +66,28 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
     // ===========================================================
 
     // http://developer.android.com/guide/topics/ui/drag-drop.html
-    private class DragAndDropListener implements OnItemLongClickListener {
+    private class DragAndDropListener implements OnItemLongClickListener, OnItemClickListener {
+
 
         @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
-           
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             // Create a new ClipData.Item from the ImageView object's tag
             // ClipData.Item item = new ClipData.Item("Tag");
             // ClipData dragData = new
             // ClipData(v.getTag(),ClipData.MIMETYPE_TEXT_PLAIN,item);
-
-            ClipData data = ClipData.newPlainText("dot", "Dot : " + v.toString());
-
-            v.startDrag(data, new ANRShadowBuilder(v), (Object) v, 0);
+            CatalogProduct item = (CatalogProduct) parent.getItemAtPosition(position);
+            Long productId = item.getProductId();
+            Intent intent = new Intent(Intent.ACTION_INSERT+ ".Product");
+            intent.putExtra(Intent.EXTRA_UID, productId);
+            
+            ClipData data = ClipData.newIntent("Product", intent);
+            DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+            view.startDrag(data, new ANRShadowBuilder(view), (Object) view, 0);
+        }
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            onItemClick(parent, view, position, id);
+          
             return true;
         }
 
@@ -93,6 +104,7 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
                 super.onDrawShadow(canvas);
             }
         }
+
 
    
     }

@@ -18,6 +18,8 @@ import eu.ttbox.androgister.ui.admin.catalog.CatalogListAdapter.ViewHolder;
 
 public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
 
+    private static final String TAG = "CatalogListAdapter";
+
     private Context context;
     public CharSequence dragData;
 
@@ -29,13 +31,14 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
     @Override
     public void bindView(View view, ViewHolder holder, Context context, Catalog item) {
         holder.nameText.setText(item.getName());
+         
     }
 
     @Override
     public ViewHolder newViewHolder(View view, Context context, Catalog item, ViewGroup parent) {
         ViewHolder holder = new ViewHolder();
         holder.nameText = (TextView) view;
-//        view.setOnDragListener(new MyDragEventListener());
+         view.setOnDragListener(new MyDragEventListener());
         return holder;
     }
 
@@ -49,112 +52,95 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
         // event to the
         // listener.
         public boolean onDrag(View v, DragEvent event) {
+            boolean result = false;
+            boolean mAcceptsDrag = true;
+            boolean mDragInProgress = false;
+            boolean mHovering = false;
 
-            // Defines a variable to store the action type for the incoming
-            // event
-            final int action = event.getAction();
-
-            // Handles each of the expected events
-            switch (action) {
-
-            case DragEvent.ACTION_DRAG_STARTED:
-
-                // Determines if this View can accept the dragged data
-                if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                     // As an example of what your application might do,
-                    // applies a blue color tint to the View to indicate that it
-                    // can accept
-                    // data.
-                    // v.setColorFilter(Color.BLUE);
-                     // Invalidate the view to force a redraw in the new tint
+            switch (event.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED: {
+                // claim to accept any dragged content
+                Log.i(TAG, "Drag started, event=" + event);
+                // cache whether we accept the drag to return for LOCATION
+                // events
+                 mDragInProgress = true;
+                 mAcceptsDrag = result = true;
+                // Redraw in the new visual state if we are a potential drop
+                // target
+                if (mAcceptsDrag) {
                     v.invalidate();
-                     // returns true to indicate that the View can accept the
-                    // dragged data.
-                    return (true);
-                 } else {
-                     // Returns false. During the current drag and drop
-                    // operation, this View will
-                    // not receive events again until ACTION_DRAG_ENDED is sent.
-                    return (false);
-                 }
-               
-
-            case DragEvent.ACTION_DRAG_ENTERED: 
-                // Applies a green tint to the View. Return true; the return
-                // value is ignored. 
-                // v.setColorFilter(Color.GREEN);
-
-                // Invalidate the view to force a redraw in the new tint
-                v.invalidate();
-
-                return (true);
-
-                
-
-            case DragEvent.ACTION_DRAG_LOCATION: 
-                // Ignore the event
-                return (true);
-
-                
-
-            case DragEvent.ACTION_DRAG_EXITED: 
-                // Re-sets the color tint to blue. Returns true; the return
-                // value is ignored.
-                // v.setColorFilter(Color.BLUE); 
-                // Invalidate the view to force a redraw in the new tint
-                v.invalidate(); 
-                return (true);
-
-               
-
-            case DragEvent.ACTION_DROP:
-
-                // Gets the item containing the dragged data
-                ClipData.Item item = event.getClipData().getItemAt(0);
-
-                // Gets the text data from the item.
-                dragData = item.getText();
-
-                // Displays a message containing the dragged data.
-                Toast.makeText(context, "Dragged data is " + dragData, Toast.LENGTH_LONG);
-
-                // Turns off any color tints
-                // v.clearColorFilter(); 
-                // Invalidates the view to force a redraw
-                v.invalidate(); 
-                // Returns true. DragEvent.getResult() will return true.
-                return (true);
- 
-
-            case DragEvent.ACTION_DRAG_ENDED:
-
-                // Turns off any color tinting
-                // v.clearColorFilter();
-
-                // Invalidates the view to force a redraw
-                v.invalidate();
-
-                // Does a getResult(), and displays what happened.
-                if (event.getResult()) {
-                    Toast.makeText(context, "The drop was handled.", Toast.LENGTH_LONG);
-
-                } else {
-                    Toast.makeText(context, "The drop didn't work.", Toast.LENGTH_LONG);
-
                 }
-                ;
-
-                // returns true; the value is ignored.
-                return (true);
- 
-
-            // An unknown action type was received.
-            default:
-                Log.e("DragDrop Example", "Unknown action type received by OnDragListener.");
-
-                return false;
             }
-            
+                break;
+
+            case DragEvent.ACTION_DRAG_ENDED: {
+                Log.d(TAG, "Drag ended ."  + ((TextView)v).getText());
+                if (mAcceptsDrag) {
+                    v.invalidate();
+                }
+                mDragInProgress = false;
+                mHovering = false;
+            }
+                break;
+
+            case DragEvent.ACTION_DRAG_LOCATION: {
+                // we returned true to DRAG_STARTED, so return true here
+                Log.d(TAG, "... seeing drag locations ..."  + ((TextView)v).getText() );
+                result = mAcceptsDrag;
+            }
+                break;
+
+            case DragEvent.ACTION_DROP: {
+                Log.i(TAG, "Got a drop! dot=" + this + " event=" + event + " // " + ((TextView)v).getText());
+                processDrop(event);
+                result = true;
+            }
+                break;
+
+            case DragEvent.ACTION_DRAG_ENTERED: {
+                Log.d(TAG, "Entered dot @ " + this);
+                v.setBackgroundColor(Color.RED);
+                mHovering = true;
+                v.invalidate();
+            }
+                break;
+
+            case DragEvent.ACTION_DRAG_EXITED: {
+                Log.d(TAG, "Exited dot @ " + this);
+                v.setBackgroundColor(Color.BLACK);
+                mHovering = false;
+                v.invalidate();
+            }
+                break;
+
+            default:
+                Log.i(TAG, "other drag event: " + event);
+                result = mAcceptsDrag;
+                break;
+            }
+
+            return result;
+
         };
     }
+
+    private void processDrop(DragEvent event) {
+        final ClipData data = event.getClipData();
+        final int N = data.getItemCount();
+        for (int i = 0; i < N; i++) {
+            ClipData.Item item = data.getItemAt(i);
+            Log.i(TAG, "Dropped item " + i + " : " + item);
+            // if (mReportView != null) {
+            String text = item.coerceToText(context).toString();
+            if (event.getLocalState() == (Object) this) {
+                text += " : Dropped on self!";
+            }
+            text += " : " ;
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+            // mReportView.setText(text);
+            // }
+        }
+    }
+    
+    
 }
