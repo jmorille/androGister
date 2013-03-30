@@ -1,3 +1,3 @@
 1;Sur place;19.5
 2;A emporté;5.5
-3;Sur place;19.5;A emporté;5.5
+3;19./5.5;19.5;A emporté;5.5

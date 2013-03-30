@@ -21,7 +21,7 @@ public class ProductDbBootstrap extends AbstractEntityDbBootstrap {
      * @return rowId or -1 if failed
      */
     @Override
-    public long addLineEntity(String[] strings) {
+    public long addLineEntity( SQLiteDatabase db, String[] strings) {
         String name = strings[0];
         String tag = strings[1];
         String price = strings[2];

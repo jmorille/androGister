@@ -84,7 +84,8 @@
     <string name="product_description">Description du Produit</string>
     <string name="product_price_ht">Prix HT</string>
     <string name="product_tag">Etiquette du produit</string>
-
+    <string name="product_taxe">TVA</string>
+    
       <plurals name="product_delete_constraints">
         <item quantity="one">Suppression impossible : 1 produit lié</item>
         <item quantity="other">Suppression impossible : %d produits liés</item>

@@ -17,7 +17,10 @@ import eu.ttbox.androgister.domain.ProductDao;
 import eu.ttbox.androgister.domain.ProductDao.Properties;
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
+import eu.ttbox.androgister.domain.Taxe;
+import eu.ttbox.androgister.domain.TaxeDao;
 import eu.ttbox.androgister.ui.admin.tag.TagListAdapter;
+import eu.ttbox.androgister.ui.admin.taxe.TaxeListAdapter;
 import eu.ttbox.androgister.ui.core.crud.CrudHelper;
 import eu.ttbox.androgister.ui.core.crud.EntityEditFragment;
 import eu.ttbox.androgister.ui.core.validator.Form;
@@ -29,9 +32,6 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
     private static final String TAG = "ProductEditFragment";
 
-    // service
-    private TagDao tagDao;
-
     // Binding
     private EditText nameText;
     private EditText descText;
@@ -39,8 +39,10 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
     private EditText tagText;
 
     private Spinner tagSpinner;
+    private Spinner taxeSpinner;
 
     // Instance
+    TaxeListAdapter taxeListAdapter;
     TagListAdapter tagListAdapter;
 
     // ===========================================================
@@ -57,21 +59,41 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         priceHTText = (EditText) v.findViewById(R.id.product_price_ht);
         tagText = (EditText) v.findViewById(R.id.product_tag);
         tagSpinner = (Spinner) v.findViewById(R.id.product_tag_spinner);
-
+        taxeSpinner = (Spinner) v.findViewById(R.id.product_taxe_spinner);
         // Listener
-        tagSpinner.setOnItemSelectedListener(tagOnItemSelectedListener);
+        // tagSpinner.setOnItemSelectedListener(tagOnItemSelectedListener);
 
-        // Load Spinner
-        tagDao = getDaoSession().getTagDao();
-        LazyList<Tag> tags = tagDao.queryBuilder()//
-                .orderAsc(TagDao.Properties.Name) //
-                .listLazy();
-        tagListAdapter = new TagListAdapter(getActivity(), tags);
-        tagSpinner.setAdapter(tagListAdapter);
+        // Load Taxe Spinner
+        taxeListAdapter = new TaxeListAdapter(getActivity(), null);
+        taxeSpinner.setAdapter(taxeListAdapter);
+
+        // Load Tag Spinner
+        tagListAdapter = new TagListAdapter(getActivity(), null);
+        tagSpinner.setAdapter(tagListAdapter); 
+        
+        // Load
+        loadTagSpinner();
+        loadTaxeSpinner();
 
         // Menu on Fragment
         setHasOptionsMenu(true);
         return v;
+    }
+
+    private void loadTaxeSpinner() {
+        TaxeDao taxeDao = getDaoSession().getTaxeDao();
+        LazyList<Taxe> taxes = taxeDao.queryBuilder()//
+                .orderAsc(TaxeDao.Properties.Title) //
+                .listLazy();
+        taxeListAdapter.changeCursor(taxes);
+     }
+
+    private void loadTagSpinner() { 
+        TagDao tagDao = getDaoSession().getTagDao();
+        LazyList<Tag> tags = tagDao.queryBuilder()//
+                .orderAsc(TagDao.Properties.Name) //
+                .listLazy();
+        tagListAdapter.changeCursor(tags);
     }
 
     @Override
@@ -80,6 +102,9 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
             // Close LazyListAdpater for closing LazyList
             tagListAdapter.close();
             tagListAdapter = null;
+            // Taxe
+            taxeListAdapter.close();
+            taxeListAdapter = null;
         }
         super.onDestroyView();
     }
@@ -142,6 +167,7 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
         // Tag
         selectSpinnerToTagId(entity.getTagId());
+        selectSpinnerToTaxeId(entity.getTaxeId());
     }
 
     private void selectSpinnerToTagId(Long wantedTagId) {
@@ -150,6 +176,18 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
             for (int i = 0; i < tagListAdapter.getCount(); i++) {
                 if (tagListAdapter.getItemId(i) == tagId) {
                     this.tagSpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void selectSpinnerToTaxeId(Long wantedTaxeId) {
+        if (wantedTaxeId != null) {
+            long tagId = wantedTaxeId.longValue();
+            for (int i = 0; i < taxeListAdapter.getCount(); i++) {
+                if (taxeListAdapter.getItemId(i) == tagId) {
+                    this.taxeSpinner.setSelection(i);
                     break;
                 }
             }

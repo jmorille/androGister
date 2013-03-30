@@ -25,7 +25,7 @@ public class TagsDbBootstrap extends AbstractEntityDbBootstrap {
      * @return rowId or -1 if failed
      */
     @Override
-    public long addLineEntity(String[] strings) {
+    public long addLineEntity( SQLiteDatabase db, String[] strings) {
         Long id = Long.valueOf(strings[0] );
         String name = strings[1] ;
         Integer color = strings.length > 2 ? Integer.valueOf(strings[2] ) : doColorChangeRamdom();

@@ -90,6 +90,7 @@ public abstract class EntityLazyListFragment<T extends DomainModel, DAO extends 
     // ===========================================================
 
     public void reloadData() {
+        Log.d(TAG, "Begin reloadData");
         QueryBuilder<T> query = createSearchQuery(entityDao);
         listAdapter.changeCursor(query.listLazy());
     }

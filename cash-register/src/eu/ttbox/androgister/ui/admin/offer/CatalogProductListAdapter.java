@@ -43,7 +43,7 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
         holder.priceText.setText(priceString);
         // Listener
         view.setOnTouchListener(gestureListener);
-//        view.setOn
+        // view.setOn
     }
 
     @Override
@@ -64,30 +64,27 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
     // ===========================================================
     // http://mobile.tutsplus.com/tutorials/android/android-sdk-implementing-drag-and-drop-functionality/
 
-    private class ListGestureListener extends SimpleOnGestureListener{
-        
+    private class ListGestureListener extends SimpleOnGestureListener {
+
         private View view;
-         
-        
+
         public ListGestureListener(View view) {
             super();
             this.view = view;
         }
- 
 
-        public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                float distanceX, float distanceY) {
-            if (distanceX>distanceY) {
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if (distanceX > distanceY) {
                 return startDrag(view, e1);
             }
             return false;
         }
-        
+
     }
-    
+
     /**
      * http://developer.android.com/training/gestures/movement.html
-      */
+     */
     private class GestureListener implements OnTouchListener {
 
         private VelocityTracker mVelocityTracker = null;
@@ -98,7 +95,7 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
             int action = MotionEventCompat.getActionMasked(event);
             int index = MotionEventCompat.getActionIndex(event);
             int pointerId = MotionEventCompat.getPointerId(event, index);
-
+          
             switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (mVelocityTracker == null) {
@@ -109,10 +106,11 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
                     // Reset the velocity tracker back to its initial state.
                     mVelocityTracker.clear();
                 }
+                Log.d(TAG, "PointerCount : " +   MotionEventCompat.getPointerCount(event) );
                 // Add a user's movement to the tracker.
                 mVelocityTracker.addMovement(event);
-//                return false;
-                break;
+                return true;
+                // break;
             case MotionEvent.ACTION_MOVE:
                 mVelocityTracker.addMovement(event);
                 // When you want to determine the velocity, call
@@ -122,22 +120,29 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
                 mVelocityTracker.computeCurrentVelocity(1000);
                 // Log velocity of pixels per second
                 // Best practice to use VelocityTrackerCompat where possible.
-                Log.d("", "X velocity: " + VelocityTrackerCompat.getXVelocity(mVelocityTracker, pointerId));
-                Log.d("", "Y velocity: " + VelocityTrackerCompat.getYVelocity(mVelocityTracker, pointerId));
+//                Log.d("", "Velocity (X,Y): " + VelocityTrackerCompat.getXVelocity(mVelocityTracker, pointerId) + " , " + VelocityTrackerCompat.getYVelocity(mVelocityTracker, pointerId));
                 float veloX = Math.abs(VelocityTrackerCompat.getXVelocity(mVelocityTracker, pointerId));
                 float veloY = Math.abs(VelocityTrackerCompat.getYVelocity(mVelocityTracker, pointerId));
                 if (veloX > veloY) {
                     return startDrag(view, event);
                 }
+                // return true;
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 // Return a VelocityTracker object back to be re-used by others.
-                mVelocityTracker.recycle();
+                mVelocityTracker.recycle(); 
+                 break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                Log.d(TAG, "GestureListener ignore  action ACTION_POINTER_DOWN : " + event.getAction());
+                Log.d(TAG, "PointerCount : " +   MotionEventCompat.getPointerCount(event) );
                 break;
+            default:
+                Log.d(TAG, "GestureListener ignore  action  : " + event.getAction());
+                return false;
             }
 
-            return true;
+            return false;
         }
     }
 

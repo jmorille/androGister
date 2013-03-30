@@ -20,8 +20,7 @@ public class TagListAdapter extends LazyListAdapter<Tag, ViewHolder> {
     }
 
     @Override
-    public void bindView(View view, ViewHolder holder, Context context, Tag item) {
-        Log.d(TAG, "bindView with Tag Id : " + item.getId());
+    public void bindView(View view, ViewHolder holder, Context context, Tag item) { 
         holder.nameText.setText(item.getName());
     }
 

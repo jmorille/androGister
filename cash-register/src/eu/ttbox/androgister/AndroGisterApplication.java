@@ -23,8 +23,8 @@ public class AndroGisterApplication extends Application {
     private OrderIdSequence orderIdSequence = new OrderIdSequence();
     private DaoSession daoSession;
 
-    private Bus  eventBus = new Bus();
-    
+    private Bus eventBus = new Bus();
+
     @Override
     public void onCreate() {
         // Create Application
@@ -41,7 +41,7 @@ public class AndroGisterApplication extends Application {
         protected Void doInBackground(Void... params) {
             final Context context = AndroGisterApplication.this;
             // Initalize Event Bus
-             initDaoSession();
+            initDaoSession();
             // Increment Counter Lauch
             int laugthCount = incrementApplicationLaunchCounter(context);
             Log.i(TAG, "Laugth count " + laugthCount);
@@ -72,8 +72,7 @@ public class AndroGisterApplication extends Application {
     public Bus getEventBus() {
         return eventBus;
     }
-     
-    
+
     public DaoSession getDaoSession() {
         if (daoSession == null) {
             daoSession = initDaoSession();
@@ -82,10 +81,13 @@ public class AndroGisterApplication extends Application {
     }
 
     private synchronized DaoSession initDaoSession() {
-        RegisterDbOpenHelper helper = new RegisterDbOpenHelper(AndroGisterApplication.this, null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        DaoSession daoSession = daoMaster.newSession();
+        if (daoSession == null) {
+            Log.d(TAG, "initDaoSession");
+            RegisterDbOpenHelper helper = new RegisterDbOpenHelper(AndroGisterApplication.this, null);
+            SQLiteDatabase db = helper.getWritableDatabase();
+            DaoMaster daoMaster = new DaoMaster(db);
+            this.daoSession = daoMaster.newSession();
+        }
         return daoSession;
     }
 

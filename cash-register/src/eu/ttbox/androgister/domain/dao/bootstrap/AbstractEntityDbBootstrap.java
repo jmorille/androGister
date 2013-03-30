@@ -65,13 +65,14 @@ public abstract class AbstractEntityDbBootstrap {
                     continue;
                 }
                 String[] strings =   colVals.toArray(new String[colVals.size()]);
-                 long id = addLineEntity(strings);
-                Log.d(TAG, String.format("Add Entity id %s : name=%s", id, strings[0] ));
+                 long id = addLineEntity(mDatabase, strings);
+//                Log.d(TAG, String.format("Add Entity id %s : name=%s", id, strings[0] ));
                 if (id < 0) {
                     Log.e(TAG, "unable to add Entity line : " + line);
                 } else {
                     insertCount++;
                 }
+                mDatabase.yieldIfContendedSafely();
             }
             mDatabase.setTransactionSuccessful();
             long end = System.currentTimeMillis();
@@ -80,7 +81,6 @@ public abstract class AbstractEntityDbBootstrap {
             reader.close();
             mDatabase.endTransaction();
         }
-        Log.d(TAG, "DONE loading entities.");
     }
 
     public SimpleStringSplitter getNewStringSplitter() {
@@ -119,5 +119,5 @@ public abstract class AbstractEntityDbBootstrap {
      * 
      * @return rowId or -1 if failed
      */
-    public abstract long addLineEntity(   String[]  values);
+    public abstract long addLineEntity(  SQLiteDatabase db,  String[]  values);
 }
