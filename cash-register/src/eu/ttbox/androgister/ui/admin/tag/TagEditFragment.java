@@ -17,11 +17,11 @@ import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.query.QueryBuilder;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.domain.Product;
-import eu.ttbox.androgister.domain.ProductDao;
-import eu.ttbox.androgister.domain.ProductDao.Properties;
+import eu.ttbox.androgister.domain.ProductDao; 
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.ui.admin.tag.holocolorpicker.ColorPicker.OnColorChangedListener;
 import eu.ttbox.androgister.ui.admin.tag.holocolorpicker.HoloColorPickerDialog;
+import eu.ttbox.androgister.ui.core.crud.CrudHelper;
 import eu.ttbox.androgister.ui.core.crud.EntityEditFragment;
 import eu.ttbox.androgister.ui.core.validator.Form;
 import eu.ttbox.androgister.ui.core.validator.validate.ValidateTextView;
@@ -96,7 +96,7 @@ public class TagEditFragment extends EntityEditFragment<Tag> implements OnColorC
 
     @Override
     public Tag bindValue(Tag entity) {
-        entity.setName(nameText.getText().toString());
+        entity.setName( CrudHelper.getStringTrimmed(nameText)  );
         entity.setColor(colorPaint.getColor());
         return entity;
     }
@@ -147,7 +147,7 @@ public class TagEditFragment extends EntityEditFragment<Tag> implements OnColorC
         long productCount = 0;
         if (entity != null && entity.getId() != null) {
             QueryBuilder<Product> queryCount = getProductDao().queryBuilder();
-            queryCount.where(Properties.TagId.eq(entity.getId()));
+            queryCount.where(ProductDao.Properties.TagId.eq(entity.getId()));
             productCount = queryCount.count();
         }
         if (productCount < 1) {

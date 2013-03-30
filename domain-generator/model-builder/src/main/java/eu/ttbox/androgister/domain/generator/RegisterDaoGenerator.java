@@ -11,8 +11,10 @@ public class RegisterDaoGenerator {
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(Integer.parseInt(args[0]), args[1]);
 
+        Entity taxe = addTaxe(schema);
+
         Entity tag = addTag(schema);
-        Entity product = addProduct(schema, tag);
+        Entity product = addProduct(schema, tag, taxe);
         Entity catalog = addCatalog(schema);
 
         addCatalogProduct(schema, catalog, product);
@@ -53,7 +55,7 @@ public class RegisterDaoGenerator {
         return catalogProduct;
     }
 
-    private static Entity addProduct(Schema schema, Entity tag) {
+    private static Entity addProduct(Schema schema, Entity tag, Entity taxe) {
         Entity product = schema.addEntity("Product");//
         implementsDomainModel(product);
         implementsVersionning(product);
@@ -65,9 +67,17 @@ public class RegisterDaoGenerator {
 
         // Tag
         Property tagFk = product.addLongProperty("tagId")//
-                .index() //  
+                .index() //
+                .notNull() //
                 .getProperty();
         product.addToOne(tag, tagFk);
+
+        // taxes
+        Property taxeFk = product.addLongProperty("taxeId")//
+                .index() //
+                // TDOO .notNull() //
+                .getProperty();
+        product.addToOne(taxe, taxeFk);
 
         return product;
     }
@@ -89,6 +99,20 @@ public class RegisterDaoGenerator {
         catalog.addStringProperty("name").notNull();
         catalog.addBooleanProperty("enabled").notNull();
         return catalog;
+    }
+
+    private static Entity addTaxe(Schema schema) {
+        Entity taxe = schema.addEntity("Taxe");
+        implementsDomainModel(taxe);
+        // Properties
+        // Primary
+        taxe.addStringProperty("title").notNull();
+        taxe.addStringProperty("taxeName").notNull();
+        taxe.addFloatProperty("taxePercent").notNull();
+        // Alternate
+        taxe.addStringProperty("alternateName");
+        taxe.addFloatProperty("alternateTaxePercent");
+        return taxe;
     }
 
     private static Entity addOffer(Schema schema) {

@@ -78,6 +78,8 @@ public class ValidateTextView implements ValidateField {
         return this;
     }
 
+    
+    @Override
     public boolean isValid(CharSequence value) {
         boolean result = true;
         this.mMessage = "";

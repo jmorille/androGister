@@ -3,21 +3,28 @@ package eu.ttbox.androgister.ui.admin.offer;
 import java.util.ArrayList;
 
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
+import android.view.View.OnTouchListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -35,7 +42,7 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
 
     private static final String TAG = "CatalogProductListFragment";
 
-    private ListView listView;
+    private GridView listView;
 
     // Instance
     private Long catalogId;
@@ -43,16 +50,89 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
     // ===========================================================
     // Constructor
     // ===========================================================
+// http://developer.android.com/training/gestures/viewgroup.html
+    private class TouchGridView extends GridView {
+
+        private boolean mIsScrolling;
+        private int mTouchSlop;
+
+        //
+
+        public TouchGridView(Context context, AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+        }
+
+        public TouchGridView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public TouchGridView(Context context) {
+            super(context);
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+            final int action = MotionEventCompat.getActionMasked(ev);
+            // Always handle the case of the touch gesture being complete.
+            if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+                // Release the scroll.
+                mIsScrolling = false;
+                return false; // Do not intercept touch event, let the child
+                              // handle it
+            }
+
+            switch (action) {
+            case MotionEvent.ACTION_MOVE: {
+                if (mIsScrolling) {
+                    // We're currently scrolling, so yes, intercept the
+                    // touch event!
+                    return true;
+                }
+
+                // If the user has dragged her finger horizontally more than
+                // the touch slop, start the scroll
+
+                // left as an exercise for the reader
+                final boolean xDiff = calculateDistanceX(ev);
+
+                // Touch slop should be calculated using ViewConfiguration
+                // constants.
+                if (xDiff ) {
+                    // Start scrolling!
+                    mIsScrolling = true;
+                    return true;
+                }
+                break;
+            }
+            }
+
+            return false;
+
+        }
+
+        private boolean calculateDistanceX(MotionEvent ev) {
+
+            float dx = Math.abs(  ev.getHistoricalX(0) - ev.getX());
+            float dy =Math.abs(  ev.getHistoricalY(0) - ev.getY());
+            if (dx>dy && dx >20) {
+//                return start
+                return true;
+            }
+            return false;
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.admin_offer_creator, container, false);
         // Binding
-        listView = (ListView) v.findViewById(R.id.calalog_product_list);
-//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-//        listView.setMultiChoiceModeListener(new ModeCallback());
-//        listView.setOnItemClickListener(new DragAndDropListener());
-        listView.setOnItemLongClickListener(new DragAndDropListener());
+        listView = (GridView) v.findViewById(R.id.calalog_product_gridview);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new ModeCallback());
+        // listView.setOnItemClickListener(new DragAndDropListener());
+        // listView.setOnItemLongClickListener(new DragAndDropListener());
+        // listView.setOnTouchListener(new GestureListener());
         return v;
     }
 
@@ -62,12 +142,36 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
     }
 
     // ===========================================================
+    // Gesture Listener
+    // ===========================================================
+    // http://mobile.tutsplus.com/tutorials/android/android-sdk-implementing-drag-and-drop-functionality/
+    private class GestureListener implements OnTouchListener {
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                // setup drag
+                // CatalogProduct item = (CatalogProduct)
+                // parent.getItemAtPosition(position);
+                Long productId = null; // item.getProductId();
+                Intent intent = new Intent(Intent.ACTION_INSERT + ".Product");
+                intent.putExtra(Intent.EXTRA_UID, productId);
+
+                ClipData data = ClipData.newIntent("Product", intent);
+                DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                view.startDrag(data, shadowBuilder, (Object) view, 0);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    // ===========================================================
     // Multi Choice Listener
     // ===========================================================
 
     // http://developer.android.com/guide/topics/ui/drag-drop.html
     private class DragAndDropListener implements OnItemLongClickListener, OnItemClickListener {
-
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,17 +181,18 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
             // ClipData(v.getTag(),ClipData.MIMETYPE_TEXT_PLAIN,item);
             CatalogProduct item = (CatalogProduct) parent.getItemAtPosition(position);
             Long productId = item.getProductId();
-            Intent intent = new Intent(Intent.ACTION_INSERT+ ".Product");
+            Intent intent = new Intent(Intent.ACTION_INSERT + ".Product");
             intent.putExtra(Intent.EXTRA_UID, productId);
-            
+
             ClipData data = ClipData.newIntent("Product", intent);
             DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
             view.startDrag(data, new ANRShadowBuilder(view), (Object) view, 0);
         }
+
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             onItemClick(parent, view, position, id);
-          
+
             return true;
         }
 
@@ -105,8 +210,6 @@ public class CatalogProductListFragment extends EntityLazyListFragment<CatalogPr
             }
         }
 
-
-   
     }
 
     // ===========================================================

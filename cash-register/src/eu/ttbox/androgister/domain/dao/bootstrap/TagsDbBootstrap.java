@@ -16,7 +16,7 @@ public class TagsDbBootstrap extends AbstractEntityDbBootstrap {
     private static final String TAG = "TagsDbBootstrap";
 
     public TagsDbBootstrap(Context mHelperContext, SQLiteDatabase mDatabase) {
-        super(mHelperContext, mDatabase, R.raw.tags);
+        super(mHelperContext, mDatabase, R.raw.tags, ';');
     }
 
     /**
@@ -26,9 +26,9 @@ public class TagsDbBootstrap extends AbstractEntityDbBootstrap {
      */
     @Override
     public long addLineEntity(String[] strings) {
-        Long id = Long.valueOf(strings[0].trim());
-        String name = strings[1].trim();
-        Integer color = strings.length > 2 ? Integer.valueOf(strings[2].trim()) : doColorChangeRamdom();
+        Long id = Long.valueOf(strings[0] );
+        String name = strings[1] ;
+        Integer color = strings.length > 2 ? Integer.valueOf(strings[2] ) : doColorChangeRamdom();
         ContentValues initialValues = new ContentValues();
         initialValues.put(Properties.Id.columnName, id);
         initialValues.put(Properties.Name.columnName, name);

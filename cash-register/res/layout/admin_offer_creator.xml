@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <ListView
-        android:id="@+id/calalog_product_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</LinearLayout>
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/calalog_product_gridview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnWidth="160dp"
+    android:drawSelectorOnTop="false"
+    android:horizontalSpacing="10dp"
+    android:numColumns="auto_fit"
+    android:verticalSpacing="10dp" />

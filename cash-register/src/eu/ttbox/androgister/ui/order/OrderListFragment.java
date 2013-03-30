@@ -86,13 +86,13 @@ public class OrderListFragment extends Fragment {
                 String countString = getResources().getQuantityString(R.plurals.search_results, count, new Object[] { count });
                 searchResultTextView.setText(countString);
             }
-            listAdapter.swapCursor(cursor);
+            listAdapter.changeCursor(cursor);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
             searchResultTextView.setText(R.string.search_instructions);
-            listAdapter.swapCursor(null);
+            listAdapter.changeCursor(null);
         }
 
     };

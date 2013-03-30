@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.text.TextUtils.SimpleStringSplitter;
 import android.util.Log;
 
 public abstract class AbstractEntityDbBootstrap {
@@ -19,13 +21,14 @@ public abstract class AbstractEntityDbBootstrap {
     public SQLiteDatabase mDatabase;
     public int sourceRawRessourceId;
 
-    public String splitSep = "-";
+    public char splitSep = ';';
 
-    public AbstractEntityDbBootstrap(Context mHelperContext, SQLiteDatabase mDatabase, int sourceRawRessourceId) {
+    public AbstractEntityDbBootstrap(Context mHelperContext, SQLiteDatabase mDatabase, int sourceRawRessourceId, char sep) {
         super();
         this.mHelperContext = mHelperContext;
         this.mDatabase = mDatabase;
         this.sourceRawRessourceId = sourceRawRessourceId;
+        this.splitSep = sep;
     }
 
     /**
@@ -53,12 +56,17 @@ public abstract class AbstractEntityDbBootstrap {
         long begin = System.currentTimeMillis();
         try {
             String line;
+//            String splitSepString = "" + splitSep;
+            SimpleStringSplitter splitter = getNewStringSplitter();
             while ((line = reader.readLine()) != null) {
-                String[] strings = TextUtils.split(line, splitSep);
-                if (strings.length < 2)
+//                String[] strings = TextUtils.split(line, splitSepString);
+                ArrayList<String> colVals = splitLineEntity(line, splitter);
+                if (colVals==null) {
                     continue;
-                long id = addLineEntity(strings);
-                Log.d(TAG, String.format("Add Entity id %s : name=%s", id, strings[0]));
+                }
+                String[] strings =   colVals.toArray(new String[colVals.size()]);
+                 long id = addLineEntity(strings);
+                Log.d(TAG, String.format("Add Entity id %s : name=%s", id, strings[0] ));
                 if (id < 0) {
                     Log.e(TAG, "unable to add Entity line : " + line);
                 } else {
@@ -75,10 +83,41 @@ public abstract class AbstractEntityDbBootstrap {
         Log.d(TAG, "DONE loading entities.");
     }
 
+    public SimpleStringSplitter getNewStringSplitter() {
+        SimpleStringSplitter splitter = new SimpleStringSplitter(splitSep);
+        return splitter;
+    }
+    
     /**
      * Add a word to the dictionary.
      * 
      * @return rowId or -1 if failed
      */
-    public abstract long addLineEntity(String[] values);
+    public  ArrayList<String> splitLineEntity(String line,  SimpleStringSplitter splitter) {
+        if (line == null || line.length() < 1) {
+            return null;
+        } 
+        splitter.setString(line);
+        ArrayList<String> colVals = new ArrayList<String>();
+        for (String col : splitter) {
+            String colVal = col;
+            // Trim to null
+            int trimmedSize = TextUtils.getTrimmedLength(colVal);
+            if (trimmedSize < 1) {
+                colVal = null;
+            } else if (trimmedSize < colVal.length()) {
+                colVal = colVal.trim();
+            }
+           // All col value
+            colVals.add(colVal);
+        }
+        return  colVals;
+    }
+
+    /**
+     * Add a word to the dictionary.
+     * 
+     * @return rowId or -1 if failed
+     */
+    public abstract long addLineEntity(   String[]  values);
 }

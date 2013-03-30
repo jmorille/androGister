@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ public class ProductListFragment extends EntityLazyListFragment<Product, Product
     private static final String TAG = "ProductAdminFragment";
  
     // Binding
-    ListView productList;
+    private  GridView productList;
 
     private OnSelectProductListener onSelectProductListener;
 
@@ -60,7 +61,7 @@ public class ProductListFragment extends EntityLazyListFragment<Product, Product
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.admin_product_list, container, false);
         // Binding
-        productList = (ListView) v.findViewById(R.id.product_list);
+        productList = (GridView) v.findViewById(R.id.product_gridview);
         // List Listener
         // http://developer.android.com/guide/topics/ui/menus.html#CAB
         productList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);

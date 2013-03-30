@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" >
+
+    <EditText
+        android:id="@+id/taxe_title"
+        style="@style/entity_edit"
+        android:ems="15"
+        android:hint="@string/taxe_name" />
+
+    <EditText
+        android:id="@+id/taxe_name"
+        style="@style/entity_edit"
+        android:layout_below="@id/taxe_title"
+        android:ems="15"
+        android:hint="@string/taxe_name" />
+
+    <EditText
+        android:id="@+id/taxe_percent"
+        style="@style/entity_edit"
+        android:layout_alignBaseline="@id/taxe_name"
+        android:layout_toRightOf="@id/taxe_name"
+        android:ems="8"
+        android:hint="@string/taxe_percent" />
+
+    <EditText
+        android:id="@+id/taxe_alternate_name"
+        style="@style/entity_edit"
+        android:layout_below="@id/taxe_name"
+        android:ems="15"
+        android:hint="@string/taxe_name" />
+
+    <EditText
+        android:id="@+id/taxe_alternate_percent"
+        style="@style/entity_edit"
+        android:layout_alignBaseline="@id/taxe_alternate_name"
+        android:layout_toRightOf="@id/taxe_alternate_name"
+        android:ems="8"
+        android:hint="@string/taxe_percent" />
+
+</RelativeLayout>

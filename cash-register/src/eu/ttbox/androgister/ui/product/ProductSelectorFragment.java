@@ -85,12 +85,12 @@ public class ProductSelectorFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-            listAdapter.swapCursor(cursor);
+            listAdapter.changeCursor(cursor);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            listAdapter.swapCursor(null);
+            listAdapter.changeCursor(null);
         }
 
     };

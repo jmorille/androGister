@@ -18,6 +18,7 @@ import eu.ttbox.androgister.domain.ProductDao.Properties;
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
 import eu.ttbox.androgister.ui.admin.tag.TagListAdapter;
+import eu.ttbox.androgister.ui.core.crud.CrudHelper;
 import eu.ttbox.androgister.ui.core.crud.EntityEditFragment;
 import eu.ttbox.androgister.ui.core.validator.Form;
 import eu.ttbox.androgister.ui.core.validator.validate.ValidateTextView;
@@ -157,10 +158,10 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
     @Override
     public Product bindValue(Product entity) {
-        entity.setName(nameText.getText().toString());
-        entity.setDescription(descText.getText().toString());
+        entity.setName(CrudHelper.getStringTrimmed(nameText));
+        entity.setDescription(CrudHelper.getStringTrimmed(descText));
         // entity.setTag(tagText.getText().toString());
-        String priceString = priceHTText.getText().toString();
+        String priceString = CrudHelper.getStringTrimmed(priceHTText);
         Long priceHt = Long.parseLong(priceString);
         entity.setPriceHT(priceHt);
         //

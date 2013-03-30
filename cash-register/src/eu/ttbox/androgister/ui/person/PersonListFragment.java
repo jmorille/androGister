@@ -160,7 +160,7 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
             // Display List
-            listAdapter.swapCursor(cursor);
+            listAdapter.changeCursor(cursor);
             // Display Counter
             int count = 0;
             if (cursor != null) {
@@ -178,7 +178,7 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
             searchResultTextView.setText(R.string.search_instructions);
-            listAdapter.swapCursor(null);
+            listAdapter.changeCursor(null);
         }
 
     };

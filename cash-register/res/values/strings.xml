@@ -90,6 +90,10 @@
         <item quantity="other">Suppression impossible : %d produits liés</item>
     </plurals>
     
+      <!-- Model Taxe -->
+    <string name="taxe_name">Nom de la Taxe</string>
+    <string name="taxe_percent">Taxe in %</string>
+      
     <!-- Model Tag -->
     <string name="tag_name">Nom du Tag</string>
     <string name="tag_color">Couleur du Tag</string>

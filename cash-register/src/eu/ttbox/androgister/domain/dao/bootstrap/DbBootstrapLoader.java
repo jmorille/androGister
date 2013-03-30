@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 public class DbBootstrapLoader  implements Runnable {
 
@@ -23,11 +24,13 @@ public class DbBootstrapLoader  implements Runnable {
     @Override
     public void run() {
         try {
+            new TaxesDbBootstrap(context, db).loadEntitiesFormRawId();
             new TagsDbBootstrap(context, db).loadEntitiesFormRawId();
             new ProductDbBootstrap(context, db).loadEntitiesFormRawId();
             new CatalogDbBootstrap(context, db).loadEntitiesFormRawId();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Toast.makeText(context, "Could not load BootStrap : " +e.getMessage(), Toast.LENGTH_LONG).show();
+            throw new RuntimeException("Could not load BootStrap : " +e.getMessage(), e);
         }
     }
 

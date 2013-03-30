@@ -12,7 +12,7 @@ public class ProductDbBootstrap extends AbstractEntityDbBootstrap {
     private static final String TAG = "ProductDbBootstrap";
 
     public ProductDbBootstrap(Context mHelperContext, SQLiteDatabase mDatabase) {
-        super(mHelperContext, mDatabase, R.raw.products);
+        super(mHelperContext, mDatabase, R.raw.products, ';');
     }
 
     /**
@@ -22,13 +22,16 @@ public class ProductDbBootstrap extends AbstractEntityDbBootstrap {
      */
     @Override
     public long addLineEntity(String[] strings) {
-        String name = strings[0].trim();
-        String tag = strings[1].trim();
-        String price = strings[2].trim();
+        String name = strings[0];
+        String tag = strings[1];
+        String price = strings[2];
         ContentValues initialValues = new ContentValues();
         initialValues.put(Properties.Name.columnName, name);
         initialValues.put(Properties.TagId.columnName, tag);
         initialValues.put(Properties.PriceHT.columnName, price);
+        // Taxe
+        String taxeId = strings.length > 3 ? strings[3] : "1";
+        initialValues.put(Properties.TaxeId.columnName, taxeId);
         return mDatabase.insert(ProductDao.TABLENAME, null, initialValues);
     }
 

@@ -117,6 +117,8 @@ public abstract class EntityEditFragment<T extends DomainModel> extends Fragment
 
     public abstract T prepareInsert(Bundle args);
 
+
+
     // ===========================================================
     // Action
     // ===========================================================

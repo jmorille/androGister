@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.squareup.otto.Bus;
+
 import eu.ttbox.androgister.core.AppConstants;
 import eu.ttbox.androgister.database.order.OrderIdSequence;
 import eu.ttbox.androgister.domain.DaoMaster;
@@ -20,6 +23,8 @@ public class AndroGisterApplication extends Application {
     private OrderIdSequence orderIdSequence = new OrderIdSequence();
     private DaoSession daoSession;
 
+    private Bus  eventBus = new Bus();
+    
     @Override
     public void onCreate() {
         // Create Application
@@ -35,6 +40,8 @@ public class AndroGisterApplication extends Application {
         @Override
         protected Void doInBackground(Void... params) {
             final Context context = AndroGisterApplication.this;
+            // Initalize Event Bus
+             initDaoSession();
             // Increment Counter Lauch
             int laugthCount = incrementApplicationLaunchCounter(context);
             Log.i(TAG, "Laugth count " + laugthCount);
@@ -62,6 +69,11 @@ public class AndroGisterApplication extends Application {
         return orderIdSequence;
     }
 
+    public Bus getEventBus() {
+        return eventBus;
+    }
+     
+    
     public DaoSession getDaoSession() {
         if (daoSession == null) {
             daoSession = initDaoSession();

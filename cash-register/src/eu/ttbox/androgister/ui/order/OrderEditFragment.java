@@ -193,12 +193,12 @@ public class OrderEditFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-            myListAdapter.swapCursor(cursor);
+            myListAdapter.changeCursor(cursor);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            myListAdapter.swapCursor(null);
+            myListAdapter.changeCursor(null);
 
         }
 

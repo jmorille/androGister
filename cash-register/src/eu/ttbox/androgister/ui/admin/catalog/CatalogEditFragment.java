@@ -16,6 +16,7 @@ import eu.ttbox.androgister.domain.Catalog;
 import eu.ttbox.androgister.domain.CatalogProduct;
 import eu.ttbox.androgister.domain.CatalogProductDao;
 import eu.ttbox.androgister.domain.CatalogProductDao.Properties;
+import eu.ttbox.androgister.ui.core.crud.CrudHelper;
 import eu.ttbox.androgister.ui.core.crud.EntityEditFragment;
 import eu.ttbox.androgister.ui.core.validator.Form;
 import eu.ttbox.androgister.ui.core.validator.validate.ValidateTextView;
@@ -75,13 +76,13 @@ public class CatalogEditFragment  extends EntityEditFragment<Catalog> {
     
     @Override
     public void bindView(Catalog entity) {
-        nameText.setText(entity.getName());
+        nameText.setText(   entity.getName());
         enabledSwitch.setChecked(entity.getEnabled()); 
     }
 
     @Override
     public Catalog bindValue(Catalog entity) {
-        entity.setName(nameText.getText().toString());
+        entity.setName(  CrudHelper.getStringTrimmed(nameText) );
         // switch
         boolean isChecked = enabledSwitch.isChecked();
         entity.setEnabled(isChecked);

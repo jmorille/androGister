@@ -1,6 +1,5 @@
 package eu.ttbox.androgister.ui.admin.offer;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
