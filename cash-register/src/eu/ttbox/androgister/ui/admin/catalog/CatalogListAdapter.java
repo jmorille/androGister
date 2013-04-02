@@ -53,10 +53,10 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
         // event to the
         // listener.
         public boolean onDrag(View v, DragEvent event) {
-            boolean result = false;
-            boolean mAcceptsDrag = true;
-            boolean mDragInProgress = false;
-            boolean mHovering = false;
+//            boolean result = false;
+//            boolean mAcceptsDrag = true;
+//            boolean mDragInProgress = false;
+//            boolean mHovering = false;
 
             switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED: {
@@ -65,64 +65,70 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
                     Log.i(TAG, "Drag started, event=" + event);
                     // cache whether we accept the drag to return for LOCATION
                     // events
-                    mDragInProgress = true;
-                    mAcceptsDrag = result = true;
+//                    mDragInProgress = true;
+//                    mAcceptsDrag = result = true;
                     // Redraw in the new visual state if we are a potential drop
                     // target
                     v.invalidate();
+                    return true;
                 } else {
                     return false;
                 }
             }
-                break;
+//                break;
 
             case DragEvent.ACTION_DRAG_ENDED: {
                 Log.d(TAG, "Drag ended ." + ((TextView) v).getText());
-                if (mAcceptsDrag) {
+//                if (mAcceptsDrag) {
                     v.invalidate();
-                }
-                mDragInProgress = false;
-                mHovering = false;
+//                }
+//                mDragInProgress = false;
+//                mHovering = false;
+                    return true;
             }
-                break;
+//                break;
 
             case DragEvent.ACTION_DRAG_LOCATION: {
                 // we returned true to DRAG_STARTED, so return true here
 //                Log.d(TAG, "... seeing drag locations ..." + ((TextView) v).getText());
-                result = mAcceptsDrag;
+//                result = mAcceptsDrag;
+                return true;
             }
-                break;
+//                break;
 
             case DragEvent.ACTION_DROP: {
                 Log.i(TAG, "Got a drop! dot=" + this + " event=" + event + " // " + ((TextView) v).getText());
                 processDrop(event);
-                result = true;
+//                result = true;
+                return true;
             }
-                break;
+//                break;
 
             case DragEvent.ACTION_DRAG_ENTERED: {
                 Log.d(TAG, "Entered dot @ " + this);
                 v.setBackgroundColor(Color.RED);
-                mHovering = true;
+//                mHovering = true;
                 v.invalidate();
+                return true;
             }
-                break;
+//                break;
 
             case DragEvent.ACTION_DRAG_EXITED: {
                 Log.d(TAG, "Exited dot @ " + this);
                 v.setBackgroundColor(Color.BLACK);
-                mHovering = false;
+//                mHovering = false;
                 v.invalidate();
+                return true;
             }
-                break;
+//                break;
 
             default:
                 Log.i(TAG, "other drag event: " + event);
-                result = mAcceptsDrag;
+//                result = mAcceptsDrag;
                 break;
             }
 
-            return result;
+            return false;
 
         };
     }
