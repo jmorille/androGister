@@ -3,6 +3,7 @@ package eu.ttbox.androgister.ui.admin.offer;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ClipData.Item;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.VelocityTrackerCompat;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import de.greenrobot.dao.query.LazyList;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.database.ProductProvider;
 import eu.ttbox.androgister.domain.CatalogProduct;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
@@ -42,8 +44,6 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
         this.context = context;
         this.productColor = new ProductUiHelper(context);
     }
-
-   
 
     // ===========================================================
     // Bindings
@@ -168,13 +168,17 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
     }
 
     private boolean startDrag(View view, MotionEvent event) {
-        // CatalogProduct item = (CatalogProduct)
-        // parent.getItemAtPosition(position);
+
         Long productId = null; // item.getProductId();
         Intent intent = new Intent(Intent.ACTION_INSERT + ".Product");
         intent.putExtra(Intent.EXTRA_UID, productId);
+        // ClipData
+        String label = "Product Catalog";
+        String[] mimeTypes = new String[] { ProductProvider.PRODUCT_MIME_TYPE };
+        Item item = new Item(intent);
+        ClipData data = new ClipData(label, mimeTypes, item);
 
-        ClipData data = ClipData.newIntent("Product", intent);
+        // ClipData data = ClipData.newIntent("Product", intent);
         DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
         view.startDrag(data, shadowBuilder, (Object) view, 0);
         return true;

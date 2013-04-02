@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.greenrobot.dao.query.LazyList;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.database.ProductProvider;
 import eu.ttbox.androgister.domain.Catalog;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
 import eu.ttbox.androgister.ui.admin.catalog.CatalogListAdapter.ViewHolder;
@@ -20,7 +21,8 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
     private static final String TAG = "CatalogListAdapter";
 
     private Context context;
-    public CharSequence dragData;
+//    public CharSequence dragData;
+    private MyDragEventListener myDragEventListener = new MyDragEventListener();
 
     public CatalogListAdapter(Context context, LazyList<Catalog> lazyList) {
         super(context, R.layout.admin_calatog_list_item, lazyList);
@@ -30,14 +32,14 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
     @Override
     public void bindView(View view, ViewHolder holder, Context context, Catalog item) {
         holder.nameText.setText(item.getName());
-         
+
     }
 
     @Override
     public ViewHolder newViewHolder(View view, Context context, Catalog item, ViewGroup parent) {
         ViewHolder holder = new ViewHolder();
         holder.nameText = (TextView) view;
-         view.setOnDragListener(new MyDragEventListener());
+        view.setOnDragListener(myDragEventListener);
         return holder;
     }
 
@@ -58,22 +60,24 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
 
             switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED: {
-                // claim to accept any dragged content
-                Log.i(TAG, "Drag started, event=" + event);
-                // cache whether we accept the drag to return for LOCATION
-                // events
-                 mDragInProgress = true;
-                 mAcceptsDrag = result = true;
-                // Redraw in the new visual state if we are a potential drop
-                // target
-                if (mAcceptsDrag) {
+                if (event.getClipDescription().hasMimeType(ProductProvider.PRODUCT_MIME_TYPE)) {
+                    // claim to accept any dragged content
+                    Log.i(TAG, "Drag started, event=" + event);
+                    // cache whether we accept the drag to return for LOCATION
+                    // events
+                    mDragInProgress = true;
+                    mAcceptsDrag = result = true;
+                    // Redraw in the new visual state if we are a potential drop
+                    // target
                     v.invalidate();
+                } else {
+                    return false;
                 }
             }
                 break;
 
             case DragEvent.ACTION_DRAG_ENDED: {
-                Log.d(TAG, "Drag ended ."  + ((TextView)v).getText());
+                Log.d(TAG, "Drag ended ." + ((TextView) v).getText());
                 if (mAcceptsDrag) {
                     v.invalidate();
                 }
@@ -84,13 +88,13 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
 
             case DragEvent.ACTION_DRAG_LOCATION: {
                 // we returned true to DRAG_STARTED, so return true here
-                Log.d(TAG, "... seeing drag locations ..."  + ((TextView)v).getText() );
+//                Log.d(TAG, "... seeing drag locations ..." + ((TextView) v).getText());
                 result = mAcceptsDrag;
             }
                 break;
 
             case DragEvent.ACTION_DROP: {
-                Log.i(TAG, "Got a drop! dot=" + this + " event=" + event + " // " + ((TextView)v).getText());
+                Log.i(TAG, "Got a drop! dot=" + this + " event=" + event + " // " + ((TextView) v).getText());
                 processDrop(event);
                 result = true;
             }
@@ -134,12 +138,11 @@ public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {
             if (event.getLocalState() == (Object) this) {
                 text += " : Dropped on self!";
             }
-            text += " : " ;
+            text += " : ";
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
             // mReportView.setText(text);
             // }
         }
     }
-    
-    
+
 }
