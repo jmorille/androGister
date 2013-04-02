@@ -1,7 +1,6 @@
 package eu.ttbox.androgister.ui.admin.catalog;
 
 import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;

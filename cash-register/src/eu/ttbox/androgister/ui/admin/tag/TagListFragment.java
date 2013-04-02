@@ -58,6 +58,7 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
         View v = inflater.inflate(R.layout.admin_calatog_list, container, false);
         // Binding
         listView = (ListView) v.findViewById(R.id.calalog_list);
+//        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
             @Override
@@ -81,6 +82,7 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
         headerData.setName(allLabel);
         ((TextView) listViewHeader).setText(allLabel);
         listView.addHeaderView(listViewHeader, headerData, true);
+
         // ListView Footer
         View listViewFooter = inflater.inflate(R.layout.admin_footer_list_item_add, container, false);
         Tag footerData = new Tag();
@@ -88,6 +90,7 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
         String addLabel = getString(R.string.add);
         footerData.setName(addLabel);
         listView.addFooterView(listViewFooter, footerData, true);
+//        listView.addFooterView(listViewFooter );
         return v;
     }
 
@@ -147,7 +150,5 @@ public class TagListFragment extends EntityLazyListFragment<Tag, TagDao> {
         }
 
     }
-    
 
-  
 }

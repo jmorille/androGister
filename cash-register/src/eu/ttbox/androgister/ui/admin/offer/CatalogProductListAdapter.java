@@ -3,6 +3,7 @@ package eu.ttbox.androgister.ui.admin.offer;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.VelocityTrackerCompat;
 import android.util.Log;
@@ -21,15 +22,28 @@ import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
 import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.ui.admin.offer.CatalogProductListAdapter.ViewHolder;
+import eu.ttbox.androgister.ui.admin.product.ProductUiHelper;
 
 public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, ViewHolder> {
 
     private static final String TAG = "CatalogProductListAdapter";
+
+    private Context context;
+
+    private ProductUiHelper productColor;
     private GestureListener gestureListener = new GestureListener();
+
+    // ===========================================================
+    // Constructor
+    // ===========================================================
 
     public CatalogProductListAdapter(Context context, LazyList<CatalogProduct> lazyList) {
         super(context, R.layout.admin_product_list_item, lazyList);
+        this.context = context;
+        this.productColor = new ProductUiHelper(context);
     }
+
+   
 
     // ===========================================================
     // Bindings
@@ -41,6 +55,9 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
         holder.nameText.setText(product.getName());
         String priceString = PriceHelper.getToStringPrice(product.getPriceHT());
         holder.priceText.setText(priceString);
+        // Color
+        Drawable grad = productColor.getStateGradientDrawable(product.getTag().getColor());
+        view.setBackgroundDrawable(grad);
         // Listener
         view.setOnTouchListener(gestureListener);
         // view.setOn
@@ -95,7 +112,7 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
             int action = MotionEventCompat.getActionMasked(event);
             int index = MotionEventCompat.getActionIndex(event);
             int pointerId = MotionEventCompat.getPointerId(event, index);
-          
+
             switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (mVelocityTracker == null) {
@@ -106,7 +123,7 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
                     // Reset the velocity tracker back to its initial state.
                     mVelocityTracker.clear();
                 }
-                Log.d(TAG, "PointerCount : " +   MotionEventCompat.getPointerCount(event) );
+                Log.d(TAG, "PointerCount : " + MotionEventCompat.getPointerCount(event));
                 // Add a user's movement to the tracker.
                 mVelocityTracker.addMovement(event);
                 return true;
@@ -120,7 +137,11 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
                 mVelocityTracker.computeCurrentVelocity(1000);
                 // Log velocity of pixels per second
                 // Best practice to use VelocityTrackerCompat where possible.
-//                Log.d("", "Velocity (X,Y): " + VelocityTrackerCompat.getXVelocity(mVelocityTracker, pointerId) + " , " + VelocityTrackerCompat.getYVelocity(mVelocityTracker, pointerId));
+                // Log.d("", "Velocity (X,Y): " +
+                // VelocityTrackerCompat.getXVelocity(mVelocityTracker,
+                // pointerId) + " , " +
+                // VelocityTrackerCompat.getYVelocity(mVelocityTracker,
+                // pointerId));
                 float veloX = Math.abs(VelocityTrackerCompat.getXVelocity(mVelocityTracker, pointerId));
                 float veloY = Math.abs(VelocityTrackerCompat.getYVelocity(mVelocityTracker, pointerId));
                 if (veloX > veloY) {
@@ -131,11 +152,11 @@ public class CatalogProductListAdapter extends LazyListAdapter<CatalogProduct, V
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 // Return a VelocityTracker object back to be re-used by others.
-                mVelocityTracker.recycle(); 
-                 break;
+                mVelocityTracker.recycle();
+                break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 Log.d(TAG, "GestureListener ignore  action ACTION_POINTER_DOWN : " + event.getAction());
-                Log.d(TAG, "PointerCount : " +   MotionEventCompat.getPointerCount(event) );
+                Log.d(TAG, "PointerCount : " + MotionEventCompat.getPointerCount(event));
                 break;
             default:
                 Log.d(TAG, "GestureListener ignore  action  : " + event.getAction());

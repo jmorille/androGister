@@ -62,7 +62,7 @@ public class RegisterDaoGenerator {
         // Properties
         product.addStringProperty("name").notNull();
         product.addStringProperty("description");
-        product.addLongProperty("priceHT");
+        product.addLongProperty("priceHT").notNull();
         // product.addStringProperty("tag");
 
         // Tag
@@ -87,7 +87,7 @@ public class RegisterDaoGenerator {
         implementsDomainModel(tag);
         // Properties
         tag.addStringProperty("name").notNull();
-        tag.addIntProperty("color");
+        tag.addIntProperty("color").notNull();
         return tag;
     }
 

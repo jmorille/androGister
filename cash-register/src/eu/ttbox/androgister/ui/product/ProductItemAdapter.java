@@ -5,14 +5,14 @@ import java.util.HashMap;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.GradientDrawable.Orientation;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.database.product.OfferHelper;
+import eu.ttbox.androgister.ui.admin.product.ProductUiHelper;
 
 public class ProductItemAdapter extends ResourceCursorAdapter {
 
@@ -20,24 +20,22 @@ public class ProductItemAdapter extends ResourceCursorAdapter {
 
     private boolean isNotBinding = true;
 
-    private HashMap<String, GradientDrawable> mapColors;
+    private HashMap<String, Drawable> mapColors;
+
+    private Context context;
+    private ProductUiHelper productColor;
 
     public ProductItemAdapter(Context context, int layout, Cursor c, int flags) {
         super(context, layout, c, flags);
-    }
-
-    private GradientDrawable getGradientDrawable(int color) {
-        GradientDrawable grad = new GradientDrawable(Orientation.BR_TL, new int[] { color, color - 0x88000000 });
-        grad.setShape(GradientDrawable.RECTANGLE);
-        grad.setCornerRadius(8);
-        return grad;
+        this.context = context;
+        this.productColor = new ProductUiHelper(context);
     }
 
     private void intViewBinding(View view, Context context, Cursor cursor) {
-        mapColors = new HashMap<String, GradientDrawable>();
-        mapColors.put("Boisson", getGradientDrawable(Color.GREEN));
-        mapColors.put("Entrée", getGradientDrawable(Color.BLUE));
-        mapColors.put("Plat", getGradientDrawable(Color.RED));
+        mapColors = new HashMap<String, Drawable>();
+        mapColors.put("Boisson", productColor.getStateGradientDrawable(Color.GREEN));
+        mapColors.put("Entrée", productColor.getStateGradientDrawable(Color.BLUE));
+        mapColors.put("Plat", productColor.getStateGradientDrawable(Color.RED));
         // Init Cursor
         helper = new OfferHelper().initWrapper(cursor);
         isNotBinding = false;
@@ -48,14 +46,14 @@ public class ProductItemAdapter extends ResourceCursorAdapter {
         if (isNotBinding) {
             intViewBinding(view, context, cursor);
         }
-        // Bind View 
-        ViewHolder holder = ( ViewHolder)view.getTag();
+        // Bind View
+        ViewHolder holder = (ViewHolder) view.getTag();
         // Bind Value
         helper.setTextOfferName(holder.nameText, cursor)//
                 .setTextOfferPrice(holder.priceText, cursor);
         // Bg color
         String tag = cursor.getString(helper.tagIdx);
-        GradientDrawable grad = mapColors.get(tag);
+        Drawable grad = mapColors.get(tag);
         if (grad != null) {
             view.setBackgroundDrawable(grad);
         }

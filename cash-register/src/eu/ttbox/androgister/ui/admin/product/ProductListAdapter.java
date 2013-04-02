@@ -1,6 +1,7 @@
 package eu.ttbox.androgister.ui.admin.product;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,15 +14,31 @@ import eu.ttbox.androgister.ui.admin.product.ProductListAdapter.ViewHolder;
 
 public class ProductListAdapter extends LazyListAdapter<Product, ViewHolder> {
 
+    private Context context;
+    private ProductUiHelper productColor;
+    
+    // ===========================================================
+    // Constructor
+    // ===========================================================
+
     public ProductListAdapter(Context context, LazyList<Product> lazyList) {
         super(context, R.layout.admin_product_list_item, lazyList);
+        this.context = context;
+        this.productColor = new ProductUiHelper(context);
     }
+ 
+    // ===========================================================
+    // Bindings
+    // ===========================================================
 
     @Override
     public void bindView(View view, ViewHolder holder, Context context, Product item) {
         holder.nameText.setText(item.getName());
         String priceString = PriceHelper.getToStringPrice(item.getPriceHT());
         holder.priceText.setText(priceString);
+        // Color
+        Drawable grad = productColor.getStateGradientDrawable(item.getTag().getColor());
+        view.setBackgroundDrawable(grad);
     }
 
     @Override
