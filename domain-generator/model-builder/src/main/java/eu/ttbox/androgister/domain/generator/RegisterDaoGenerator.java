@@ -20,9 +20,13 @@ public class RegisterDaoGenerator {
         addCatalogProduct(schema, catalog, product);
 
         addOffer(schema);
+        
+        
         new DaoGenerator().generateAll(schema, args[2]);
     }
+ 
 
+    
     private static void implementsVersionning(Entity entity) {
         entity.implementsInterface("eu.ttbox.androgister.domain.VersioningModel");
         entity.addLongProperty("creationDate");

@@ -10,8 +10,17 @@
 
     <!-- <uses-permission android:name="android.permission.BROADCAST_STICKY" /> -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
-
+    
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    
+    
     <uses-permission android:name="eu.ttbox.androgister.OFFER_READ" />
     <uses-permission android:name="eu.ttbox.androgister.OFFER_WRITE" />
     <uses-permission android:name="eu.ttbox.androgister.ORDER_READ" />
@@ -46,7 +55,7 @@
             android:label="@string/app_name" >  
         </activity>
         <!-- Register -->
-        <activity
+        <activity  android:exported="false"
             android:name=".ui.CashRegisterActivity"
             android:label="@string/app_name" 
             android:launchMode="singleTask"  >
@@ -61,7 +70,7 @@
         </activity>
 
         <!-- Product Admin -->
-        <activity
+        <activity  android:exported="true"
             android:name=".ui.admin.offer.OfferCreatorActivity"
             android:label="@string/app_name" 
             android:launchMode="singleTask" > 
@@ -70,24 +79,24 @@
                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity  
+        <activity    android:exported="false"
             android:name=".ui.admin.product.ProductEditActivity"
             android:label="@string/app_name" > 
         </activity>
         
-          <activity  
+          <activity   android:exported="false"
             android:name=".ui.admin.catalog.CatalogEditActivity"
             android:label="@string/app_name" > 
         </activity>
-          <activity  
+          <activity   android:exported="false"
             android:name=".ui.admin.tag.TagEditActivity"
             android:label="@string/app_name" > 
         </activity>
         
         <!--  Product google Drive -->
-        <activity
+        <activity   
             android:name=".ui.admin.product.ProductDriveExporterActivity"
-            android:exported="true" 
+            android:exported="false" 
             android:label="@string/app_name" >
             <meta-data
                 android:name="com.google.android.apps.drive.APP_ID"
@@ -103,17 +112,17 @@
         </activity>
 
         <!-- Order -->
-        <activity
+        <activity  android:exported="false"
             android:name=".ui.order.OrderEditActivity"
             android:label="@string/app_name" >
         </activity>
-        <activity
+        <activity  android:exported="false"
             android:name=".ui.order.OrderListActivity"
             android:label="@string/app_name" >
         </activity>
 
         <!-- Person -->
-        <activity
+        <activity  android:exported="false"
             android:name=".ui.person.PersonListActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop" >
@@ -127,7 +136,7 @@
         </activity>
 
         <!-- Admin   android:theme="@android:style/Theme.Holo.Light.Dialog" -->
-        <activity
+        <activity  android:exported="false"
             android:name=".ui.admin.user.UserAdminActivity"
             android:label="@string/app_name" >
 <!--              <intent-filter> -->
@@ -138,7 +147,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable_user" />
         </activity>
-        <activity
+        <activity  android:exported="false"
             android:name=".ui.admin.user.UserEditActivity"
             android:label="@string/app_name"
               android:theme="@style/EditorActivityTheme"
@@ -156,14 +165,14 @@
         </activity>
 
         <!-- Service -->
-        <service
+        <service   
             android:name=".service.OrderService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="eu.ttbox.androgister.intent.ACTION_ORDER_ADD" />
             </intent-filter>
         </service>
-        <service
+        <service  
             android:name=".service.UsbService"
             android:exported="false" >
             <intent-filter>
@@ -171,8 +180,38 @@
             </intent-filter>
         </service>
 
+        <!-- ### Sync service ### -->
+        <!-- #################### -->
+        <service android:name=".sync.authenticator.AuthenticationService"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <service android:name=".sync.syncadapter.SyncService"
+            android:exported="true">
+            <intent-filter>
+                <action  android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" /> 
+        </service>
+                
+      <activity
+            android:name=".sync.authenticator.AuthenticatorActivity"
+            android:label="@string/ui_activity_title"
+            android:theme="@android:style/Theme.Dialog"
+            android:excludeFromRecents="true"
+            android:configChanges="orientation"
+            /> 
+                 
         <!-- Provider -->
-        <provider
+        <provider 
             android:name=".database.OfferProvider"
             android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider"
             android:readPermission="eu.ttbox.androgister.OFFER_READ"
