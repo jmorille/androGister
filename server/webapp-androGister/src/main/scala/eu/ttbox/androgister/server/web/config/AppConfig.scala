@@ -1,7 +1,6 @@
-package eu.ttbox.androgister.server.web
-package config
+package eu.ttbox.androgister.server.web.config
 
-import controller.IndexController
+import eu.ttbox.androgister.server.web.controller.IndexController
 import org.springframework.context.annotation._
 import org.fusesource.scalate.spring.view.ScalateViewResolver
 

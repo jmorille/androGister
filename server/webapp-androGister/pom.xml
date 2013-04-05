@@ -32,6 +32,16 @@
 
   <name>${project.artifactId}</name>
  
+ <properties>
+    <scalate.editor>${env.SCALATE_EDITOR}</scalate.editor>
+    <scalate.mode>development</scalate.mode>
+    <scalate.workdir>${basedir}/target/_scalate</scalate.workdir>
+ 
+     <scalate.package.resources>${project.groupId}.${project.artifactId}.resources</scalate.package.resources>
+  
+     <version.frk.jackson>2.1.4</version.frk.jackson>
+ </properties>
+ 
   <dependencies>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -57,7 +67,25 @@
       <artifactId>spring-webmvc</artifactId>
       <version>${org.springframework.version}</version>
     </dependency>
-     
+
+   <!-- Jackson -->
+      <dependency>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-core</artifactId>
+         <version>${version.frk.jackson}</version>
+      </dependency>
+      <dependency>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-databind</artifactId>
+         <version>${version.frk.jackson}</version>
+      </dependency>
+       <dependency>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-annotations</artifactId>
+         <version>${version.frk.jackson}</version>
+      </dependency>
+           
+                
      <!-- MongoDb -->
        <dependency>
       <groupId>org.springframework.data</groupId>
@@ -379,7 +407,64 @@
           </execution>
         </executions>
       </plugin>
+ 
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <path>/</path>
+          <port>8181</port>
+          <contextFile>./src/test/conf/context.xml</contextFile>
+           <systemProperties>
+              <!-- enable easy JMX connection to JConsole -->
+              <com.sun.management.jmxremote />
 
+              <!-- Scalate console configuration -->
+              <scalate.mode>${scalate.mode}</scalate.mode>
+              <scalate.editor>${scalateEditor}</scalate.editor>
+              <scalate.workdir>${scalate.workdir}</scalate.workdir>
+              <scalate.package.resources>${scalate.package.resources}</scalate.package.resources>
+            </systemProperties>
+                      
+          <!-- partie reservee au https -->
+          <!-- creation du keystore -->
+
+          <!-- keytool -genkey -alias tomcat -keyalg RSA -keystore monstore -->
+          <!-- Tapez le mot de passe du Keystore : "taper un mot de passe" -->
+          <!-- Ressaisissez le nouveau mot de passe : "taper le même mot de passe" -->
+          <!-- Quels sont vos prénom et nom ? -->
+          <!-- [Unknown] : nom de la machine ex : http://gf654321:8443 il faut mettre gf654321 -->
+          <!-- Quel est le nom de votre unité organisationnelle ? -->
+          <!-- [Unknown] : votre département ex : CCJ -->
+          <!-- Quelle est le nom de votre organisation ? -->
+          <!-- [Unknown] : GENERALI -->
+          <!-- Quel est le nom de votre ville de résidence ? -->
+          <!-- [Unknown] : Saint-Denis -->
+          <!-- Quel est le nom de votre état ou province ? -->
+          <!-- [Unknown] : France -->
+          <!-- Quel est le code de pays à deux lettres pour cette unité ? -->
+          <!-- [Unknown] : FR -->
+          <!-- Est-ce CN=gf654321, OU=CCJ, O=GENERALI, L=Saint-Denis, ST=France, C=FR ? -->
+          <!-- [non] : oui -->
+          <!-- Spécifiez le mot de passe de la clé pour <tomcat> -->
+          <!-- (appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : "appuyez sur la touche Entrée" -->
+
+          <!-- <hostName>gf200820</hostName> -->
+          <!-- <httpsPort>8443</httpsPort> -->
+          <!-- <keystoreFile>../../ccjsamplestorecr</keystoreFile> -->
+          <!-- <keystorePass>ccjsample</keystorePass> -->
+
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.171</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+ 
     </plugins>
   </build>
   

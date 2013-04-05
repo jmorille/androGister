@@ -25,3 +25,7 @@ lint.xml
 
 # Google 
 .google_apis
+
+# Scalate
+.cache
+

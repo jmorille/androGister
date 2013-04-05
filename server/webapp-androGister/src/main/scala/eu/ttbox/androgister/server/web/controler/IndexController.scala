@@ -19,6 +19,6 @@ class IndexController {
   }
 
   @RequestMapping(Array("/", "/render"))
-  def render = "render:/index.scaml"
+  def render = "layout:/index.scaml"
     
 }
