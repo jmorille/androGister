@@ -30,7 +30,8 @@
 
 		<scalate.package.resources>${project.groupId}.${project.artifactId}.resources</scalate.package.resources>
 
-		<jackson.version>2.1.4</jackson.version>
+		<jackson.version>2.1.4</jackson.version> 
+		<jackson-module-scala.version>2.1.3</jackson-module-scala.version> 
 		<grizzled-slf4j.version>1.0.1</grizzled-slf4j.version>
 	</properties>
 
@@ -105,6 +106,11 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-scala_2.10</artifactId>
+			<version>${jackson-module-scala.version}</version>
+		</dependency>
 
 
 		<!-- MongoDb -->
@@ -149,7 +155,7 @@
 						</jvmArgs>
 						<args>
 							<!-- arg>-unchecked</arg -->
-							<arg>-deprecation</arg>
+jackson-module-scala_2.10							<arg>-deprecation</arg>
 						</args>
 						<javacArgs>
 							<javacArg>-g</javacArg>
@@ -417,7 +423,7 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.1</version>
 				<configuration>
-					<path>/</path>
+					<path>/app</path>
 					<port>8181</port>
 					<contextFile>./src/test/conf/context.xml</contextFile>
 					<systemProperties>

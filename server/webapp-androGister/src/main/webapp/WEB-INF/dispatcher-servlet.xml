@@ -11,50 +11,44 @@
 	<context:component-scan base-package="eu.ttbox.androgister.server.web.controller" />
 
 	<!-- content-negotiation-manager="contentNegotiationManager" -->
-	<mvc:annotation-driven />
+  <mvc:annotation-driven>
+        <mvc:message-converters>
+            <!-- Use the HibernateAware mapper instead of the default -->
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="com.fasterxml.jackson.module.scala.DefaultScalaModule" />
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
 	<import resource="classpath*:/META-INF/androgister/*.spring.xml" />
 
-	<bean class="org.fusesource.scalate.spring.view.ScalateViewResolver"
-		p:order="1">
-		<property name="prefix" value="/WEB-INF/" />
-	</bean>
+<!--    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean"> -->
+<!--     <property name="favorPathExtension" value="false" /> -->
+<!--     <property name="favorParameter" value="true" /> -->
+<!--     <property name="mediaTypes" > -->
+<!--    <value> -->
+<!--        json=application/json -->
+<!--        xml=application/xml -->
+<!--    </value> -->
+<!--     </property> -->
+<!-- </bean> -->
 
-	<bean class="org.fusesource.scalate.spring.view.ScalateViewResolver"
-		p:order="2">
-	</bean>
-
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:order="3">
-		<property name="prefix" value="/WEB-INF/jsp/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
-
-
-	<!-- <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean"> -->
-	<!-- <property name="favorPathExtension" value="false" /> -->
-	<!-- <property name="favorParameter" value="true" /> -->
-	<!-- <property name="mediaTypes" > -->
-	<!-- <value> -->
-	<!-- json=application/json -->
-	<!-- xml=application/xml -->
-	<!-- </value> -->
-	<!-- </property> -->
-	<!-- </bean> -->
-
-	<!-- <bean id="scalateViewScalate" class="org.fusesource.scalate.spring.view.ScalateViewResolver" 
-		/> -->
-
-	<!-- <bean id="viewResolver" -->
-	<!-- class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
-	<!-- <property name="viewClass" -->
-	<!-- value="org.springframework.web.servlet.view.JstlView" /> -->
-	<!-- <property name="prefix" value="/WEB-INF/jsp/" /> -->
-	<!-- <property name="suffix" value=".jsp" /> -->
-	<!-- </bean> -->
-
-	<bean id="contentNegotiationManager"
+<!-- 	<bean class="org.fusesource.scalate.spring.view.ScalateViewResolver" -->
+<!-- 		p:order="1"> -->
+<!-- 		<property name="prefix" value="/WEB-INF/" /> -->
+<!-- 	</bean>  -->
+<!-- 	<bean class="org.fusesource.scalate.spring.view.ScalateViewResolver" -->
+<!-- 		p:order="2"> -->
+<!-- 	</bean>  -->
+<!-- 	<bean -->
+<!-- 		class="org.springframework.web.servlet.view.InternalResourceViewResolver" -->
+<!-- 		p:order="3"> -->
+<!-- 		<property name="prefix" value="/WEB-INF/jsp/" /> -->
+<!-- 		<property name="suffix" value=".jsp" /> -->
+<!-- 	</bean> -->
+ 	<bean id="contentNegotiationManager"
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="mediaTypes">
 			<map>
@@ -76,44 +70,13 @@
 			</list>
 		</property>
 		<property name="defaultViews"> 
-		    <!-- JSON View --> 
+<!-- 		    JSON View  -->
 			<list>
 				<bean
 					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
 			</list>
 		</property>
 	</bean>
-
-
-	<!-- <bean -->
-	<!-- class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"> -->
-	<!-- <property name="mediaTypes"> -->
-	<!-- <map> -->
-	<!-- <entry key="atom" value="application/atom+xml" /> -->
-	<!-- <entry key="html" value="text/html" /> -->
-	<!-- <entry key="json" value="application/json" /> -->
-	<!-- </map> -->
-	<!-- </property> -->
-	<!-- <property name="viewResolvers"> -->
-	<!-- <list> -->
-	<!-- <bean -->
-	<!-- class="org.springframework.web.servlet.view.BeanNameViewResolver" /> -->
-	<!-- <bean id="scalateViewScalate" class="org.fusesource.scalate.spring.view.ScalateViewResolver" 
-		/> -->
-	<!-- <bean -->
-	<!-- class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
-	<!-- <property name="prefix" value="/WEB-INF/jsp/" /> -->
-	<!-- <property name="suffix" value=".jsp" /> -->
-	<!-- </bean> -->
-	<!-- </list> -->
-	<!-- </property> -->
-	<!-- <property name="defaultViews"> -->
-	<!-- <list> -->
-	<!-- <bean -->
-	<!-- class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" 
-		/> -->
-	<!-- </list> -->
-	<!-- </property> -->
-	<!-- </bean> -->
+ 
 
 </beans>

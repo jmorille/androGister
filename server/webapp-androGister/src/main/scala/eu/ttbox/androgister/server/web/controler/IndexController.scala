@@ -11,7 +11,7 @@ class IndexController {
   @RequestMapping(Array("/layout"))
   def layout = "/index.scaml"
 
-  @RequestMapping(Array("/view"))
+  @RequestMapping(Array("/viewXX"))
   def view: ModelAndView = {
     val mav = new ModelAndView
     mav.addObject("it", new SomeClass)
