@@ -51,7 +51,7 @@
 </properties>
   
   <modules>
-    <module>webapp-androGister</module>
+    <module>springmvc-webapp</module>
     <module>lift-webapp</module>
   </modules>
 
