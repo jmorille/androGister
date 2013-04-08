@@ -1,472 +1,479 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+<!-- Copyright (C) 2009-2011 the original author or authors. See the notice.md 
+	file distributed with this work for additional information regarding copyright 
+	ownership. Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. You may 
+	obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    Copyright (C) 2009-2011 the original author or authors.
-    See the notice.md file distributed with this work for additional
-    information regarding copyright ownership.
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.ttbox.androgister.server</groupId>
+		<artifactId>server</artifactId>
+		<version>0.0.1</version>
+	</parent>
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+	<artifactId>webapp-andoGister</artifactId>
+	<packaging>war</packaging>
 
-        http://www.apache.org/licenses/LICENSE-2.0
+	<name>${project.artifactId}</name>
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+	<properties>
+		<scalate.editor>${env.SCALATE_EDITOR}</scalate.editor>
+		<scalate.mode>development</scalate.mode>
+		<scalate.workdir>${basedir}/target/_scalate</scalate.workdir>
 
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		<scalate.package.resources>${project.groupId}.${project.artifactId}.resources</scalate.package.resources>
 
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>eu.ttbox.androgister.server</groupId>
-    <artifactId>server</artifactId>
-    <version>0.0.1</version>
-  </parent>
+		<jackson.version>2.1.4</jackson.version>
+		<grizzled-slf4j.version>1.0.1</grizzled-slf4j.version>
+	</properties>
 
-  <artifactId>webapp-andoGister</artifactId>
-  <packaging>war</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.fusesource.scalate</groupId>
+			<artifactId>scalate-spring-mvc_2.10</artifactId>
+			<version>${scalate.version}</version>
+		</dependency>
 
-  <name>${project.artifactId}</name>
- 
- <properties>
-    <scalate.editor>${env.SCALATE_EDITOR}</scalate.editor>
-    <scalate.mode>development</scalate.mode>
-    <scalate.workdir>${basedir}/target/_scalate</scalate.workdir>
- 
-     <scalate.package.resources>${project.groupId}.${project.artifactId}.resources</scalate.package.resources>
-  
-     <version.frk.jackson>2.1.4</version.frk.jackson>
- </properties>
- 
-  <dependencies>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>${servlet-api-version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.fusesource.scalate</groupId>
-      <artifactId>scalate-spring-mvc_2.10</artifactId>
-      <version>${scalate.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback-version}</version>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-      <version>${org.springframework.version}</version>
-    </dependency>
-
-   <!-- Jackson -->
-      <dependency>
-         <groupId>com.fasterxml.jackson.core</groupId>
-         <artifactId>jackson-core</artifactId>
-         <version>${version.frk.jackson}</version>
-      </dependency>
-      <dependency>
-         <groupId>com.fasterxml.jackson.core</groupId>
-         <artifactId>jackson-databind</artifactId>
-         <version>${version.frk.jackson}</version>
-      </dependency>
+		<!-- Logging -->
+        <dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version> 
+		</dependency>
+		
        <dependency>
-         <groupId>com.fasterxml.jackson.core</groupId>
-         <artifactId>jackson-annotations</artifactId>
-         <version>${version.frk.jackson}</version>
-      </dependency>
-           
-                
-     <!-- MongoDb -->
-       <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-mongodb</artifactId>
-      <version>${spring-data-mongodb.version}</version>
-    </dependency>
-     <dependency>
-		<groupId>org.mongodb</groupId>
-		<artifactId>mongo-java-driver</artifactId>
-		<version>2.11.0</version>
-	</dependency>
-	
-  </dependencies>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version> 
+		</dependency>
 
-<build>
-    <defaultGoal>install</defaultGoal>
-<!--
-    <sourceDirectory>src/main/scala</sourceDirectory>
-    <testSourceDirectory>src/test/scala</testSourceDirectory>
--->
+		
+		<!-- http://software.clapper.org/grizzled-slf4j/#using_the_grizzled_slf4j_library -->
+		<dependency>
+			<groupId>org.clapper</groupId>
+			<artifactId>grizzled-slf4j_2.10</artifactId>
+			<version>${grizzled-slf4j.version}</version>
+		</dependency>
 
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>net.alchim31.maven</groupId>
-          <artifactId>scala-maven-plugin</artifactId>
-          <version>${scala-plugin-version}</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>compile</goal>
-                <goal>testCompile</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <!-- lets disable vscaladoc -->
-            <scaladocClassName>scala.tools.nsc.ScalaDoc</scaladocClassName>
-            <!--
-                        <scalaJars>
-                          <scalaJar>
-                            <groupId>org.scala-lang</groupId>
-                            <artifactId>scala-compiler</artifactId>
-                            <version>${scala-version}</version>
-                          </scalaJar>
-                        </scalaJars>
-            -->
-            <jvmArgs>
-              <jvmArg>-Xmx1024m</jvmArg>
-            </jvmArgs>
-            <args>
-              <!-- arg>-unchecked</arg -->
-              <arg>-deprecation</arg>
-            </args>
-            <javacArgs>
-              <javacArg>-g</javacArg>
-              <javacArg>-target</javacArg>
-              <javacArg>1.6</javacArg>
-              <javacArg>-source</javacArg>
-              <javacArg>1.6</javacArg>
-            </javacArgs>
-            <scalaVersion>${scala-version}</scalaVersion>
-            <recompileMode>incremental</recompileMode>
-            <useZincServer>true</useZincServer>
-          </configuration>
-        </plugin>
+		<!-- Logging -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
 
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>1.6</source>
-            <target>1.6</target>
-            <optimize>true</optimize>
-            <debug>true</debug>
-          </configuration>
-        </plugin>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <configuration>
-            <archive>
-              <manifest>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              </manifest>
-            </archive>
-          </configuration>
-        </plugin>
+		<!-- Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 
 
-        <plugin>
-          <artifactId>maven-war-plugin</artifactId>
-          <version>${war-plugin-version}</version>
-          <configuration>
-            <attachClasses>true</attachClasses>
-          </configuration>
-        </plugin>
+		<!-- MongoDb -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>${spring-data-mongodb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>2.11.0</version>
+		</dependency>
 
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-idea-plugin</artifactId>
-          <version>${idea-plugin-version}</version>
-          <configuration>
-            <downloadSources>true</downloadSources>
-            <downloadJavadocs>true</downloadJavadocs>
-          </configuration>
-        </plugin>
+	</dependencies>
 
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-eclipse-plugin</artifactId>
-          <version>${eclipse-plugin-version}</version>
-          <configuration>
-            <outputDirectory>${basedir}/eclipse-classes</outputDirectory>
-            <downloadSources>true</downloadSources>
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<!-- <sourceDirectory>src/main/scala</sourceDirectory> <testSourceDirectory>src/test/scala</testSourceDirectory> -->
 
-            <!-- Eclipse update site for the Checkstyle plugin is http://eclipse-cs.sourceforge.net/update -->
-            <!-- Eclipse update site for the PMD plugin is http://pmd.sf.net/eclipse -->
-            <buildcommands>
-              <java.lang.String>org.eclipse.jdt.core.javabuilder</java.lang.String>
-              <java.lang.String>com.atlassw.tools.eclipse.checkstyle.CheckstyleBuilder</java.lang.String>
-              <!-- Lets not enable the PMD buidler just yet..
-              <java.lang.String>net.sourceforge.pmd.runtime.pmdBuilder</java.lang.String>
-              -->
-            </buildcommands>
-            <projectnatures>
-              <nature>org.eclipse.jdt.core.javanature</nature>
-              <nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
-              <!-- Lets not enable the PMD buidler just yet..
-              <nature>net.sourceforge.pmd.runtime.pmdNature</nature>
-              -->
-            </projectnatures>
-          </configuration>
-        </plugin>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>net.alchim31.maven</groupId>
+					<artifactId>scala-maven-plugin</artifactId>
+					<version>${scala-plugin-version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>compile</goal>
+								<goal>testCompile</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<!-- lets disable vscaladoc -->
+						<scaladocClassName>scala.tools.nsc.ScalaDoc</scaladocClassName>
+						<!-- <scalaJars> <scalaJar> <groupId>org.scala-lang</groupId> <artifactId>scala-compiler</artifactId> 
+							<version>${scala-version}</version> </scalaJar> </scalaJars> -->
+						<jvmArgs>
+							<jvmArg>-Xmx1024m</jvmArg>
+						</jvmArgs>
+						<args>
+							<!-- arg>-unchecked</arg -->
+							<arg>-deprecation</arg>
+						</args>
+						<javacArgs>
+							<javacArg>-g</javacArg>
+							<javacArg>-target</javacArg>
+							<javacArg>1.6</javacArg>
+							<javacArg>-source</javacArg>
+							<javacArg>1.6</javacArg>
+						</javacArgs>
+						<scalaVersion>${scala-version}</scalaVersion>
+						<recompileMode>incremental</recompileMode>
+						<useZincServer>true</useZincServer>
+					</configuration>
+				</plugin>
 
-        <plugin>
-          <groupId>org.mortbay.jetty</groupId>
-          <artifactId>jetty-maven-plugin</artifactId>
-          <version>${jetty-plugin-version}</version>
-          <configuration>
-            <!--
-            <connectors>
-              <connector implementation="org.eclipse.jetty.nio.SelectChannelConnector">
-                <port>${jetty.port}</port>
-                <maxIdleTime>60000</maxIdleTime>
-              </connector>
-            </connectors>
-            -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<optimize>true</optimize>
+						<debug>true</debug>
+					</configuration>
+				</plugin>
 
-            <webAppConfig>
-              <contextPath>/</contextPath>
-              <resourceBase>${basedir}/src/main/webapp</resourceBase>
-              <unpackOverlays>true</unpackOverlays>
-            </webAppConfig>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
 
-            <systemProperties>
-              <!-- enable easy JMX connection to JConsole -->
-              <systemProperty>
-                <name>com.sun.management.jmxremote</name>
-                <value />
-              </systemProperty>
-              <systemProperty>
-                <name>scalate.editor</name>
-                <value>${scalate.editor}</value>
-              </systemProperty>
-              <systemProperty>
-                <name>scalate.workdir</name>
-                <value>${scalate.workdir}</value>
-              </systemProperty>
-              <systemProperty>
-                <name>scalate.mode</name>
-                <value>${scalate.mode}</value>
-              </systemProperty>
-            </systemProperties>
-            <scanIntervalSeconds>0</scanIntervalSeconds>
-          </configuration>
-        </plugin>
 
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>tomcat-maven-plugin</artifactId>
-          <version>${tomcat-plugin-version}</version>
-          <configuration>
-            <path>/</path>
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${war-plugin-version}</version>
+					<configuration>
+						<attachClasses>true</attachClasses>
+					</configuration>
+				</plugin>
 
-            <systemProperties>
-              <!-- enable easy JMX connection to JConsole -->
-              <com.sun.management.jmxremote />
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-idea-plugin</artifactId>
+					<version>${idea-plugin-version}</version>
+					<configuration>
+						<downloadSources>true</downloadSources>
+						<downloadJavadocs>true</downloadJavadocs>
+					</configuration>
+				</plugin>
 
-              <!-- Scalate console configuration -->
-              <scalate.mode>${scalate.mode}</scalate.mode>
-              <scalate.editor>${scalateEditor}</scalate.editor>
-              <scalate.workdir>${scalate.workdir}</scalate.workdir>
-              <scalate.package.resources>${scalate.package.resources}</scalate.package.resources>
-            </systemProperties>
-          </configuration>
-        </plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>${eclipse-plugin-version}</version>
+					<configuration>
+						<outputDirectory>${basedir}/eclipse-classes</outputDirectory>
+						<downloadSources>true</downloadSources>
 
-      </plugins>
-    </pluginManagement>
+						<!-- Eclipse update site for the Checkstyle plugin is http://eclipse-cs.sourceforge.net/update -->
+						<!-- Eclipse update site for the PMD plugin is http://pmd.sf.net/eclipse -->
+						<buildcommands>
+							<java.lang.String>org.eclipse.jdt.core.javabuilder</java.lang.String>
+							<java.lang.String>com.atlassw.tools.eclipse.checkstyle.CheckstyleBuilder</java.lang.String>
+							<!-- Lets not enable the PMD buidler just yet.. <java.lang.String>net.sourceforge.pmd.runtime.pmdBuilder</java.lang.String> -->
+						</buildcommands>
+						<projectnatures>
+							<nature>org.eclipse.jdt.core.javanature</nature>
+							<nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
+							<!-- Lets not enable the PMD buidler just yet.. <nature>net.sourceforge.pmd.runtime.pmdNature</nature> -->
+						</projectnatures>
+					</configuration>
+				</plugin>
 
-    <plugins>
-      <plugin>
-        <groupId>net.alchim31.maven</groupId>
-        <artifactId>scala-maven-plugin</artifactId>
-      </plugin>
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>${jetty-plugin-version}</version>
+					<configuration>
+						<!-- <connectors> <connector implementation="org.eclipse.jetty.nio.SelectChannelConnector"> 
+							<port>${jetty.port}</port> <maxIdleTime>60000</maxIdleTime> </connector> 
+							</connectors> -->
 
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>${bundle-plugin-version}</version>
-        <extensions>true</extensions>
-        <inherited>true</inherited>
-        <configuration>
-          <instructions>
-            <Implementation-Title>${project.artifactId}</Implementation-Title>
-            <Implementation-Version>${project.version}</Implementation-Version>
-            <Bundle-Name>${project.artifactId}</Bundle-Name>
-            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-            <Export-Package>{local-packages};version=${project.version};-noimport:=true</Export-Package>
-            <Import-Package>${scalate.osgi.import}</Import-Package>
-            <Private-Package>!*</Private-Package>
-            <_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl>
-            <_versionpolicy-uses>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy-uses>
-            <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
-            <_failok>false</_failok>
-          </instructions>
-        </configuration>
-      </plugin>
-        
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>${changes-plugin-version}</version>
-        <configuration>
-          <filteringChanges>true</filteringChanges>
-        </configuration>
-      </plugin>
+						<webAppConfig>
+							<contextPath>/</contextPath>
+							<resourceBase>${basedir}/src/main/webapp</resourceBase>
+							<unpackOverlays>true</unpackOverlays>
+						</webAppConfig>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.0</version>
-        <executions>
-         <execution>
-           <id>attach-descriptor</id>
-           <goals>
-             <goal>attach-descriptor</goal>
-           </goals>
-         </execution>
-       </executions>
-       <configuration>
-          <reportPlugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-project-info-reports-plugin</artifactId>
-              <version>2.4</version>
-              <configuration>
-                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-              </configuration>
-              <!-- simpler configuration without reportSets available for usual cases -->
-              <reports>
-                <report>index</report>
-                <report>dependencies</report>
-                <report>issue-tracking</report>
-                <report>license</report>
-                <report>mailing-list</report>
-                <report>modules</report>
-                <report>project-team</report>
-                <report>plugin-management</report>
-                <report>plugins</report>
-                <report>scm</report>
-              </reports>
-            </plugin>
-            <plugin>
-              <groupId>net.alchim31.maven</groupId>
-              <artifactId>scala-maven-plugin</artifactId>
-              <configuration>
-                <scalaVersion>${scala-version}</scalaVersion>
-              </configuration>
-            </plugin>
-          </reportPlugins>
-        </configuration>
-      </plugin>
+						<systemProperties>
+							<!-- enable easy JMX connection to JConsole -->
+							<systemProperty>
+								<name>com.sun.management.jmxremote</name>
+								<value />
+							</systemProperty>
+							<systemProperty>
+								<name>scalate.editor</name>
+								<value>${scalate.editor}</value>
+							</systemProperty>
+							<systemProperty>
+								<name>scalate.workdir</name>
+								<value>${scalate.workdir}</value>
+							</systemProperty>
+							<systemProperty>
+								<name>scalate.mode</name>
+								<value>${scalate.mode}</value>
+							</systemProperty>
+						</systemProperties>
+						<scanIntervalSeconds>0</scanIntervalSeconds>
+					</configuration>
+				</plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin-version}</version>
-        <configuration>
-          <!-- we must turn off the use of system class loader so our tests can find stuff - otherwise scala compiler can't find stuff -->
-          <useSystemClassLoader>false</useSystemClassLoader>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>tomcat-maven-plugin</artifactId>
+					<version>${tomcat-plugin-version}</version>
+					<configuration>
+						<path>/</path>
 
-          <forkMode>once</forkMode>
-          <childDelegation>false</childDelegation>
-          <useFile>${test.useFile}</useFile>
-          <failIfNoTests>false</failIfNoTests>
-        </configuration>
-      </plugin>
+						<systemProperties>
+							<!-- enable easy JMX connection to JConsole -->
+							<com.sun.management.jmxremote />
 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>${buildhelper-plugin-version}</version>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>src/main/scala</source>
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
- 
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.1</version>
-        <configuration>
-          <path>/</path>
-          <port>8181</port>
-          <contextFile>./src/test/conf/context.xml</contextFile>
-           <systemProperties>
-              <!-- enable easy JMX connection to JConsole -->
-              <com.sun.management.jmxremote />
+							<!-- Scalate console configuration -->
+							<scalate.mode>${scalate.mode}</scalate.mode>
+							<scalate.editor>${scalateEditor}</scalate.editor>
+							<scalate.workdir>${scalate.workdir}</scalate.workdir>
+							<scalate.package.resources>${scalate.package.resources}</scalate.package.resources>
+						</systemProperties>
+					</configuration>
+				</plugin>
 
-              <!-- Scalate console configuration -->
-              <scalate.mode>${scalate.mode}</scalate.mode>
-              <scalate.editor>${scalateEditor}</scalate.editor>
-              <scalate.workdir>${scalate.workdir}</scalate.workdir>
-              <scalate.package.resources>${scalate.package.resources}</scalate.package.resources>
-            </systemProperties>
-                      
-          <!-- partie reservee au https -->
-          <!-- creation du keystore -->
+			</plugins>
+		</pluginManagement>
 
-          <!-- keytool -genkey -alias tomcat -keyalg RSA -keystore monstore -->
-          <!-- Tapez le mot de passe du Keystore : "taper un mot de passe" -->
-          <!-- Ressaisissez le nouveau mot de passe : "taper le même mot de passe" -->
-          <!-- Quels sont vos prénom et nom ? -->
-          <!-- [Unknown] : nom de la machine ex : http://gf654321:8443 il faut mettre gf654321 -->
-          <!-- Quel est le nom de votre unité organisationnelle ? -->
-          <!-- [Unknown] : votre département ex : CCJ -->
-          <!-- Quelle est le nom de votre organisation ? -->
-          <!-- [Unknown] : GENERALI -->
-          <!-- Quel est le nom de votre ville de résidence ? -->
-          <!-- [Unknown] : Saint-Denis -->
-          <!-- Quel est le nom de votre état ou province ? -->
-          <!-- [Unknown] : France -->
-          <!-- Quel est le code de pays à deux lettres pour cette unité ? -->
-          <!-- [Unknown] : FR -->
-          <!-- Est-ce CN=gf654321, OU=CCJ, O=GENERALI, L=Saint-Denis, ST=France, C=FR ? -->
-          <!-- [non] : oui -->
-          <!-- Spécifiez le mot de passe de la clé pour <tomcat> -->
-          <!-- (appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : "appuyez sur la touche Entrée" -->
+		<plugins>
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+			</plugin>
 
-          <!-- <hostName>gf200820</hostName> -->
-          <!-- <httpsPort>8443</httpsPort> -->
-          <!-- <keystoreFile>../../ccjsamplestorecr</keystoreFile> -->
-          <!-- <keystorePass>ccjsample</keystorePass> -->
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${bundle-plugin-version}</version>
+				<extensions>true</extensions>
+				<inherited>true</inherited>
+				<configuration>
+					<instructions>
+						<Implementation-Title>${project.artifactId}</Implementation-Title>
+						<Implementation-Version>${project.version}</Implementation-Version>
+						<Bundle-Name>${project.artifactId}</Bundle-Name>
+						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+						<Export-Package>{local-packages};version=${project.version};-noimport:=true</Export-Package>
+						<Import-Package>${scalate.osgi.import}</Import-Package>
+						<Private-Package>!*</Private-Package>
+						<_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl>
+						<_versionpolicy-uses>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy-uses>
+						<_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
+						<_failok>false</_failok>
+					</instructions>
+				</configuration>
+			</plugin>
 
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.3.171</version>
-          </dependency>
-        </dependencies>
-      </plugin>
- 
-    </plugins>
-  </build>
-  
-  
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<version>${changes-plugin-version}</version>
+				<configuration>
+					<filteringChanges>true</filteringChanges>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0</version>
+				<executions>
+					<execution>
+						<id>attach-descriptor</id>
+						<goals>
+							<goal>attach-descriptor</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<reportPlugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.4</version>
+							<configuration>
+								<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+								<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+							</configuration>
+							<!-- simpler configuration without reportSets available for usual 
+								cases -->
+							<reports>
+								<report>index</report>
+								<report>dependencies</report>
+								<report>issue-tracking</report>
+								<report>license</report>
+								<report>mailing-list</report>
+								<report>modules</report>
+								<report>project-team</report>
+								<report>plugin-management</report>
+								<report>plugins</report>
+								<report>scm</report>
+							</reports>
+						</plugin>
+						<plugin>
+							<groupId>net.alchim31.maven</groupId>
+							<artifactId>scala-maven-plugin</artifactId>
+							<configuration>
+								<scalaVersion>${scala-version}</scalaVersion>
+							</configuration>
+						</plugin>
+					</reportPlugins>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire-plugin-version}</version>
+				<configuration>
+					<!-- we must turn off the use of system class loader so our tests can 
+						find stuff - otherwise scala compiler can't find stuff -->
+					<useSystemClassLoader>false</useSystemClassLoader>
+
+					<forkMode>once</forkMode>
+					<childDelegation>false</childDelegation>
+					<useFile>${test.useFile}</useFile>
+					<failIfNoTests>false</failIfNoTests>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${buildhelper-plugin-version}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/main/scala</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<path>/</path>
+					<port>8181</port>
+					<contextFile>./src/test/conf/context.xml</contextFile>
+					<systemProperties>
+						<!-- enable easy JMX connection to JConsole -->
+						<com.sun.management.jmxremote />
+
+						<!-- Scalate console configuration -->
+						<scalate.mode>${scalate.mode}</scalate.mode>
+						<scalate.editor>${scalateEditor}</scalate.editor>
+						<scalate.workdir>${scalate.workdir}</scalate.workdir>
+						<scalate.package.resources>${scalate.package.resources}</scalate.package.resources>
+					</systemProperties>
+
+					<!-- partie reservee au https -->
+					<!-- creation du keystore -->
+
+					<!-- keytool -genkey -alias tomcat -keyalg RSA -keystore monstore -->
+					<!-- Tapez le mot de passe du Keystore : "taper un mot de passe" -->
+					<!-- Ressaisissez le nouveau mot de passe : "taper le même mot de passe" -->
+					<!-- Quels sont vos prénom et nom ? -->
+					<!-- [Unknown] : nom de la machine ex : http://gf654321:8443 il faut 
+						mettre gf654321 -->
+					<!-- Quel est le nom de votre unité organisationnelle ? -->
+					<!-- [Unknown] : votre département ex : CCJ -->
+					<!-- Quelle est le nom de votre organisation ? -->
+					<!-- [Unknown] : GENERALI -->
+					<!-- Quel est le nom de votre ville de résidence ? -->
+					<!-- [Unknown] : Saint-Denis -->
+					<!-- Quel est le nom de votre état ou province ? -->
+					<!-- [Unknown] : France -->
+					<!-- Quel est le code de pays à deux lettres pour cette unité ? -->
+					<!-- [Unknown] : FR -->
+					<!-- Est-ce CN=gf654321, OU=CCJ, O=GENERALI, L=Saint-Denis, ST=France, 
+						C=FR ? -->
+					<!-- [non] : oui -->
+					<!-- Spécifiez le mot de passe de la clé pour <tomcat> -->
+					<!-- (appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : 
+						"appuyez sur la touche Entrée" -->
+
+					<!-- <hostName>gf200820</hostName> -->
+					<!-- <httpsPort>8443</httpsPort> -->
+					<!-- <keystoreFile>../../ccjsamplestorecr</keystoreFile> -->
+					<!-- <keystorePass>ccjsample</keystorePass> -->
+
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>1.3.171</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+		</plugins>
+	</build>
+
+
 </project>

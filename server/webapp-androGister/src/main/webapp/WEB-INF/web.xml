@@ -27,16 +27,16 @@
       <load-on-startup>1</load-on-startup>
       <!-- Configure DispatcherServlet to use JavaConfigWebApplicationContext 
          instead of the default XmlWebApplicationContext -->
-      <init-param>
-         <param-name>contextClass</param-name>
-         <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
-      </init-param>
+<!--       <init-param> -->
+<!--          <param-name>contextClass</param-name> -->
+<!--          <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value> -->
+<!--       </init-param> -->
       <!-- Again, config locations must consist of one or more comma- or 
          space-delimited and fully-qualified @Configuration classes -->
-      <init-param>
-         <param-name>contextConfigLocation</param-name>
-         <param-value>eu.ttbox.androgister.server.web.config.AppConfig</param-value>
-      </init-param>
+<!--       <init-param> -->
+<!--          <param-name>contextConfigLocation</param-name> -->
+<!--          <param-value>eu.ttbox.androgister.server.web.config.AppConfig</param-value> -->
+<!--       </init-param> -->
    </servlet>
 
    <servlet-mapping>
