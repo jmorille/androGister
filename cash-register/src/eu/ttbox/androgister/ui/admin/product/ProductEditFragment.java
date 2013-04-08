@@ -162,7 +162,7 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         descText.setText(entity.getDescription());
         // String priceString =
         // PriceHelper.getToStringPrice(entity.getPriceHT());
-        String priceString = entity.getPriceHT() != null ? entity.getPriceHT().toString() : null;
+        String priceString =  String.valueOf(  entity.getPriceHT() ) ;
         priceHTText.setText(priceString);
 
         // Tag
