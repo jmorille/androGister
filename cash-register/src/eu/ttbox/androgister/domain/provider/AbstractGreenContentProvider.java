@@ -10,16 +10,19 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Log;
 import de.greenrobot.dao.AbstractDao;
-import eu.ttbox.androgister.domain.DomainModel;
-import eu.ttbox.androgister.domain.provider.ProductProvider.Constants;
+import eu.ttbox.androgister.domain.DomainModel; 
 
 public abstract class AbstractGreenContentProvider<MODEL extends DomainModel> extends ContentProvider {
 
     public AbstractDao<MODEL, Long> entityDao;
 
-    private static final int ENTITIES = 0;
-    private static final int ENTITY = 1;
+    public static final int ENTITIES = 0;
+    public static final int ENTITY = 1;
+
+    private static final String TAG = "AbstractGreenContentProvider";
 
     @Override
     public boolean onCreate() {
@@ -27,7 +30,34 @@ public abstract class AbstractGreenContentProvider<MODEL extends DomainModel> ex
         return true;
     }
 
-  
+
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Log.d(TAG, "query for uri : " + uri);
+        // Use the UriMatcher to see what kind of query we have and format the
+        // db query accordingly
+        switch (matchUriMatcher(uri)) {
+        case ENTITIES:
+            return queryEntities(projection, selection, selectionArgs, sortOrder);
+        case ENTITY:
+            String selectionMerged = selection;
+            String entityId = uri.getLastPathSegment();
+            String[] args = new String[] { entityId };
+            if (!TextUtils.isEmpty(selection)) {
+                Log.d(TAG, "Merge selection [" + selection + "] with Uri : " + uri);
+                selectionMerged = String.format("%s and (%s)",  getSelectClauseByEntityId(), selection);
+                int pSelectionArgSize = selectionArgs.length;
+                args = new String[pSelectionArgSize + 1];
+                System.arraycopy(selectionArgs, 0, args, 1, pSelectionArgSize);
+                selectionArgs[0] = entityId;
+            } else {
+                args = new String[] { entityId };
+            }
+            return queryEntities(projection, selectionMerged, args, null);
+        default:
+            throw new IllegalArgumentException("Unknown Uri: " + uri);
+        }
+    }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -36,7 +66,7 @@ public abstract class AbstractGreenContentProvider<MODEL extends DomainModel> ex
             long entityId = insertEntity(values);
             Uri entityUri = null;
             if (entityId > -1) {
-                entityUri = Uri.withAppendedPath(Constants.CONTENT_URI, String.valueOf(entityId));
+                entityUri = getEntityUri(entityId);
                 getContext().getContentResolver().notifyChange(uri, null);
                 // Backup
                 BackupManager.dataChanged(getContext().getPackageName());
@@ -165,4 +195,6 @@ public abstract class AbstractGreenContentProvider<MODEL extends DomainModel> ex
     public abstract String getSelectClauseByEntityId();
 
     public abstract int matchUriMatcher(Uri uri);
+    
+    public abstract Uri getEntityUri(long entityId) ;
 }
