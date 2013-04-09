@@ -34,7 +34,7 @@ public class AuthenticationService extends Service {
     @Override
     public void onCreate() {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "SampleSyncAdapter Authentication Service started.");
+            Log.v(TAG, "SyncAdapter Authentication Service started.");
         }
         mAuthenticator = new Authenticator(this);
     }
@@ -42,7 +42,7 @@ public class AuthenticationService extends Service {
     @Override
     public void onDestroy() {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "SampleSyncAdapter Authentication Service stopped.");
+            Log.v(TAG, "SyncAdapter Authentication Service stopped.");
         }
     }
 

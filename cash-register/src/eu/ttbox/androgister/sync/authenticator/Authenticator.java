@@ -144,8 +144,7 @@ class Authenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account,
-            String authTokenType, Bundle loginOptions) {
+    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle loginOptions) {
         Log.v(TAG, "updateCredentials()");
         return null;
     }

@@ -32,6 +32,13 @@ public class RegisterDaoGenerator {
         entity.addLongProperty("creationDate");
         entity.addLongProperty("versionDate");
     }
+    
+    private static void implementsSync(Entity entity) {
+//        entity.implementsInterface("eu.ttbox.androgister.domain.VersioningModel");
+        entity.addBooleanProperty("dirty").notNull();
+        entity.addBooleanProperty("deleted").notNull();
+    }
+    
 
     private static Entity implementsDomainModel(Entity entity) {
         entity.implementsInterface("eu.ttbox.androgister.domain.DomainModel");
@@ -63,6 +70,7 @@ public class RegisterDaoGenerator {
         Entity product = schema.addEntity("Product");//
         implementsDomainModel(product);
         implementsVersionning(product);
+        implementsSync(product);
         // Properties
         product.addStringProperty("name").notNull();
         product.addStringProperty("description");
