@@ -45,11 +45,10 @@ public class ProductProvider extends AbstractGreenContentProvider<Product> {
     public ProductDao getEntityDao() {
         return ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getProductDao();
     }
-    
+
     private HashMap<String, String> buildEntityColumnMap() {
         HashMap<String, String> map = new HashMap<String, String>();
-        // Add Id
-        // map.put(PersonColumns.COL_ID, "rowid AS " + BaseColumns._ID);
+        ;
         // Add Identity Column
         for (String col : entityDao.getAllColumns()) {
             map.put(col, col);
@@ -79,8 +78,6 @@ public class ProductProvider extends AbstractGreenContentProvider<Product> {
         return sURIMatcher.match(uri);
     }
 
-
-
     public String getSelectClauseByEntityId() {
         return SELECT_BY_ENTITY_ID;
     }
@@ -99,11 +96,7 @@ public class ProductProvider extends AbstractGreenContentProvider<Product> {
         case ENTITIES:
             return PRODUCTS_LIST_MIME_TYPE;
         case ENTITY:
-            return PRODUCT_MIME_TYPE;
-            // case SEARCH_SUGGEST:
-            // return SearchManager.SUGGEST_MIME_TYPE;
-            // case REFRESH_SHORTCUT:
-            // return SearchManager.SHORTCUT_MIME_TYPE;
+            return PRODUCT_MIME_TYPE; 
         default:
             throw new IllegalArgumentException("Unknown URL " + uri);
         }
