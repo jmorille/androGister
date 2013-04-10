@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.UriMatcher;
 import android.net.Uri;
 import eu.ttbox.androgister.AndroGisterApplication;
+import eu.ttbox.androgister.domain.TagDao;
 import eu.ttbox.androgister.domain.Taxe;
 import eu.ttbox.androgister.domain.TaxeDao;
 import eu.ttbox.androgister.domain.TaxeDao.Properties;
@@ -35,7 +36,7 @@ public class TaxeProvider extends AbstractGreenContentProvider<Taxe> {
 
     public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", Properties.Id);
 
-    private HashMap<String, String> mEntityColumnMap = buildEntityColumnMap();
+    private HashMap<String, String> mEntityColumnMap;
 
     @Override
     public Map<String, String> getEntityColumnMap() {
@@ -43,10 +44,12 @@ public class TaxeProvider extends AbstractGreenContentProvider<Taxe> {
     }
 
     public TaxeDao getEntityDao() {
-        return ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getTaxeDao();
+        TaxeDao dao = ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getTaxeDao(); 
+        mEntityColumnMap = buildEntityColumnMap(dao);
+        return dao;
     }
 
-    private HashMap<String, String> buildEntityColumnMap() {
+    private HashMap<String, String> buildEntityColumnMap(TaxeDao entityDao) {
         HashMap<String, String> map = new HashMap<String, String>();
         ;
         // Add Identity Column

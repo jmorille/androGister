@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.UriMatcher;
 import android.net.Uri;
 import eu.ttbox.androgister.AndroGisterApplication;
+import eu.ttbox.androgister.domain.ProductDao;
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
 import eu.ttbox.androgister.domain.TagDao.Properties;
@@ -35,7 +36,7 @@ public class TagProvider extends AbstractGreenContentProvider<Tag> {
 
     public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", Properties.Id);
 
-    private HashMap<String, String> mEntityColumnMap = buildEntityColumnMap();
+    private HashMap<String, String> mEntityColumnMap ;
 
     @Override
     public Map<String, String> getEntityColumnMap() {
@@ -43,10 +44,12 @@ public class TagProvider extends AbstractGreenContentProvider<Tag> {
     }
 
     public TagDao getEntityDao() {
-        return ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getTagDao();
+        TagDao dao =  ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getTagDao(); 
+        mEntityColumnMap = buildEntityColumnMap(dao);
+        return dao;
     }
 
-    private HashMap<String, String> buildEntityColumnMap() {
+    private HashMap<String, String> buildEntityColumnMap(TagDao entityDao) {
         HashMap<String, String> map = new HashMap<String, String>();
         ;
         // Add Identity Column

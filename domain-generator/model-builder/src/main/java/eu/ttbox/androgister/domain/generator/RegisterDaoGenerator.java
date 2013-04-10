@@ -37,6 +37,8 @@ public class RegisterDaoGenerator {
 //        entity.implementsInterface("eu.ttbox.androgister.domain.VersioningModel");
         entity.addBooleanProperty("dirty").notNull();
         entity.addBooleanProperty("deleted").notNull();
+        entity.addLongProperty("serverId").notNull();
+        entity.addLongProperty("version").notNull();
     }
     
 

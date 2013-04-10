@@ -181,8 +181,15 @@
         </service>
 
         <!-- ### Sync service ### -->
-        <!-- #################### -->
-        <service android:name=".sync.authenticator.AuthenticationService"
+        <!-- #################### -->    
+      <activity
+            android:name=".sync.authenticator.AuthenticatorActivity"
+            android:label="@string/ui_activity_title"
+            android:theme="@android:style/Theme.Dialog"
+            android:excludeFromRecents="true"
+            android:configChanges="orientation"
+            /> 
+      <service android:name=".sync.authenticator.AuthenticationService"
             android:exported="true">
             <intent-filter>
                 <action
@@ -192,25 +199,32 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-        <service android:name=".sync.syncadapter.SyncService"
+        <service android:name=".sync.syncadapter.SyncService" 
             android:exported="true">
             <intent-filter>
                 <action  android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data
+            <meta-data 
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" /> 
         </service>
-                
-      <activity
-            android:name=".sync.authenticator.AuthenticatorActivity"
-            android:label="@string/ui_activity_title"
-            android:theme="@android:style/Theme.Dialog"
-            android:excludeFromRecents="true"
-            android:configChanges="orientation"
-            /> 
-                 
+        <service android:name=".sync.syncadapter.OrderSyncService" 
+            android:exported="true">
+            <intent-filter>
+                <action  android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data 
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter_order" /> 
+        </service>
+     
+      
         <!-- Provider -->
+        <provider android:exported="false"
+            android:name=".domain.provider.ProductProvider" android:label="Produits"
+            android:authorities="eu.ttbox.androgister.domain.product"  />
+
+        <!-- Old Provider -->
         <provider 
             android:name=".database.OfferProvider"
             android:authorities="eu.ttbox.androgister.searchableoffer.OfferProvider"
@@ -223,6 +237,7 @@
             android:writePermission="eu.ttbox.androgister.PERSON_WRITE" />
         <provider
             android:name=".database.OrderProvider"
+            android:label="Commande"
             android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider"
             android:readPermission="eu.ttbox.androgister.ORDER_READ"
             android:writePermission="eu.ttbox.androgister.ORDER_WRITE" />

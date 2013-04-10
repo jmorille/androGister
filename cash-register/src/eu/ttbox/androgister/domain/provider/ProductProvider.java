@@ -21,7 +21,7 @@ public class ProductProvider extends AbstractGreenContentProvider<Product> {
     public static final String PRODUCT_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ttbox.cursor.item/product";
 
     public static class Constants {
-        public static String AUTHORITY = "eu.ttbox.androgister.product";
+        public static String AUTHORITY = "eu.ttbox.androgister.domain.product";
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/product");
         public static final Uri CONTENT_URI_GET_PRODUCT = Uri.parse("content://" + AUTHORITY + "/product/");
 
@@ -35,7 +35,7 @@ public class ProductProvider extends AbstractGreenContentProvider<Product> {
 
     public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", Properties.Id);
 
-    private HashMap<String, String> mEntityColumnMap = buildEntityColumnMap();
+    private HashMap<String, String> mEntityColumnMap; 
 
     @Override
     public Map<String, String> getEntityColumnMap() {
@@ -43,10 +43,12 @@ public class ProductProvider extends AbstractGreenContentProvider<Product> {
     }
 
     public ProductDao getEntityDao() {
-        return ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getProductDao();
+        ProductDao dao =  ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getProductDao();
+        mEntityColumnMap = buildEntityColumnMap(dao);
+        return dao;
     }
 
-    private HashMap<String, String> buildEntityColumnMap() {
+    private HashMap<String, String> buildEntityColumnMap(ProductDao entityDao ) {
         HashMap<String, String> map = new HashMap<String, String>();
         ;
         // Add Identity Column

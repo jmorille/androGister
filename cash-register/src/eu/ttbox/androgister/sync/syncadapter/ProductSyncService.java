@@ -24,17 +24,17 @@ import android.os.IBinder;
  * ACTION_AUTHENTICATOR_INTENT. It instantiates the syncadapter and returns its
  * IBinder.
  */
-public class SyncService extends Service {
+public class ProductSyncService extends Service {
 
-    private static final Object sSyncAdapterLock = new Object();
+    private static final Object[] sSyncAdapterLock = new Object[0];
 
-    private static SyncAdapter sSyncAdapter = null;
+    private static ProductSyncAdapter sSyncAdapter = null;
 
     @Override
     public void onCreate() {
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
-                sSyncAdapter = new SyncAdapter(getApplicationContext(), true);
+                sSyncAdapter = new ProductSyncAdapter(getApplicationContext(), true);
             }
         }
     }

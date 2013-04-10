@@ -35,7 +35,7 @@ public class CatalogProvider extends AbstractGreenContentProvider<Catalog> {
 
     public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", Properties.Id);
 
-    private HashMap<String, String> mEntityColumnMap = buildEntityColumnMap();
+    private HashMap<String, String> mEntityColumnMap;
 
     @Override
     public Map<String, String> getEntityColumnMap() {
@@ -43,10 +43,12 @@ public class CatalogProvider extends AbstractGreenContentProvider<Catalog> {
     }
 
     public CatalogDao getEntityDao() {
-        return ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getCatalogDao();
+        CatalogDao dao =  ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getCatalogDao(); 
+        mEntityColumnMap = buildEntityColumnMap(dao);
+        return dao;
     }
 
-    private HashMap<String, String> buildEntityColumnMap() {
+    private HashMap<String, String> buildEntityColumnMap(CatalogDao entityDao) {
         HashMap<String, String> map = new HashMap<String, String>();
         ;
         // Add Identity Column

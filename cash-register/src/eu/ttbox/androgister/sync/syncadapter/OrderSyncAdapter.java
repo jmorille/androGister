@@ -42,18 +42,21 @@ import eu.ttbox.androgister.sync.Constants;
  * between the client and a sample server. It also contains an example of how to
  * update the contacts' status messages, which would be useful for a messaging
  * or social networking client.
+ * 
+ * @see http://stackoverflow.com/questions/1859241/own-sync-adapter-for-android/7795266
+ * @see http://dev.evernote.com/media/pdf/edam-sync.pdf
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter {
+public class OrderSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String TAG = "SyncAdapter";
-    private static final String SYNC_MARKER_KEY = "eu.ttbox.androgister.sync.marker";
+    private static final String SYNC_MARKER_KEY = "eu.ttbox.androgister.sync.marker.order";
     private static final boolean NOTIFY_AUTH_FAILURE = true;
 
     private final AccountManager mAccountManager;
 
     private final Context mContext;
 
-    public SyncAdapter(Context context, boolean autoInitialize) {
+    public OrderSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContext = context;
         mAccountManager = AccountManager.get(context);

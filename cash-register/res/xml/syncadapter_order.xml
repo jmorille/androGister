@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
     android:accountType="eu.ttbox.androgister"
-    android:contentAuthority="eu.ttbox.androgister.domain.product" 
+    android:contentAuthority="eu.ttbox.androgister.searchableorder.OrderProvider" 
     android:supportsUploading="true"
     android:userVisible="true" />
