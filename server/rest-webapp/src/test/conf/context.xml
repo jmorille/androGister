@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context reloadable="true">
+
+<!--   <Resource name="jdbc/ccjSampleDS" type="javax.sql.DataSource" auth="Container" driverClassName="org.h2.Driver" -->
+<!--     url="jdbc:h2:mem:ccjsample" uniqueResourceName="ccjsample" username="sa" password="" maxActive="20" maxIdle="10" -->
+<!--     maxWait="-1" description="Datasource to CCJ Sample" /> -->
+
+  <Resource name="jdbc/androGisterDS" type="javax.sql.DataSource" auth="Container" driverClassName="org.h2.Driver"
+    url="jdbc:h2:target/androGisterDS" 
+    uniqueResourceName="ccjsample" username="sa" password="" maxActive="20" maxIdle="10"
+    maxWait="-1" description="Datasource to CCJ Sample" />
+  
+  
+</Context>

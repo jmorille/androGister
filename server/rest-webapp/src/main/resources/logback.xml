@@ -1,0 +1,39 @@
+<configuration>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%-30(%d [%thread]) %-5level %logger [%line] - %msg
+        %xEx{3}%n</Pattern>
+    </layout>
+  </appender>
+
+  <logger name="fr.generali.ccj.sample.mappingpersistence">
+    <level value="DEBUG" />
+  </logger>
+
+  <logger name="org">
+    <level value="INFO" />
+  </logger>
+
+  <logger name="org.springframework">
+    <level value="INFO" />
+  </logger>
+
+  <logger name="org.springframework.orm">
+    <level value="INFO" />
+  </logger>
+
+  <logger name="org.springframework.transaction">
+    <level value="INFO" />
+  </logger>
+
+  <logger name="org.hibernate">
+    <level value="INFO" />
+  </logger>
+
+  <root>
+    <level value="DEBUG" />
+    <appender-ref ref="CONSOLE" />
+  </root>
+
+</configuration>
