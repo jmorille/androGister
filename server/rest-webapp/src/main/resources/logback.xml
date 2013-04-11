@@ -15,6 +15,12 @@
     <level value="INFO" />
   </logger>
 
+    <logger name="org.openid4java">
+    <level value="DEBUG" />
+  </logger>
+  
+  
+
   <logger name="org.springframework">
     <level value="DEBUG" />
   </logger>

@@ -37,8 +37,8 @@
     <http-basic />
     <logout logout-url="/app/logout" logout-success-url="/app/login" />
 
-
-    <openid-login authentication-failure-url="/app/login?action=loginFailure" user-service-ref="openIdAutoRegisteringUserDetailsService"
+<!-- authentication-failure-url="/app/login?action=loginFailure" -->
+    <openid-login  user-service-ref="openIdAutoRegisteringUserDetailsService"
       authentication-success-handler-ref="appAuthenticationSuccessHandler">
       <!-- Only Google Apps is supported -->
       <attribute-exchange identifier-match="https://www.google.com/.*">
