@@ -26,13 +26,17 @@
   </logger>
 
   <logger name="org.springframework.orm">
-    <level value="INFO" />
+    <level value="WARN" />
   </logger>
 
   <logger name="org.springframework.transaction">
-    <level value="INFO" />
+    <level value="WARN" />
   </logger>
 
+   <logger name="org.springframework.web">
+    <level value="WARN" />
+  </logger>
+  
   <logger name="org.hibernate">
     <level value="INFO" />
   </logger>
