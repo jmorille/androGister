@@ -7,7 +7,7 @@
     </layout>
   </appender>
 
-  <logger name="fr.generali.ccj.sample.mappingpersistence">
+  <logger name="eu.ttbox.androgister">
     <level value="DEBUG" />
   </logger>
 
