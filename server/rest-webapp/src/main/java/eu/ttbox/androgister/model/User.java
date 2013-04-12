@@ -3,6 +3,7 @@ package eu.ttbox.androgister.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,9 +11,12 @@ import javax.validation.groups.Default;
 
 import org.hibernate.validator.constraints.Email;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import eu.ttbox.androgister.model.validation.ContraintsUserCreation;
 
 @Entity 
+@Table(name = "User")
 public class User {
 
     @Id
@@ -36,6 +40,7 @@ public class User {
 
     @NotNull(message = "Password is mandatory.", groups = {ContraintsUserCreation.class, Default.class}) 
     @Size(min=3, groups = {ContraintsUserCreation.class, Default.class})
+    @JsonIgnore
     public String password;
     
     @Override

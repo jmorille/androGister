@@ -51,7 +51,7 @@ public class WebConfigurer implements ServletContextListener {
         log.debug("Registering Spring MVC Servlet");
         ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(
                 dispatcherServletConfig));
-        dispatcherServlet.addMapping("/tatami/*");
+        dispatcherServlet.addMapping("/rest/*");
         dispatcherServlet.setLoadOnStartup(2);
 
         log.debug("Registering Spring Security Filter");
