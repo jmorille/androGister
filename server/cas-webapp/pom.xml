@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2009-2011 the original author or authors. See the notice.md file distributed with this work for additional 
+  information regarding copyright ownership. Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
+  this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS 
+  IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language 
+  governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>eu.ttbox.androgister.server</groupId>
+    <artifactId>server</artifactId>
+    <version>0.0.1</version>
+  </parent>
+
+  <artifactId>cas-webapp</artifactId>
+  <packaging>war</packaging>
+
+  <name>${project.artifactId}</name>
+
+  <properties>
+     <cas.version>3.5.2</cas.version> 
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${servlet-api-version}</version>
+      <scope>provided</scope>
+    </dependency>
+  <dependency>
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-webapp</artifactId>
+            <version>${cas.version}</version>
+            <type>war</type>
+            <scope>runtime</scope>
+        </dependency> 
+ 
+<dependency>
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-support-generic</artifactId>
+            <version>${cas.version}</version>
+            <type>jar</type>
+            <scope>runtime</scope>
+        </dependency>
+  
+  </dependencies>
+
+  <repositories>
+             <repository>
+                  <id>ja-sig</id>
+                  <url>http://oss.sonatype.org/content/repositories/releases/</url>
+             </repository>
+        </repositories>
+
+
+  <build>
+    <defaultGoal>install</defaultGoal> 
+    <plugins>
+    
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>${war-plugin-version}</version>
+          <configuration>
+            <warName>cas</warName>
+          </configuration>
+        </plugin>
+
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <path>/castore</path>
+          <port>8383</port> 
+          <!-- partie reservee au https :  -->
+          <!-- https://wiki.jasig.org/display/CASUM/Best+Practice+-+Setting+Up+CAS+Locally+using+the+Maven2+WAR+Overlay+Method -->
+          <!-- creation du keystore -->
+
+          <!-- keytool -genkey -alias tomcat -keyalg RSA   -->
+          <!-- Tapez le mot de passe du Keystore : "taper un mot de passe" -->
+          <!-- Ressaisissez le nouveau mot de passe : "taper le même mot de passe" -->
+          <!-- Quels sont vos prénom et nom ? -->
+          <!-- [Unknown] : nom de la machine ex : http://gf654321:8443 il faut mettre gf654321 -->
+          <!-- Quel est le nom de votre unité organisationnelle ? -->
+          <!-- [Unknown] : votre département ex : CCJ -->
+          <!-- Quelle est le nom de votre organisation ? -->
+          <!-- [Unknown] : GENERALI -->
+          <!-- Quel est le nom de votre ville de résidence ? -->
+          <!-- [Unknown] : Saint-Denis -->
+          <!-- Quel est le nom de votre état ou province ? -->
+          <!-- [Unknown] : France -->
+          <!-- Quel est le code de pays à deux lettres pour cette unité ? -->
+          <!-- [Unknown] : FR -->
+          <!-- Est-ce CN=gf654321, OU=CCJ, O=GENERALI, L=Saint-Denis, ST=France, C=FR ? -->
+          <!-- [non] : oui -->
+          <!-- Spécifiez le mot de passe de la clé pour <tomcat> -->
+          <!-- (appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : "appuyez sur la touche Entrée" -->
+
+          <hostName>GF219896</hostName>
+          <httpsPort>8443</httpsPort>  
+          <keystoreFile>../../castore</keystoreFile>
+          <keystorePass>${castore.password}</keystorePass>
+
+          <systemProperties>
+            <com.sun.management.jmxremote>true</com.sun.management.jmxremote>
+            <com.sun.management.jmxremote.port>8050</com.sun.management.jmxremote.port>
+            <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
+            <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+<!--             <http.proxyHost>webcache.generali.fr</http.proxyHost> -->
+<!--             <http.proxyPort>3128</http.proxyPort>  -->
+          </systemProperties>
+        </configuration> 
+      </plugin>
+
+    </plugins>
+  </build>
+
+
+</project>
