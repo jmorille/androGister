@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import eu.ttbox.androgister.web.model.User;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true, timeout = 1000)
 public class UserService {
 
@@ -43,9 +43,7 @@ public class UserService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	private static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-	private static Validator validator = factory.getValidator();
-
+ 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public ResponseEntity<User> getUserById(@PathVariable Long userId) {
@@ -68,7 +66,7 @@ public class UserService {
 		else return results.get(0);
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public List<User> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
 		Query query = entityManager.createQuery("from User");
