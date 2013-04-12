@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.web.security;
+package eu.ttbox.androgister.security;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Service;
 
-import eu.ttbox.androgister.web.model.User;
+import eu.ttbox.androgister.model.User;
 import eu.ttbox.androgister.web.rest.UserService;
 
 @Service

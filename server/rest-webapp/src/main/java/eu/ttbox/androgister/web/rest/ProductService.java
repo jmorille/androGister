@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.ttbox.androgister.web.model.Product;
+import eu.ttbox.androgister.model.Product;
 
 @Controller
 @RequestMapping("/product")

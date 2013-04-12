@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.web.security;
+package eu.ttbox.androgister.security;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.security.openid.OpenIDAttribute;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Component;
 
-import eu.ttbox.androgister.web.model.User;
+import eu.ttbox.androgister.model.User;
 import eu.ttbox.androgister.web.rest.UserService;
 
 /**

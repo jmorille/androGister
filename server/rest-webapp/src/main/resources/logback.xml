@@ -37,7 +37,7 @@
     <level value="WARN" />
   </logger>
   
-  <logger name="org.hibernate">
+  <logger name="me.prettyprint">
     <level value="INFO" />
   </logger>
 

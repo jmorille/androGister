@@ -1,395 +1,580 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (C) 2009-2011 the original author or authors. See the notice.md file distributed with this work for additional 
-  information regarding copyright ownership. Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
-  this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS 
-  IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language 
-  governing permissions and limitations under the License. -->
+<!-- Copyright (C) 2009-2011 the original author or authors. See the notice.md 
+	file distributed with this work for additional information regarding copyright 
+	ownership. Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. You may 
+	obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>eu.ttbox.androgister.server</groupId>
-    <artifactId>server</artifactId>
-    <version>0.0.1</version>
-  </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.ttbox.androgister.server</groupId>
+		<artifactId>server</artifactId>
+		<version>0.0.1</version>
+	</parent>
 
-  <artifactId>rest-webapp</artifactId>
-  <packaging>war</packaging>
+	<artifactId>rest-webapp</artifactId>
+	<packaging>war</packaging>
 
-  <name>${project.artifactId}</name>
+	<name>${project.artifactId}</name>
 
-  <properties>
-    <springframework.version>3.2.2.RELEASE</springframework.version> 
-    <spring-security.version>3.1.3.RELEASE</spring-security.version>
-    <jackson.version>2.1.4</jackson.version> 
-    <hibernate.version>3.6.5.Final</hibernate.version> 
-    
-<!--     <http.proxy.host>webcache.generali.fr</http.proxy.host> -->
-<!-- <http.proxy.port>3128</http.proxy.port> -->
-    
-  </properties>
+	<properties>
+		<spring.version>3.2.2.RELEASE</spring.version>
+		<spring-security.version>3.1.3.RELEASE</spring-security.version>
+		<jackson.version>2.1.4</jackson.version>
+		<hibernate.version>3.6.5.Final</hibernate.version>
 
-  <dependencies>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>${servlet-api-version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- <dependency> -->
-    <!-- <groupId>org.fusesource.scalate</groupId> -->
-    <!-- <artifactId>scalate-spring-mvc_2.10</artifactId> -->
-    <!-- <version>${scalate.version}</version> -->
-    <!-- </dependency> -->
+		<yammer-metrics.version>2.2.0</yammer-metrics.version> <!-- 2.2.0, 3.0.0-BETA1 -->
 
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
+		<!-- Repository -->
+		<cassandra.version>1.2.4</cassandra.version>
+		<hector-object-mapper.version>3.1-08</hector-object-mapper.version>
+		<hector.version>1.1-3</hector.version>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
+		<!-- Plugins -->
+		<cassandra-maven-plugin.version>1.2.1-1</cassandra-maven-plugin.version>
 
+		<!-- WebApp Configs -->
+		<spring.profiles.active></spring.profiles.active> <!-- metrics -->
+		<app.metrics.graphite.host></app.metrics.graphite.host>
+		<app.metrics.graphite.port></app.metrics.graphite.port>
 
-    <!-- http://software.clapper.org/grizzled-slf4j/#using_the_grizzled_slf4j_library -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.clapper</groupId> -->
-    <!-- <artifactId>grizzled-slf4j_2.10</artifactId> -->
-    <!-- <version>${grizzled-slf4j.version}</version> -->
-    <!-- </dependency> -->
+		<app.message.reloading.enabled>false</app.message.reloading.enabled>
 
-    <!-- Logging -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback-version}</version>
-      <scope>runtime</scope>
-    </dependency>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.fusesource.scalate</groupId> -->
+		<!-- <artifactId>scalate-spring-mvc_2.10</artifactId> -->
+		<!-- <version>${scalate.version}</version> -->
+		<!-- </dependency> -->
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
 
 
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-      <version>${springframework.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-logging</artifactId>
-          <groupId>commons-logging</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-orm</artifactId>
-      <version>${springframework.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-logging</artifactId>
-          <groupId>commons-logging</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <!-- Spring Security --> 
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-crypto</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-ldap</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-openid</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.springframework.security</groupId>
-          <artifactId>spring-security-cas</artifactId>
-          <version>${spring-security.version}</version>
-        </dependency>    
-        
-    <!-- Validation --> 
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>1.0.0.GA</version>
-    </dependency>
-    
-    <!-- Hibernate -->
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>4.3.1.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
+		<!-- http://software.clapper.org/grizzled-slf4j/#using_the_grizzled_slf4j_library -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.clapper</groupId> -->
+		<!-- <artifactId>grizzled-slf4j_2.10</artifactId> -->
+		<!-- <version>${grizzled-slf4j.version}</version> -->
+		<!-- </dependency> -->
 
-    <!-- Jackson -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>${jackson.version}</version>
-    </dependency> 
+		<!-- Logging -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Metric -->
+		<dependency>
+			<groupId>com.yammer.metrics</groupId>
+			<artifactId>metrics-core</artifactId>
+			<version>${yammer-metrics.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yammer.metrics</groupId>
+			<artifactId>metrics-logback</artifactId>
+			<version>${yammer-metrics.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yammer.metrics</groupId>
+			<artifactId>metrics-ehcache</artifactId>
+			<version>${yammer-metrics.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yammer.metrics</groupId>
+			<artifactId>metrics-graphite</artifactId>
+			<version>${yammer-metrics.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yammer.metrics</groupId>
+			<artifactId>metrics-servlet</artifactId>
+			<version>${yammer-metrics.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yammer.metrics</groupId>
+			<artifactId>metrics-spring</artifactId>
+			<version>${yammer-metrics.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yammer.metrics</groupId>
+			<artifactId>metrics-web</artifactId>
+			<version>${yammer-metrics.version}</version>
+		</dependency>
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-ldap</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-openid</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+
+		<!-- Validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.3.1.Final</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.hibernate</groupId> -->
+		<!-- <artifactId>hibernate-entitymanager</artifactId> -->
+		<!-- <version>${hibernate.version}</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>1.0.1.Final</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>javax.persistence</groupId> -->
+		<!-- <artifactId>persistence-api</artifactId> -->
+		<!-- <version>${persistence.api.version}</version> -->
+		<!-- </dependency> -->
+
+		<!-- Cassandra -->
+		<dependency>
+			<groupId>org.apache.cassandra</groupId>
+			<artifactId>cassandra-all</artifactId>
+			<version>${cassandra.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-util</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hectorclient</groupId>
+			<artifactId>hector-core</artifactId>
+			<version>${hector.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hectorclient</groupId>
+			<artifactId>hector-object-mapper</artifactId>
+			<version>${hector-object-mapper.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 
 
-    <!-- MongoDb -->
-    <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-mongodb</artifactId>
-      <version>${spring-data-mongodb.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mongodb</groupId>
-      <artifactId>mongo-java-driver</artifactId>
-      <version>2.11.0</version>
-    </dependency>
+		<!-- MongoDb -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework.data</groupId> -->
+		<!-- <artifactId>spring-data-mongodb</artifactId> -->
+		<!-- <version>${spring-data-mongodb.version}</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.mongodb</groupId> -->
+		<!-- <artifactId>mongo-java-driver</artifactId> -->
+		<!-- <version>2.11.0</version> -->
+		<!-- </dependency> -->
 
-  </dependencies>
+	</dependencies>
 
-  <build>
-    <defaultGoal>install</defaultGoal>
-    <!-- <sourceDirectory>src/main/scala</sourceDirectory> <testSourceDirectory>src/test/scala</testSourceDirectory> -->
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<optimize>true</optimize>
+						<debug>true</debug>
+					</configuration>
+				</plugin>
 
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>1.6</source>
-            <target>1.6</target>
-            <optimize>true</optimize>
-            <debug>true</debug>
-          </configuration>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <configuration>
-            <archive>
-              <manifest>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              </manifest>
-            </archive>
-          </configuration>
-        </plugin>
-
-
-        <plugin>
-          <artifactId>maven-war-plugin</artifactId>
-          <version>${war-plugin-version}</version>
-          <configuration>
-            <attachClasses>true</attachClasses>
-          </configuration>
-        </plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
 
 
-      </plugins>
-    </pluginManagement>
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${war-plugin-version}</version>
+					<configuration>
+						<attachClasses>true</attachClasses>
+					</configuration>
+				</plugin>
 
-    <plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>cassandra-maven-plugin</artifactId>
+					<version>${cassandra-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>start-cassandra</id>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>start</goal>
+							</goals>
+						</execution>
+						<!-- TODO : add stop also ? -->
+					</executions>
+				</plugin>
 
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>${bundle-plugin-version}</version>
-        <extensions>true</extensions>
-        <inherited>true</inherited>
-        <configuration>
-          <instructions>
-            <Implementation-Title>${project.artifactId}</Implementation-Title>
-            <Implementation-Version>${project.version}</Implementation-Version>
-            <Bundle-Name>${project.artifactId}</Bundle-Name>
-            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-            <Export-Package>{local-packages};version=${project.version};-noimport:=true</Export-Package>
-            <Import-Package>${scalate.osgi.import}</Import-Package>
-            <Private-Package>!*</Private-Package>
-            <_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl>
-            <_versionpolicy-uses>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy-uses>
-            <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
-            <_failok>false</_failok>
-          </instructions>
-        </configuration>
-      </plugin>
+			</plugins>
+		</pluginManagement>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>${changes-plugin-version}</version>
-        <configuration>
-          <filteringChanges>true</filteringChanges>
-        </configuration>
-      </plugin>
+		<plugins>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.0</version>
-        <executions>
-          <execution>
-            <id>attach-descriptor</id>
-            <goals>
-              <goal>attach-descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <reportPlugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-project-info-reports-plugin</artifactId>
-              <version>2.4</version>
-              <configuration>
-                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-              </configuration>
-              <!-- simpler configuration without reportSets available for usual cases -->
-              <reports>
-                <report>index</report>
-                <report>dependencies</report>
-                <report>issue-tracking</report>
-                <report>license</report>
-                <report>mailing-list</report>
-                <report>modules</report>
-                <report>project-team</report>
-                <report>plugin-management</report>
-                <report>plugins</report>
-                <report>scm</report>
-              </reports>
-            </plugin>
-            <plugin>
-              <groupId>net.alchim31.maven</groupId>
-              <artifactId>scala-maven-plugin</artifactId>
-              <configuration>
-                <scalaVersion>${scala-version}</scalaVersion>
-              </configuration>
-            </plugin>
-          </reportPlugins>
-        </configuration>
-      </plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${bundle-plugin-version}</version>
+				<extensions>true</extensions>
+				<inherited>true</inherited>
+				<configuration>
+					<instructions>
+						<Implementation-Title>${project.artifactId}</Implementation-Title>
+						<Implementation-Version>${project.version}</Implementation-Version>
+						<Bundle-Name>${project.artifactId}</Bundle-Name>
+						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+						<Export-Package>{local-packages};version=${project.version};-noimport:=true</Export-Package>
+						<Import-Package>${scalate.osgi.import}</Import-Package>
+						<Private-Package>!*</Private-Package>
+						<_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl>
+						<_versionpolicy-uses>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy-uses>
+						<_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
+						<_failok>false</_failok>
+					</instructions>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<version>${changes-plugin-version}</version>
+				<configuration>
+					<filteringChanges>true</filteringChanges>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0</version>
+				<executions>
+					<execution>
+						<id>attach-descriptor</id>
+						<goals>
+							<goal>attach-descriptor</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<reportPlugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.4</version>
+							<configuration>
+								<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+								<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+							</configuration>
+							<!-- simpler configuration without reportSets available for usual 
+								cases -->
+							<reports>
+								<report>index</report>
+								<report>dependencies</report>
+								<report>issue-tracking</report>
+								<report>license</report>
+								<report>mailing-list</report>
+								<report>modules</report>
+								<report>project-team</report>
+								<report>plugin-management</report>
+								<report>plugins</report>
+								<report>scm</report>
+							</reports>
+						</plugin>
+						<plugin>
+							<groupId>net.alchim31.maven</groupId>
+							<artifactId>scala-maven-plugin</artifactId>
+							<configuration>
+								<scalaVersion>${scala-version}</scalaVersion>
+							</configuration>
+						</plugin>
+					</reportPlugins>
+				</configuration>
+			</plugin>
 
 
 
-      <!-- <plugin> -->
-      <!-- <groupId>org.codehaus.mojo</groupId> -->
-      <!-- <artifactId>build-helper-maven-plugin</artifactId> -->
-      <!-- <version>${buildhelper-plugin-version}</version> -->
-      <!-- <executions> -->
-      <!-- <execution> -->
-      <!-- <phase>generate-sources</phase> -->
-      <!-- <goals> -->
-      <!-- <goal>add-source</goal> -->
-      <!-- </goals> -->
-      <!-- <configuration> -->
-      <!-- <sources> -->
-      <!-- <source>src/main/scala</source> -->
-      <!-- </sources> -->
-      <!-- </configuration> -->
-      <!-- </execution> -->
-      <!-- </executions> -->
-      <!-- </plugin> -->
+			<!-- <plugin> -->
+			<!-- <groupId>org.codehaus.mojo</groupId> -->
+			<!-- <artifactId>build-helper-maven-plugin</artifactId> -->
+			<!-- <version>${buildhelper-plugin-version}</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <phase>generate-sources</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>add-source</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <sources> -->
+			<!-- <source>src/main/scala</source> -->
+			<!-- </sources> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
 
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.1</version>
-        <configuration>
-          <path>/app</path>
-          <port>8080</port>
-          <contextFile>./src/test/conf/context.xml</contextFile>
-          <!-- partie reservee au https -->
-          <!-- creation du keystore -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<path>/app</path>
+					<port>8080</port>
+					<contextFile>./src/test/conf/context.xml</contextFile>
+					<!-- partie reservee au https -->
+					<!-- creation du keystore -->
 
-          <!-- keytool -genkey -alias tomcat -keyalg RSA -keystore monstore -->
-          <!-- Tapez le mot de passe du Keystore : "taper un mot de passe" -->
-          <!-- Ressaisissez le nouveau mot de passe : "taper le même mot de passe" -->
-          <!-- Quels sont vos prénom et nom ? -->
-          <!-- [Unknown] : nom de la machine ex : http://gf654321:8443 il faut mettre gf654321 -->
-          <!-- Quel est le nom de votre unité organisationnelle ? -->
-          <!-- [Unknown] : votre département ex : CCJ -->
-          <!-- Quelle est le nom de votre organisation ? -->
-          <!-- [Unknown] : GENERALI -->
-          <!-- Quel est le nom de votre ville de résidence ? -->
-          <!-- [Unknown] : Saint-Denis -->
-          <!-- Quel est le nom de votre état ou province ? -->
-          <!-- [Unknown] : France -->
-          <!-- Quel est le code de pays à deux lettres pour cette unité ? -->
-          <!-- [Unknown] : FR -->
-          <!-- Est-ce CN=gf654321, OU=CCJ, O=GENERALI, L=Saint-Denis, ST=France, C=FR ? -->
-          <!-- [non] : oui -->
-          <!-- Spécifiez le mot de passe de la clé pour <tomcat> -->
-          <!-- (appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : "appuyez sur la touche Entrée" -->
+					<!-- keytool -genkey -alias tomcat -keyalg RSA -keystore monstore -->
+					<!-- Tapez le mot de passe du Keystore : "taper un mot de passe" -->
+					<!-- Ressaisissez le nouveau mot de passe : "taper le même mot de passe" -->
+					<!-- Quels sont vos prénom et nom ? -->
+					<!-- [Unknown] : nom de la machine ex : http://gf654321:8443 il faut 
+						mettre gf654321 -->
+					<!-- Quel est le nom de votre unité organisationnelle ? -->
+					<!-- [Unknown] : votre département ex : CCJ -->
+					<!-- Quelle est le nom de votre organisation ? -->
+					<!-- [Unknown] : GENERALI -->
+					<!-- Quel est le nom de votre ville de résidence ? -->
+					<!-- [Unknown] : Saint-Denis -->
+					<!-- Quel est le nom de votre état ou province ? -->
+					<!-- [Unknown] : France -->
+					<!-- Quel est le code de pays à deux lettres pour cette unité ? -->
+					<!-- [Unknown] : FR -->
+					<!-- Est-ce CN=gf654321, OU=CCJ, O=GENERALI, L=Saint-Denis, ST=France, 
+						C=FR ? -->
+					<!-- [non] : oui -->
+					<!-- Spécifiez le mot de passe de la clé pour <tomcat> -->
+					<!-- (appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : 
+						"appuyez sur la touche Entrée" -->
 
-          <!-- <hostName>gf200820</hostName> -->
-          <!-- <httpsPort>8443</httpsPort> -->
-          <!-- <keystoreFile>../../ccjsamplestorecr</keystoreFile> -->
-          <!-- <keystorePass>ccjsample</keystorePass> -->
+					<!-- <hostName>gf200820</hostName> -->
+					<!-- <httpsPort>8443</httpsPort> -->
+					<!-- <keystoreFile>../../ccjsamplestorecr</keystoreFile> -->
+					<!-- <keystorePass>ccjsample</keystorePass> -->
 
-          <systemProperties>
-            <com.sun.management.jmxremote>true</com.sun.management.jmxremote>
-            <com.sun.management.jmxremote.port>8050</com.sun.management.jmxremote.port>
-            <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
-            <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
-<!--             <http.proxyHost>webcache.generali.fr</http.proxyHost> -->
-<!--             <http.proxyPort>3128</http.proxyPort>  -->
-          </systemProperties>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.3.171</version>
-          </dependency>
-        </dependencies>
-      </plugin>
+					<systemProperties>
+						<spring.profiles.active>${spring.profiles.active}</spring.profiles.active>
+						<com.sun.management.jmxremote>true</com.sun.management.jmxremote>
+						<com.sun.management.jmxremote.port>8050</com.sun.management.jmxremote.port>
+						<com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
+						<com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+						<!-- <http.proxyHost>webcache.generali.fr</http.proxyHost> -->
+						<!-- <http.proxyPort>3128</http.proxyPort> -->
+					</systemProperties>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>1.3.171</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 
-    </plugins>
-  </build>
+		</plugins>
+	</build>
 
 
 </project>

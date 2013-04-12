@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.web.security;
+package eu.ttbox.androgister.security;
 
 import java.util.Collection;
 

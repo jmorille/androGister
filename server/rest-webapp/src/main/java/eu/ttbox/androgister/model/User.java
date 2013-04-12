@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.web.model;
+package eu.ttbox.androgister.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +10,7 @@ import javax.validation.groups.Default;
 
 import org.hibernate.validator.constraints.Email;
 
-import eu.ttbox.androgister.web.model.validation.ContraintsUserCreation;
+import eu.ttbox.androgister.model.validation.ContraintsUserCreation;
 
 @Entity 
 public class User {
