@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.config;
+package eu.ttbox.androgister.config.web;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,8 @@ import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
+import eu.ttbox.androgister.config.ApplicationConfiguration;
 
 @Configuration
 @ComponentScan("eu.ttbox.androgister.web")

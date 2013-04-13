@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-import com.google.inject.Inject;
 import com.yammer.metrics.HealthChecks;
 import com.yammer.metrics.reporting.GraphiteReporter;
 

@@ -1,15 +1,15 @@
 package eu.ttbox.androgister.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.validation.groups.Default;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,35 +19,85 @@ import eu.ttbox.androgister.model.validation.ContraintsUserCreation;
 @Table(name = "User")
 public class User {
 
+    @NotEmpty(message = "Login is mandatory.", groups = {ContraintsUserCreation.class, Default.class})
+    @NotNull(message = "Login is mandatory.", groups = {ContraintsUserCreation.class, Default.class})
+    @Email(message = "Email is invalid.")
     @Id
-    @GeneratedValue
-    public Long id;
+    @JsonIgnore
+    public String login;
 
-    @Version
-    public Long version;
-
-    public String openIdUrl;
-    
-    @Email
-    public String email;
-    
-    @Size(min = 2, max = 50)
-    public String firstname;
-
-    @Size(min = 0, max = 50)
-    public String lastname;
-
-
-    @NotNull(message = "Password is mandatory.", groups = {ContraintsUserCreation.class, Default.class}) 
-    @Size(min=3, groups = {ContraintsUserCreation.class, Default.class})
+    @Column(name = "password")
     @JsonIgnore
     public String password;
+
+    @Column(name = "username")
+    public String username;
+
+    @Column(name = "domain")
+    @JsonIgnore
+    public String domain;
+
+    @Column(name = "avatar")
+    public String avatar;
+
+    @Size(min = 0, max = 50)
+    @Column(name = "firstName")
+    public String firstName;
+
+    @Size(min = 0, max = 50)
+    @Column(name = "lastName")
+    public String lastName;
+
+    @Size(min = 0, max = 100)
+    @Column(name = "jobTitle")
+    public String jobTitle;
+
+    @Size(min = 0, max = 20)
+    @Column(name = "phoneNumber")
+    public String phoneNumber;
+
+    @Column(name = "openIdUrl")
+    @JsonIgnore
+    public String openIdUrl;
+
+    @Column(name = "theme")
+    @JsonIgnore
+    public String theme;
+
+    @Column(name = "preferences_mention_email")
+    @JsonIgnore
+    public Boolean preferencesMentionEmail;
+
+    @Column(name = "rssUid")
+    @JsonIgnore
+    public String rssUid;
+
+    @Column(name = "weekly_digest_subscription")
+    @JsonIgnore
+    public Boolean weeklyDigestSubscription;
+
+    @Column(name = "daily_digest_subscription")
+    @JsonIgnore
+    public Boolean dailyDigestSubscription;
+
+    @Column(name = "attachmentsSize")
+    public long attachmentsSize;
+
+    @Column(name = "isNew")
+    @JsonIgnore
+    public Boolean isNew;
+
+    public long statusCount;
+
+    public long friendsCount;
+
+    public long followersCount;
     
     @Override
     public String toString() {
-        return new StringBuffer(64).append("User [id=").append(id).append(", version=").append(version) //
-                        .append(", firstname=").append(firstname)//
-                        .append(", lastname=").append(lastname) //
+        return new StringBuffer(64).append("User [id=").append(login).append(", version=").append(login) //
+                        .append(", firstname=").append(firstName)//
+                        .append(", lastname=").append(lastName) //
                         .append("]") //
                         .toString();
     }
@@ -56,7 +106,7 @@ public class User {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((login == null) ? 0 : login.hashCode());
         return result;
     }
 
@@ -69,10 +119,10 @@ public class User {
         if (getClass() != obj.getClass())
             return false;
         User other = (User ) obj;
-        if (id == null) {
-            if (other.id != null)
+        if (login == null) {
+            if (other.login != null)
                 return false;
-        } else if (!id.equals(other.id))
+        } else if (!login.equals(other.login))
             return false;
         return true;
     }

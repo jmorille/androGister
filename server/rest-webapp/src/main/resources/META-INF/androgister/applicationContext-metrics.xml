@@ -1,6 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:metrics="http://www.yammer.com/schema/metrics"
+        xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="
            http://www.yammer.com/schema/metrics http://www.yammer.com/schema/metrics/metrics.xsd
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"

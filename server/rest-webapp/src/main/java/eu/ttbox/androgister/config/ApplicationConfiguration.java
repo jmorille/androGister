@@ -20,8 +20,8 @@ import eu.ttbox.androgister.config.metrics.MetricsConfiguration;
 
 @Configuration
 @ComponentScan(basePackages = {//
-"eu.ttbox.androgister.repository", "eu.ttbox.androgister.service"
-// , "eu.ttbox.androgister.security" //
+"eu.ttbox.androgister.repository", "eu.ttbox.androgister.security"
+// , "eu.ttbox.androgister.service"  //
 })
 @Import(value = { 
 CassandraConfiguration.class, MetricsConfiguration.class })

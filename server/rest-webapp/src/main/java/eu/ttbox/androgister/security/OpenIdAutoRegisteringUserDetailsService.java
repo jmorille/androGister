@@ -20,7 +20,7 @@ import eu.ttbox.androgister.web.rest.UserService;
  * It auto-registers the user based on its "email" OpenId attribute
  * (that must have been asked to the OpenId provider). 
  */
-@Component
+//@Component
 public class OpenIdAutoRegisteringUserDetailsService implements
         AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 
@@ -88,9 +88,9 @@ public class OpenIdAutoRegisteringUserDetailsService implements
         // so we store it for future use case :
         user.openIdUrl = token.getName();
 
-        user.email = login;
-        user.firstname = firstName;
-        user.lastname = lastName;
+        user.login = login;
+        user.firstName = firstName;
+        user.lastName = lastName;
         
         // Create User  
         userService.createUser(user);

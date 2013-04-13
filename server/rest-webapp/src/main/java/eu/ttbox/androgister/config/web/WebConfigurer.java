@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.web.config;
+package eu.ttbox.androgister.config.web;
 
 import java.util.EnumSet;
 
@@ -23,7 +23,6 @@ import com.yammer.metrics.web.DefaultWebappMetricsFilter;
 
 import eu.ttbox.androgister.config.ApplicationConfiguration;
 import eu.ttbox.androgister.config.Constants;
-import eu.ttbox.androgister.config.DispatcherServletConfig;
 
 public class WebConfigurer implements ServletContextListener {
 

@@ -14,11 +14,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Service;
 
 import eu.ttbox.androgister.model.User;
-import eu.ttbox.androgister.web.rest.UserService;
+import eu.ttbox.androgister.repository.CassandraUserRepository;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
@@ -32,7 +31,7 @@ public class AppUserDetailsService implements UserDetailsService {
 	private Collection<String> adminUsers = null;
 
     @Autowired
-    private UserService userService; 
+    private CassandraUserRepository userService; 
     
 	@PostConstruct
 	public void init() {
@@ -61,7 +60,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {  
-        User userFromCassandra = userService.getUserByEmail(username);
+        User userFromCassandra = userService.findUserByLogin(username);
         if ( userFromCassandra == null) {
             throw new UsernameNotFoundException("User " + username + " was not found in Db");
         }
