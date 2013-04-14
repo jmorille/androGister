@@ -105,7 +105,7 @@ public class UserService {
         if (entity.getBody() != null) {
             userRepository.deleteUser(entity.getBody());
         }
-        return "redirect:/service/users/";
+        return "redirect:/rest/users/";
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

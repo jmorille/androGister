@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -11,10 +12,16 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import me.prettyprint.cassandra.model.CqlQuery;
+import me.prettyprint.cassandra.model.CqlRows;
+import me.prettyprint.cassandra.serializers.LongSerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
+import me.prettyprint.cassandra.service.template.ColumnFamilyTemplate;
+import me.prettyprint.cassandra.service.template.ThriftColumnFamilyTemplate;
 import me.prettyprint.hector.api.Keyspace;
 import me.prettyprint.hector.api.factory.HFactory;
 import me.prettyprint.hector.api.mutation.Mutator;
+import me.prettyprint.hector.api.query.QueryResult;
 import me.prettyprint.hom.EntityManagerImpl;
 
 import org.slf4j.Logger;
@@ -27,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import eu.ttbox.androgister.config.cassandra.ColumnFamilyKeys;
 import eu.ttbox.androgister.model.User;
-import eu.ttbox.androgister.model.validation.ContraintsUserCreation;
 
 @Repository
 public class CassandraUserRepository {
@@ -43,21 +49,36 @@ public class CassandraUserRepository {
     private static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private static Validator validator = factory.getValidator();
 
+    private ColumnFamilyTemplate<String, String> template;
+
+    @PostConstruct
+    public void init() {
+        template = new ThriftColumnFamilyTemplate<String, String>(keyspaceOperator, ColumnFamilyKeys.USER_CF.cfName, StringSerializer.get(), StringSerializer.get());
+    }
+
     public List<User> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
-        Query query = em.createQuery("from User");
+
+        CqlQuery<String, String, Long> cqlQuery = new CqlQuery<String, String, Long>(keyspaceOperator, StringSerializer.get(), StringSerializer.get(), LongSerializer.get());
+        cqlQuery.setQuery("select * from User");
+        QueryResult<CqlRows<String, String, Long>> result = cqlQuery.execute();
+        CqlRows<String, String, Long> rows = result.get();
+
+        Query query = em.createQuery("from User", User.class);
         query.setFirstResult(firstResult);
         query.setMaxResults(maxResult);
         List<User> users = query.getResultList();
         return users;
     }
-    
+
     @CacheEvict(value = "user-cache", key = "#user.login")
     public void createUser(User user) {
         log.debug("Creating user : {}", user);
-        Set<ConstraintViolation<User>> constraintViolations = validator.validate(user, ContraintsUserCreation.class);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(constraintViolations));
-        }
+        // Set<ConstraintViolation<User>> constraintViolations =
+        // validator.validate(user, ContraintsUserCreation.class);
+        // if (!constraintViolations.isEmpty()) {
+        // throw new ConstraintViolationException(new
+        // HashSet<ConstraintViolation<?>>(constraintViolations));
+        // }
         em.persist(user);
     }
 
@@ -88,19 +109,19 @@ public class CassandraUserRepository {
         try {
             user = em.find(User.class, login);
         } catch (Exception e) {
-            if (log.isDebugEnabled()) {
-                log.warn("Exception while looking for user " + login + " : " + e.toString());
-            }
+            // if (log.isDebugEnabled()) {
+            log.warn("Exception while looking for user " + login + " : " + e.toString());
+            // }
             return null;
         }
-//        if (user != null) {
-            // user.setStatusCount(counterRepository.getStatusCounter(login));
-            // user.setFollowersCount(counterRepository.getFollowersCounter(login));
-            // user.setFriendsCount(counterRepository.getFriendsCounter(login));
-//            if (user.getIsNew() == null) {
-//                user.setIsNew(false);
-//            }
-//        }
+        // if (user != null) {
+        // user.setStatusCount(counterRepository.getStatusCounter(login));
+        // user.setFollowersCount(counterRepository.getFollowersCounter(login));
+        // user.setFriendsCount(counterRepository.getFriendsCounter(login));
+        // if (user.getIsNew() == null) {
+        // user.setIsNew(false);
+        // }
+        // }
         return user;
     }
 }
