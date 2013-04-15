@@ -1,11 +1,12 @@
 package eu.ttbox.androgister.repository;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -14,15 +15,22 @@ import javax.validation.ValidatorFactory;
 
 import me.prettyprint.cassandra.model.CqlQuery;
 import me.prettyprint.cassandra.model.CqlRows;
-import me.prettyprint.cassandra.serializers.LongSerializer;
+import me.prettyprint.cassandra.serializers.BytesArraySerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
 import me.prettyprint.cassandra.service.template.ColumnFamilyTemplate;
 import me.prettyprint.cassandra.service.template.ThriftColumnFamilyTemplate;
 import me.prettyprint.hector.api.Keyspace;
+import me.prettyprint.hector.api.beans.ColumnSlice;
+import me.prettyprint.hector.api.beans.HColumn;
+import me.prettyprint.hector.api.beans.Row;
 import me.prettyprint.hector.api.factory.HFactory;
 import me.prettyprint.hector.api.mutation.Mutator;
 import me.prettyprint.hector.api.query.QueryResult;
+import me.prettyprint.hom.CFMappingDef;
+import me.prettyprint.hom.ClassCacheMgr;
 import me.prettyprint.hom.EntityManagerImpl;
+import me.prettyprint.hom.HectorObjectMapper;
+import me.prettyprint.hom.HectorObjectMapperHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,16 +65,31 @@ public class CassandraUserRepository {
     }
 
     public List<User> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
+//        ClassCacheMgr cacheMgr = new ClassCacheMgr();
+//        HectorObjectMapper objMapper = new HectorObjectMapper(cacheMgr);
+//        cacheMgr.initializeCacheForClass(User.class);
+//        CFMappingDef<User> cfMapDef = cacheMgr.getCfMapDef(User.class, false);
 
-        CqlQuery<String, String, Long> cqlQuery = new CqlQuery<String, String, Long>(keyspaceOperator, StringSerializer.get(), StringSerializer.get(), LongSerializer.get());
-        cqlQuery.setQuery("select * from User");
-        QueryResult<CqlRows<String, String, Long>> result = cqlQuery.execute();
-        CqlRows<String, String, Long> rows = result.get();
+        CqlQuery<String, String, String> cqlQuery = new CqlQuery<String, String, String>(keyspaceOperator, StringSerializer.get(), StringSerializer.get(), StringSerializer.get()) //
+                .setQuery("select * from User")//
+                ;
+        QueryResult<CqlRows<String, String, String>> result = cqlQuery.execute();
+        CqlRows<String, String, String> rows = result.get();
 
-        Query query = em.createQuery("from User", User.class);
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResult);
-        List<User> users = query.getResultList();
+        Iterator<Row<String, String, String>> it = rows.iterator();
+        while (it.hasNext()) {
+            Row<String, String, String> row = it.next();
+            User user = null; // HectorObjectMapperHelper.getObject(objMapper,
+                              // cfMapDef, keyspaceOperator,
+                              // cfMapDef.getEffectiveColFamName(), row);
+            String key = row.getKey();
+            ColumnSlice<String, String> colSlice = row.getColumnSlice();
+//            colSlice.getColumnByName(columnName)
+            List<HColumn<String, String>> colSlices = row.getColumnSlice().getColumns();  
+//            colSlices.
+            log.info("Row : " + row + " =======> " + user);
+        }
+        List<User> users = new ArrayList<User>();
         return users;
     }
 
@@ -80,9 +103,9 @@ public class CassandraUserRepository {
         // HashSet<ConstraintViolation<?>>(constraintViolations));
         // }
         try {
-        em.persist(user);
+            em.persist(user);
         } catch (Exception e) {
-        	log.error("Erro Creating user {} : " + e.getMessage() );
+            log.error("Erro Creating user {} : " + e.getMessage());
         }
         log.debug("Creating End user : {}", user);
     }
