@@ -79,7 +79,12 @@ public class CassandraUserRepository {
         // throw new ConstraintViolationException(new
         // HashSet<ConstraintViolation<?>>(constraintViolations));
         // }
+        try {
         em.persist(user);
+        } catch (Exception e) {
+        	log.error("Erro Creating user {} : " + e.getMessage() );
+        }
+        log.debug("Creating End user : {}", user);
     }
 
     @CacheEvict(value = "user-cache", key = "#user.login", beforeInvocation = true)

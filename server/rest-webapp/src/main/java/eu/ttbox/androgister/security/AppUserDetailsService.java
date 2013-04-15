@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import eu.ttbox.androgister.model.User;
 import eu.ttbox.androgister.repository.CassandraUserRepository;
 
-@Service
+//@Service
 public class AppUserDetailsService implements UserDetailsService {
 
 	private final Logger log = LoggerFactory.getLogger(AppUserDetailsService.class);

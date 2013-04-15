@@ -107,7 +107,7 @@ public class CassandraConfiguration {
 
     @Bean
     public EntityManagerImpl entityManager(Keyspace keyspace) {
-        String[] packagesToScan = { "eu.ttbox.androgister.web.model" };
+        String[] packagesToScan = { "eu.ttbox.androgister.model" };
         return new EntityManagerImpl(keyspace, packagesToScan);
     }
 

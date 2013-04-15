@@ -54,7 +54,7 @@ public class WebConfigurer implements ServletContextListener {
         dispatcherServlet.setLoadOnStartup(2);
 
         log.debug("Registering Spring Security Filter");
-//        FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain",   new DelegatingFilterProxy());
+        FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain",   new DelegatingFilterProxy());
 
         Environment env = rootContext.getBean(Environment.class);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_METRICS)) {
@@ -71,9 +71,9 @@ public class WebConfigurer implements ServletContextListener {
             metricsAdminServlet.addMapping("/metrics/*");
             dispatcherServlet.setLoadOnStartup(3);
 
-//            springSecurityFilter.addMappingForServletNames(disps, true, "dispatcher", "atmosphereServlet", "metricsAdminServlet");
+            springSecurityFilter.addMappingForServletNames(disps, true, "dispatcher", "atmosphereServlet", "metricsAdminServlet");
         } else {
-//            springSecurityFilter.addMappingForServletNames(disps, true, "dispatcher", "atmosphereServlet");
+            springSecurityFilter.addMappingForServletNames(disps, true, "dispatcher", "atmosphereServlet");
         }
 
         log.debug("Web application fully configured");

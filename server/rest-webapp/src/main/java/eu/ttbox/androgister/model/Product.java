@@ -6,12 +6,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
-@Entity
-@Table(name = "Product")
+//@Entity
+//@Table(name = "Product")
 public class Product {
 
-    @Id
-    @GeneratedValue
+//    @Id
+//    @GeneratedValue
     public Long id;
     
 }

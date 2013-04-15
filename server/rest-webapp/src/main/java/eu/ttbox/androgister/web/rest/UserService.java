@@ -1,5 +1,6 @@
 package eu.ttbox.androgister.web.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.groups.Default;
@@ -42,6 +43,7 @@ public class UserService {
     @ResponseBody
     public ResponseEntity<User> getUserById(@PathVariable String userId) {
         User user = userRepository.findUserByLogin(userId);
+//        User user = createMockUser(Integer.valueOf(userId));
         LOG.info("Get Uer by Id {} : {} ", userId, user);
         return user == null ? new ResponseEntity<User>(HttpStatus.NOT_FOUND) : new ResponseEntity<User>(user, HttpStatus.OK);
     }
@@ -54,7 +56,11 @@ public class UserService {
     @RequestMapping(value = "", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
     public List<User> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
-        List<User> users = userRepository.findUser(firstResult, maxResult);
+//        List<User> users = userRepository.findUser(firstResult, maxResult);
+    	 List<User> users = new ArrayList<User>();
+    	 for (int i = 0 ; i<20; i++) {
+    		 users.add( createMockUser(i) );
+    	 }
         return users;
     }
 
