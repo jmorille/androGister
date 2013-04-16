@@ -27,6 +27,7 @@
 
     <ehcache.version>2.6.5</ehcache.version>
     <jasig-cas-client.version>3.2.1</jasig-cas-client.version>
+    
     <!-- Repository -->
     <cassandra.version>1.2.4</cassandra.version>
     <hector-object-mapper.version>3.1-08</hector-object-mapper.version>
@@ -229,6 +230,10 @@
           <artifactId>commons-logging</artifactId>
           <groupId>commons-logging</groupId>
         </exclusion>
+        <exclusion>
+        	<artifactId>guice</artifactId>
+        	<groupId>com.google.inject</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -275,7 +280,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>4.3.1.Final</version>
+      <version>4.3.1.Final</version> 
     </dependency>
     <!-- <dependency> -->
     <!-- <groupId>org.hibernate</groupId> -->

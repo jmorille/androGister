@@ -62,15 +62,16 @@ public class CassandraUserRepository {
     }
 
     public List<UserLight> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
-//        ClassCacheMgr cacheMgr = new ClassCacheMgr();
-//        HectorObjectMapper objMapper = new HectorObjectMapper(cacheMgr);
-//        cacheMgr.initializeCacheForClass(User.class);
-//        CFMappingDef<User> cfMapDef = cacheMgr.getCfMapDef(User.class, false);
+        // ClassCacheMgr cacheMgr = new ClassCacheMgr();
+        // HectorObjectMapper objMapper = new HectorObjectMapper(cacheMgr);
+        // cacheMgr.initializeCacheForClass(User.class);
+        // CFMappingDef<User> cfMapDef = cacheMgr.getCfMapDef(User.class,
+        // false);
 
         CqlQuery<String, String, String> cqlQuery = new CqlQuery<String, String, String>(keyspaceOperator, StringSerializer.get(), StringSerializer.get(), StringSerializer.get()) //
                 .setQuery("select * from User")//
-                ;
-//        cqlQuery.sestColumnNameSerializer(columnNameSerializer)
+        ;
+        // cqlQuery.sestColumnNameSerializer(columnNameSerializer)
         QueryResult<CqlRows<String, String, String>> result = cqlQuery.execute();
         CqlRows<String, String, String> rows = result.get();
 
@@ -78,35 +79,36 @@ public class CassandraUserRepository {
         Iterator<Row<String, String, String>> it = rows.iterator();
         while (it.hasNext()) {
             Row<String, String, String> row = it.next();
-//            User user = null; // HectorObjectMapperHelper.getObject(objMapper,
-                              // cfMapDef, keyspaceOperator,
-                              // cfMapDef.getEffectiveColFamName(), row);
+            // User user = null; //
+            // HectorObjectMapperHelper.getObject(objMapper,
+            // cfMapDef, keyspaceOperator,
+            // cfMapDef.getEffectiveColFamName(), row);
             String key = row.getKey();
             UserLight user = new UserLight();
-            ColumnSlice<String, String>  colSlice = row.getColumnSlice() ;  
-            user.login =  key;
-            user.username =     getColumnStringValueByName(colSlice, "username");  
-            user.lastName = getColumnStringValueByName(colSlice, "lastName");  
-            user.firstName =  getColumnStringValueByName(colSlice, "firstName");  
-//            colSlices.
+            ColumnSlice<String, String> colSlice = row.getColumnSlice();
+            user.login = key;
+            user.username = getColumnStringValueByName(colSlice, "username");
+            user.lastName = getColumnStringValueByName(colSlice, "lastName");
+            user.firstName = getColumnStringValueByName(colSlice, "firstName");
+            // colSlices.
             users.add(user);
             log.info("Row : " + row + " =======> " + user);
         }
-    
+
         return users;
     }
-    
-    public <T> T getColumnStringValueByName( ColumnSlice<String, T> colSlice , String columName) {
-    	 HColumn<String, T>  col = colSlice.getColumnByName(columName);
-    	 if (col!=null) {
-    		 return col.getValue();
-    	 } else {
-    		 return null;
-    	 }
+
+    public <T> T getColumnStringValueByName(ColumnSlice<String, T> colSlice, String columName) {
+        HColumn<String, T> col = colSlice.getColumnByName(columName);
+        if (col != null) {
+            return col.getValue();
+        } else {
+            return null;
+        }
     }
 
     @CacheEvict(value = "user-cache", key = "#user.login")
-    public void createUser(User user) {
+    public void persist(User user) {
         log.debug("Creating user : {}", user);
         // Set<ConstraintViolation<User>> constraintViolations =
         // validator.validate(user, ContraintsUserCreation.class);
@@ -114,12 +116,12 @@ public class CassandraUserRepository {
         // throw new ConstraintViolationException(new
         // HashSet<ConstraintViolation<?>>(constraintViolations));
         // }
-        if (user.uuid==null) {
-        	 user.uuid = TimeUUIDUtils.getUniqueTimeUUIDinMillis();
+        if (user.uuid == null) {
+            user.uuid = TimeUUIDUtils.getUniqueTimeUUIDinMillis();
         }
-         
+
         try {
-        	
+
             em.persist(user);
         } catch (Exception e) {
             log.error("Erro Creating user {} : " + e.getMessage());
@@ -140,9 +142,7 @@ public class CassandraUserRepository {
 
     @CacheEvict(value = "user-cache", key = "#user.login")
     public void deleteUser(User user) {
-        if (log.isDebugEnabled()) {
-            log.debug("Deleting user : " + user);
-        }
+        log.debug("Deleting user : {}", user);
         Mutator<String> mutator = HFactory.createMutator(keyspaceOperator, StringSerializer.get());
         mutator.addDeletion(user.login, ColumnFamilyKeys.USER_CF.cfName);
         mutator.execute();
@@ -155,7 +155,7 @@ public class CassandraUserRepository {
             user = em.find(User.class, login);
         } catch (Exception e) {
             // if (log.isDebugEnabled()) {
-            log.warn("Exception while looking for user " + login + " : " + e.toString());
+            log.warn("Exception while looking for user " + login + " : " + e.getMessage());
             // }
             return null;
         }

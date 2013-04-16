@@ -9,6 +9,10 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRegistration;
 
+import me.prettyprint.cassandra.service.ThriftCluster;
+import me.prettyprint.hector.api.Cluster;
+import me.prettyprint.hector.api.factory.HFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -23,6 +27,7 @@ import com.yammer.metrics.web.DefaultWebappMetricsFilter;
 
 import eu.ttbox.androgister.config.ApplicationConfiguration;
 import eu.ttbox.androgister.config.Constants;
+import eu.ttbox.androgister.config.cassandra.CassandraConfiguration;
 
 public class WebConfigurer implements ServletContextListener {
 
@@ -48,26 +53,23 @@ public class WebConfigurer implements ServletContextListener {
         dispatcherServletConfig.register(DispatcherServletConfig.class);
 
         log.debug("Registering Spring MVC Servlet");
-        ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(
-                dispatcherServletConfig));
+        ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(dispatcherServletConfig));
         dispatcherServlet.addMapping("/rest/*");
         dispatcherServlet.setLoadOnStartup(2);
 
         log.debug("Registering Spring Security Filter");
-        FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain",   new DelegatingFilterProxy());
+        FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy());
 
         Environment env = rootContext.getBean(Environment.class);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_METRICS)) {
             log.debug("Setting Metrics profile for the Web ApplicationContext");
 
             log.debug("Registering Metrics Filter");
-            FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
-                    new DefaultWebappMetricsFilter());
+            FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter", new DefaultWebappMetricsFilter());
             metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
 
             log.debug("Registering Metrics Admin Servlet");
-            ServletRegistration.Dynamic metricsAdminServlet =
-                    servletContext.addServlet("metricsAdminServlet", new AdminServlet());
+            ServletRegistration.Dynamic metricsAdminServlet = servletContext.addServlet("metricsAdminServlet", new AdminServlet());
             metricsAdminServlet.addMapping("/metrics/*");
             dispatcherServlet.setLoadOnStartup(3);
 
@@ -84,8 +86,13 @@ public class WebConfigurer implements ServletContextListener {
         log.info("Destroying Web application");
         WebApplicationContext ac = WebApplicationContextUtils.getRequiredWebApplicationContext(sce.getServletContext());
         AnnotationConfigWebApplicationContext gwac = (AnnotationConfigWebApplicationContext) ac;
+        // Close Hector
+        Cluster cluster  = gwac.getBean(ThriftCluster.class); 
+        log.info("Shutdows Cassandra Cluster : {}", cluster);
+        HFactory.shutdownCluster(cluster);
+        // Close Spring
         gwac.close();
-        log.debug("Web application destroyed");
+         log.debug("Web application destroyed");
     }
 
 }

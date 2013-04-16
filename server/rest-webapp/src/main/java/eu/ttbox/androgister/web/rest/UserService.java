@@ -99,7 +99,7 @@ public class UserService {
     @ResponseBody
     public User createUser(@RequestBody @Validated({ Default.class }) User user) {
         LOG.info("Create User {}", user);
-        userRepository.createUser(user);
+        userRepository.persist(user);
         return user;
     }
 
@@ -108,7 +108,7 @@ public class UserService {
     @ResponseBody
     public User updateUser(@RequestBody User user) {
         LOG.info("Merge User {}", user);
-        userRepository.createUser(user);
+        userRepository.persist(user);
         return user;
     }
 
@@ -144,7 +144,7 @@ public class UserService {
         int count = 0;
         for (int i = 1; i < 20; i++) {
             User user = createMockUser(i);
-            userRepository.createUser(user);
+            userRepository.persist(user);
             LOG.debug("persist User  : {} ", user);
             count++;
         }

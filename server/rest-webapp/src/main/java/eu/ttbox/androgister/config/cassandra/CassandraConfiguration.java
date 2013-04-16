@@ -7,6 +7,8 @@ import me.prettyprint.cassandra.service.CassandraHostConfigurator;
 import me.prettyprint.cassandra.service.ThriftCfDef;
 import me.prettyprint.cassandra.service.ThriftCluster;
 import me.prettyprint.cassandra.service.ThriftKsDef;
+import me.prettyprint.hector.api.Cluster;
+import me.prettyprint.hector.api.ConsistencyLevelPolicy;
 import me.prettyprint.hector.api.HConsistencyLevel;
 import me.prettyprint.hector.api.Keyspace;
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
@@ -33,20 +35,17 @@ public class CassandraConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CassandraConfiguration.class);
 
-    private static final String CASSANDRA_KEYSPACE = "cassandra.keyspace";
-    private static final String CASSANDRA_CLUSTER_NAME = "cassandra.clusterName";
-    private static final String CASSANDRA_HOST = "cassandra.host";
+    public static final String CASSANDRA_KEYSPACE = "cassandra.keyspace";
+    public static final String CASSANDRA_CLUSTER_NAME = "cassandra.clusterName";
+    public static final String CASSANDRA_HOST = "cassandra.host";
 
     @Autowired
     private Environment env;
 
     @Bean
-    public Keyspace keyspaceOperator() {
-        log.info("Configuring Cassandra keyspace");
+    public ThriftCluster cluster() {
         String cassandraHost = env.getProperty(CASSANDRA_HOST);
         String cassandraClusterName = env.getProperty(CASSANDRA_CLUSTER_NAME);
-        String cassandraKeyspace = env.getProperty(CASSANDRA_KEYSPACE);
-
         CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator(cassandraHost);
         cassandraHostConfigurator.setMaxActive(100);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_METRICS)) {
@@ -55,18 +54,27 @@ public class CassandraConfiguration {
             cassandraHostConfigurator.setOpTimer(hOpTimer);
         }
         ThriftCluster cluster = new ThriftCluster(cassandraClusterName, cassandraHostConfigurator);
+        return cluster;
+    }
+
+    @Bean
+    public Keyspace keyspaceOperator(ThriftCluster cluster) {
+        log.info("Configuring Cassandra keyspace");
+        String cassandraKeyspace = env.getProperty(CASSANDRA_KEYSPACE);
+
         ConfigurableConsistencyLevel consistencyLevelPolicy = new ConfigurableConsistencyLevel();
         consistencyLevelPolicy.setDefaultReadConsistencyLevel(HConsistencyLevel.ONE);
-//        consistencyLevelPolicy.setDefaultWriteConsistencyLevel(HConsistencyLevel.LOCAL_QUORUM);
+        // consistencyLevelPolicy.setDefaultWriteConsistencyLevel(HConsistencyLevel.LOCAL_QUORUM);
 
         KeyspaceDefinition keyspaceDef = cluster.describeKeyspace(cassandraKeyspace);
         if (keyspaceDef == null) {
             log.warn("Keyspace \"{}\" does not exist, creating it!", cassandraKeyspace);
             keyspaceDef = new ThriftKsDef(cassandraKeyspace);
             cluster.addKeyspace(keyspaceDef, true);
-
+            // HFactory.createKeyspace(cassandraKeyspace, cluster );
             // Column Family
             addColumnFamily(cluster, ColumnFamilyKeys.USER_CF, 0);
+            addColumnFamily(cluster, ColumnFamilyKeys.PRODUCT_CF, 0);
             addColumnFamily(cluster, ColumnFamilyKeys.DOMAIN_CF, 0);
         }
         return HFactory.createKeyspace(cassandraKeyspace, cluster, consistencyLevelPolicy);

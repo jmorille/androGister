@@ -5,6 +5,7 @@ import me.prettyprint.hector.api.ddl.ComparatorType;
 public enum ColumnFamilyKeys {
 
     USER_CF("User", null), //ComparatorType.TIMEUUIDTYPE
+    PRODUCT_CF("Product", ComparatorType.UUIDTYPE), //
     DOMAIN_CF("Domain", null);
 
     ColumnFamilyKeys(String name, ComparatorType comparatorType) {

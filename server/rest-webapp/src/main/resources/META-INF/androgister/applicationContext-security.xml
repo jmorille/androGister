@@ -24,8 +24,8 @@
 <!--     <intercept-url pattern="/casfailed.jsp" access="permitAll()" /> -->
 <!--     <intercept-url pattern="/j_spring_cas_security_proxyreceptor" access="permitAll()" /> -->
 <!--     <intercept-url pattern="/rest/user/init" access="permitAll()" /> -->
-    <secu:intercept-url pattern="/rest/**" access="hasRole('ROLE_USER')" />
-<!--     <secu:intercept-url pattern="/rest/**" access="permitAll" /> -->
+<!--     <secu:intercept-url pattern="/rest/**" access="hasRole('ROLE_USER')" /> -->
+    <secu:intercept-url pattern="/rest/**" access="permitAll" />
     
     <secu:logout logout-success-url="/cas-logout.jsp" />
 
@@ -86,20 +86,20 @@
         <constructor-arg value="https://${cas.server.host}/castore" />
       </bean>
     </property>
-    <property name="statelessTicketCache">
-      <bean class="org.springframework.security.cas.authentication.EhCacheBasedTicketCache">
-        <property name="cache">
-          <bean class="net.sf.ehcache.Cache" init-method="initialise" destroy-method="dispose">
-            <constructor-arg value="casTickets" />
-            <constructor-arg value="50" />
-            <constructor-arg value="true" />
-            <constructor-arg value="false" />
-            <constructor-arg value="3600" />
-            <constructor-arg value="900" />
-          </bean>
-        </property>
-      </bean>
-    </property>
+<!--     <property name="statelessTicketCache"> -->
+<!--       <bean class="org.springframework.security.cas.authentication.EhCacheBasedTicketCache"> -->
+<!--         <property name="cache"> -->
+<!--           <bean class="net.sf.ehcache.Cache" init-method="initialise" destroy-method="dispose"> -->
+<!--             <constructor-arg value="casTickets" /> -->
+<!--             <constructor-arg value="50" /> -->
+<!--             <constructor-arg value="true" /> -->
+<!--             <constructor-arg value="false" /> -->
+<!--             <constructor-arg value="3600" /> -->
+<!--             <constructor-arg value="900" /> -->
+<!--           </bean> -->
+<!--         </property> -->
+<!--       </bean> -->
+<!--     </property> -->
 
   </bean>
 
