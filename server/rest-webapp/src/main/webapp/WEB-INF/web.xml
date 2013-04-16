@@ -8,9 +8,9 @@
   <listener>
     <listener-class>eu.ttbox.androgister.config.web.WebConfigurer</listener-class>
   </listener>
-  <listener>
-    <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
-  </listener>
+<!--   <listener> -->
+<!--     <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class> -->
+<!--   </listener> -->
 
   <filter>
     <filter-name>GzipFilter</filter-name>

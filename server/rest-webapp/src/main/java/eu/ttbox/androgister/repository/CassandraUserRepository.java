@@ -15,10 +15,10 @@ import javax.validation.ValidatorFactory;
 
 import me.prettyprint.cassandra.model.CqlQuery;
 import me.prettyprint.cassandra.model.CqlRows;
-import me.prettyprint.cassandra.serializers.BytesArraySerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
 import me.prettyprint.cassandra.service.template.ColumnFamilyTemplate;
 import me.prettyprint.cassandra.service.template.ThriftColumnFamilyTemplate;
+import me.prettyprint.cassandra.utils.TimeUUIDUtils;
 import me.prettyprint.hector.api.Keyspace;
 import me.prettyprint.hector.api.beans.ColumnSlice;
 import me.prettyprint.hector.api.beans.HColumn;
@@ -26,11 +26,7 @@ import me.prettyprint.hector.api.beans.Row;
 import me.prettyprint.hector.api.factory.HFactory;
 import me.prettyprint.hector.api.mutation.Mutator;
 import me.prettyprint.hector.api.query.QueryResult;
-import me.prettyprint.hom.CFMappingDef;
-import me.prettyprint.hom.ClassCacheMgr;
 import me.prettyprint.hom.EntityManagerImpl;
-import me.prettyprint.hom.HectorObjectMapper;
-import me.prettyprint.hom.HectorObjectMapperHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import eu.ttbox.androgister.config.cassandra.ColumnFamilyKeys;
 import eu.ttbox.androgister.model.User;
+import eu.ttbox.androgister.model.UserLight;
 
 @Repository
 public class CassandraUserRepository {
@@ -64,7 +61,7 @@ public class CassandraUserRepository {
         template = new ThriftColumnFamilyTemplate<String, String>(keyspaceOperator, ColumnFamilyKeys.USER_CF.cfName, StringSerializer.get(), StringSerializer.get());
     }
 
-    public List<User> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
+    public List<UserLight> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
 //        ClassCacheMgr cacheMgr = new ClassCacheMgr();
 //        HectorObjectMapper objMapper = new HectorObjectMapper(cacheMgr);
 //        cacheMgr.initializeCacheForClass(User.class);
@@ -73,24 +70,39 @@ public class CassandraUserRepository {
         CqlQuery<String, String, String> cqlQuery = new CqlQuery<String, String, String>(keyspaceOperator, StringSerializer.get(), StringSerializer.get(), StringSerializer.get()) //
                 .setQuery("select * from User")//
                 ;
+//        cqlQuery.sestColumnNameSerializer(columnNameSerializer)
         QueryResult<CqlRows<String, String, String>> result = cqlQuery.execute();
         CqlRows<String, String, String> rows = result.get();
 
+        List<UserLight> users = new ArrayList<UserLight>();
         Iterator<Row<String, String, String>> it = rows.iterator();
         while (it.hasNext()) {
             Row<String, String, String> row = it.next();
-            User user = null; // HectorObjectMapperHelper.getObject(objMapper,
+//            User user = null; // HectorObjectMapperHelper.getObject(objMapper,
                               // cfMapDef, keyspaceOperator,
                               // cfMapDef.getEffectiveColFamName(), row);
             String key = row.getKey();
-            ColumnSlice<String, String> colSlice = row.getColumnSlice();
-//            colSlice.getColumnByName(columnName)
-            List<HColumn<String, String>> colSlices = row.getColumnSlice().getColumns();  
+            UserLight user = new UserLight();
+            ColumnSlice<String, String>  colSlice = row.getColumnSlice() ;  
+            user.login =  key;
+            user.username =     getColumnStringValueByName(colSlice, "username");  
+            user.lastName = getColumnStringValueByName(colSlice, "lastName");  
+            user.firstName =  getColumnStringValueByName(colSlice, "firstName");  
 //            colSlices.
+            users.add(user);
             log.info("Row : " + row + " =======> " + user);
         }
-        List<User> users = new ArrayList<User>();
+    
         return users;
+    }
+    
+    public <T> T getColumnStringValueByName( ColumnSlice<String, T> colSlice , String columName) {
+    	 HColumn<String, T>  col = colSlice.getColumnByName(columName);
+    	 if (col!=null) {
+    		 return col.getValue();
+    	 } else {
+    		 return null;
+    	 }
     }
 
     @CacheEvict(value = "user-cache", key = "#user.login")
@@ -102,7 +114,12 @@ public class CassandraUserRepository {
         // throw new ConstraintViolationException(new
         // HashSet<ConstraintViolation<?>>(constraintViolations));
         // }
+        if (user.uuid==null) {
+        	 user.uuid = TimeUUIDUtils.getUniqueTimeUUIDinMillis();
+        }
+         
         try {
+        	
             em.persist(user);
         } catch (Exception e) {
             log.error("Erro Creating user {} : " + e.getMessage());

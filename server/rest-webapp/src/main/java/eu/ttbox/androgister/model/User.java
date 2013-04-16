@@ -1,5 +1,7 @@
 package eu.ttbox.androgister.model;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,117 +17,132 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import eu.ttbox.androgister.model.validation.ContraintsUserCreation;
 
-@Entity 
+@Entity
 @Table(name = "User")
 public class User {
 
-    @NotEmpty(message = "Login is mandatory.", groups = {ContraintsUserCreation.class, Default.class})
-    @NotNull(message = "Login is mandatory.", groups = {ContraintsUserCreation.class, Default.class})
-    @Email(message = "Email is invalid.")
-    @Id
-    @JsonIgnore
-    public String login;
+//	@Id
+	@Column(name = "uuid")
+	public UUID uuid;
 
-    @Column(name = "password")
-    @JsonIgnore
-    public String password;
+	@NotEmpty(message = "Login is mandatory.", groups = { ContraintsUserCreation.class, Default.class })
+	@NotNull(message = "Login is mandatory.", groups = { ContraintsUserCreation.class, Default.class })
+	@Email(message = "Email is invalid.")
+	@Id
+	@JsonIgnore
+	public String login;
 
-    @Column(name = "username")
-    public String username;
+	@Column(name = "password")
+	@JsonIgnore
+	public String password;
 
-    @Column(name = "domain")
-    @JsonIgnore
-    public String domain;
+	@Column(name = "username")
+	public String username;
 
-    @Column(name = "avatar")
-    public String avatar;
+	@Column(name = "domain")
+	@JsonIgnore
+	public String domain;
 
-    @Size(min = 0, max = 50)
-    @Column(name = "firstName")
-    public String firstName;
+	@Column(name = "avatar")
+	public String avatar;
 
-    @Size(min = 0, max = 50)
-    @Column(name = "lastName")
-    public String lastName;
+	@Size(min = 0, max = 50)
+	@Column(name = "firstName")
+	public String firstName;
 
-    @Size(min = 0, max = 100)
-    @Column(name = "jobTitle")
-    public String jobTitle;
+	@Size(min = 0, max = 50)
+	@Column(name = "lastName")
+	public String lastName;
 
-    @Size(min = 0, max = 20)
-    @Column(name = "phoneNumber")
-    public String phoneNumber;
+	@Size(min = 0, max = 100)
+	@Column(name = "jobTitle")
+	public String jobTitle;
 
-    @Column(name = "openIdUrl")
-    @JsonIgnore
-    public String openIdUrl;
+	@Size(min = 0, max = 20)
+	@Column(name = "phoneNumber")
+	public String phoneNumber;
 
-    @Column(name = "theme")
-    @JsonIgnore
-    public String theme;
+	@Column(name = "openIdUrl")
+	@JsonIgnore
+	public String openIdUrl;
 
-    @Column(name = "preferences_mention_email")
-    @JsonIgnore
-    public Boolean preferencesMentionEmail;
+	@Column(name = "theme")
+	@JsonIgnore
+	public String theme;
 
-    @Column(name = "rssUid")
-    @JsonIgnore
-    public String rssUid;
+	@Column(name = "preferences_mention_email")
+	@JsonIgnore
+	public Boolean preferencesMentionEmail;
 
-    @Column(name = "weekly_digest_subscription")
-    @JsonIgnore
-    public Boolean weeklyDigestSubscription;
+	@Column(name = "rssUid")
+	@JsonIgnore
+	public String rssUid;
 
-    @Column(name = "daily_digest_subscription")
-    @JsonIgnore
-    public Boolean dailyDigestSubscription;
+	@Column(name = "weekly_digest_subscription")
+	@JsonIgnore
+	public Boolean weeklyDigestSubscription;
 
-    @Column(name = "attachmentsSize")
-    public long attachmentsSize;
+	@Column(name = "daily_digest_subscription")
+	@JsonIgnore
+	public Boolean dailyDigestSubscription;
 
-    @Column(name = "isNew")
-    @JsonIgnore
-    public Boolean isNew;
+	@Column(name = "attachmentsSize")
+	public long attachmentsSize;
 
-    public long statusCount;
+	@Column(name = "isNew")
+	@JsonIgnore
+	public Boolean isNew;
 
-    public long friendsCount;
+	public long statusCount;
 
-    public long followersCount;
-    
-    @Override
-    public String toString() {
-        return new StringBuffer(64).append("User [id=").append(login).append(", version=").append(login) //
-                        .append(", firstname=").append(firstName)//
-                        .append(", lastname=").append(lastName) //
-                        .append("]") //
-                        .toString();
-    }
+	public long friendsCount;
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((login == null) ? 0 : login.hashCode());
-        return result;
-    }
+	public long followersCount;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        User other = (User ) obj;
-        if (login == null) {
-            if (other.login != null)
-                return false;
-        } else if (!login.equals(other.login))
-            return false;
-        return true;
-    }
+	@Override
+	public String toString() {
+		return new StringBuffer(64).append("User [uuid=").append(uuid).append(", version=").append(login) //
+				.append(", firstname=").append(firstName)//
+				.append(", lastname=").append(lastName) //
+				.append("]") //
+				.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((login == null) ? 0 : login.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (login == null) {
+			if (other.login != null)
+				return false;
+		} else if (!login.equals(other.login))
+			return false;
+		return true;
+	}
+ 
+	
+	 
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
 
 	public String getLogin() {
 		return login;
@@ -286,9 +303,5 @@ public class User {
 	public void setFollowersCount(long followersCount) {
 		this.followersCount = followersCount;
 	}
-    
-    
-    
-    
 
 }

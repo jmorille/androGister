@@ -57,6 +57,7 @@ public class CassandraConfiguration {
         ThriftCluster cluster = new ThriftCluster(cassandraClusterName, cassandraHostConfigurator);
         ConfigurableConsistencyLevel consistencyLevelPolicy = new ConfigurableConsistencyLevel();
         consistencyLevelPolicy.setDefaultReadConsistencyLevel(HConsistencyLevel.ONE);
+//        consistencyLevelPolicy.setDefaultWriteConsistencyLevel(HConsistencyLevel.LOCAL_QUORUM);
 
         KeyspaceDefinition keyspaceDef = cluster.describeKeyspace(cassandraKeyspace);
         if (keyspaceDef == null) {
@@ -91,7 +92,7 @@ public class CassandraConfiguration {
         ColumnFamilyDefinition cfd = HFactory.createColumnFamilyDefinition(cassandraKeyspace, cfName);
 
         cfd.setRowCacheKeysToSave(rowCacheKeysToSave);
-        cfd.setComparatorType(ComparatorType.UUIDTYPE);
+        cfd.setComparatorType(ComparatorType.TIMEUUIDTYPE);
         cluster.addColumnFamily(cfd);
     }
 

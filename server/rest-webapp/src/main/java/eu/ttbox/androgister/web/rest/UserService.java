@@ -1,9 +1,10 @@
 package eu.ttbox.androgister.web.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.groups.Default;
+
+import me.prettyprint.cassandra.utils.TimeUUIDUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import eu.ttbox.androgister.model.User;
+import eu.ttbox.androgister.model.UserLight;
 import eu.ttbox.androgister.repository.CassandraUserRepository;
 
 @Controller
@@ -40,6 +42,7 @@ public class UserService {
     private CassandraUserRepository userRepository;
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET, headers = "Accept=application/json")
+    
     @ResponseBody
     public ResponseEntity<User> getUserById(@PathVariable String userId) {
         User user = userRepository.findUserByLogin(userId);
@@ -55,18 +58,18 @@ public class UserService {
 
     @RequestMapping(value = "", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
-    public List<User> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
-        List<User> users = null;
+    public List<UserLight> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
+        List<UserLight> users = null;
         try {
 
             users = userRepository.findUser(firstResult, maxResult);
         } catch (Exception e) {
             LOG.error("Error find all user " + e.getMessage(), e);
         }
-        users = new ArrayList<User>();
-        for (int i = 0; i < 20; i++) {
-            users.add(createMockUser(i));
-        }
+//        users = new ArrayList<User>();
+//        for (int i = 0; i < 20; i++) {
+//            users.add(createMockUser(i));
+//        }
         return users;
     }
 
@@ -151,6 +154,7 @@ public class UserService {
     private User createMockUser(int userId) {
         User user = new User();
         // user.id = Long.valueOf(userId);
+       
         user.login = String.valueOf(userId);
         user.firstName = String.format("Prenom %s", userId);
         user.lastName = String.format("Nom %s", userId);
