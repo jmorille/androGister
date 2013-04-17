@@ -87,10 +87,16 @@ public class CassandraConfiguration {
         ColumnFamilyDefinition cfd = HFactory.createColumnFamilyDefinition(cassandraKeyspace, cfName.cfName);
 
         cfd.setRowCacheKeysToSave(rowCacheKeysToSave);
+        if (cfName.keyValidatorClass != null) {
+            cfd.setKeyValidationClass(cfName.keyValidatorClass);
+        }
         if (cfName.comparatorType != null) {
             cfd.setComparatorType(cfName.comparatorType);
         }
-        cluster.addColumnFamily(cfd);
+        if (cfName.defaultValidatorClass != null) {
+            cfd.setDefaultValidationClass(cfName.defaultValidatorClass);
+        }
+         cluster.addColumnFamily(cfd);
     }
 
     private void addColumnFamilySortedbyUUID(ThriftCluster cluster, String cfName, int rowCacheKeysToSave) {
