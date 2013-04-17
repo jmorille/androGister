@@ -58,8 +58,8 @@ public class ProductRepository {
         }
         if (product.uuid == null) {
             product.uuid = TimeUUIDUtils.getUniqueTimeUUIDinMillis(); // UUID.randomUUID();//
-        } 
-        
+        }
+
         try {
             em.persist(product);
         } catch (Exception e) {
@@ -89,24 +89,25 @@ public class ProductRepository {
 
     public List<Product> finddAll() {
         CqlQuery<UUID, String, String> cqlQuery = new CqlQuery<UUID, String, String>(keyspace, UUIDSerializer.get(), StringSerializer.get(), StringSerializer.get()) //
-                .setQuery("select * from User")//
+                .setQuery("select * from Product")//
         ;
         List<Product> entities = new ArrayList<Product>();
         QueryResult<CqlRows<UUID, String, String>> result = cqlQuery.execute();
         CqlRows<UUID, String, String> rows = result.get();
-        Iterator<Row<UUID, String, String>> it = rows.iterator();
-        while (it.hasNext()) {
-            Row<UUID, String, String> row = it.next();
-            UUID key = row.getKey();
-            Product entity = new Product();
-            entity.uuid = key;
-            ColumnSlice<String, String> colSlice = row.getColumnSlice();
-            getColumnStringValueByName(colSlice, "name");
-            getColumnStringValueByName(colSlice, "description");
-            //
-            entities.add(entity);
+        if (rows.getCount() > 0) {
+            Iterator<Row<UUID, String, String>> it = rows.iterator();
+            while (it.hasNext()) {
+                Row<UUID, String, String> row = it.next();
+                UUID key = row.getKey();
+                Product entity = new Product();
+                entity.uuid = key;
+                ColumnSlice<String, String> colSlice = row.getColumnSlice();
+                getColumnStringValueByName(colSlice, "name");
+                getColumnStringValueByName(colSlice, "description");
+                //
+                entities.add(entity);
+            }
         }
-
         return entities;
     }
 

@@ -46,7 +46,7 @@ public class ProductService {
         try {
             entities = productRepository.finddAll(); // firstResult, maxResult
         } catch (Exception e) {
-            LOG.error("Error find all user " + e.getMessage(), e);
+            LOG.error("Error find all product " + e.getMessage(), e);
         }
         return entities;
     }
