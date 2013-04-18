@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -17,6 +18,8 @@ import me.prettyprint.cassandra.model.CqlQuery;
 import me.prettyprint.cassandra.model.CqlRows;
 import me.prettyprint.cassandra.serializers.StringSerializer;
 import me.prettyprint.cassandra.serializers.UUIDSerializer;
+import me.prettyprint.cassandra.service.template.ColumnFamilyTemplate;
+import me.prettyprint.cassandra.service.template.ThriftColumnFamilyTemplate;
 import me.prettyprint.cassandra.utils.TimeUUIDUtils;
 import me.prettyprint.hector.api.Keyspace;
 import me.prettyprint.hector.api.beans.ColumnSlice;
@@ -50,12 +53,25 @@ public class ProductRepository {
     private static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private static Validator validator = factory.getValidator();
 
-    public void persist(Product product) {
-        log.debug("Creating product : {}", product);
+    private ColumnFamilyTemplate<String, String> template;
+
+    @PostConstruct
+    public void init() {
+        template = new ThriftColumnFamilyTemplate<String, String>(keyspace, ColumnFamilyKeys.PRODUCT_CF.cfName, StringSerializer.get(), StringSerializer.get());
+    }
+    
+    public void validateEntity(Product product) {
         Set<ConstraintViolation<Product>> constraintViolations = validator.validate(product);
         if (!constraintViolations.isEmpty()) {
             throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(constraintViolations));
         }
+    }
+    
+    
+    public void persist(Product product) {
+        log.debug("Creating product : {}", product);
+        validateEntity(product);
+        
         if (product.uuid == null) {
             product.uuid = TimeUUIDUtils.getUniqueTimeUUIDinMillis(); // UUID.randomUUID();//
         }
