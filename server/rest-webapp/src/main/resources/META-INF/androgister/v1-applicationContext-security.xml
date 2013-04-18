@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:secu="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+				http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/security
+				http://www.springframework.org/schema/security/spring-security.xsd
+				http://www.springframework.org/schema/context
+				http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <context:property-placeholder location="classpath:/androgister.properties" />
+
+  <secu:global-method-security pre-post-annotations="enabled" />
+
+
+  <secu:http pattern="/js/**" security="none" />
+  <secu:http pattern="/css/**" security="none" />
+  <secu:http pattern="/img/**" security="none" />
+
+
+  <secu:http entry-point-ref="casEntryPoint" use-expressions="true" create-session="stateless">
+    <!-- <secu:intercept-url pattern="/**" access="isAuthenticated()" /> -->
+    <secu:intercept-url pattern="/cas-logout.jsp" access="permitAll()" />
+    <!-- <isecu:ntercept-url pattern="/casfailed.jsp" access="permitAll()" /> -->
+    <secu:intercept-url pattern="/j_spring_cas_security_proxyreceptor" access="permitAll()" />
+    <!-- <secu:intercept-url pattern="/rest/user/init" access="permitAll()" /> -->
+
+    <secu:intercept-url pattern="/product/**" access="permitAll()" />
+    <secu:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+    <!-- <secu:intercept-url pattern="/rest/**" access="permitAll" /> -->
+
+    <secu:logout logout-success-url="/cas-logout.jsp" />
+
+    <!-- <secu:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER" /> -->
+    <!-- <secu:custom-filter ref="singleLogoutFilter" before="CAS_FILTER" /> -->
+    <secu:custom-filter ref="casFilter" position="CAS_FILTER" />
+  </secu:http>
+
+  <secu:authentication-manager alias="authenticationManager">
+    <secu:authentication-provider ref="casAuthenticationProvider" />
+    <!-- <authentication-provider ref="daoAuthenticationProvider" /> -->
+  </secu:authentication-manager>
+
+
+  <secu:user-service id="userService">
+    <secu:user name="joe" password="joe" authorities="ROLE_USER" />
+    <secu:user name="jmorille" password="jmorille" authorities="ROLE_ADMIN,ROLE_USER" />
+  </secu:user-service>
+
+
+  <!-- CAS p:service="http://127.0.0.1:8080/app/j_spring_cas_security_proxyreceptor" -->
+
+  <bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties" p:service="" p:sendRenew="false"
+    p:authenticateAllArtifacts="true" />
+
+  <!-- Path org.springframework.security.cas.web -->
+  <bean id="casEntryPoint" class="eu.ttbox.androgister.security.cas.CasAuthenticationEntryPoint" p:loginUrl="https://${cas.server.host}/castore/login"
+    p:serviceProperties-ref="serviceProperties" />
+
+
+<!--    p:proxyReceptorUrl="/j_spring_cas_security_proxyreceptor" -->
+  <bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter" p:authenticationManager-ref="authenticationManager"
+    p:serviceProperties-ref="serviceProperties" p:proxyGrantingTicketStorage-ref="pgtStorage" 
+    p:proxyReceptorUrl="/pgtCallback">
+    <property name="authenticationDetailsSource">
+      <bean class="org.springframework.security.cas.web.authentication.ServiceAuthenticationDetailsSource" />
+    </property>
+    <property name="authenticationFailureHandler">
+      <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" p:defaultFailureUrl="/casfailed.jsp" />
+    </property>
+    <property name="authenticationSuccessHandler">
+      <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler" p:defaultTargetUrl="/user/" />
+    </property>
+  </bean>
+  
+  
+  
+
+
+  <bean id="pgtStorage" class="org.jasig.cas.client.proxy.ProxyGrantingTicketStorageImpl" />
+
+
+  <bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider"
+    p:serviceProperties-ref="serviceProperties" p:key="an_id_for_this_auth_provider_only">
+    <property name="authenticationUserDetailsService">
+      <bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
+        <constructor-arg ref="userService" />
+      </bean>
+    </property>
+    <property name="ticketValidator">
+      <!--  p:proxyCallbackUrl="http://${cas.service.host}/app/j_spring_cas_security_proxyreceptor"  -->
+      <bean class="org.jasig.cas.client.validation.Cas20ProxyTicketValidator" p:acceptAnyProxy="true" p:proxyGrantingTicketStorage-ref="pgtStorage"
+           p:proxyCallbackUrl="https://${cas.server.host}/castore/pgtCallback" >
+        
+        <constructor-arg value="https://${cas.server.host}/castore" />
+      </bean>
+    </property>
+    <property name="statelessTicketCache">
+      <bean class="org.springframework.security.cas.authentication.EhCacheBasedTicketCache">
+        <property name="cache">
+          <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" p:cacheName="casTickets" />
+            <!-- <bean class="net.sf.ehcache.Cache" init-method="initialise" destroy-method="dispose"> -->
+          <!-- <constructor-arg value="casTickets" /> -->
+          <!-- <constructor-arg value="50" /> -->
+          <!-- <constructor-arg value="true" /> -->
+          <!-- <constructor-arg value="false" /> -->
+          <!-- <constructor-arg value="3600" /> -->
+          <!-- <constructor-arg value="900" /> -->
+          <!-- </bean> -->
+        </property>
+
+      </bean>
+
+
+    </property>
+
+  </bean>
+
+  <!-- p:configLocation="ehcache.xml" -->
+<!--   <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:shared="true" /> -->
+
+  <!-- This filter handles a Single Logout Request from the CAS Server -->
+  <!-- <bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter" /> -->
+
+  <!-- This filter redirects to the CAS Server to signal Single Logout should be performed -->
+  <!-- <bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter"> -->
+  <!-- <constructor-arg value="https://${cas.server.host}/castore/logout" /> -->
+  <!-- <constructor-arg> -->
+  <!-- <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" /> -->
+  <!-- </constructor-arg> -->
+  <!-- <property name="filterProcessesUrl" value="/j_spring_cas_security_logout" /> -->
+  <!-- </bean> -->
+
+
+  <!-- <bean id="daoAuthenticationProvider" -->
+  <!-- class="org.springframework.security.authentication.dao.DaoAuthenticationProvider"> -->
+  <!-- <property name="userDetailsService" ref="appUserDetailsService" /> -->
+  <!-- <property name="passwordEncoder"> -->
+  <!-- <bean -->
+  <!-- class="org.springframework.security.crypto.password.StandardPasswordEncoder" /> -->
+  <!-- </property> -->
+  <!-- </bean> -->
+
+
+</beans>

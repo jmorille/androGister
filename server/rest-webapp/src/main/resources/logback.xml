@@ -18,11 +18,19 @@
     <level value="DEBUG" />
   </logger>
   
+  <logger name="org.jasig">
+    <level value="DEBUG" />
+  </logger>
+  
+    
   <logger name="org.springframework.security.cas">
     <level value="DEBUG" />
   </logger>
   
      
+  <logger name="net.sf.ehcache">
+    <level value="INFO" />
+  </logger>
 
   <logger name="org.springframework">
     <level value="WARN" />

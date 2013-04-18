@@ -1,6 +1,7 @@
 package eu.ttbox.androgister.web.rest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -41,8 +42,8 @@ public class ProductService {
 
     @RequestMapping(value = "", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseBody
-    public List<Product> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
-        List<Product> entities = null;
+    public List< Map<String,Object>> findUser(@RequestParam(value = "s", defaultValue = "0") int firstResult, @RequestParam(value = "p", defaultValue = "10") int maxResult) {
+        List< Map<String,Object>> entities = null;
         try {
             entities = productRepository.finddAll(); // firstResult, maxResult
         } catch (Exception e) {

@@ -613,17 +613,18 @@
           <!-- Spécifiez le mot de passe de la clé pour <tomcat> -->
           <!-- (appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : "appuyez sur la touche Entrée" -->
 
-          <!-- <hostName>gf200820</hostName> -->
-          <!-- <httpsPort>8443</httpsPort> -->
-          <!-- <keystoreFile>../../ccjsamplestorecr</keystoreFile> -->
-          <!-- <keystorePass>ccjsample</keystorePass> -->
+          <hostName>GF219896</hostName>
+          <httpsPort>9443</httpsPort>  
+          <keystoreFile>../../../cas-webapp/castore</keystoreFile>
+          <keystorePass>${castore.password}</keystorePass>
 
           <systemProperties>
             <spring.profiles.active>${spring.profiles.active}</spring.profiles.active>
+<!--
             <com.sun.management.jmxremote>true</com.sun.management.jmxremote>
             <com.sun.management.jmxremote.port>8050</com.sun.management.jmxremote.port>
             <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
-            <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+            <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate> -->
             <!-- <http.proxyHost>webcache.generali.fr</http.proxyHost> -->
             <!-- <http.proxyPort>3128</http.proxyPort> -->
           </systemProperties>
