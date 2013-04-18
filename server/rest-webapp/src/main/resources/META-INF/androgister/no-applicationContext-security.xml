@@ -48,7 +48,7 @@
   </secu:user-service>
 
 
-  <!-- CAS p:service="http://127.0.0.1:8080/app/j_spring_cas_security_proxyreceptor" -->
+  <!-- CAS p:service="https://${cas.service.host}/app/j_spring_cas_security_proxyreceptor" -->
 
   <bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties" p:service="" p:sendRenew="false"
     p:authenticateAllArtifacts="true" />
@@ -90,7 +90,7 @@
     <property name="ticketValidator">
       <!--  p:proxyCallbackUrl="http://${cas.service.host}/app/j_spring_cas_security_proxyreceptor"  -->
       <bean class="org.jasig.cas.client.validation.Cas20ProxyTicketValidator" p:acceptAnyProxy="true" p:proxyGrantingTicketStorage-ref="pgtStorage"
-           p:proxyCallbackUrl="https://${cas.server.host}/castore/pgtCallback" >
+           p:proxyCallbackUrl="https://${cas.service.host}/app/pgtCallback" >
         
         <constructor-arg value="https://${cas.server.host}/castore" />
       </bean>
