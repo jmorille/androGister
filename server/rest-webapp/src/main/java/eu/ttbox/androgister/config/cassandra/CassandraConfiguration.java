@@ -1,5 +1,7 @@
 package eu.ttbox.androgister.config.cassandra;
 
+import javax.annotation.PreDestroy;
+
 import me.prettyprint.cassandra.connection.HOpTimer;
 import me.prettyprint.cassandra.connection.MetricsOpTimer;
 import me.prettyprint.cassandra.model.ConfigurableConsistencyLevel;
@@ -42,6 +44,15 @@ public class CassandraConfiguration {
     @Autowired
     private Environment env;
 
+    private Cluster myCluster;
+
+    @PreDestroy
+    public void destroy() {
+        log.info("Closing Hector connection pool");
+        myCluster.getConnectionManager().shutdown();
+        HFactory.shutdownCluster(myCluster);
+    }
+    
     @Bean
     public ThriftCluster cluster() {
         String cassandraHost = env.getProperty(CASSANDRA_HOST);
@@ -54,6 +65,7 @@ public class CassandraConfiguration {
             cassandraHostConfigurator.setOpTimer(hOpTimer);
         }
         ThriftCluster cluster = new ThriftCluster(cassandraClusterName, cassandraHostConfigurator);
+        this.myCluster = cluster; // Keep a pointer to the cluster, as Hector is buggy and can't find it again...
         return cluster;
     }
 
