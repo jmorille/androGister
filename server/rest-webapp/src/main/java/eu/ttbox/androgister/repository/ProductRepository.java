@@ -1,9 +1,11 @@
 package eu.ttbox.androgister.repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -103,11 +105,11 @@ public class ProductRepository {
         return entity;
     }
 
-    public List<Product> finddAll() {
+    public List< Map<String,Object>> finddAll() {
         CqlQuery<UUID, String, String> cqlQuery = new CqlQuery<UUID, String, String>(keyspace, UUIDSerializer.get(), StringSerializer.get(), StringSerializer.get()) //
                 .setQuery("select * from Product")//
         ;
-        List<Product> entities = new ArrayList<Product>();
+        List< Map<String,Object>> entities = new ArrayList< Map<String,Object>>();
         QueryResult<CqlRows<UUID, String, String>> result = cqlQuery.execute();
         CqlRows<UUID, String, String> rows = result.get();
         if (rows.getCount() > 0) {
@@ -115,11 +117,15 @@ public class ProductRepository {
             while (it.hasNext()) {
                 Row<UUID, String, String> row = it.next();
                 UUID key = row.getKey();
-                Product entity = new Product();
-                entity.uuid = key;
+                Map<String,Object> entity = new HashMap<String, Object>() ;
+//                entity.uuid = key;
+                entity.put("uuid", key);
                 ColumnSlice<String, String> colSlice = row.getColumnSlice();
-                getColumnStringValueByName(colSlice, "name");
-                getColumnStringValueByName(colSlice, "description");
+//                entity.name=  getColumnStringValueByName(colSlice, "name");
+//                entity.description = getColumnStringValueByName(colSlice, "description");
+                entity.put("name", getColumnStringValueByName(colSlice, "name"));
+                entity.put("description", getColumnStringValueByName(colSlice, "description"));
+
                 //
                 entities.add(entity);
             }

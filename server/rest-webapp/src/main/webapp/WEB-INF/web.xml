@@ -8,6 +8,11 @@
   <listener>
     <listener-class>eu.ttbox.androgister.config.web.WebConfigurer</listener-class>
   </listener>
+  <listener>
+    <listener-class>eu.ttbox.androgister.web.listener.LogCreateHttpSessionListener</listener-class>
+  </listener>
+  
+
 <!--   <listener> -->
 <!--     <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class> -->
 <!--   </listener> -->

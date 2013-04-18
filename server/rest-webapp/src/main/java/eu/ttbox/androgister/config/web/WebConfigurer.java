@@ -59,7 +59,9 @@ public class WebConfigurer implements ServletContextListener {
         dispatcherServlet.setLoadOnStartup(2);
 
         log.debug("Registering Spring Security Filter");
-        FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy());
+        DelegatingFilterProxy delegatingFilterProxy =  new DelegatingFilterProxy();
+//        delegatingFilterProxy.setTargetBeanName("casFilter");
+        FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain", delegatingFilterProxy);
  
         Environment env = rootContext.getBean(Environment.class);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_METRICS)) {

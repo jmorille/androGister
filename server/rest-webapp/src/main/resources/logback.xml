@@ -23,6 +23,9 @@
   </logger>
   
      
+  <logger name="net.sf.ehcache">
+    <level value="INFO" />
+  </logger>
 
   <logger name="org.springframework">
     <level value="WARN" />
