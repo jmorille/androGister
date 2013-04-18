@@ -54,12 +54,13 @@ public class WebConfigurer implements ServletContextListener {
 
         log.debug("Registering Spring MVC Servlet");
         ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(dispatcherServletConfig));
-        dispatcherServlet.addMapping("/rest/*");
+//        dispatcherServlet.addMapping("/rest/*");
+        dispatcherServlet.addMapping("/*");
         dispatcherServlet.setLoadOnStartup(2);
 
         log.debug("Registering Spring Security Filter");
         FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy());
-
+ 
         Environment env = rootContext.getBean(Environment.class);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_METRICS)) {
             log.debug("Setting Metrics profile for the Web ApplicationContext");
