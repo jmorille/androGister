@@ -25,6 +25,7 @@
     <secu:intercept-url pattern="/j_spring_cas_security_proxyreceptor" access="permitAll()" />
     <!-- <secu:intercept-url pattern="/rest/user/init" access="permitAll()" /> -->
 
+    <secu:intercept-url pattern="/rest/product/**" access="permitAll()" />
     <secu:intercept-url pattern="/product/**" access="permitAll()" />
     <secu:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
     <!-- <secu:intercept-url pattern="/rest/**" access="permitAll" /> -->
@@ -90,12 +91,15 @@
     <property name="statelessTicketCache">
       <bean class="org.springframework.security.cas.authentication.EhCacheBasedTicketCache">
         <property name="cache">
-          <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" p:cacheName="casTickets" /> 
+          <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" 
+              p:cacheManager-ref="ehCacheManager"
+              p:cacheName="casTickets" /> 
         </property> 
       </bean>  
     </property> 
   </bean>
  
+   <bean  id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" /> 
   
   <!--    p:proxyReceptorUrl="/j_spring_cas_security_proxyreceptor" -->
   <bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter" p:authenticationManager-ref="authenticationManager"

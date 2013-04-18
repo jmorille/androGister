@@ -6,6 +6,8 @@ public enum ColumnFamilyKeys {
 
     USER_CF("User",  null, ComparatorType.ASCIITYPE, null),  
     PRODUCT_CF("Product", ComparatorType.TIMEUUIDTYPE.getClassName(), ComparatorType.ASCIITYPE, ComparatorType.UTF8TYPE.getClassName()), //
+    PRODUCT_SALESPOINT_CF("ProductSalepoint", ComparatorType.ASCIITYPE.getClassName(), ComparatorType.TIMEUUIDTYPE, null), //
+
     DOMAIN_CF("Domain", null, null, null);
 
     ColumnFamilyKeys(String name, String keyValidatorClass, ComparatorType comparatorType, String defaultValidatorClass) {

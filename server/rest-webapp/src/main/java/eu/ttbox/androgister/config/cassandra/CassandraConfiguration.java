@@ -86,7 +86,8 @@ public class CassandraConfiguration {
             // HFactory.createKeyspace(cassandraKeyspace, cluster );
             // Column Family
             addColumnFamily(cluster, ColumnFamilyKeys.USER_CF, 0);
-            addColumnFamily(cluster, ColumnFamilyKeys.PRODUCT_CF, 0);
+            addColumnFamily(cluster, ColumnFamilyKeys.PRODUCT_CF, 0); 
+            addColumnFamily(cluster, ColumnFamilyKeys.PRODUCT_SALESPOINT_CF, 0);
             addColumnFamily(cluster, ColumnFamilyKeys.DOMAIN_CF, 0);
         }
         return HFactory.createKeyspace(cassandraKeyspace, cluster, consistencyLevelPolicy);

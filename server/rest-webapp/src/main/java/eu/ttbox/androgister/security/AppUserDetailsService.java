@@ -32,8 +32,8 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
     private CassandraUserRepository userService; 
-    
-	@PostConstruct
+      
+	@PostConstruct 
 	public void init() {
 		if (userGrantedAuthorities.size() == 0) { // to prevent a bug that makes
 													// this bean initialized

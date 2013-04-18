@@ -41,11 +41,25 @@ public class V2WebConfigurer implements ServletContextListener {
         log.debug("Configuring Spring root application context");
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(ApplicationConfiguration.class);
-        rootContext.refresh();
-
+        rootContext.refresh(); 
+        
         servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, rootContext);
 
-         
+        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
+
+        log.debug("Configuring Spring Web application context");
+        AnnotationConfigWebApplicationContext dispatcherServletConfig = new AnnotationConfigWebApplicationContext();
+        dispatcherServletConfig.setParent(rootContext);
+        dispatcherServletConfig.register(DispatcherServletConfig.class);
+
+        log.debug("Registering Spring MVC Servlet");
+        ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(dispatcherServletConfig));
+        // dispatcherServlet.addMapping("/rest/*");
+        dispatcherServlet.addMapping("/*");
+        dispatcherServlet.setLoadOnStartup(2);
+
+        
+        
         log.debug("Web application fully configured");
     }
 
@@ -54,13 +68,8 @@ public class V2WebConfigurer implements ServletContextListener {
         log.info("Destroying Web application");
         WebApplicationContext ac = WebApplicationContextUtils.getRequiredWebApplicationContext(sce.getServletContext());
         AnnotationConfigWebApplicationContext gwac = (AnnotationConfigWebApplicationContext) ac;
-        // Close Hector
-        Cluster cluster  = gwac.getBean(ThriftCluster.class); 
-        log.info("Shutdows Cassandra Cluster : {}", cluster);
-        HFactory.shutdownCluster(cluster);
-        // Close Spring
         gwac.close();
-         log.debug("Web application destroyed");
+        log.debug("Web application destroyed");
     }
 
 }

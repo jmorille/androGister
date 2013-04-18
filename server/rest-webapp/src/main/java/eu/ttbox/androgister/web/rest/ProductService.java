@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.ttbox.androgister.model.Product;
-import eu.ttbox.androgister.model.Product;
-import eu.ttbox.androgister.model.UserLight;
 import eu.ttbox.androgister.repository.ProductRepository;
 
 @Controller

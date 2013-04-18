@@ -54,15 +54,15 @@ public class WebConfigurer implements ServletContextListener {
 
         log.debug("Registering Spring MVC Servlet");
         ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(dispatcherServletConfig));
-//        dispatcherServlet.addMapping("/rest/*");
-        dispatcherServlet.addMapping("/*");
+         dispatcherServlet.addMapping("/rest/*");
+//        dispatcherServlet.addMapping("/*");
         dispatcherServlet.setLoadOnStartup(2);
 
         log.debug("Registering Spring Security Filter");
-        DelegatingFilterProxy delegatingFilterProxy =  new DelegatingFilterProxy();
-        delegatingFilterProxy.setTargetBeanName("authenticationFilter");
+        DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy();
+//        delegatingFilterProxy.setTargetBeanName("authenticationFilter");
         FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain", delegatingFilterProxy);
- 
+
         Environment env = rootContext.getBean(Environment.class);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_METRICS)) {
             log.debug("Setting Metrics profile for the Web ApplicationContext");
@@ -89,13 +89,8 @@ public class WebConfigurer implements ServletContextListener {
         log.info("Destroying Web application");
         WebApplicationContext ac = WebApplicationContextUtils.getRequiredWebApplicationContext(sce.getServletContext());
         AnnotationConfigWebApplicationContext gwac = (AnnotationConfigWebApplicationContext) ac;
-        // Close Hector
-        Cluster cluster  = gwac.getBean(ThriftCluster.class); 
-        log.info("Shutdows Cassandra Cluster : {}", cluster);
-        HFactory.shutdownCluster(cluster);
-        // Close Spring
         gwac.close();
-         log.debug("Web application destroyed");
+        log.debug("Web application destroyed");
     }
 
 }
