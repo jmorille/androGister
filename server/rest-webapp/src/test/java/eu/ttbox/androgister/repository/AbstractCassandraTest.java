@@ -54,11 +54,11 @@ public abstract class AbstractCassandraTest {
 
     protected User constructAUser(String login, String firstName, String lastName) {
         User user = new User();
-        user.setLogin(login);
-        user.setPassword(""); 
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setJobTitle("web developer");
+        user.login = login;
+        user.password= ""; 
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.jobTitle="web developer";
          
         return user;
     }

@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,67 +22,64 @@ import eu.ttbox.androgister.model.User;
 @Repository
 public class UserRepository {
 
-    public static ColumnFamily<UUID, String> CF_USER = ColumnFamily.newColumnFamily("User", UUIDSerializer.get(), StringSerializer.get());
+	private static final Logger LOG = LoggerFactory.getLogger(UserRepository.class);
 
-    @Autowired
-    public Keyspace keyspace;
+	public static ColumnFamily<UUID, String> CF_USER = ColumnFamily.newColumnFamily("User", UUIDSerializer.get(), StringSerializer.get());
 
-    public EntityManager<User, UUID> entityManager;
-   
-    
-    @PostConstruct
-    public void init() {
-        entityManager = new DefaultEntityManager.Builder<User, UUID>() //
-                .withEntityType(User.class) //
-                .withKeyspace(keyspace) //
-                .withColumnFamily(CF_USER) //
-                .build(); 
-    }
+	@Autowired
+	public Keyspace keyspace;
 
-    public User getById(UUID entityId) {
-        return entityManager.get(entityId);
-    }
+	public EntityManager<User, UUID> entityManager;
 
-    
-    public User findUserByLogin(String email) {
-        UUID entityId = UUID.fromString(email);
-        return getById(entityId);
-    }
-    
-    
-    public void persist(User entity) {
-        if (entity.uuid == null) {
-            entity.uuid = UUID.randomUUID();// TimeUUIDUtils.getUniqueTimeUUIDinMillis();
-        } 
-        entityManager.put(entity);
-    }
+	@PostConstruct
+	public void init() {
+		entityManager = new DefaultEntityManager.Builder<User, UUID>() //
+				.withEntityType(User.class) //
+				.withKeyspace(keyspace) //
+				.withColumnFamily(CF_USER) //
+				.build();
+	}
 
- 
-    public void remove(User entity) {
-        if (entity != null ) {
-            remove(entity.uuid);
-        }        
-    }
-    
-    public void remove(UUID id) {
-        entityManager.delete(id);
-    }
-    
-    public List<User> getAll() {
-        return entityManager.getAll();
-    }
- 
-    public List<User> getFindAll() {
-        return entityManager.find("SELECT * from User LIMIT 5");
-    }
+	public User getById(UUID entityId) {
+		return entityManager.get(entityId);
+	}
 
-    public List<User > findUser(int firstResult, int maxResult) {
-         return getFindAll();
-    }
+	public User findUserByLogin(String email) {
+		UUID entityId = UUID.fromString(email);
+		return getById(entityId);
+	}
 
+	public void persist(User entity) {
+		if (entity.uuid == null) {
+			entity.uuid = UUID.randomUUID();// TimeUUIDUtils.getUniqueTimeUUIDinMillis();
+		}
+		try {
+			entityManager.put(entity);
+		} catch (Exception e) {
+			LOG.error("Error Persist Entity Prodcut : " + e.getMessage(), e);
+		}
+	}
 
+	public void remove(User entity) {
+		if (entity != null) {
+			remove(entity.uuid);
+		}
+	}
 
-  
-    
+	public void remove(UUID id) {
+		entityManager.delete(id);
+	}
+
+	public List<User> getAll() {
+		return entityManager.getAll();
+	}
+
+	public List<User> getFindAll() {
+		return entityManager.find("SELECT * from User LIMIT 5");
+	}
+
+	public List<User> findUser(int firstResult, int maxResult) {
+		return getAll();
+	}
 
 }

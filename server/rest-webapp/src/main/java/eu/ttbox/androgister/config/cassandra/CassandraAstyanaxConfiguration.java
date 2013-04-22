@@ -63,7 +63,7 @@ public class CassandraAstyanaxConfiguration {
                         .setDiscoveryType(NodeDiscoveryType.RING_DESCRIBE) //
                         .setCqlVersion("3.0.1") //
                         .setTargetCassandraVersion("1.2") //
-                ).withConnectionPoolConfiguration(new ConnectionPoolConfigurationImpl("AstyanaxConnectionPool") //
+                ).withConnectionPoolConfiguration(new ConnectionPoolConfigurationImpl(cassandraClusterName+"_"+cassandraKeyspace) //
                         .setPort(9160) //
                         .setMaxConnsPerHost(1) //
                         .setSeeds(cassandraHost) //

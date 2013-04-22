@@ -21,14 +21,14 @@ import eu.ttbox.androgister.model.validation.ContraintsUserCreation;
 @Table(name = "User")
 public class User {
 
-//	@Id
+	@Id
 	@Column(name = "uuid")
 	public UUID uuid;
 
 	@NotEmpty(message = "Login is mandatory.", groups = { ContraintsUserCreation.class, Default.class })
 	@NotNull(message = "Login is mandatory.", groups = { ContraintsUserCreation.class, Default.class })
 	@Email(message = "Email is invalid.")
-	@Id
+//	@Id
 	@JsonIgnore
 	public String login;
 
@@ -134,174 +134,6 @@ public class User {
 	}
  
 	
-	 
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getDomain() {
-		return domain;
-	}
-
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getJobTitle() {
-		return jobTitle;
-	}
-
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getOpenIdUrl() {
-		return openIdUrl;
-	}
-
-	public void setOpenIdUrl(String openIdUrl) {
-		this.openIdUrl = openIdUrl;
-	}
-
-	public String getTheme() {
-		return theme;
-	}
-
-	public void setTheme(String theme) {
-		this.theme = theme;
-	}
-
-	public Boolean getPreferencesMentionEmail() {
-		return preferencesMentionEmail;
-	}
-
-	public void setPreferencesMentionEmail(Boolean preferencesMentionEmail) {
-		this.preferencesMentionEmail = preferencesMentionEmail;
-	}
-
-	public String getRssUid() {
-		return rssUid;
-	}
-
-	public void setRssUid(String rssUid) {
-		this.rssUid = rssUid;
-	}
-
-	public Boolean getWeeklyDigestSubscription() {
-		return weeklyDigestSubscription;
-	}
-
-	public void setWeeklyDigestSubscription(Boolean weeklyDigestSubscription) {
-		this.weeklyDigestSubscription = weeklyDigestSubscription;
-	}
-
-	public Boolean getDailyDigestSubscription() {
-		return dailyDigestSubscription;
-	}
-
-	public void setDailyDigestSubscription(Boolean dailyDigestSubscription) {
-		this.dailyDigestSubscription = dailyDigestSubscription;
-	}
-
-	public long getAttachmentsSize() {
-		return attachmentsSize;
-	}
-
-	public void setAttachmentsSize(long attachmentsSize) {
-		this.attachmentsSize = attachmentsSize;
-	}
-
-	public Boolean getIsNew() {
-		return isNew;
-	}
-
-	public void setIsNew(Boolean isNew) {
-		this.isNew = isNew;
-	}
-
-	public long getStatusCount() {
-		return statusCount;
-	}
-
-	public void setStatusCount(long statusCount) {
-		this.statusCount = statusCount;
-	}
-
-	public long getFriendsCount() {
-		return friendsCount;
-	}
-
-	public void setFriendsCount(long friendsCount) {
-		this.friendsCount = friendsCount;
-	}
-
-	public long getFollowersCount() {
-		return followersCount;
-	}
-
-	public void setFollowersCount(long followersCount) {
-		this.followersCount = followersCount;
-	}
+	  
 
 }

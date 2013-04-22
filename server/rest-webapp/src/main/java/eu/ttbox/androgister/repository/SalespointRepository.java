@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,8 @@ import eu.ttbox.androgister.model.Salespoint;
 @Repository
 public class SalespointRepository {
 
+	private static final Logger LOG = LoggerFactory.getLogger(SalespointRepository.class);
+	
     public static ColumnFamily<String, String> CF_SALESPOINT = ColumnFamily.newColumnFamily("Salespoint", StringSerializer.get(), StringSerializer.get());
 
     @Autowired

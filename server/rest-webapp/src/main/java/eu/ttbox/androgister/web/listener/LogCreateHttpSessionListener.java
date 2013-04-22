@@ -17,6 +17,10 @@ public class LogCreateHttpSessionListener implements HttpSessionListener {
 		LOG.warn("*** *********************************** ***");
 		LOG.warn("*** ********* Session Created ********* ***");
 		LOG.warn("*** *********************************** ***");
+		// Yoyo Le mécréant
+		System.out.println("*** *********************************** ***");
+		System.out.println("*** ********* Session Created ********* ***");
+		System.out.println("*** *********************************** ***");
 	}
 
 	@Override
