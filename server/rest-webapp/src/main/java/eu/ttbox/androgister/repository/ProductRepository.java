@@ -120,11 +120,18 @@ public class ProductRepository {
         }
     }
 
-    @CacheEvict(value = "product-cache", key = "#product.login")
+    @CacheEvict(value = "product-cache", key = "#product.uuid")
     public void remove(Product product) {
         LOG.debug("Deleting product : {} ", product);
-        entityManager.delete(product.uuid);
+        remove(product.uuid); 
+    }
+
+    @CacheEvict(value = "product-cache", key = "#uuid")
+    public void remove(UUID uuid) {
+        LOG.debug("Deleting product : {} ", uuid);
+        entityManager.delete( uuid);
         // removeProductToSalespointline(productUUID);
     }
 
+    
 }

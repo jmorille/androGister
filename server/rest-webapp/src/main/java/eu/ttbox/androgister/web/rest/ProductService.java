@@ -1,8 +1,8 @@
 package eu.ttbox.androgister.web.rest;
 
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.util.TokenBuffer;
 
 import eu.ttbox.androgister.model.Product;
 import eu.ttbox.androgister.repository.ProductRepository;
@@ -78,20 +79,40 @@ public class ProductService {
         LOG.info("Sync {} products ", 3);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-
-//        TokenBuffer buffer = new TokenBuffer(mapper);
-//        JsonParser jp = buffer.asParser();
-        InputStream is = new BufferedInputStream(request.getInputStream(), 1024);
         MappingJsonFactory jsonFactory =  new MappingJsonFactory(mapper);
+        
+        // Prepare Writer  
+        response.setContentType("application/json;charset=UTF-8");
+//        wrapper.setHeader("Content-length", "" + jsonContent.getBytes().length);
+        
+        OutputStream os = response.getOutputStream();
+        JsonGenerator jgen = jsonFactory.createGenerator(os, JsonEncoding.UTF8);
+        jgen.writeStartArray();
+        
+        // Read The file 
+        BufferedReader is =  request.getReader();
         JsonParser jp =jsonFactory.createJsonParser(is);
-        while (jp.nextToken() != JsonToken.END_ARRAY) {
-            
-        } 
-//       
-//       jsonFactory.createJsonParser(is); 
-//        jp.re
-//        buffer.asParser() 
-    }
+        // advance stream to START_ARRAY first:
+        JsonToken firstToken = jp.nextToken();
+        if (firstToken != JsonToken.START_ARRAY) {
+            throw new RuntimeException("Invalid Format");
+        }
+         while (jp.nextToken() == JsonToken.START_OBJECT) {
+             // Read Entity
+            Product entity = mapper.readValue(jp, Product.class);
+            // Save Entity
+            LOG.debug("Read Product entity : {}", entity);
+            productRepository.persist(entity); 
+            // Write the status
+            mapper.writeValue(jgen, entity);
+        }
+        jp.close();
+        is.close();
+
+        // Close Writer 
+        jgen.writeEndArray();
+        jgen.close();
+     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @RequestMapping(value = "/init", method = RequestMethod.GET)

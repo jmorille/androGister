@@ -12,12 +12,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
+import eu.ttbox.androgister.config.cassandra.CassandraAstyanaxConfiguration;
 import eu.ttbox.androgister.config.cassandra.CassandraConfiguration;
 
 @Configuration
 @PropertySource("classpath:/androgister.properties")
 @ComponentScan(basePackages = { "eu.ttbox.androgister.repository" })
-@Import(value = { CassandraConfiguration.class })
+@Import(value = { CassandraAstyanaxConfiguration.class })
 public class ApplicationTestConfiguration {
 
     private final Log log = LogFactory.getLog(ApplicationTestConfiguration.class);

@@ -30,8 +30,8 @@ public abstract class AbstractCassandraTest {
     private static boolean isInitialized = false;
 
  
-    @Autowired
-    private CassandraUserRepository counterRepository;
+//    @Autowired
+//    private CassandraUserRepository counterRepository;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
