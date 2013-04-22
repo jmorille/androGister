@@ -40,7 +40,7 @@ import eu.ttbox.androgister.config.cassandra.ColumnFamilyKeys;
 import eu.ttbox.androgister.model.User;
 import eu.ttbox.androgister.model.UserLight;
 
-@Repository
+//@Repository
 public class CassandraUserRepository {
 
     private static final Logger log = LoggerFactory.getLogger(CassandraUserRepository.class);

@@ -27,76 +27,19 @@ public class Product {
     public String description;
     
     @Column(name = "priceHT")
-    public long priceHT;
+    public Long priceHT;
     
     @Column(name = "tagId")
-    public long tagId;
+    public Long tagId;
     
     @Column(name = "taxeId")
     public Long taxeId;
 
-    public UUID getUuid() {
-        return uuid;
-    }
+     
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public Long getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Long creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public Long getVersionDate() {
-        return versionDate;
-    }
-
-    public void setVersionDate(Long versionDate) {
-        this.versionDate = versionDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public long getPriceHT() {
-        return priceHT;
-    }
-
-    public void setPriceHT(long priceHT) {
-        this.priceHT = priceHT;
-    }
-
-    public long getTagId() {
-        return tagId;
-    }
-
-    public void setTagId(long tagId) {
-        this.tagId = tagId;
-    }
-
-    public Long getTaxeId() {
-        return taxeId;
-    }
-
-    public void setTaxeId(Long taxeId) {
-        this.taxeId = taxeId;
+    @Override
+    public String toString() {
+        return "Product [uuid=" + uuid + ", name=" + name + "]";
     }
     
     

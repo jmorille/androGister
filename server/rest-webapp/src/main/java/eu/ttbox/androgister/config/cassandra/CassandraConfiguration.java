@@ -139,4 +139,7 @@ public class CassandraConfiguration {
         return new EntityManagerImpl(keyspace, packagesToScan);
     }
 
+    
+    
+    
 }

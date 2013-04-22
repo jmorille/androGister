@@ -27,7 +27,7 @@
 
     <secu:intercept-url pattern="/rest/product/**" access="permitAll()" />
     <secu:intercept-url pattern="/product/**" access="permitAll()" />
-    <secu:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+    <secu:intercept-url pattern="/rest/user/**" access="hasRole('ROLE_USER')" />
     <!-- <secu:intercept-url pattern="/rest/**" access="permitAll" /> -->
 
     <secu:logout logout-success-url="/cas-logout.jsp" />
