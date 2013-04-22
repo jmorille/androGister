@@ -25,8 +25,8 @@ public class MetricsConfiguration {
     @Autowired
     private Environment env;
 
-    @Autowired
-    private Keyspace keyspaceOperator;
+//    @Autowired
+//    private Keyspace keyspaceOperator;
 
    
 
@@ -34,7 +34,7 @@ public class MetricsConfiguration {
     public void initMetrics() {
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_METRICS)) {
             log.debug("Initializing Metrics healthchecks");
-            HealthChecks.register(new CassandraHealthCheck(keyspaceOperator));
+//            HealthChecks.register(new CassandraHealthCheck(keyspaceOperator));
 //            HealthChecks.register(new JavaMailHealthCheck(mailService));
 
             String graphiteHost = env.getProperty("app.metrics.graphite.host");

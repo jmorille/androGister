@@ -15,6 +15,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
+import eu.ttbox.androgister.config.cassandra.CassandraAstyanaxConfiguration;
 import eu.ttbox.androgister.config.cassandra.CassandraConfiguration;
 import eu.ttbox.androgister.config.metrics.MetricsConfiguration;
 
@@ -24,7 +25,7 @@ import eu.ttbox.androgister.config.metrics.MetricsConfiguration;
 // , "eu.ttbox.androgister.service"  //
 })
 @Import(value = { 
-CassandraConfiguration.class, MetricsConfiguration.class })
+CassandraAstyanaxConfiguration.class, MetricsConfiguration.class })
 @PropertySource({ "classpath:/androgister.properties" })
 @ImportResource("classpath*:/META-INF/androgister/applicationContext*.xml")
 public class ApplicationConfiguration {
