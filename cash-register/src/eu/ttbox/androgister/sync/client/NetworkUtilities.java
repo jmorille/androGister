@@ -73,7 +73,7 @@ final public class NetworkUtilities {
     public static final int HTTP_REQUEST_TIMEOUT_MS = 30 * 1000;
   
 
-    public static final String BASE_URL = "http://127.0.0.1:8181";
+    public static final String BASE_URL = "http://192.168.1.101:8080";
     /** URI for authentication service */
     public static final String AUTH_URI = BASE_URL + "/auth";
     /** URI for sync service */

@@ -63,56 +63,67 @@ public class ProductService {
         return entities;
     }
 
+    // @Transactional(propagation = Propagation.REQUIRED)
+    // @RequestMapping(value = "/sync", method = RequestMethod.POST, consumes =
+    // MediaType.APPLICATION_JSON_VALUE)
+    // @ResponseBody
+    // public List<Product> syncProducts(@RequestBody List<Product> products) {
+    //
+    // LOG.info("Sync {} products ", products.size());
+    // return products;
+    // }
+
     @Transactional(propagation = Propagation.REQUIRED)
     @RequestMapping(value = "/sync", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Product> syncProducts(@RequestBody List<Product> products) {
-
-        LOG.info("Sync {} products ", products.size());
-        return products;
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @RequestMapping(value = "/synco", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public void syncProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        LOG.info("Sync {} products ", 3);
+    public void syncProducts(@RequestParam(value = "syncstate", defaultValue = "-1") long syncstate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        LOG.info("Sync Begin products : Last Sync State {}", syncstate);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        MappingJsonFactory jsonFactory =  new MappingJsonFactory(mapper);
-        
-        // Prepare Writer  
+        MappingJsonFactory jsonFactory = new MappingJsonFactory(mapper);
+
+        // Prepare Writer
         response.setContentType("application/json;charset=UTF-8");
-//        wrapper.setHeader("Content-length", "" + jsonContent.getBytes().length);
-        
+        // wrapper.setHeader("Content-length", "" +
+        // jsonContent.getBytes().length);
+
         OutputStream os = response.getOutputStream();
         JsonGenerator jgen = jsonFactory.createGenerator(os, JsonEncoding.UTF8);
         jgen.writeStartArray();
-        
-        // Read The file 
-        BufferedReader is =  request.getReader();
-        JsonParser jp =jsonFactory.createJsonParser(is);
+
+        // ServletServerHttpResponse responseHeader = new
+        // ServletServerHttpResponse(response);
+        // MappingJackson2HttpMessageConverter jsonConverter = new
+        // MappingJackson2HttpMessageConverter();
+        // MediaType jsonMimeType = MediaType.APPLICATION_JSON;
+        // jsonConverter.write(entity, jsonMimeType,responseHeader);
+
+        // Read The file
+        BufferedReader is = request.getReader();
+        JsonParser jp = jsonFactory.createJsonParser(is);
         // advance stream to START_ARRAY first:
         JsonToken firstToken = jp.nextToken();
         if (firstToken != JsonToken.START_ARRAY) {
             throw new RuntimeException("Invalid Format");
         }
-         while (jp.nextToken() == JsonToken.START_OBJECT) {
-             // Read Entity
+        while (jp.nextToken() == JsonToken.START_OBJECT) {
+            // Read Entity
             Product entity = mapper.readValue(jp, Product.class);
             // Save Entity
             LOG.debug("Read Product entity : {}", entity);
-            productRepository.persist(entity); 
+            productRepository.persist(entity);
             // Write the status
             mapper.writeValue(jgen, entity);
+            jgen.flush();
         }
         jp.close();
         is.close();
 
-        // Close Writer 
+        // Close Writer
         jgen.writeEndArray();
         jgen.close();
-     }
+        LOG.info("Sync {} products ", "End");
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @RequestMapping(value = "/init", method = RequestMethod.GET)

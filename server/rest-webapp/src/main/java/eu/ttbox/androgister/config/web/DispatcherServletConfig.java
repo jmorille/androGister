@@ -119,20 +119,20 @@ public class DispatcherServletConfig extends WebMvcConfigurerAdapter {
 //                .setCachePeriod(60 * 60 * 24 * 30);
 //    }
 
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-        exceptionResolvers.add(new HandlerExceptionResolver() {
-
-            @Override
-            public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-                try {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                    return new ModelAndView();
-                } catch (Exception handlerException) {
-                    log.warn("Handling of [" + ex.getClass().getName() + "] resulted in Exception", handlerException);
-                }
-                return null;
-            }
-        });
-    }
+//    @Override
+//    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+//        exceptionResolvers.add(new HandlerExceptionResolver() {
+//
+//            @Override
+//            public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+//                try {
+//                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+//                    return new ModelAndView();
+//                } catch (Exception handlerException) {
+//                    log.warn("Handling of [" + ex.getClass().getName() + "] resulted in Exception", handlerException);
+//                }
+//                return null;
+//            }
+//        });
+//    }
 }

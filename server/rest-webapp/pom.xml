@@ -931,7 +931,7 @@
           <!-- Spécifiez le mot de passe de la clé pour <tomcat> -->
           <!-- (appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : "appuyez sur la touche Entrée" -->
 
-          <hostName>GF219896</hostName>
+<!--           <hostName>GF219896</hostName> -->
           <httpsPort>9443</httpsPort>
           <keystoreFile>../../../cas-webapp/castore</keystoreFile>
           <keystorePass>${castore.password}</keystorePass>

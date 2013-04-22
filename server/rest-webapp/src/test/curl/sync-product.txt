@@ -1,0 +1,5 @@
+curl -XPOST -H "Content-Type: application/json" 'http://localhost:8080/app/rest/product/sync?syncstate=9383' -d '[{"name":"Product name 18","description":"Product name 18","priceHT":18,"tagId":null,"taxeId":null},
+{"name":"Product name 13","description":"Product name 13","priceHT":13,"tagId":null,"taxeId":null},
+{"name":"Product name 21","description":"Product name 21","priceHT":21,"tagId":null,"taxeId":null}
+]
+'
