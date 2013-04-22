@@ -27,6 +27,7 @@
 
     <secu:intercept-url pattern="/rest/product/**" access="permitAll()" />
     <secu:intercept-url pattern="/product/**" access="permitAll()" />
+    <secu:intercept-url pattern="/rest/auth/**" access="hasRole('ROLE_USER')" />
     <secu:intercept-url pattern="/rest/user/**" access="hasRole('ROLE_USER')" />
     <!-- <secu:intercept-url pattern="/rest/**" access="permitAll" /> -->
 
@@ -101,10 +102,13 @@
  
    <bean  id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" /> 
   
+   
   <!--    p:proxyReceptorUrl="/j_spring_cas_security_proxyreceptor" -->
-  <bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter" p:authenticationManager-ref="authenticationManager"
-    p:serviceProperties-ref="serviceProperties" p:proxyGrantingTicketStorage-ref="pgtStorage" 
-    p:proxyReceptorUrl="/rest/j_spring_cas_security_proxyreceptor">
+  <bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter" 
+      p:authenticationManager-ref="authenticationManager"
+      p:serviceProperties-ref="serviceProperties" 
+      p:proxyGrantingTicketStorage-ref="pgtStorage" 
+      p:proxyReceptorUrl="/rest/j_spring_cas_security_proxyreceptor">
     <property name="authenticationDetailsSource">
       <bean class="org.springframework.security.cas.web.authentication.ServiceAuthenticationDetailsSource" />
     </property>
