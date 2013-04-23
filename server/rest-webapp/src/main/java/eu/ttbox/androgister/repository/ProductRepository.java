@@ -14,14 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 
+import com.google.common.base.Function;
 import com.netflix.astyanax.ColumnListMutation;
 import com.netflix.astyanax.Keyspace;
 import com.netflix.astyanax.MutationBatch;
 import com.netflix.astyanax.connectionpool.OperationResult;
 import com.netflix.astyanax.connectionpool.exceptions.ConnectionException;
 import com.netflix.astyanax.entitystore.DefaultEntityManager;
-import com.netflix.astyanax.entitystore.EntityManager;
+import com.netflix.astyanax.entitystore.MyEntityMapperFactoty;
 import com.netflix.astyanax.model.ColumnFamily;
+import com.netflix.astyanax.model.ColumnList;
+import com.netflix.astyanax.model.CqlResult;
+import com.netflix.astyanax.model.Row;
+import com.netflix.astyanax.model.Rows;
+import com.netflix.astyanax.query.IndexQuery;
 import com.netflix.astyanax.serializers.StringSerializer;
 import com.netflix.astyanax.serializers.UUIDSerializer;
 
@@ -37,7 +43,7 @@ public class ProductRepository {
     @Autowired
     public Keyspace keyspace;
 
-    public EntityManager<Product, UUID> entityManager;
+    public DefaultEntityManager<Product, UUID> entityManager;
 
     public enum ProductColumn {
         uuid, name, description, priceHT;
@@ -60,12 +66,55 @@ public class ProductRepository {
         return entityManager.getAll();
     }
 
+    public void findEntityUpdatedFrom(String salespointId, long timestamp, Function<Product, Boolean> callback) throws ConnectionException {
+
+        IndexQuery<UUID, String> query = keyspace.prepareQuery(CF_PRODUCT) //
+                .searchWithIndex() //
+                .setRowLimit(20) // This is the page size
+                .withColumnSlice("versionDate")
+                .autoPaginateRows(true)//
+                .addExpression().whereColumn("salepointId").equals().value(salespointId) //
+                .addExpression().whereColumn("versionDate").greaterThanEquals().value(timestamp) //
+
+        ;
+
+        int pageCount = 0;
+        int rowCount = 0;
+        OperationResult<Rows<UUID, String>> result;
+        while (!(result = query.execute()).getResult().isEmpty()) {
+            pageCount++;
+            rowCount += result.getResult().size();
+            for (Row<UUID, String> row : result.getResult()) {
+                // TODO
+                Product entity = entityManager.get(row.getKey());
+                // TODO
+                // UUID id = row.getKey();
+                // ColumnList<String> cl = row.getColumns();
+                // Product entity = entityManager.constructEntity(id, cl);
+                callback.apply(entity);
+            }
+        }
+
+    }
+
+    // public void findEntityUpdatedFrom(long timestamp) throws
+    // ConnectionException {
+    // OperationResult<CqlResult<UUID, String>> result =
+    // keyspace.prepareQuery(CF_PRODUCT)//
+    // .withCql("SELECT  * FROM Product where versionDate > ?") //
+    // .asPreparedStatement() //
+    // .withLongValue(timestamp) //
+    // .execute();
+    //
+    // }
+
     public void persist(Product product) {
         LOG.debug("Creating product : {}", product);
         // validateEntity(product);
         if (product.uuid == null) {
             product.uuid = UUID.randomUUID();// TimeUUIDUtils.getUniqueTimeUUIDinMillis();
         }
+        product.versionDate = System.currentTimeMillis();
         entityManager.put(product);
         // addProductToSalespointline(product.uuid);
 
@@ -123,15 +172,14 @@ public class ProductRepository {
     @CacheEvict(value = "product-cache", key = "#product.uuid")
     public void remove(Product product) {
         LOG.debug("Deleting product : {} ", product);
-        remove(product.uuid); 
+        remove(product.uuid);
     }
 
     @CacheEvict(value = "product-cache", key = "#uuid")
     public void remove(UUID uuid) {
         LOG.debug("Deleting product : {} ", uuid);
-        entityManager.delete( uuid);
+        entityManager.delete(uuid);
         // removeProductToSalespointline(productUUID);
     }
 
-    
 }

@@ -43,9 +43,9 @@ public class CassandraAstyanaxConfiguration {
     private AstyanaxContext<Keyspace> context;
 
     @PreDestroy
-    public void destroy() { 
+    public void destroy() {
         log.info("Closing Astyanax connection pool");
-        context.shutdown(); 
+        context.shutdown();
     }
 
     @Bean
@@ -63,28 +63,29 @@ public class CassandraAstyanaxConfiguration {
                         .setDiscoveryType(NodeDiscoveryType.RING_DESCRIBE) //
                         .setCqlVersion("3.0.1") //
                         .setTargetCassandraVersion("1.2") //
-                ).withConnectionPoolConfiguration(new ConnectionPoolConfigurationImpl(cassandraClusterName+"_"+cassandraKeyspace) //
+                ).withConnectionPoolConfiguration(new ConnectionPoolConfigurationImpl(cassandraClusterName + "_" + cassandraKeyspace) //
                         .setPort(9160) //
                         .setMaxConnsPerHost(1) //
                         .setSeeds(cassandraHost) //
-                )//.withConnectionPoolMonitor(new CountingConnectionPoolMonitor())//
+                )// .withConnectionPoolMonitor(new
+                 // CountingConnectionPoolMonitor())//
                 .buildKeyspace(ThriftFamilyFactory.getInstance());
         this.context = context; // Keep ref to close it
-        
-        // Start Context 
-        context.start(); 
-        // Use Key space 
-         Keyspace keyspace = context.getClient(); 
-         
-         // Keyspace definition
-         KeyspaceDefinition ksDef = null;
+
+        // Start Context
+        context.start();
+        // Use Key space
+        Keyspace keyspace = context.getClient();
+
+        // Keyspace definition
+        KeyspaceDefinition ksDef = null;
         try {
-        ksDef = keyspace.describeKeyspace();
-        } catch (ConnectionException e){
+            ksDef = keyspace.describeKeyspace();
+        } catch (ConnectionException e) {
             log.info("-------------- KeyspaceDefinition : ConnectionException " + e.getMessage());
-         }
+        }
         log.info("-------------- KeyspaceDefinition : " + ksDef);
-        if (ksDef == null) { 
+        if (ksDef == null) {
             // Model
             keyspace.createKeyspace(ImmutableMap.<String, Object> builder() //
                     .put("strategy_options", ImmutableMap.<String, Object> builder()//
@@ -95,12 +96,40 @@ public class CassandraAstyanaxConfiguration {
             );
             keyspace.createColumnFamily(SalespointRepository.CF_SALESPOINT, ImmutableMap.<String, Object> builder() //
                     .put("default_validation_class", "UTF8Type") //
-                    .put("key_validation_class", "UTF8Type") //
-                    .put("comparator_type", "UTF8Type") //
+                    .put("key_validation_class", "AsciiType") //
+                    .put("comparator_type", "AsciiType") //
                     .build());
 
             keyspace.createColumnFamily(UserRepository.CF_USER, null);
-            keyspace.createColumnFamily(ProductRepository.CF_PRODUCT, null);
+
+            keyspace.createColumnFamily(ProductRepository.CF_PRODUCT, ImmutableMap.<String, Object> builder() //
+                    // .put("default_validation_class", "UTF8Type") //
+                    .put("key_validation_class", "UUIDType") //
+                    .put("comparator_type", "AsciiType") //
+                    .put("column_metadata", ImmutableMap.<String, Object> builder() //
+                            .put("versionDate", ImmutableMap.<String, Object> builder()//
+                                    .put("validation_class", "LongType")//DateType 
+                                    .put("index_name", "product_versionDate")//
+                                    .put("index_type", "KEYS")//
+                                    .build()) //
+                            .put("salepointId", ImmutableMap.<String, Object> builder()//
+                                    .put("validation_class", "UTF8Type")//
+                                    .put("index_name", "product_salepointId")//
+                                    .put("index_type", "KEYS")//
+                                    .build())//
+                            .put("priceHT", ImmutableMap.<String, Object> builder()//
+                                    .put("validation_class", "LongType")//
+                                    .build())//
+                            .put("name", ImmutableMap.<String, Object> builder()//
+                                    .put("validation_class", "UTF8Type") //
+                                    .build())//
+                            .put("description", ImmutableMap.<String, Object> builder()//
+                                    .put("validation_class", "UTF8Type") //
+                                    .build())//
+
+                            .build())//
+                    .build());
+
         }
         return keyspace;
     }

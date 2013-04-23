@@ -17,9 +17,13 @@ public class Product {
     @Column(name = "creationDate")
     public Long creationDate;
 
-    @Column(name = "creationDate")
+    @Column(name = "versionDate")
     public Long versionDate;
 
+    @Column(name = "salepointId")
+    public String salepointId;
+
+    
     @Column(name = "name")
     public String name;
     

@@ -24,12 +24,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.base.Function;
+import com.netflix.astyanax.connectionpool.exceptions.ConnectionException;
 
 import eu.ttbox.androgister.model.Product;
 import eu.ttbox.androgister.repository.ProductRepository;
@@ -76,9 +80,10 @@ public class ProductService {
     @Transactional(propagation = Propagation.REQUIRED)
     @RequestMapping(value = "/sync", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void syncProducts(@RequestParam(value = "syncstate", defaultValue = "-1") long syncstate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void syncProducts(@RequestParam(value = "syncstate", defaultValue = "-1") long syncstate, HttpServletRequest request, HttpServletResponse response) throws IOException, ConnectionException {
+        long begin = System.currentTimeMillis();
         LOG.info("Sync Begin products : Last Sync State {}", syncstate);
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         MappingJsonFactory jsonFactory = new MappingJsonFactory(mapper);
 
@@ -88,7 +93,7 @@ public class ProductService {
         // jsonContent.getBytes().length);
 
         OutputStream os = response.getOutputStream();
-        JsonGenerator jgen = jsonFactory.createGenerator(os, JsonEncoding.UTF8);
+        final JsonGenerator jgen = jsonFactory.createGenerator(os, JsonEncoding.UTF8);
         jgen.writeStartArray();
 
         // ServletServerHttpResponse responseHeader = new
@@ -116,13 +121,33 @@ public class ProductService {
             mapper.writeValue(jgen, entity);
             jgen.flush();
         }
+        // Read Other modify
+        Function<Product, Boolean> callback = new Function<Product, Boolean>() {
+
+            @Override
+            public Boolean apply(Product entity) {
+                try {
+                    mapper.writeValue(jgen, entity);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return Boolean.FALSE;
+                }
+                return Boolean.TRUE;
+            }
+
+        };
+        String salespointId = "ttbox"; // TODO 
+        productRepository.findEntityUpdatedFrom(salespointId,syncstate, callback);
+
         jp.close();
         is.close();
 
         // Close Writer
         jgen.writeEndArray();
         jgen.close();
-        LOG.info("Sync {} products ", "End");
+        long end = System.currentTimeMillis();
+
+        LOG.info("Sync {} products  in {} ms", "End", (end-begin));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -145,6 +170,7 @@ public class ProductService {
 
         product.name = "Product name " + productId;
         product.description = "Product name " + productId;
+        product.salepointId = "ttbox";
         product.priceHT = Long.valueOf(productId);
         return product;
     }
