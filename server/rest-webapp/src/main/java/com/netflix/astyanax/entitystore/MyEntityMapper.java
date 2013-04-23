@@ -19,6 +19,7 @@ public class MyEntityMapper<T, K> {
 
     public T constructEntity(K id, ColumnList<String> cl) {
         return entityMapper.constructEntity(id, cl);
+        // TODO lifecycleHandler.onPostLoad(entity);
     }
 
     public K getEntityId(T entity) throws Exception {

@@ -24,6 +24,7 @@ import com.netflix.astyanax.connectionpool.exceptions.ConnectionException;
 import com.netflix.astyanax.entitystore.DefaultEntityManager;
 import com.netflix.astyanax.entitystore.MyEntityMapper;
 import com.netflix.astyanax.model.ColumnFamily;
+import com.netflix.astyanax.model.ColumnList;
 import com.netflix.astyanax.model.Row;
 import com.netflix.astyanax.model.Rows;
 import com.netflix.astyanax.query.IndexQuery;
@@ -87,27 +88,19 @@ public class ProductRepository {
             rowCount += result.getResult().size();
             for (Row<UUID, String> row : result.getResult()) {
                 // TODO
-                Product entity = entityManager.get(row.getKey());
+                // Product entity = entityManager.get(row.getKey());
                 // TODO
-                // UUID id = row.getKey();
-                // ColumnList<String> cl = row.getColumns();
-                // Product entity = entityManager.constructEntity(id, cl);
+                UUID id = row.getKey();
+                ColumnList<String> cl = row.getColumns();
+                if (cl.isEmpty())
+                    continue;
+                Product entity = entityMapper.constructEntity(id, cl);
                 callback.apply(entity);
             }
         }
 
     }
-
-    // public void findEntityUpdatedFrom(long timestamp) throws
-    // ConnectionException {
-    // OperationResult<CqlResult<UUID, String>> result =
-    // keyspace.prepareQuery(CF_PRODUCT)//
-    // .withCql("SELECT  * FROM Product where versionDate > ?") //
-    // .asPreparedStatement() //
-    // .withLongValue(timestamp) //
-    // .execute();
-    //
-    // }
+ 
 
     public void persist(Product product) {
         long now = System.currentTimeMillis();
@@ -152,7 +145,7 @@ public class ProductRepository {
         if (uuid == null) {
             uuid = UUID.randomUUID();// TimeUUIDUtils.getUniqueTimeUUIDinMillis();
             entity.put(ProductColumn.uuid.name(), uuid);
-            entity.put(ProductColumn.creationDate.name(), updateTime); 
+            entity.put(ProductColumn.creationDate.name(), updateTime);
         } else {
             // Get Previous
             // getById(uuid);
@@ -202,10 +195,15 @@ public class ProductRepository {
     @CacheEvict(value = "product-cache", key = "#uuid")
     public void remove(UUID uuid, String salepointId) {
         LOG.debug("Deleting product : {} ", uuid);
-        entityManager.delete(uuid);
+
+//         entityManager.delete(uuid); 
+        // removeProductToSalespointline(salepointId, uuid);
         // Deps
         try {
-            removeProductToSalespointline(salepointId, uuid);
+            MutationBatch mb = keyspace.prepareMutationBatch();// public entityManager.newMutationBatch()
+            mb.withRow(CF_PRODUCT, uuid).delete();
+            mb.withRow(CF_SALESPOINT_PRODUCT, salepointId).deleteColumn(uuid);
+            mb.execute();
         } catch (Exception e) {
             throw new PersistenceException("failed to put entity ", e);
         }
