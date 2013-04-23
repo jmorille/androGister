@@ -95,22 +95,25 @@ public class CassandraAstyanaxConfiguration {
                     .build()//
             );
             keyspace.createColumnFamily(SalespointRepository.CF_SALESPOINT, ImmutableMap.<String, Object> builder() //
-                    .put("default_validation_class", "UTF8Type") //
                     .put("key_validation_class", "AsciiType") //
                     .put("comparator_type", "AsciiType") //
+                    .put("default_validation_class", "UTF8Type") //
                     .build());
 
             keyspace.createColumnFamily(UserRepository.CF_USER, null);
 
             keyspace.createColumnFamily(ProductRepository.CF_PRODUCT, ImmutableMap.<String, Object> builder() //
-                    // .put("default_validation_class", "UTF8Type") //
                     .put("key_validation_class", "UUIDType") //
                     .put("comparator_type", "AsciiType") //
+                    // .put("default_validation_class", "UTF8Type") //
                     .put("column_metadata", ImmutableMap.<String, Object> builder() //
                             .put("versionDate", ImmutableMap.<String, Object> builder()//
-                                    .put("validation_class", "LongType")//DateType 
+                                    .put("validation_class", "LongType")// DateType
                                     .put("index_name", "product_versionDate")//
                                     .put("index_type", "KEYS")//
+                                    .build()) //
+                            .put("creationDate", ImmutableMap.<String, Object> builder()//
+                                    .put("validation_class", "LongType")// DateType
                                     .build()) //
                             .put("salepointId", ImmutableMap.<String, Object> builder()//
                                     .put("validation_class", "UTF8Type")//
@@ -128,6 +131,12 @@ public class CassandraAstyanaxConfiguration {
                                     .build())//
 
                             .build())//
+                    .build());
+
+            keyspace.createColumnFamily(ProductRepository.CF_SALESPOINT_PRODUCT, ImmutableMap.<String, Object> builder() //
+                    .put("key_validation_class", "AsciiType") //
+                    .put("comparator_type", "UUIDType") //
+                    .put("default_validation_class", "LongType") //
                     .build());
 
         }

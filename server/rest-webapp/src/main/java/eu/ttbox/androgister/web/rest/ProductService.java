@@ -111,12 +111,13 @@ public class ProductService {
         if (firstToken != JsonToken.START_ARRAY) {
             throw new RuntimeException("Invalid Format");
         }
+        
         while (jp.nextToken() == JsonToken.START_OBJECT) {
             // Read Entity
             Product entity = mapper.readValue(jp, Product.class);
             // Save Entity
             LOG.debug("Read Product entity : {}", entity);
-            productRepository.persist(entity);
+            productRepository.persist(entity, begin);
             // Write the status
             mapper.writeValue(jgen, entity);
             jgen.flush();

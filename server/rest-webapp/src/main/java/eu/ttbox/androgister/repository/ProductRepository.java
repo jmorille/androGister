@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.PersistenceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,8 @@ import com.netflix.astyanax.MutationBatch;
 import com.netflix.astyanax.connectionpool.OperationResult;
 import com.netflix.astyanax.connectionpool.exceptions.ConnectionException;
 import com.netflix.astyanax.entitystore.DefaultEntityManager;
-import com.netflix.astyanax.entitystore.MyEntityMapperFactoty;
+import com.netflix.astyanax.entitystore.MyEntityMapper;
 import com.netflix.astyanax.model.ColumnFamily;
-import com.netflix.astyanax.model.ColumnList;
-import com.netflix.astyanax.model.CqlResult;
 import com.netflix.astyanax.model.Row;
 import com.netflix.astyanax.model.Rows;
 import com.netflix.astyanax.query.IndexQuery;
@@ -39,14 +38,16 @@ public class ProductRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ProductRepository.class);
 
     public static ColumnFamily<UUID, String> CF_PRODUCT = ColumnFamily.newColumnFamily("Product", UUIDSerializer.get(), StringSerializer.get());
+    public static ColumnFamily<String, UUID> CF_SALESPOINT_PRODUCT = ColumnFamily.newColumnFamily("SalepointProduct", StringSerializer.get(), UUIDSerializer.get());
 
     @Autowired
     public Keyspace keyspace;
 
     public DefaultEntityManager<Product, UUID> entityManager;
+    public MyEntityMapper<Product, UUID> entityMapper;
 
     public enum ProductColumn {
-        uuid, name, description, priceHT;
+        uuid, salepointId, versionDate, creationDate, name, description, priceHT;
     }
 
     @PostConstruct
@@ -56,6 +57,7 @@ public class ProductRepository {
                 .withKeyspace(keyspace) //
                 .withColumnFamily(CF_PRODUCT) //
                 .build();
+        entityMapper = new MyEntityMapper<Product, UUID>(Product.class);
     }
 
     public Product findById(UUID uuid) {
@@ -71,8 +73,7 @@ public class ProductRepository {
         IndexQuery<UUID, String> query = keyspace.prepareQuery(CF_PRODUCT) //
                 .searchWithIndex() //
                 .setRowLimit(20) // This is the page size
-                .withColumnSlice("versionDate")
-                .autoPaginateRows(true)//
+                .withColumnSlice("versionDate").autoPaginateRows(true)//
                 .addExpression().whereColumn("salepointId").equals().value(salespointId) //
                 .addExpression().whereColumn("versionDate").greaterThanEquals().value(timestamp) //
 
@@ -109,28 +110,54 @@ public class ProductRepository {
     // }
 
     public void persist(Product product) {
+        long now = System.currentTimeMillis();
+        persist(product, now);
+    }
+
+    public void persist(Product product, long updateTime) {
         LOG.debug("Creating product : {}", product);
         // validateEntity(product);
         if (product.uuid == null) {
             product.uuid = UUID.randomUUID();// TimeUUIDUtils.getUniqueTimeUUIDinMillis();
+            product.creationDate = updateTime;
         }
-        product.versionDate = System.currentTimeMillis();
+        product.versionDate = updateTime;
         entityManager.put(product);
-        // addProductToSalespointline(product.uuid);
-
+        // Deps
+        try {
+            addProductToSalespointline(product.salepointId, product.uuid, updateTime);
+        } catch (Exception e) {
+            throw new PersistenceException("failed to put entity ", e);
+        }
         LOG.debug("Creating End product : {}", product);
     }
 
+    private void addProductToSalespointline(String salespointId, UUID uuid, long updateTime) throws ConnectionException {
+        MutationBatch mb = keyspace.prepareMutationBatch();
+        mb.withRow(CF_SALESPOINT_PRODUCT, salespointId).putColumn(uuid, updateTime);
+        mb.execute();
+    }
+
+    private void removeProductToSalespointline(String salespointId, UUID uuid) throws ConnectionException {
+        MutationBatch mb = keyspace.prepareMutationBatch();
+        mb.withRow(CF_SALESPOINT_PRODUCT, salespointId).deleteColumn(uuid);
+        mb.execute();
+    }
+
     public void persist(Map<String, Object> entity) {
+        long updateTime = System.currentTimeMillis();
         // Define Id
         UUID uuid = (UUID) entity.get(ProductColumn.uuid.name());
+        String salepointId = (String) entity.get(ProductColumn.salepointId.name());
         if (uuid == null) {
             uuid = UUID.randomUUID();// TimeUUIDUtils.getUniqueTimeUUIDinMillis();
             entity.put(ProductColumn.uuid.name(), uuid);
+            entity.put(ProductColumn.creationDate.name(), updateTime); 
         } else {
             // Get Previous
             // getById(uuid);
         }
+        entity.put(ProductColumn.versionDate.name(), updateTime);
         // Save It
         MutationBatch m = keyspace.prepareMutationBatch();
         ColumnListMutation<String> updaterEntity = m.withRow(CF_PRODUCT, uuid); //
@@ -143,14 +170,11 @@ public class ProductRepository {
         }
         try {
             OperationResult<Void> result = m.execute();
-        } catch (ConnectionException e) {
-            LOG.error("Error Persisting Entity Product : " + e.getMessage(), e);
+            // Deps
+            addProductToSalespointline(salepointId, uuid, updateTime);
+        } catch (Exception e) {
+            throw new PersistenceException("failed to put entity ", e);
         }
-        // Dep
-        // ColumnFamilyUpdater<String, UUID> spUpdater =
-        // productSalespointTemplate.createUpdater("salepoint");
-        // spUpdater.setByteArray(uuid, new byte[0]);
-        // productSalespointTemplate.update(spUpdater);
     }
 
     public void setColumnListMutation(ColumnListMutation<String> updaterEntity, String columnName, Object value) {
@@ -172,14 +196,19 @@ public class ProductRepository {
     @CacheEvict(value = "product-cache", key = "#product.uuid")
     public void remove(Product product) {
         LOG.debug("Deleting product : {} ", product);
-        remove(product.uuid);
+        remove(product.uuid, product.salepointId);
     }
 
     @CacheEvict(value = "product-cache", key = "#uuid")
-    public void remove(UUID uuid) {
+    public void remove(UUID uuid, String salepointId) {
         LOG.debug("Deleting product : {} ", uuid);
         entityManager.delete(uuid);
-        // removeProductToSalespointline(productUUID);
+        // Deps
+        try {
+            removeProductToSalespointline(salepointId, uuid);
+        } catch (Exception e) {
+            throw new PersistenceException("failed to put entity ", e);
+        }
     }
 
 }
