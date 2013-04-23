@@ -74,10 +74,10 @@ public class ProductRepository {
         IndexQuery<UUID, String> query = keyspace.prepareQuery(CF_PRODUCT) //
                 .searchWithIndex() //
                 .setRowLimit(20) // This is the page size
-                .withColumnSlice("versionDate").autoPaginateRows(true)//
+                .autoPaginateRows(true)//
+                .withColumnSlice("versionDate")//
                 .addExpression().whereColumn("salepointId").equals().value(salespointId) //
                 .addExpression().whereColumn("versionDate").greaterThanEquals().value(timestamp) //
-
         ;
 
         int pageCount = 0;
@@ -100,7 +100,6 @@ public class ProductRepository {
         }
 
     }
- 
 
     public void persist(Product product) {
         long now = System.currentTimeMillis();
@@ -196,11 +195,12 @@ public class ProductRepository {
     public void remove(UUID uuid, String salepointId) {
         LOG.debug("Deleting product : {} ", uuid);
 
-//         entityManager.delete(uuid); 
+        // entityManager.delete(uuid);
         // removeProductToSalespointline(salepointId, uuid);
         // Deps
         try {
-            MutationBatch mb = keyspace.prepareMutationBatch();// public entityManager.newMutationBatch()
+            MutationBatch mb = keyspace.prepareMutationBatch();// public
+                                                               // entityManager.newMutationBatch()
             mb.withRow(CF_PRODUCT, uuid).delete();
             mb.withRow(CF_SALESPOINT_PRODUCT, salepointId).deleteColumn(uuid);
             mb.execute();
