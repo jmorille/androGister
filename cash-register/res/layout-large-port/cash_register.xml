@@ -3,22 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/appwidget_bg"  >
-
-    <fragment
-        android:id="@+id/fragment_product_selector"
-        android:name="eu.ttbox.androgister.ui.product.ProductSelectorFragment"
-        android:layout_width="837dp"
-        android:layout_height="match_parent"
-        tools:layout="@layout/product_selector" />
+    android:background="@drawable/appwidget_bg" >
 
     <fragment
         android:id="@+id/fragment_register_basket"
         android:name="eu.ttbox.androgister.ui.register.RegisterMultiBasketFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="465dp"
-        android:layout_alignTop="@id/fragment_product_selector"
-        android:layout_toRightOf="@id/fragment_product_selector"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         tools:layout="@layout/register_multi_basket" />
 
     <fragment
@@ -26,8 +17,15 @@
         android:name="eu.ttbox.androgister.ui.register.RegisterKeyboardFragment"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/fragment_register_basket"
-        android:layout_toRightOf="@id/fragment_product_selector"
+        android:layout_toRightOf="@id/fragment_register_basket" 
         tools:layout="@layout/register_keyboard" />
+
+    <fragment
+        android:id="@+id/fragment_product_selector"
+        android:name="eu.ttbox.androgister.ui.product.ProductSelectorFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/fragment_register_basket"
+        tools:layout="@layout/product_selector" />
 
 </RelativeLayout>
