@@ -1,0 +1,20 @@
+{
+"header" : {
+      "syncDate" : 1366814257804,
+      "now" : 1366810594302,
+      "clientId" : "CLIENT-ID_01"
+    },
+"synced" : [
+    {"serverId":"ba30dbc9-c8a2-4526-9beb-c5231a9b091d","versionDate":1366810357804},
+    {"serverId":"8113708d-649f-486a-811e-31337b9e3ad4","versionDate":1366810357804}
+    ], 
+"updated" : [
+    {"name":"Product name 18","description":"Product name 18","priceHT":18,"tagId":null,"taxeId":null},
+    {"name":"Product name 13","description":"Product name 13","priceHT":13,"tagId":null,"taxeId":null},
+    {"name":"Product name 21","description":"Product name 21","priceHT":21,"tagId":null,"taxeId":null}
+    ],
+"deleted" : [
+    {"serverId":"b1833028-6885-4f99-8685-dfd8749c1a76","versionDate":1366810357804},
+    {"serverId":"d37121c6-662e-4d54-bd2a-e9e44d806ef","versionDate":1366810357804}
+    ]
+}

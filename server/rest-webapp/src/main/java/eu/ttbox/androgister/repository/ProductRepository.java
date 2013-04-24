@@ -103,21 +103,21 @@ public class ProductRepository {
 
     public void persist(Product product) {
         long now = System.currentTimeMillis();
-        persist(product, now);
+        persist(product,  Long.valueOf( now));
     }
 
-    public void persist(Product product, long updateTime) {
+    public void persist(Product product, Long updateTime) {
         LOG.debug("Creating product : {}", product);
         // validateEntity(product);
         if (product.uuid == null) {
-            product.uuid = UUID.randomUUID();// TimeUUIDUtils.getUniqueTimeUUIDinMillis();
+            product.uuid = UUID.randomUUID();
             product.creationDate = updateTime;
         }
         product.versionDate = updateTime;
         entityManager.put(product);
         // Deps
         try {
-            addProductToSalespointline(product.salepointId, product.uuid, updateTime);
+//            addProductToSalespointline(product.salepointId, product.uuid, updateTime);
         } catch (Exception e) {
             throw new PersistenceException("failed to put entity ", e);
         }

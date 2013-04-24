@@ -3,6 +3,7 @@ package eu.ttbox.androgister.web.rest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,25 +113,33 @@ public class ProductService {
             throw new RuntimeException("Invalid Format");
         }
         
+        final HashMap<UUID, Long> updatedEntity = new HashMap<UUID, Long>();
+        
         while (jp.nextToken() == JsonToken.START_OBJECT) {
             // Read Entity
             Product entity = mapper.readValue(jp, Product.class);
             // Save Entity
             LOG.debug("Read Product entity : {}", entity);
             productRepository.persist(entity, begin);
+            updatedEntity.put(entity.uuid, entity.versionDate);
             // Write the status
             mapper.writeValue(jgen, entity);
             jgen.flush();
         }
+        
         // Read Other modify
         Function<Product, Boolean> callback = new Function<Product, Boolean>() {
 
             @Override
             public Boolean apply(Product entity) {
                 try {
-                    mapper.writeValue(jgen, entity);
+                	Long clientVersion = updatedEntity.get(entity.uuid);
+                	if (clientVersion==null || !clientVersion.equals(entity.versionDate)) {
+                		// Send server version
+                		mapper.writeValue(jgen, entity);
+                	}
                 } catch (Exception e) {
-                    e.printStackTrace();
+                	LOG.error("Callback read error : " + e.getMessage(), e);
                     return Boolean.FALSE;
                 }
                 return Boolean.TRUE;

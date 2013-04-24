@@ -132,7 +132,7 @@ ther than an HTTPS URL whereat they are able to
 				<!-- <bean  class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" />  -->
 			        <bean class="org.jasig.cas.adaptors.generic.AcceptUsersAuthenticationHandler">
 			          <property name="users"><map>
-                                      <entry key="jmorille" value="jmorille" />
+                                      <entry key="jmorille" value="pass" />
                                       <entry key="llarcher" value="llarcher"/>
                                   </map></property>
                                </bean>
