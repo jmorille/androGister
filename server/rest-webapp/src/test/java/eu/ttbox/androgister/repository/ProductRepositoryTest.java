@@ -41,7 +41,8 @@ public class ProductRepositoryTest extends AbstractCassandraTest {
         Product readEntity = repository.findById(uuid);
         Assert.assertNotNull(readEntity);
         // Delete
-        repository.remove(uuid);
+        String salespointId = "ttbox";
+        repository.remove(uuid, salespointId);
         // Re Read
         Product reReadEntity = repository.findById(uuid);
         Assert.assertNull(reReadEntity);    
