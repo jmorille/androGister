@@ -22,8 +22,8 @@
         android:lines="5" />
 
     <ImageView android:id="@+id/product_photo"
-         android:layout_height="50dp"
-         android:layout_width="50dp" 
+         android:layout_height="256dp"
+         android:layout_width="256dp" 
          android:src="@drawable/ic_launcher"/>
     
     <EditText

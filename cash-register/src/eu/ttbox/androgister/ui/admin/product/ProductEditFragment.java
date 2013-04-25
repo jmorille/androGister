@@ -44,13 +44,12 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
     private static final int PICK_FROM_CAMERA = 1;
     private static final int CROP_FROM_CAMERA = 2;
-    
+
     // Photo
     private Bitmap bitmap;
     private ImageView imageView;
     private PhotoHandler mPhotoHandler;
 
-    
     // Binding
     private EditText nameText;
     private EditText descText;
@@ -79,13 +78,14 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         tagText = (EditText) v.findViewById(R.id.product_tag);
         tagSpinner = (Spinner) v.findViewById(R.id.product_tag_spinner);
         taxeSpinner = (Spinner) v.findViewById(R.id.product_taxe_spinner);
-        
+
         // Photo
         imageView = (ImageView) v.findViewById(R.id.product_photo);
-//        int mode = (mPhotoUri == null) ? PhotoActionPopup.Modes.NO_PHOTO : PhotoActionPopup.Modes.PHOTO_DISALLOW_PRIMARY;
-        mPhotoHandler = new PhotoHandler(getActivity(),imageView,PhotoActionPopup.Modes.NO_PHOTO ) ;
+        // int mode = (mPhotoUri == null) ? PhotoActionPopup.Modes.NO_PHOTO :
+        // PhotoActionPopup.Modes.PHOTO_DISALLOW_PRIMARY;
+        mPhotoHandler = new PhotoHandler(getActivity(), imageView, PhotoActionPopup.Modes.NO_PHOTO);
         imageView.setOnClickListener(mPhotoHandler);
-        
+
         // Listener
         // tagSpinner.setOnItemSelectedListener(tagOnItemSelectedListener);
 
@@ -258,54 +258,49 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
     // http://developer.android.com/training/camera/photobasics.html
     // ===========================================================
 
-  
     public void pickImage(View View) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-//        
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //
+        // Intent intent = new Intent();
+        // intent.setType("image/*");
+        // intent.setAction(Intent.ACTION_GET_CONTENT);
+        // intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
     }
-    
+
     public static boolean isIntentAvailable(Context context, String action) {
         final PackageManager packageManager = context.getPackageManager();
         final Intent intent = new Intent(action);
-        List<ResolveInfo> list =
-                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
-    
+
     private void handleSmallCameraPhoto(Intent intent) {
         Bundle extras = intent.getExtras();
-        setProductPhoto( (Bitmap) extras.get("data"));
+        setProductPhoto((Bitmap) extras.get("data"));
     }
-    
+
     private void setProductPhoto(Bitmap bitmap) {
-        this.bitmap =bitmap;
-        this.imageView.setImageBitmap(bitmap);  
+        this.bitmap = bitmap;
+        this.imageView.setImageBitmap(bitmap);
     }
-    
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mPhotoHandler!= null) {
+        if (mPhotoHandler != null) {
             mPhotoHandler.handlePhotoActivityResult(requestCode, resultCode, data);
-        } 
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    
-   private  String mCurrentPhotoFile;
-    
+
+    private String mCurrentPhotoFile;
+
     private final class PhotoHandler extends PhotoSelectionHandler {
         private final PhotoActionListener mListener;
 
-        private PhotoHandler(
-                Context context, View photoView, int photoMode ) {
-            super(context, photoView, photoMode, false 
-                     );
+        private PhotoHandler(Context context, View photoView, int photoMode) {
+            super(context, photoView, photoMode, false);
             mListener = new PhotoListener();
         }
 
@@ -316,7 +311,8 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
         @Override
         public void startPhotoActivity(Intent intent, int requestCode, String photoFile) {
-//            mSubActivityInProgress = true;
+            Log.d(TAG, "startPhotoActivity for photoFile : " + photoFile);
+            // mSubActivityInProgress = true;
             mCurrentPhotoFile = photoFile;
             startActivityForResult(intent, requestCode);
         }
@@ -324,30 +320,34 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         private final class PhotoListener extends PhotoActionListener {
             @Override
             public void onPhotoSelected(Bitmap bitmap) {
+                Log.d(TAG, "onPhotoSelected Bitmap : " + bitmap);
                 setProductPhoto(bitmap);
-                
-//                EntityDeltaList delta = getDeltaForAttachingPhotoToContact();
-//                long rawContactId = getWritableEntityId();
-//                final String croppedPath = ContactPhotoUtils.pathForCroppedPhoto(
-//                        PhotoSelectionActivity.this, mCurrentPhotoFile);
-//                Intent intent = ContactSaveService.createSaveContactIntent(
-//                        mContext, delta, "", 0, mIsProfile, null, null, rawContactId, croppedPath);
-//                startService(intent);
-//                finish();
+
+                // EntityDeltaList delta = getDeltaForAttachingPhotoToContact();
+                // long rawContactId = getWritableEntityId();
+                // final String croppedPath =
+                // ContactPhotoUtils.pathForCroppedPhoto(
+                // PhotoSelectionActivity.this, mCurrentPhotoFile);
+                // Intent intent = ContactSaveService.createSaveContactIntent(
+                // mContext, delta, "", 0, mIsProfile, null, null, rawContactId,
+                // croppedPath);
+                // startService(intent);
+                // finish();
             }
 
             @Override
             public String getCurrentPhotoFile() {
+                Log.d(TAG, "getCurrentPhotoFile : " + mCurrentPhotoFile); 
                 return mCurrentPhotoFile;
             }
 
             @Override
             public void onPhotoSelectionDismissed() {
-//                if (!mSubActivityInProgress) {
-//                    finish();
-//                }
+                // if (!mSubActivityInProgress) {
+                // finish();
+                // }
             }
         }
     }
-    
+
 }

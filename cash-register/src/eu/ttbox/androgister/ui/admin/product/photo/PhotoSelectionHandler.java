@@ -83,6 +83,7 @@ public abstract class PhotoSelectionHandler implements OnClickListener {
      */
     public boolean handlePhotoActivityResult(int requestCode, int resultCode, Intent data) {
         final PhotoActionListener listener = getListener();
+        Log.d(TAG, "handlePhotoActivityResult requestCode : " + requestCode);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
             // Photo was chosen (either new or existing from gallery), and
@@ -90,6 +91,7 @@ public abstract class PhotoSelectionHandler implements OnClickListener {
             case REQUEST_CODE_PHOTO_PICKED_WITH_DATA: {
                 final String path = ProductPhotoUtils.pathForCroppedPhoto(mContext, listener.getCurrentPhotoFile());
                 Bitmap bitmap = BitmapFactory.decodeFile(path);
+                Log.d(TAG, "Bitmap decodeFile  : " + path + " ==> Bitmap : " + bitmap);
                 listener.onPhotoSelected(bitmap);
                 return true;
             }
@@ -110,12 +112,16 @@ public abstract class PhotoSelectionHandler implements OnClickListener {
      * Sends a newly acquired photo to Gallery for cropping
      */
     private void doCropPhoto(String fileName) {
+        Log.d(TAG, "doCropPhoto for : " + fileName);
         try {
             // Obtain the absolute paths for the newly-taken photo, and the
             // destination
             // for the soon-to-be-cropped photo.
             final String newPath = ProductPhotoUtils.pathForNewCameraPhoto(fileName);
             final String croppedPath = ProductPhotoUtils.pathForCroppedPhoto(mContext, fileName);
+
+            Log.d(TAG, "doCropPhoto newPath : " + newPath);
+            Log.d(TAG, "doCropPhoto croppedPath : " + croppedPath);
 
             // Add the image to the media store
             MediaScannerConnection.scanFile(mContext, new String[] { newPath }, new String[] { null }, null);

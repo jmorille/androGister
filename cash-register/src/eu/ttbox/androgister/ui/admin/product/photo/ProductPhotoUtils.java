@@ -34,23 +34,31 @@ public class ProductPhotoUtils {
     }
 
     public static String pathForCroppedPhoto(Context context, String fileName) {
+        //http://developer.android.com/reference/android/content/Context.html#getExternalCacheDir%28%29
+//        Environment.getExternalStorageDirectory()
         final File dir = new File(context.getExternalCacheDir() + "/tmp");
         dir.mkdirs();
         final File f = new File(dir, fileName);
-        return f.getAbsolutePath();
+        String result =  f.getAbsolutePath();
+        Log.d(TAG, "pathForCroppedPhoto  : " + result);
+        return result;
     }
 
     public static String pathForNewCameraPhoto(String fileName) {
         final File dir = new File(NEW_PHOTO_DIR_PATH);
         dir.mkdirs();
         final File f = new File(dir, fileName);
-        return f.getAbsolutePath();
+        String result =  f.getAbsolutePath();
+        Log.d(TAG, "pathForNewCameraPhoto  : " + result);
+        return result;
     }
 
     public static String generateTempPhotoFileName() {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat(PHOTO_DATE_FORMAT);
-        return "ProductPhoto-" + dateFormat.format(date) + ".jpg";
+        String result = "ProductPhoto-" + dateFormat.format(date) + ".jpg"; 
+        Log.d(TAG, "pathForNewCameraPhoto  : " + result);
+        return result;
     }
 
     /**

@@ -8,6 +8,9 @@
         android:minSdkVersion="15"
         android:targetSdkVersion="17" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+        
     <!-- <uses-permission android:name="android.permission.BROADCAST_STICKY" /> -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     
@@ -31,6 +34,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
  
+    
     
   
     <uses-feature android:name="android.hardware.usb.accessory" />
