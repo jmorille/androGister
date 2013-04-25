@@ -21,6 +21,11 @@
         android:hint="@string/product_description"
         android:lines="5" />
 
+    <ImageView android:id="@+id/product_photo"
+         android:layout_height="50dp"
+         android:layout_width="50dp" 
+         android:src="@drawable/ic_launcher"/>
+    
     <EditText
         android:id="@+id/product_price_ht"
         style="@style/entity_edit"

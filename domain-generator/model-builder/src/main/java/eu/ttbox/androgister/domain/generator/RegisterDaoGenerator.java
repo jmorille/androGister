@@ -35,10 +35,10 @@ public class RegisterDaoGenerator {
     
     private static void implementsSync(Entity entity) {
 //        entity.implementsInterface("eu.ttbox.androgister.domain.VersioningModel");
-        entity.addStringProperty("uuid");
         entity.addBooleanProperty("dirty").notNull();
         entity.addBooleanProperty("deleted").notNull();
-        entity.addLongProperty("version").notNull();
+        entity.addStringProperty("serverUuid");
+        entity.addLongProperty("serverVersion");
     }
     
 

@@ -31,6 +31,15 @@
             android:layout_height="wrap_content"
             app:src="@android:drawable/ic_menu_preferences"
             app:text="@string/menu_preference" />
+        
+        <eu.ttbox.androgister.ui.slidingmenu.SlindingMenuItemView
+            android:id="@+id/menu_security_preference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:src="@android:drawable/ic_menu_preferences"
+            app:text="@string/menu_security_preference" />
+        
+       
     </LinearLayout>
 
 </ScrollView>

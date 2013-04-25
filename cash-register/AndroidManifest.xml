@@ -28,9 +28,13 @@
     <uses-permission android:name="eu.ttbox.androgister.PERSON_READ" />
     <uses-permission android:name="eu.ttbox.androgister.PERSON_WRITE" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
  
+    
+  
     <uses-feature android:name="android.hardware.usb.accessory" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
     
     <application
         android:name="AndroGisterApplication"
@@ -224,8 +228,30 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter_order" /> 
         </service>
-     
-      
+        
+        
+        <!-- ### Security     ### --> 
+        <!-- #################### -->    
+        <activity android:name=".security.DeviceAdminActivity"
+                android:label="@string/activity_app_device_admin">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+
+        <receiver android:name=".security.DeviceAdminActivity$DeviceAdminActivityReceiver"
+                android:label="@string/app_device_admin"
+                android:description="@string/app_device_admin_description"
+                android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data android:name="android.app.device_admin"
+                       android:resource="@xml/device_admin_sample" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        
         <!-- Provider -->
         <provider android:exported="false"
             android:name=".domain.provider.ProductProvider" android:label="Produits"

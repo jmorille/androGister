@@ -6,7 +6,7 @@
     <string name="pickerNewEntityText">"Créer un nouveau enregistrement"</string>
 
     <!-- Action -->
-   <string name="all">Tous</string>
+    <string name="all">Tous</string>
 
     <!-- Action -->
     <string name="add">Ajouter</string>
@@ -16,6 +16,7 @@
     <string name="menu_doNotSave">"Annuler"</string>
 
     <!-- Menu -->
+    <string name="menu_security_preference">Sécurité</string>
     <string name="menu_preference">Préférence</string>
     <string name="menu_admin_user">Utilisateurs</string>
     <string name="menu_search">Rechercher</string>
@@ -85,23 +86,35 @@
     <string name="product_price_ht">Prix HT</string>
     <string name="product_tag">Etiquette du produit</string>
     <string name="product_taxe">TVA</string>
-    
-      <plurals name="product_delete_constraints">
+
+    <plurals name="product_delete_constraints">
         <item quantity="one">Suppression impossible : 1 produit lié</item>
         <item quantity="other">Suppression impossible : %d produits liés</item>
     </plurals>
+
+    <!-- Photo -->
+    <string name="photoPickerNotFoundText" msgid="6247290728908599701" product="tablet">"Aucune image n'est disponible sur la tablette."</string>
+    <string name="photoPickerNotFoundText" msgid="431331662154342581" product="default">"Aucune image disponible sur le téléphone."</string>
+    <string name="use_photo_as_primary" msgid="8807110122951157246">"Utiliser cette photo"</string>
+    <string name="removePhoto" msgid="4898105274130284565">"Supprimer la photo"</string>
+    <string name="take_photo" msgid="7496128293167402354">"Prendre une photo"</string>
+    <string name="take_new_photo" msgid="7341354729436576304">"Prendre une autre photo"</string>
+     <string name="pick_photo" msgid="3746334626214970837">"Sélectionner une photo dans la galerie"</string>
+    <string name="pick_new_photo" msgid="7962368009197147617">"Sélectionner une autre photo dans la galerie"</string>
+ 
     
-      <!-- Model Taxe -->
+
+    <!-- Model Taxe -->
     <string name="taxe_name">Nom de la Taxe</string>
     <string name="taxe_percent">Taxe in %</string>
-      
+
     <!-- Model Tag -->
     <string name="tag_name">Nom du Tag</string>
     <string name="tag_color">Couleur du Tag</string>
     <string name="tag_color_picker">Palette de couleur</string>
-    
+
     <!-- Model Catalog -->
     <string name="catalog_name">Nom du Catalogue</string>
     <string name="catalog_enabled">Activé</string>
-    
+
 </resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- A set of preferences used to exercise the DevicePolicyManager API. -->
+<!-- This screen is shown for the "Encryption" header. -->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="key_category_encryption"
+        android:title="@string/encryption_category" >
+
+        <CheckBoxPreference
+            android:key="key_require_encryption"
+            android:title="@string/require_encryption" />
+        <PreferenceScreen
+            android:key="key_activate_encryption"
+            android:title="@string/activate_encryption" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -129,8 +129,12 @@ public abstract class EntityEditFragment<T extends DomainModel> extends Fragment
     }
 
     public void onDeleteClick() {
-        entityDao.delete(entity);
-        getActivity().setResult(Activity.RESULT_OK);
+        if (entity!=null) {
+            entityDao.delete(entity);
+            getActivity().setResult(Activity.RESULT_OK);
+        } else {
+            getActivity().setResult(Activity.RESULT_CANCELED); 
+        }
         getActivity().finish();
     }
 

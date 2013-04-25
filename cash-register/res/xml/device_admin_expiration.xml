@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?> 
+
+<!-- A set of preferences used to exercise the DevicePolicyManager API. -->
+<!-- This screen is shown for the "Password Expiration" header. -->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:title="@string/password_controls_category" >
+
+        <PreferenceScreen
+            android:key="key_set_password"
+            android:title="@string/set_password_user" />
+        <EditTextPreference
+            android:key="key_reset_password"
+            android:title="@string/set_password_api"
+            android:dialogTitle="@string/set_password_api_dialog" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="key_category_expiration"
+        android:title="@string/password_expiration_category" >
+
+        <EditTextPreference
+            android:key="key_history"
+            android:title="@string/password_history_depth"
+            android:dialogTitle="@string/password_history_depth"
+            android:inputType="number" />
+        <EditTextPreference
+            android:key="key_expiration_timeout"
+            android:title="@string/password_expiration_timeout"
+            android:dialogTitle="@string/password_expiration_timeout"
+            android:inputType="number" />
+        <PreferenceScreen
+            android:key="key_expiration_status"
+            android:title="@string/password_expiration_status" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

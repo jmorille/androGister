@@ -1,7 +1,14 @@
 package eu.ttbox.androgister.ui.admin.product;
 
+import java.util.List;
+
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import de.greenrobot.dao.query.LazyList;
 import eu.ttbox.androgister.R;
@@ -19,6 +27,8 @@ import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
 import eu.ttbox.androgister.domain.Taxe;
 import eu.ttbox.androgister.domain.TaxeDao;
+import eu.ttbox.androgister.ui.admin.product.photo.PhotoActionPopup;
+import eu.ttbox.androgister.ui.admin.product.photo.PhotoSelectionHandler;
 import eu.ttbox.androgister.ui.admin.tag.TagListAdapter;
 import eu.ttbox.androgister.ui.admin.taxe.TaxeListAdapter;
 import eu.ttbox.androgister.ui.core.crud.CrudHelper;
@@ -32,6 +42,15 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
     private static final String TAG = "ProductEditFragment";
 
+    private static final int PICK_FROM_CAMERA = 1;
+    private static final int CROP_FROM_CAMERA = 2;
+    
+    // Photo
+    private Bitmap bitmap;
+    private ImageView imageView;
+    private PhotoHandler mPhotoHandler;
+
+    
     // Binding
     private EditText nameText;
     private EditText descText;
@@ -60,6 +79,13 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         tagText = (EditText) v.findViewById(R.id.product_tag);
         tagSpinner = (Spinner) v.findViewById(R.id.product_tag_spinner);
         taxeSpinner = (Spinner) v.findViewById(R.id.product_taxe_spinner);
+        
+        // Photo
+        imageView = (ImageView) v.findViewById(R.id.product_photo);
+//        int mode = (mPhotoUri == null) ? PhotoActionPopup.Modes.NO_PHOTO : PhotoActionPopup.Modes.PHOTO_DISALLOW_PRIMARY;
+        mPhotoHandler = new PhotoHandler(getActivity(),imageView,PhotoActionPopup.Modes.NO_PHOTO ) ;
+        imageView.setOnClickListener(mPhotoHandler);
+        
         // Listener
         // tagSpinner.setOnItemSelectedListener(tagOnItemSelectedListener);
 
@@ -69,8 +95,8 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
         // Load Tag Spinner
         tagListAdapter = new TagListAdapter(getActivity(), null);
-        tagSpinner.setAdapter(tagListAdapter); 
-        
+        tagSpinner.setAdapter(tagListAdapter);
+
         // Load
         loadTagSpinner();
         loadTaxeSpinner();
@@ -86,9 +112,9 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
                 .orderAsc(TaxeDao.Properties.Title) //
                 .listLazy();
         taxeListAdapter.changeCursor(taxes);
-     }
+    }
 
-    private void loadTagSpinner() { 
+    private void loadTagSpinner() {
         TagDao tagDao = getDaoSession().getTagDao();
         LazyList<Tag> tags = tagDao.queryBuilder()//
                 .orderAsc(TagDao.Properties.Name) //
@@ -162,7 +188,7 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
         descText.setText(entity.getDescription());
         // String priceString =
         // PriceHelper.getToStringPrice(entity.getPriceHT());
-        String priceString =  String.valueOf(  entity.getPriceHT() ) ;
+        String priceString = String.valueOf(entity.getPriceHT());
         priceHTText.setText(priceString);
 
         // Tag
@@ -225,4 +251,103 @@ public class ProductEditFragment extends EntityEditFragment<Product> {
 
     };
 
+    // ===========================================================
+    // Photo Picker
+    // ===========================================================
+    // http://www.vogella.com/articles/AndroidCamera/article.html
+    // http://developer.android.com/training/camera/photobasics.html
+    // ===========================================================
+
+  
+    public void pickImage(View View) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+//        
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
+    }
+    
+    public static boolean isIntentAvailable(Context context, String action) {
+        final PackageManager packageManager = context.getPackageManager();
+        final Intent intent = new Intent(action);
+        List<ResolveInfo> list =
+                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+    
+    private void handleSmallCameraPhoto(Intent intent) {
+        Bundle extras = intent.getExtras();
+        setProductPhoto( (Bitmap) extras.get("data"));
+    }
+    
+    private void setProductPhoto(Bitmap bitmap) {
+        this.bitmap =bitmap;
+        this.imageView.setImageBitmap(bitmap);  
+    }
+    
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mPhotoHandler!= null) {
+            mPhotoHandler.handlePhotoActivityResult(requestCode, resultCode, data);
+        } 
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    
+   private  String mCurrentPhotoFile;
+    
+    private final class PhotoHandler extends PhotoSelectionHandler {
+        private final PhotoActionListener mListener;
+
+        private PhotoHandler(
+                Context context, View photoView, int photoMode ) {
+            super(context, photoView, photoMode, false 
+                     );
+            mListener = new PhotoListener();
+        }
+
+        @Override
+        public PhotoActionListener getListener() {
+            return mListener;
+        }
+
+        @Override
+        public void startPhotoActivity(Intent intent, int requestCode, String photoFile) {
+//            mSubActivityInProgress = true;
+            mCurrentPhotoFile = photoFile;
+            startActivityForResult(intent, requestCode);
+        }
+
+        private final class PhotoListener extends PhotoActionListener {
+            @Override
+            public void onPhotoSelected(Bitmap bitmap) {
+                setProductPhoto(bitmap);
+                
+//                EntityDeltaList delta = getDeltaForAttachingPhotoToContact();
+//                long rawContactId = getWritableEntityId();
+//                final String croppedPath = ContactPhotoUtils.pathForCroppedPhoto(
+//                        PhotoSelectionActivity.this, mCurrentPhotoFile);
+//                Intent intent = ContactSaveService.createSaveContactIntent(
+//                        mContext, delta, "", 0, mIsProfile, null, null, rawContactId, croppedPath);
+//                startService(intent);
+//                finish();
+            }
+
+            @Override
+            public String getCurrentPhotoFile() {
+                return mCurrentPhotoFile;
+            }
+
+            @Override
+            public void onPhotoSelectionDismissed() {
+//                if (!mSubActivityInProgress) {
+//                    finish();
+//                }
+            }
+        }
+    }
+    
 }

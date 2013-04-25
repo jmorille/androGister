@@ -21,4 +21,8 @@
     <dimen name="entity_picker_list_min_height">550dip</dimen>
     <dimen name="list_section_divider_min_height">32dip</dimen>
 
+    
+    <!-- Photo -->
+    <dimen name="photo_action_popup_min_width">300dip</dimen>
+    
 </resources>

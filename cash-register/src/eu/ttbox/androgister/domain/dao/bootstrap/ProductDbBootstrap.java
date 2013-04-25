@@ -32,6 +32,10 @@ public class ProductDbBootstrap extends AbstractEntityDbBootstrap {
         // Taxe
         String taxeId = strings.length > 3 ? strings[3] : "1";
         initialValues.put(Properties.TaxeId.columnName, taxeId);
+        // Default
+        initialValues.put(Properties.Deleted.columnName, false);
+        initialValues.put(Properties.Dirty.columnName, false); 
+        
         return mDatabase.insert(ProductDao.TABLENAME, null, initialValues);
     }
 

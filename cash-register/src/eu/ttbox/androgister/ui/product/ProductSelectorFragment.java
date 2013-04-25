@@ -3,6 +3,7 @@ package eu.ttbox.androgister.ui.product;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class ProductSelectorFragment extends Fragment {
 
     private static final int OFFER_LIST_LOADER = R.id.config_id_offer_list_loader_started;
 
+  
     // Constante
     private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OfferColumns.KEY_ID, OfferColumns.KEY_NAME, OfferColumns.KEY_PRICEHT, OfferColumns.KEY_TAG };
     private static final String SEARCH_SELECTION_TAG = String.format("%s MATCH ?", OfferColumns.KEY_TAG);
@@ -55,6 +57,7 @@ public class ProductSelectorFragment extends Fragment {
 
     // Registered Listeenr
     private OnOfferSelectedListener onOfferSelectedListener;
+    
     // Listener
     private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -145,9 +148,11 @@ public class ProductSelectorFragment extends Fragment {
     public void setOnOfferSelectedListener(OnOfferSelectedListener listener) {
         this.onOfferSelectedListener = listener;
     }
-    
+
     public static interface OnOfferSelectedListener {
         public void onOfferSelected(Offer offer);
     }
+
+  
 
 }

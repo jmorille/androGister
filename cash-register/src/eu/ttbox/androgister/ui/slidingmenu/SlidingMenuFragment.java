@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import com.slidingmenu.lib.app.SlidingActivityBase;
 
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.security.DeviceAdminActivity;
 import eu.ttbox.androgister.ui.CashRegisterActivity;
 import eu.ttbox.androgister.ui.admin.offer.OfferCreatorActivity;
 import eu.ttbox.androgister.ui.config.MyPreferencesActivity;
@@ -34,7 +35,7 @@ public class SlidingMenuFragment extends Fragment {
     private SparseArray<SlindingMenuItemView> menuItems;
     private static int[] menuIds = new int[] { //
     R.id.menu_cash_register, R.id.menu_catalog_manager //
-            , R.id.menu_preference //
+            , R.id.menu_preference , R.id.menu_security_preference //
     };
 
     // ===========================================================
@@ -125,6 +126,7 @@ public class SlidingMenuFragment extends Fragment {
         boolean isRootActivity = false;
         switch (itemId) {
         case R.id.menu_preference:
+        case R.id.menu_security_preference:
         case R.id.menu_cash_register:
         case R.id.menu_catalog_manager:
             // case R.id.menu_pairing:
@@ -158,6 +160,8 @@ public class SlidingMenuFragment extends Fragment {
             return OfferCreatorActivity.class;
         case R.id.menu_preference:
             return MyPreferencesActivity.class;
+        case R.id.menu_security_preference:
+            return DeviceAdminActivity.class;
             // case R.id.menuGeotracker:
             // return GeoTrakerActivity.class;
             // case R.id.menuMap:
