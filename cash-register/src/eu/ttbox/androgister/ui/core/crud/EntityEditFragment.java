@@ -117,8 +117,6 @@ public abstract class EntityEditFragment<T extends DomainModel> extends Fragment
 
     public abstract T prepareInsert(Bundle args);
 
-
-
     // ===========================================================
     // Action
     // ===========================================================
@@ -129,11 +127,11 @@ public abstract class EntityEditFragment<T extends DomainModel> extends Fragment
     }
 
     public void onDeleteClick() {
-        if (entity!=null) {
+        if (entity != null && entity.getId() != null) {
             entityDao.delete(entity);
             getActivity().setResult(Activity.RESULT_OK);
         } else {
-            getActivity().setResult(Activity.RESULT_CANCELED); 
+            getActivity().setResult(Activity.RESULT_CANCELED);
         }
         getActivity().finish();
     }

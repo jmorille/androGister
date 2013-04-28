@@ -13,7 +13,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import de.greenrobot.dao.AbstractDao;
-import eu.ttbox.androgister.domain.DomainModel; 
+import eu.ttbox.androgister.domain.DomainModel;
 
 public abstract class AbstractGreenContentProvider<MODEL extends DomainModel> extends ContentProvider {
 

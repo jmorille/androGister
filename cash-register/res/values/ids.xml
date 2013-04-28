@@ -5,7 +5,10 @@
     <item type="id" name="config_id_order_list_loader_started"/> 
     <item type="id" name="config_id_order_edit_loader_started"/> 
     <item type="id" name="config_id_order_edit_items_loader_started"/> 
+    
     <item type="id" name="config_id_offer_list_loader_started"/> 
+    <item type="id" name="config_id_tag_list_loader_started"/> 
+    
     <item type="id" name="config_id_person_list_loader_started"/> 
     <item type="id" name="config_id_admin_user_list_loader_started"/> 
     <item type="id" name="config_id_admin_user_view_loader_started"/> 

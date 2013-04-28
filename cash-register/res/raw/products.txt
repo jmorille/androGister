@@ -13,6 +13,7 @@ Perrier 125ml  ;400;50;2
 Minute Maid    ;400;60;1
 Coca Cola      ;400;65;1
 Biere          ;400;150;1
+Jus d'orange   ;400;150;1
 Vin 33cl       ;400;120;1
 Mix Brochette  ;200;320;1
 Truite Grillé  ;200;410;1

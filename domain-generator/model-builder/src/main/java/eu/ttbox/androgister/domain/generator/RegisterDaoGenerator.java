@@ -20,27 +20,23 @@ public class RegisterDaoGenerator {
         addCatalogProduct(schema, catalog, product);
 
         addOffer(schema);
-        
-        
+
         new DaoGenerator().generateAll(schema, args[2]);
     }
- 
 
-    
     private static void implementsVersionning(Entity entity) {
         entity.implementsInterface("eu.ttbox.androgister.domain.VersioningModel");
         entity.addLongProperty("creationDate");
         entity.addLongProperty("versionDate");
     }
-    
+
     private static void implementsSync(Entity entity) {
-//        entity.implementsInterface("eu.ttbox.androgister.domain.VersioningModel");
+        // entity.implementsInterface("eu.ttbox.androgister.domain.VersioningModel");
         entity.addBooleanProperty("dirty").notNull();
         entity.addBooleanProperty("deleted").notNull();
         entity.addStringProperty("serverUuid");
         entity.addLongProperty("serverVersion");
     }
-    
 
     private static Entity implementsDomainModel(Entity entity) {
         entity.implementsInterface("eu.ttbox.androgister.domain.DomainModel");
@@ -88,7 +84,7 @@ public class RegisterDaoGenerator {
 
         // taxes
         Property taxeFk = product.addLongProperty("taxeId")//
-                .index() //
+//                .index() //
                 // TDOO .notNull() //
                 .getProperty();
         product.addToOne(taxe, taxeFk);
@@ -139,6 +135,41 @@ public class RegisterDaoGenerator {
         offer.addIntProperty("priceHT");
         offer.addStringProperty("tag");
         return offer;
+    }
+
+    private static Entity addOrder(Schema schema) {
+        Entity order = schema.addEntity("Order");
+        implementsDomainModel(order);
+        // Properties
+        order.addStringProperty("orderNumber").notNull(); // KEY_ORDER_NUMBER
+        order.addLongProperty("orderDate"); // KEY_ORDER_DATE
+        order.addStringProperty("orderUUID"); // KEY_ORDER_UUID
+        order.addStringProperty("orderDeleteUUID"); // KEY_ORDER_DELETE_UUID
+        order.addLongProperty("priceSumHT"); // KEY_PRICE_SUM_HT
+        order.addIntProperty("status"); // KEY_STATUS
+        order.addIntProperty("paymentMode"); // KEY_PAYMENT_MODE
+
+        order.addStringProperty("personId"); // KEY_PERS_ID
+        order.addStringProperty("personMatricule"); // KEY_PERS_MATRICULE
+        order.addStringProperty("personFirstname"); // KEY_PERS_FIRSTNAME
+        order.addStringProperty("personLastname"); // KEY_PERS_LASTNAME
+
+        //  ArrayList<OrderItem> items;
+        return order;
+    }
+
+    private static Entity addOrderItem(Schema schema) {
+        Entity orderItem = schema.addEntity("OrderItem");
+        implementsDomainModel(orderItem);
+        // Properties
+        orderItem.addStringProperty("name"); // KEY_NAME
+        // KEY_ORDER_ID = "ORDER_ID";
+        // KEY_PRODUCT_ID = "PRODUCT_ID";
+        orderItem.addStringProperty("ean"); // KEY_EAN = "EAN";
+        orderItem.addIntProperty("quantity").notNull(); // KEY_QUANTITY  
+        orderItem.addLongProperty("priceUnitHT").notNull();// KEY_PRICE_UNIT_HT  
+        orderItem.addLongProperty("priceSumHT").notNull(); // KEY_PRICE_SUM_HT  
+        return orderItem;
     }
 
 }

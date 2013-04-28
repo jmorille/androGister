@@ -8,7 +8,6 @@ import android.content.ContentResolver;
 import android.content.UriMatcher;
 import android.net.Uri;
 import eu.ttbox.androgister.AndroGisterApplication;
-import eu.ttbox.androgister.domain.TagDao;
 import eu.ttbox.androgister.domain.Taxe;
 import eu.ttbox.androgister.domain.TaxeDao;
 import eu.ttbox.androgister.domain.TaxeDao.Properties;

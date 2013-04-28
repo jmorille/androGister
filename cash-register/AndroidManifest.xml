@@ -258,9 +258,18 @@
         
         <!-- Provider -->
         <provider android:exported="false"
+            android:name=".domain.provider.TagProvider" android:label="Tags"
+            android:authorities="eu.ttbox.androgister.tag"  />
+        <provider android:exported="false"
+            android:name=".domain.provider.TaxeProvider" android:label="Taxes"
+            android:authorities="eu.ttbox.androgister.taxe"  />
+        <provider android:exported="false"
             android:name=".domain.provider.ProductProvider" android:label="Produits"
-            android:authorities="eu.ttbox.androgister.domain.product"  />
-
+            android:authorities="eu.ttbox.androgister.product"  />
+       <provider android:exported="false"
+            android:name=".domain.provider.CatalogProvider" android:label="Catalog"
+            android:authorities="eu.ttbox.androgister.catalog"  />
+        
         <!-- Old Provider -->
         <provider 
             android:name=".database.OfferProvider"
