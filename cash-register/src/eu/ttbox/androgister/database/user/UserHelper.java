@@ -6,6 +6,7 @@ import android.widget.TextView;
 import eu.ttbox.androgister.database.user.UserDatabase.UserColumns;
 import eu.ttbox.androgister.model.user.User;
 
+@Deprecated
 public class UserHelper {
 
     boolean isNotInit = true;

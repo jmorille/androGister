@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
+import eu.ttbox.androgister.domain.PersonDao;
 import eu.ttbox.androgister.model.Offer;
 import eu.ttbox.androgister.model.Person;
 import eu.ttbox.androgister.model.PriceHelper;
@@ -278,12 +279,13 @@ public class RegisterBasketFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK  ) {
             if (SELECT_PERSON_REQUEST_CODE== requestCode || SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET== requestCode) {
                 Person person = (Person) data.getSerializableExtra(Intents.EXTRA_PERSON);
+                Bundle extras = data.getExtras();
                 Order localOrder = null;
-                if (person != null) {
-                    localOrder = getOrder().setPersonId(person.getId())//
-                            .setPersonMatricule(person.getMatricule())//
-                            .setPersonLastname(person.getLastname())//
-                            .setPersonFirstname(person.getFirstname());
+                if (person != null) { 
+                    localOrder = getOrder().setPersonId(extras.getLong(PersonDao.Properties.Id.columnName ))//
+                            .setPersonMatricule(extras.getString(PersonDao.Properties.Lastname.columnName ))//
+                            .setPersonLastname(extras.getString(PersonDao.Properties.Firstname.columnName ))//
+                            .setPersonFirstname(extras.getString(PersonDao.Properties.Matricule.columnName));
                 }
                 setPersonData(localOrder);
                 if (  SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET== requestCode) {

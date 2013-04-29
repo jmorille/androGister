@@ -3,6 +3,7 @@ package eu.ttbox.androgister.ui.admin.user;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -20,11 +21,14 @@ import android.widget.ListView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.UserProvider;
 import eu.ttbox.androgister.database.user.UserDatabase;
 import eu.ttbox.androgister.database.user.UserDatabase.UserColumns;
 import eu.ttbox.androgister.database.user.UserHelper;
+import eu.ttbox.androgister.domain.UserDao;
+import eu.ttbox.androgister.domain.UserDao.UserCursorHelper;
+import eu.ttbox.androgister.domain.provider.UserProvider;
 import eu.ttbox.androgister.widget.AutoScrollListView;
 
 public class UserListFragment extends Fragment implements OnQueryTextListener {
@@ -49,9 +53,12 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
     private static final int DELAY_AUTOSELECT_FIRST_FOUND_CONTACT_MILLIS = 500;
 
     
+    // Dao
+    private UserDao userDao;
+    private UserCursorHelper helper;
+
 	// Adapter
-	private UserListAdapter listAdapter;
-	private UserHelper helper;
+	private UserListAdapter listAdapter; 
 
 	// Config
 	private boolean mSelectionToScreenRequested;
@@ -86,13 +93,18 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
 			onListItemClick((ListView) parent, v, position, id);
 		}
 	};
-	
-  
+
+
     
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.admin_user_list, container, false);
+	      // Dao 
+        Context context = getActivity();
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+          userDao = app.getDaoSession().getUserDao();
+          
 		// Bind
 		listView = (ListView) view.findViewById(android.R.id.list);
 		listView.setOnItemClickListener(mOnClickListener);
@@ -180,9 +192,9 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
 			Cursor cursor = (Cursor) l.getAdapter().getItem(position);
 			if (cursor != null) {
 				if (helper == null) {
-					helper = new UserHelper().initWrapper(cursor);
+					helper = userDao.getCursorHelper(cursor);
 				}
-				String userId = helper.getUserIdAsString(cursor);
+				String userId = helper.getId(cursor).toString();
 				Uri uri = Uri.withAppendedPath(UserProvider.Constants.CONTENT_URI, userId);
 				selectedEntityUri = uri;
 				// User user = helper.getEntity(cursor);
@@ -224,13 +236,9 @@ public class UserListFragment extends Fragment implements OnQueryTextListener {
 			if (queryString != null) {
 				queryString = queryString.trim();
 				if (!queryString.isEmpty()) {
-					queryString = queryString + "*";
-					// selection = String.format("%s MATCH ? or %s MATCH ?",
-					// UserColumns.KEY_LASTNAME, UserColumns.KEY_FIRSTNAME);
-					// selectionArgs = new String[] { queryString, queryString
-					// };
-					selection = String.format("%s MATCH ?", UserDatabase.TABLE_USER_FTS);
-					selectionArgs = new String[] { queryString };
+					queryString = queryString + "*"; 
+					selection = String.format("(%s like ? or %s like ?)", UserDao.Properties.Lastname.columnName, UserDao.Properties.Firstname.columnName);
+					selectionArgs = new String[] { queryString , queryString};
 				}
 			}
 

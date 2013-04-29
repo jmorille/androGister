@@ -2,6 +2,7 @@ package eu.ttbox.androgister.model;
 
 import java.io.Serializable;
 
+@Deprecated
 public class Person implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

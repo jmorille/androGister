@@ -11,6 +11,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 import eu.ttbox.androgister.database.product.PersonDatabase;
 
+@Deprecated
 public class PersonProvider extends ContentProvider {
 
     @SuppressWarnings("unused")

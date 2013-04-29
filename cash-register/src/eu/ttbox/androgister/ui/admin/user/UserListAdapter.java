@@ -8,22 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
-import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.UserProvider;
-import eu.ttbox.androgister.database.user.UserHelper;
+import eu.ttbox.androgister.AndroGisterApplication;
+import eu.ttbox.androgister.R;  
+import eu.ttbox.androgister.domain.UserDao;
+import eu.ttbox.androgister.domain.UserDao.UserCursorHelper;
+import eu.ttbox.androgister.domain.provider.UserProvider;
 
 public class UserListAdapter extends ResourceCursorAdapter {
 
 	private static final String TAG = "UserListAdapter";
 
-	private UserHelper helper;
-
-	private boolean isNotBinding = true;
-
+	private UserCursorHelper helper;
+  
 	private long selectedId = -1;
 
 	public UserListAdapter(Context context, int layout, Cursor c, int flags) {
 		super(context, layout, c, flags);
+		  // Init Dao
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+        UserDao userDao = app.getDaoSession().getUserDao();
+        helper  =userDao.getCursorHelper(c);
 	}
 
 	public void setSelectedId(long selectedEntity) {
@@ -31,12 +35,7 @@ public class UserListAdapter extends ResourceCursorAdapter {
 		notifyDataSetChanged();
 	}
 
-	private void intViewBinding(View view, Context context, Cursor cursor) {
-		// Init Cursor
-		helper = new UserHelper().initWrapper(cursor);
-		isNotBinding = false;
-
-	}
+ 
 
 	public Uri getContactUri(int position) {
 		Cursor item = (Cursor) getItem(position);
@@ -44,24 +43,23 @@ public class UserListAdapter extends ResourceCursorAdapter {
 	}
 
 	public Uri getEntityUri(Cursor cursor) {
-		String contactId = helper.getUserIdAsString(cursor);
+		String contactId = helper.getId(cursor).toString();
 		Uri uri = Uri.withAppendedPath(UserProvider.Constants.CONTENT_URI, contactId);
 		return uri;
 	}
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-
-		if (isNotBinding) {
-			intViewBinding(view, context, cursor);
+		if (helper.isNotInit) {
+			helper.initWrapper(cursor);
 		}
 		ViewHolder holder = (ViewHolder) view.getTag();
 		// Bind Value
-		helper.setTextUserLastname(holder.lastnameText, cursor)//
-				.setTextUserFirstname(holder.firstnameText, cursor)//
-				.setTextUserMatricule(holder.matriculeText, cursor);
+		helper.setTextLastname(holder.lastnameText, cursor)//
+				.setTextFirstname(holder.firstnameText, cursor)//
+				.setTextLogin(holder.matriculeText, cursor);
 		// String
-		long currentId = helper.getUserId(cursor);
+		long currentId = helper.getId(cursor);
 		boolean selected = currentId == selectedId;
 		Log.i(TAG, "Is selected for userid = " + currentId + " ==> " + selected);
 		view.setSelected(selected);

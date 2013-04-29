@@ -42,7 +42,7 @@ public class ProductItemAdapter extends ResourceCursorAdapter {
         tagDao = app.getDaoSession().getTagDao();
         // Init Helper
         this.productColor = new ProductUiHelper(context);
-        helper = productDao.getCursorHelper(null);
+        helper = productDao.getCursorHelper(c);
     }
 
     private int getTagColor(long tagId) {

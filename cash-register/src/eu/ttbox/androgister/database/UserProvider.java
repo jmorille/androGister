@@ -13,6 +13,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 import eu.ttbox.androgister.database.user.UserDatabase;
 
+@Deprecated
 public class UserProvider extends ContentProvider {
 
  

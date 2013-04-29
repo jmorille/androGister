@@ -31,6 +31,9 @@ public class DbBootstrapLoader implements Runnable {
             new TagsDbBootstrap(context, db).loadEntitiesFormRawId();
             new ProductDbBootstrap(context, db).loadEntitiesFormRawId();
             new CatalogDbBootstrap(context, db).loadEntitiesFormRawId();
+            new PersonDbBootstrap(context, db).loadEntitiesFormRawId();
+            new UserDbBootstrap(context, db).loadEntitiesFormRawId();
+            
             long end = System.currentTimeMillis();
             Log.i(TAG, String.format("DONE Loading DbBootstrap in %s ms",   (end - begin)));
         } catch (IOException e) {

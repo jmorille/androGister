@@ -2,8 +2,9 @@ package eu.ttbox.androgister.core;
 
 import android.content.Context;
 import android.content.Intent;
+import eu.ttbox.androgister.domain.Person;
+import eu.ttbox.androgister.domain.PersonDao;
 import eu.ttbox.androgister.model.Offer;
-import eu.ttbox.androgister.model.Person;
 import eu.ttbox.androgister.model.order.Order;
 import eu.ttbox.androgister.model.order.OrderPaymentModeEnum;
 import eu.ttbox.androgister.service.OrderService;
@@ -75,8 +76,14 @@ public class Intents {
         return new Intent(ACTION_PERSON_ASK_SELECT_DIALOG) ;
     }
     
-    public static Intent selectedPerson(Person person) {
-        return new Intent(ACTION_PERSON_SELECTED).putExtra(EXTRA_PERSON, person) ;
+    
+    public static Intent selectedPerson(Long id, String  lastName, String firstName, String matricule) {
+        return new Intent(ACTION_PERSON_SELECTED) //
+        .putExtra(PersonDao.Properties.Id.columnName, id) //
+        .putExtra(PersonDao.Properties.Lastname.columnName, lastName) //
+        .putExtra(PersonDao.Properties.Firstname.columnName, firstName) //
+        .putExtra(PersonDao.Properties.Matricule.columnName, matricule) //
+        ;
     }
 
 }

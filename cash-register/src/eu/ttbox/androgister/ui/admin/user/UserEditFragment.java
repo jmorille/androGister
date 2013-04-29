@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -26,9 +27,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.UserProvider;
 import eu.ttbox.androgister.database.user.UserHelper;
+import eu.ttbox.androgister.domain.UserDao;
+import eu.ttbox.androgister.domain.UserDao.UserCursorHelper;
+import eu.ttbox.androgister.domain.provider.UserProvider;
 
 public class UserEditFragment extends  Fragment {
 
@@ -39,6 +43,9 @@ public class UserEditFragment extends  Fragment {
 	private static final int REQUEST_CODE = 435;
 	private static final int LOADER_DATA = R.id.config_id_admin_user_edit_loader_started;
 
+	// Dao
+	private  UserDao userDao;
+	  
 	// Bindings
 	private EditText userFirstnameTextView, userLastnameTextView, userMatriculeTextView;
 	private ImageView imageView;
@@ -65,6 +72,10 @@ public class UserEditFragment extends  Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.admin_user_edit, container, false);
+		// Dao 
+		Context context = getActivity();
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+          userDao = app.getDaoSession().getUserDao();
 		// View
 		userLastnameTextView = (EditText) v.findViewById(R.id.user_lastname);
 		userFirstnameTextView = (EditText) v.findViewById(R.id.user_firstname);
@@ -73,7 +84,7 @@ public class UserEditFragment extends  Fragment {
 		if (getArguments() != null) {
 			long userId = getArguments().getLong(USER_ID);
 			String userIdString = String.valueOf(userId);
-			Uri userUri = Uri.withAppendedPath(UserProvider.Constants.CONTENT_URI_GET_USER, userIdString);
+			Uri userUri = Uri.withAppendedPath(UserProvider.Constants.CONTENT_URI , "/"+ userIdString);
 			load("", userUri, null);
 		}
 		// Title
@@ -128,11 +139,11 @@ public class UserEditFragment extends  Fragment {
 		@Override
 		public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 			Log.d(TAG, "OnLoadCompleteListener for User");
-			UserHelper helper = new UserHelper().initWrapper(cursor);
+			UserCursorHelper helper = userDao.getCursorHelper(cursor);
 			// bind Values
-			helper.setTextUserFirstname(userFirstnameTextView, cursor) //
-					.setTextUserLastname(userLastnameTextView, cursor)//
-					.setTextUserMatricule(userMatriculeTextView, cursor)//
+			helper.setTextFirstname(userFirstnameTextView, cursor) //
+					.setTextLastname(userLastnameTextView, cursor)//
+					.setTextLogin(userMatriculeTextView, cursor)//
 			;
 
 		}

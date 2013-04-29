@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import eu.ttbox.androgister.model.PriceHelper;
 
+@Deprecated
 public class Product implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -28,7 +29,6 @@ public class Product implements Serializable {
 		this.id = id;
 	}
 
-	
 	
 	public Product setName(String state) {
 		this.name = state;

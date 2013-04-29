@@ -53,6 +53,12 @@
 							<tasks>
 								<delete dir="${schema.output}" failonerror="false" />
 								<mkdir dir="${schema.output}" />
+                                                                <copy todir="${schema.output}/eu/ttbox/androgister/domain" >
+                                                                    <fileset dir="${basedir}/src/main/template">
+                                                                        <include name="**/*.java"/>
+                                                                    </fileset>
+                                                                </copy>
+
 							</tasks>
 						</configuration>
 						<goals>

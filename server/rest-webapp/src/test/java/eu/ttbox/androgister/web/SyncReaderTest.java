@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.annotation.ExpectedException;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -42,18 +43,18 @@ public class SyncReaderTest {
 		return is;
 	}
 
-	@Test(expected=JsonParseException.class) 
-	public void testReadSyncBroken() throws IOException { 
-		String name = "/sync/product-sync-broken.json"; 
-		StringWriter sb = new StringWriter(1024); 
-		InputStream is = openJsonFile(name);
-		try {
-			syncFile(is, sb);
-		} finally { 
-			is.close();
-		} 
-
-	}
+//	@Test(expected=JsonParseException.class) 
+//	public void testReadSyncBroken() throws IOException { 
+//		String name = "/sync/product-sync-broken.json"; 
+//		StringWriter sb = new StringWriter(1024); 
+//		InputStream is = openJsonFile(name);
+//		try {
+//			syncFile(is, sb);
+//		} finally { 
+//			is.close();
+//		} 
+//
+//	}
 
 	
 	@Test
@@ -66,7 +67,7 @@ public class SyncReaderTest {
 		try {
 			syncFile(is, sb);
 		} finally {
-			System.out.println("Error --> " + sb.getBuffer().toString());
+			System.out.println("Result --> " + sb.getBuffer().toString());
 			is.close();
 		}
 
@@ -82,7 +83,7 @@ public class SyncReaderTest {
 		MappingJsonFactory jsonFactory = new MappingJsonFactory(mapper);
 		// Init Writer
 		final JsonGenerator jgen = jsonFactory.createGenerator(out);
-		jgen.writeStartArray();
+		jgen.writeStartObject();
 
 		// Read The file
 		JsonParser jp = jsonFactory.createJsonParser(is);
@@ -131,7 +132,7 @@ public class SyncReaderTest {
 		
 		
 		// Close Json Writer 
-        jgen.writeEndArray();
+        jgen.writeEndObject();
         jgen.close();
         
 	}
@@ -141,6 +142,8 @@ public class SyncReaderTest {
 		if (firstToken != JsonToken.START_ARRAY) {
 			throw new RuntimeException("Invalid Format : Token [" + firstToken + "]");
 		}
+		// Prepare Generator
+		jgen.writeArrayFieldStart("synced");
 		while (jp.nextToken() != JsonToken.END_ARRAY) {
 			// Read Entity
 			Product entity = mapper.readValue(jp, Product.class);
@@ -154,9 +157,12 @@ public class SyncReaderTest {
 			mapper.writeValue(jgen, entity);
 			jgen.flush();
 		}
+		// Close field generator
+		jgen.writeEndArray();
+		
 	}
 	
-	private void syncDatabaseUpdated(final ObjectMapper mapper, final JsonGenerator jgen, final HashMap<UUID,  Long> entityIgnore, SyncHeader entityHeader) {
+	private void syncDatabaseUpdated(final ObjectMapper mapper, final JsonGenerator jgen, final HashMap<UUID,  Long> entityIgnore, SyncHeader entityHeader) throws JsonGenerationException, IOException {
 		// Read Other modify
         Function<Product, Boolean> callback = new Function<Product, Boolean>() {
 
@@ -176,9 +182,15 @@ public class SyncReaderTest {
             }
 
         };
+        // Prepare Generator
+     	jgen.writeArrayFieldStart("updated");
+     		
         // Read All Datas
         String salespointId = "ttbox"; // TODO 
 //        productRepository.findEntityUpdatedFrom(salespointId,entityHeader.syncDate, callback);
+        
+		// Close field generator
+		jgen.writeEndArray();
         
 	}
 	

@@ -6,36 +6,41 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.product.PersonHelper;
+import eu.ttbox.androgister.domain.PersonDao;
+import eu.ttbox.androgister.domain.PersonDao.PersonCursorHelper;
 
 public class PersonListAdapter extends ResourceCursorAdapter {
 
-    private PersonHelper helper;
+//    private PersonHelper helper;
+//
+//    private boolean isNotBinding = true;
 
-    private boolean isNotBinding = true;
-
+    private PersonCursorHelper helper;
+    
+    
     public PersonListAdapter(Context context, int layout, Cursor c, int flags) {
         super(context, layout, c, flags);
+        // Init Dao
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+        PersonDao personDao = app.getDaoSession().getPersonDao();
+        // Init Cursor
+        helper = personDao.getCursorHelper(c); 
     }
 
-    private void intViewBinding(View view, Context context, Cursor cursor) {
-        // Init Cursor
-        helper = new PersonHelper().initWrapper(cursor);
-        isNotBinding = false;
-    }
+ 
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-
-        if (isNotBinding) {
-            intViewBinding(view, context, cursor);
+        if (helper.isNotInit) {
+            helper.initWrapper(cursor);
         }
         ViewHolder holder = (ViewHolder)view.getTag(); 
         // Bind Value
-        helper.setTextPersonLastname(holder.lastnameText, cursor)//
-                .setTextPersonFirstname(holder.firstnameText, cursor)//
-                .setTextPersonMatricule(holder.matriculeText, cursor);
+        helper.setTextLastname(holder.lastnameText, cursor)//
+                .setTextFirstname(holder.firstnameText, cursor)//
+                .setTextMatricule(holder.matriculeText, cursor);
 
     }
 

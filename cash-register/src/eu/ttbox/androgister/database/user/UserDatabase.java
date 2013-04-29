@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 
+@Deprecated
 public class UserDatabase {
 
 	@SuppressWarnings("unused")

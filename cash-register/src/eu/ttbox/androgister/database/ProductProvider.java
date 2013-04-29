@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import eu.ttbox.androgister.database.product.ProductDatabase;
 
+@Deprecated
 public class ProductProvider extends ContentProvider {
     
     @SuppressWarnings("unused")

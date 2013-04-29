@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -17,16 +18,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.SearchView.OnQueryTextListener;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.database.PersonProvider;
-import eu.ttbox.androgister.database.product.PersonDatabase;
-import eu.ttbox.androgister.database.product.PersonDatabase.PersonColumns;
 import eu.ttbox.androgister.database.product.PersonHelper;
-import eu.ttbox.androgister.model.Person;
+import eu.ttbox.androgister.domain.Person;
+import eu.ttbox.androgister.domain.PersonDao;
+import eu.ttbox.androgister.domain.PersonDao.PersonCursorHelper;
+import eu.ttbox.androgister.domain.PersonDao.Properties;
+import eu.ttbox.androgister.domain.provider.PersonProvider;
 
 /**
  * Autocompletion {link
@@ -41,9 +44,12 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
 
     private static final int PERSON_LIST_LOADER = R.id.config_id_person_list_loader_started;
 
-    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { PersonColumns.KEY_ID, PersonColumns.KEY_LASTNAME, PersonColumns.KEY_FIRSTNAME, PersonColumns.KEY_MATRICULE };
+    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Properties.Id.columnName, Properties.Lastname.columnName, Properties.Firstname.columnName, Properties.Matricule.columnName };
 
-    private static final String PERSON_SORT_DEFAULT = String.format("%s DESC, %s DESC", PersonColumns.KEY_LASTNAME, PersonColumns.KEY_FIRSTNAME);
+    private static final String PERSON_SORT_DEFAULT = String.format("%s DESC, %s DESC", Properties.Lastname.columnName, Properties.Firstname.columnName);
+
+    // Dao
+    private PersonDao personDao;
 
     // Adapter
     private PersonListAdapter listAdapter;
@@ -51,7 +57,7 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
     // Binding
     private TextView searchResultTextView;
     private ListView listView;
-//    private TextView emptyListView;
+    // private TextView emptyListView;
     private EditText searchNameTextView;
 
     // Listener
@@ -65,14 +71,19 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.person_list, container, false);
+        // Dao
+        Context context = getActivity();
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+        personDao = app.getDaoSession().getPersonDao();
+
         // Bind
         listView = (ListView) view.findViewById(R.id.person_list_list);
         listView.setOnItemClickListener(mOnClickListener);
-//        emptyListView = (TextView) view.findViewById(android.R.id.empty);
-//        listView.setEmptyView(emptyListView);
+        // emptyListView = (TextView) view.findViewById(android.R.id.empty);
+        // listView.setEmptyView(emptyListView);
         // Search Criteria
         searchResultTextView = (TextView) view.findViewById(R.id.person_search_result);
-        searchNameTextView = (EditText) view.findViewById(R.id.person_list_search_name_input); 
+        searchNameTextView = (EditText) view.findViewById(R.id.person_list_search_name_input);
         searchNameTextView.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -111,10 +122,11 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
 
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Cursor cursor = (Cursor) l.getAdapter().getItem(position);
-        PersonHelper helper = new PersonHelper().initWrapper(cursor);
-        Person person = helper.getEntity(cursor);
+        PersonCursorHelper helper = personDao.getCursorHelper(cursor);
         // Define result
-        getActivity().setResult(Activity.RESULT_OK, Intents.selectedPerson(person));
+        getActivity().setResult(Activity.RESULT_OK, Intents.selectedPerson( //
+                helper.getId(cursor), helper.getLastname(cursor), helper.getFirstname(cursor), helper.getMatricule(cursor) //
+                ));
         getActivity().finish();
     }
 
@@ -125,7 +137,7 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
     }
 
     private final LoaderManager.LoaderCallbacks<Cursor> orderLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
-        
+
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String sortOrder = PERSON_SORT_DEFAULT;
@@ -143,14 +155,14 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
                 if (!queryString.isEmpty()) {
                     queryString = queryString + "*";
                     // selection = String.format("%s MATCH ? or %s MATCH ?",
-                    // PersonColumns.KEY_LASTNAME, PersonColumns.KEY_FIRSTNAME);
+                    // Properties.KEY_LASTNAME, Properties.KEY_FIRSTNAME);
                     // selectionArgs = new String[] { queryString, queryString
                     // };
-                    selection = String.format("%s MATCH ?", PersonDatabase.TABLE_PERSON_FTS);
-                    selectionArgs = new String[] { queryString };
+                    selection = String.format("(%s like ? or %s like ?)", Properties.Lastname, Properties.Firstname);
+                    selectionArgs = new String[] { queryString, queryString };
                 }
             }
-           
+
             // Filter
             // Loader
             CursorLoader cursorLoader = new CursorLoader(getActivity(), PersonProvider.Constants.CONTENT_URI, SEARCH_PROJECTION_COLOMN, selection, selectionArgs, sortOrder);
@@ -165,14 +177,14 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
             int count = 0;
             if (cursor != null) {
                 count = cursor.getCount();
-            } 
+            }
             if (count < 1) {
-                searchResultTextView.setText( R.string.search_no_results );
+                searchResultTextView.setText(R.string.search_no_results);
             } else {
                 String countString = getResources().getQuantityString(R.plurals.search_results, count, new Object[] { count });
                 searchResultTextView.setText(countString);
             }
-          
+
         }
 
         @Override
@@ -191,7 +203,7 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
 
     @Override
     public boolean onQueryTextChange(String newText) {
-       doSearch(newText);
+        doSearch(newText);
         return true;
     }
 

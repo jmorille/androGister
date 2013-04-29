@@ -8,22 +8,22 @@ import android.content.ContentResolver;
 import android.content.UriMatcher;
 import android.net.Uri;
 import eu.ttbox.androgister.AndroGisterApplication;
-import eu.ttbox.androgister.domain.Catalog;
-import eu.ttbox.androgister.domain.CatalogDao;
-import eu.ttbox.androgister.domain.CatalogDao.Properties;
+import eu.ttbox.androgister.domain.Order;
+import eu.ttbox.androgister.domain.OrderDao;
+import eu.ttbox.androgister.domain.OrderDao.Properties;
 
-public class CatalogProvider extends AbstractGreenContentProvider<Catalog> {
+public class OrderProvider extends AbstractGreenContentProvider<Order> {
 
-    private static final String TAG = "CatalogProvider";
+    private static final String TAG = "OrderProvider";
 
     // MIME types used for searching words or looking up a single definition
-    public static final String CATALOGS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ttbox.cursor.item/catalog";
-    public static final String CATALOG_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ttbox.cursor.item/catalog";
+    public static final String ORDERS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ttbox.cursor.item/order";
+    public static final String ORDER_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ttbox.cursor.item/order";
 
     public static class Constants {
-        public static String AUTHORITY = "eu.ttbox.androgister.catalog";
-        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/catalog");
-        public static final Uri CONTENT_URI_GET_CATALOG = Uri.parse("content://" + AUTHORITY + "/catalog/");
+        public static String AUTHORITY = "eu.ttbox.androgister.order";
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/order");
+        public static final Uri CONTENT_URI_GET_ORDER = Uri.parse("content://" + AUTHORITY + "/order/");
 
         public static Uri getEntityUri(long entityId) {
             return Uri.withAppendedPath(CONTENT_URI, String.valueOf(entityId));
@@ -42,13 +42,13 @@ public class CatalogProvider extends AbstractGreenContentProvider<Catalog> {
         return mEntityColumnMap;
     }
 
-    public CatalogDao getEntityDao() {
-        CatalogDao dao =  ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getCatalogDao(); 
+    public OrderDao getEntityDao() {
+        OrderDao dao =  ((AndroGisterApplication) getContext().getApplicationContext()).getDaoSession().getOrderDao(); 
         mEntityColumnMap = buildEntityColumnMap(dao);
         return dao;
     }
 
-    private HashMap<String, String> buildEntityColumnMap(CatalogDao entityDao) {
+    private HashMap<String, String> buildEntityColumnMap(OrderDao entityDao) {
         HashMap<String, String> map = new HashMap<String, String>();
         ;
         // Add Identity Column
@@ -56,7 +56,7 @@ public class CatalogProvider extends AbstractGreenContentProvider<Catalog> {
             map.put(col, col);
         }
         // Add Suggest Aliases
-        map.put(SearchManager.SUGGEST_COLUMN_TEXT_1, String.format("%s AS %s", Properties.Name, SearchManager.SUGGEST_COLUMN_TEXT_1));
+        map.put(SearchManager.SUGGEST_COLUMN_TEXT_1, String.format("%s AS %s", Properties.OrderNumber, SearchManager.SUGGEST_COLUMN_TEXT_1));
         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
         map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS " + SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
         // Add Other Aliases
@@ -70,8 +70,8 @@ public class CatalogProvider extends AbstractGreenContentProvider<Catalog> {
     private static UriMatcher buildUriMatcher() {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         // to get definitions...
-        matcher.addURI(Constants.AUTHORITY, "catalog", ENTITIES);
-        matcher.addURI(Constants.AUTHORITY, "catalog/#", ENTITY);
+        matcher.addURI(Constants.AUTHORITY, "order", ENTITIES);
+        matcher.addURI(Constants.AUTHORITY, "order/#", ENTITY);
         return matcher;
     }
 
@@ -95,9 +95,9 @@ public class CatalogProvider extends AbstractGreenContentProvider<Catalog> {
     public String getType(Uri uri) {
         switch (matchUriMatcher(uri)) {
         case ENTITIES:
-            return CATALOGS_LIST_MIME_TYPE;
+            return ORDERS_LIST_MIME_TYPE;
         case ENTITY:
-            return CATALOG_MIME_TYPE;
+            return ORDER_MIME_TYPE;
         default:
             throw new IllegalArgumentException("Unknown URL " + uri);
         }

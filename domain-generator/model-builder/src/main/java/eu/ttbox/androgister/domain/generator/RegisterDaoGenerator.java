@@ -5,6 +5,7 @@ import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Index;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
+import de.greenrobot.daogenerator.ToMany;
 
 public class RegisterDaoGenerator {
 
@@ -18,9 +19,17 @@ public class RegisterDaoGenerator {
         Entity catalog = addCatalog(schema);
 
         addCatalogProduct(schema, catalog, product);
-
         addOffer(schema);
 
+        
+        // Person
+        addPerson(schema);
+        addUser(schema);
+        
+        // Order
+        addOrder(schema);
+        
+        
         new DaoGenerator().generateAll(schema, args[2]);
     }
 
@@ -137,8 +146,35 @@ public class RegisterDaoGenerator {
         return offer;
     }
 
+    private static Entity addPerson(Schema schema) {
+        Entity person = schema.addEntity("Person");
+        implementsDomainModel(person);
+
+        person.addStringProperty("lastname");
+        person.addStringProperty("firstname");
+        person.addStringProperty("matricule");
+ 
+        person.addStringProperty("tag");
+        person.addLongProperty("priceHT");
+        
+ 
+        return person;
+    }
+    
+    private static Entity addUser(Schema schema) {
+        Entity user = schema.addEntity("User");
+        implementsDomainModel(user);
+
+        user.addStringProperty("lastname");
+        user.addStringProperty("firstname");
+        user.addStringProperty("login"); 
+        user.addStringProperty("password");  
+        return user;
+    }
+    
     private static Entity addOrder(Schema schema) {
         Entity order = schema.addEntity("Order");
+        order.setHasKeepSections(Boolean.TRUE);
         implementsDomainModel(order);
         // Properties
         order.addStringProperty("orderNumber").notNull(); // KEY_ORDER_NUMBER
@@ -146,7 +182,7 @@ public class RegisterDaoGenerator {
         order.addStringProperty("orderUUID"); // KEY_ORDER_UUID
         order.addStringProperty("orderDeleteUUID"); // KEY_ORDER_DELETE_UUID
         order.addLongProperty("priceSumHT"); // KEY_PRICE_SUM_HT
-        order.addIntProperty("status"); // KEY_STATUS
+        order.addIntProperty("statusId").notNull(); // KEY_STATUS
         order.addIntProperty("paymentMode"); // KEY_PAYMENT_MODE
 
         order.addStringProperty("personId"); // KEY_PERS_ID
@@ -154,7 +190,13 @@ public class RegisterDaoGenerator {
         order.addStringProperty("personFirstname"); // KEY_PERS_FIRSTNAME
         order.addStringProperty("personLastname"); // KEY_PERS_LASTNAME
 
-        //  ArrayList<OrderItem> items;
+        // Items
+        Entity orderItem  = addOrderItem(schema);
+        Property orderFk =  orderItem.addLongProperty("orderId").notNull().getProperty();
+        ToMany orderToOrderItems = order.addToMany(orderItem, orderFk);
+        orderToOrderItems.setName("items");
+//        orderToOrderItems.orderAsc(properties);
+        
         return order;
     }
 

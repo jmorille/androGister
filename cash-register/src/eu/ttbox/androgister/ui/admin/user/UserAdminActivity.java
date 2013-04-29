@@ -5,13 +5,12 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.UserProvider;
+import eu.ttbox.androgister.domain.provider.UserProvider;
 import eu.ttbox.androgister.ui.admin.user.UserListFragment.OnSelectUserListener;
 
 public class UserAdminActivity extends Activity {

@@ -2,6 +2,7 @@ package eu.ttbox.androgister.ui.admin.user;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -12,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.database.UserProvider;
 import eu.ttbox.androgister.database.user.UserHelper;
+import eu.ttbox.androgister.domain.UserDao;
+import eu.ttbox.androgister.domain.UserDao.UserCursorHelper;
 
 public class UserViewFragment extends Fragment {
 
@@ -22,15 +26,24 @@ public class UserViewFragment extends Fragment {
 
 	private static final int LOADER_USER_DETAILS = R.id.config_id_admin_user_view_loader_started;
 
-	// Bindings
+    // Dao
+    private UserDao userDao;
+
+    // Bindings
 	private TextView userFirstnameTextView, userLastnameTextView, userMatriculeTextView;
 
 	// Instance Data 
 	private Uri lookupUri;
 
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.admin_user_view, container, false);
+		// Dao 
+        Context context = getActivity();
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+          userDao = app.getDaoSession().getUserDao();
+          
 		// View
 		userLastnameTextView = (TextView) v.findViewById(R.id.user_lastname);
 		userFirstnameTextView = (TextView) v.findViewById(R.id.user_firstname);
@@ -79,11 +92,11 @@ public class UserViewFragment extends Fragment {
 		@Override
 		public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 			Log.d(TAG, "OnLoadCompleteListener for User");
-			UserHelper helper = new UserHelper().initWrapper(cursor);
+			UserCursorHelper helper =userDao.getCursorHelper(cursor);
 			// bind Values
-			helper.setTextUserFirstname(userFirstnameTextView, cursor) //
-					.setTextUserLastname(userLastnameTextView, cursor)//
-					.setTextUserMatricule(userMatriculeTextView, cursor)//
+			helper.setTextFirstname(userFirstnameTextView, cursor) //
+					.setTextLastname(userLastnameTextView, cursor)//
+					.setTextLogin(userMatriculeTextView, cursor)//
 			;
 
 		}
