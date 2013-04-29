@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonAutoDetect(fieldVisibility=Visibility.NON_PRIVATE)
-@JsonPropertyOrder(value= {} )
+@JsonPropertyOrder(value= {"uuid", "versionDate" , "name"} )
 public interface ProductLight {
 
 }
