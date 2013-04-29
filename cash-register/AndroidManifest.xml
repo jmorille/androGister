@@ -244,7 +244,7 @@
             </intent-filter>
         </activity>
 
-
+<!-- 
         <receiver android:name=".security.DeviceAdminActivity$DeviceAdminActivityReceiver"
                 android:label="@string/app_device_admin"
                 android:description="@string/app_device_admin_description"
@@ -255,7 +255,7 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
-        
+        --> 
         <!-- Provider -->
         <provider android:exported="false"
             android:name=".domain.provider.TagProvider" android:label="Tags"

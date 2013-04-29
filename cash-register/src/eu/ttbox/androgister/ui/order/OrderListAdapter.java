@@ -1,48 +1,79 @@
 package eu.ttbox.androgister.ui.order;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.model.order.OrderHelper;
+import eu.ttbox.androgister.domain.OrderDao;
+import eu.ttbox.androgister.domain.OrderDao.OrderCursorHelper;
+import eu.ttbox.androgister.domain.dao.helper.OrderHelper;
+import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.model.order.OrderStatusEnum;
 
 public class OrderListAdapter extends ResourceCursorAdapter {
 
-    private OrderHelper helper;
+    private OrderCursorHelper helper;
+    private SimpleDateFormat dateFormat;
 
-    private boolean isNotBinding = true;
-
+    
     public OrderListAdapter(Context context, int layout, Cursor c, int flags) {
         super(context, layout, c, flags);
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+        OrderDao orderDao = app.getDaoSession().getOrderDao();
+        helper = orderDao.getCursorHelper(null);
+        // FOrmat
+        String datePattern  ="yyyy-MM-dd HH:mm:ss";
+        dateFormat = new SimpleDateFormat(datePattern);
     }
+ 
 
-    private void intViewBinding(View view, Context context, Cursor cursor) {
-        // Init Cursor
-        helper = new OrderHelper().initWrapper(cursor);
-        isNotBinding = false;
+    public void setTextOrderStatus(TextView view, Cursor cursor) {
+        int statusId = helper.getStatusId(cursor);
+        OrderStatusEnum status = OrderStatusEnum.getEnumFromKey(statusId);
+        if (status != null) {
+            view.setText(status.name());
+        } else {
+            view.setText(null);
+        } 
     }
-
+    
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        if (isNotBinding) {
-            intViewBinding(view, context, cursor);
+        if (helper.isNotInit) {
+            helper.initWrapper(cursor);
         }
         // Bind View 
         ViewHolder holder =(ViewHolder)view.getTag();
         // Bind Value
-        helper.setTextOrderNumber(holder.orderNumText, cursor) //
-                .setTextOrderUuid(holder.orderUuidText, cursor)//
-                .setTextOrderStatus(holder.statusText, cursor)//
-                .setTextOrderPriceSum(holder.priceText, cursor)//
+        helper .setTextOrderUUID(holder.orderUuidText, cursor)// 
                 .setTextPersonFirstname(holder.personFirstnameText, cursor) //
                 .setTextPersonLastname(holder.personLastnameText, cursor) //
                 .setTextPersonMatricule(holder.personMatriculeText, cursor) //
-                .setTextOrderDate(holder.dateText, cursor);
+                ;
+        
+         
+       setTextOrderStatus(holder.statusText, cursor);
+        
+       // Number
+        holder.orderNumText.setText(String.valueOf(helper.getOrderNumber(cursor)));
+        
+        // Date
+        String dateAsString = dateFormat.format(new Date(helper.getOrderDate(cursor)));
+        holder.dateText.setText(dateAsString);
+        
+        // Price
+        String priceSum = PriceHelper.getToStringPrice(helper.getPriceSumHT(cursor) );
+        holder.priceText.setText(priceSum);
+        
         // Test Invalid
-        if (helper.isOrderDeletePossible(cursor)) {
+        if (OrderHelper.isOrderDeletePossible(cursor, helper)) {
             view.setBackgroundResource(R.drawable.entity_list_item_bg);
         } else {
             view.setBackgroundResource(R.drawable.order_list_item_cancel_bg);

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
 import eu.ttbox.androgister.model.PriceHelper;
 
+@Deprecated
 public class OrderHelper {
 
     private static final String TAG = "OrderHelper";

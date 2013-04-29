@@ -21,8 +21,8 @@ import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.AppConstants;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.database.OrderProvider;
-import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
+import eu.ttbox.androgister.domain.OrderDao.Properties;
+import eu.ttbox.androgister.domain.provider.OrderProvider;
 
 /**
  * {link http://mobile.tutsplus.com/tutorials/android/android-sdk_loading-
@@ -36,13 +36,13 @@ public class OrderListFragment extends Fragment {
     private static final String TAG = "OrderListFragment";
 
     private static final int ORDER_LIST_LOADER = R.id.config_id_order_list_loader_started;
-    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { OrderColumns.KEY_ID, //
-            OrderColumns.KEY_ORDER_NUMBER, OrderColumns.KEY_STATUS, OrderColumns.KEY_ORDER_DATE, //
-            OrderColumns.KEY_ORDER_UUID, OrderColumns.KEY_ORDER_DELETE_UUID, //
-            OrderColumns.KEY_PERS_LASTNAME, OrderColumns.KEY_PERS_FIRSTNAME, OrderColumns.KEY_PERS_MATRICULE, //
-            OrderColumns.KEY_PRICE_SUM_HT };
+    private static final String[] SEARCH_PROJECTION_COLOMN = new String[] { Properties.Id.columnName, //
+            Properties.OrderNumber.columnName, Properties.StatusId.columnName, Properties.OrderDate.columnName, //
+            Properties.OrderUUID.columnName, Properties.OrderDeleteUUID.columnName, //
+            Properties.PersonLastname.columnName, Properties.PersonFirstname.columnName, Properties.PersonMatricule.columnName, //
+            Properties.PriceSumHT.columnName };
 
-    private static final String ORDER_SORT_DEFAULT = String.format("%s DESC, %s DESC", OrderColumns.KEY_ORDER_DATE, OrderColumns.KEY_ORDER_NUMBER);
+    private static final String ORDER_SORT_DEFAULT = String.format("%s DESC, %s DESC", Properties.OrderDate.columnName, Properties.OrderNumber.columnName);
 
     // Search Filter Value
     String filterOrderDateMin = null;
@@ -66,7 +66,7 @@ public class OrderListFragment extends Fragment {
             String[] selectionArgs = null;
             // Filter
             if (filterOrderDateMin != null) {
-                selection = String.format("%1$s >= ? and %1$s < ?", OrderColumns.KEY_ORDER_DATE);
+                selection = String.format("%1$s >= ? and %1$s < ?", Properties.OrderDate.columnName);
                 selectionArgs = new String[] { filterOrderDateMin, filterOrderDateMax };
             }
             // Loader
@@ -155,7 +155,7 @@ public class OrderListFragment extends Fragment {
 
     private void onListItemClick(ListView l, View v, int position, long id) {
         Cursor item = (Cursor) l.getAdapter().getItem(position);
-        long orderId = item.getLong(item.getColumnIndex(OrderColumns.KEY_ID));
+        long orderId = item.getLong(item.getColumnIndex(Properties.Id.columnName));
         startActivity(Intents.viewOrderDetail(getActivity(), orderId));
     }
 

@@ -16,11 +16,14 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
 import eu.ttbox.androgister.domain.provider.ProductProvider;
 import eu.ttbox.androgister.database.product.OfferDatabase.OfferColumns;
 import eu.ttbox.androgister.database.product.OfferHelper;
+import eu.ttbox.androgister.domain.ProductDao;
+import eu.ttbox.androgister.domain.ProductDao.ProductCursorHelper;
 import eu.ttbox.androgister.domain.ProductDao.Properties;
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
@@ -67,7 +70,8 @@ public class ProductSelectorFragment extends Fragment {
     private ListView filterListView;
 
     // Helper
-    private OfferHelper offerHelper;
+    private ProductDao productDao;
+    private ProductCursorHelper productHelper;
     private ProductItemAdapter listAdapter;
 
     private TagItemAdapter tagListAdapter;
@@ -88,6 +92,7 @@ public class ProductSelectorFragment extends Fragment {
         }
     };
 
+   
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -95,7 +100,11 @@ public class ProductSelectorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        offerHelper = new OfferHelper();
+        // Dao
+        Context context = getActivity();
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+        productDao = app.getDaoSession().getProductDao();
+         productHelper =productDao.getCursorHelper(null);
     }
 
     @Override
@@ -147,7 +156,7 @@ public class ProductSelectorFragment extends Fragment {
 
     public void onListItemClick(GridView l, View v, int position, long id) {
         Cursor item = (Cursor) l.getAdapter().getItem(position);
-        Offer offer = offerHelper.getEntity(item);
+        Bundle offer =    productHelper.readBundleValues(item); 
         if (onOfferSelectedListener != null) {
             onOfferSelectedListener.onOfferSelected(offer);
         } else {
@@ -160,7 +169,7 @@ public class ProductSelectorFragment extends Fragment {
     }
 
     public static interface OnOfferSelectedListener {
-        public void onOfferSelected(Offer offer);
+        public void onOfferSelected(Bundle offer);
     }
 
     // ===========================================================

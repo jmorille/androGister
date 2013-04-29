@@ -19,11 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.model.Offer;
+import eu.ttbox.androgister.domain.OrderItem;
+import eu.ttbox.androgister.domain.dao.helper.OrderItemHelper;
+import eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum;
 import eu.ttbox.androgister.model.PriceHelper;
-import eu.ttbox.androgister.model.order.OrderItem;
-import eu.ttbox.androgister.model.order.OrderItemHelper;
-import eu.ttbox.androgister.model.order.OrderPaymentModeEnum;
 import eu.ttbox.androgister.ui.register.RegisterBasketFragment.OnBasketSunUpdateListener;
 
 /**
@@ -246,7 +245,7 @@ public class RegisterMultiBasketFragment extends Fragment {
             String action = intent.getAction();
             Log.i(TAG, "onReceive Intent action : " + action);
             if (Intents.ACTION_ADD_BASKET.equals(action)) {
-                Offer offer = (Offer) intent.getSerializableExtra(Intents.EXTRA_OFFER);
+                Bundle offer =   intent.getExtras();
                 OrderItem item = OrderItemHelper.createFromOffer(offer);
                 onAddBasketItem(item);
                 // context.removeStickyBroadcast(intent);

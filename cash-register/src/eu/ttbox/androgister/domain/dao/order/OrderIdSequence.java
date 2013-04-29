@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.database.order;
+package eu.ttbox.androgister.domain.dao.order;
 
 import java.util.concurrent.atomic.AtomicLong;
 

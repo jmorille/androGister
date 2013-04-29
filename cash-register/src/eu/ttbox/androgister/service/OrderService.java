@@ -1,22 +1,28 @@
 package eu.ttbox.androgister.service;
 
+import java.util.ArrayList;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.Address;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 import android.util.Log;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.AppConstants;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.database.order.OrderDatabase;
-import eu.ttbox.androgister.model.order.Order;
+import eu.ttbox.androgister.domain.Order;
+import eu.ttbox.androgister.domain.OrderItem;
+import eu.ttbox.androgister.domain.dao.order.OrderDatabase;
 import eu.ttbox.androgister.service.core.WorkerService;
 import eu.ttbox.androgister.ui.CashRegisterActivity;
+// FIXME
 
 public class OrderService extends WorkerService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -112,8 +118,8 @@ public class OrderService extends WorkerService implements SharedPreferences.OnS
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void saveOrder(Order order) {
-        long orderId = orderDatabase.insertOrder(deviceId, order);
+    private void saveOrder(Order order,  ArrayList<OrderItem> orderItems ) {
+        long orderId = orderDatabase.insertOrder(deviceId, order, orderItems);
         if (orderId != -1) {
             sendBroadcast(Intents.orderSaved(orderId));
             Log.i(TAG, "Save Order with id " + orderId);
@@ -158,8 +164,14 @@ public class OrderService extends WorkerService implements SharedPreferences.OnS
         String action = intent.getAction();
         Log.i(TAG, "Service onReceive action : " + action);
         if (Intents.ACTION_ORDER_ADD.equals(action)) {
-            Order order = (Order) intent.getSerializableExtra(Intents.EXTRA_ORDER);
-            saveOrder(order);
+            Order order =  intent.getParcelableExtra(Intents.EXTRA_ORDER);
+            Parcelable[] parcels =  intent.getParcelableArrayExtra(Intents.EXTRA_ORDER_ITEMS);
+            ArrayList<OrderItem> orderItems = new ArrayList<OrderItem>(parcels.length);
+             for (Parcelable par : parcels){
+                 orderItems.add((OrderItem) par);              
+             }
+             
+            saveOrder(order, orderItems);
         } else if (Intents.ACTION_ORDER_DELETE.equals(action)) {
             long orderId = intent.getLongExtra(Intents.EXTRA_ORDER, -1);
             if (orderId != -1) {

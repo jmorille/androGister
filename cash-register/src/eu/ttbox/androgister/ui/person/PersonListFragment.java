@@ -158,7 +158,7 @@ public class PersonListFragment extends Fragment implements OnQueryTextListener 
                     // Properties.KEY_LASTNAME, Properties.KEY_FIRSTNAME);
                     // selectionArgs = new String[] { queryString, queryString
                     // };
-                    selection = String.format("(%s like ? or %s like ?)", Properties.Lastname, Properties.Firstname);
+                    selection = String.format("(%s like ? or %s like ?)", Properties.Lastname.columnName, Properties.Firstname.columnName);
                     selectionArgs = new String[] { queryString, queryString };
                 }
             }

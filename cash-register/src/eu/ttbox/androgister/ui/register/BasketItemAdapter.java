@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.domain.OrderItem;
 import eu.ttbox.androgister.model.PriceHelper;
-import eu.ttbox.androgister.model.order.OrderItem;
 
 public class BasketItemAdapter extends ArrayAdapter<OrderItem> {
 

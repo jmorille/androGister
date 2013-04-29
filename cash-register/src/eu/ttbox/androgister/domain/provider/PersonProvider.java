@@ -23,7 +23,7 @@ public class PersonProvider extends AbstractGreenContentProvider<Person> {
     public static class Constants {
         public static String AUTHORITY = "eu.ttbox.androgister.person";
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/person");
-        public static final Uri CONTENT_URI_GET_PRODUCT = Uri.parse("content://" + AUTHORITY + "/person/");
+        public static final Uri CONTENT_URI_GET_PERSON = Uri.parse("content://" + AUTHORITY + "/person/");
 
         public static Uri getEntityUri(long entityId) {
             return Uri.withAppendedPath(CONTENT_URI, String.valueOf(entityId));

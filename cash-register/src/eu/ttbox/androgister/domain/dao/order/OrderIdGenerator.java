@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.database.order;
+package eu.ttbox.androgister.domain.dao.order;
 
 import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicLong;
@@ -8,21 +8,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import eu.ttbox.androgister.AndroGisterApplication;
-import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
-import eu.ttbox.androgister.domain.dao.order.OrderIdSequence;
+import eu.ttbox.androgister.domain.OrderDao;
 
 /**
  * Android Identifier {link http://android-developers.blogspot.fr/2011/03/identifying-app-installations.html}
  * @author jmorille
  *
  */
-@Deprecated
 public class OrderIdGenerator {
 
 	private final static String TAG = "OrderIdGenerator";
 
-	private final static String QUERY_SELECT_MAX_ORDER_NUMBER = "SELECT MAX(" + OrderColumns.KEY_ORDER_NUMBER + ") AS max_id FROM " + OrderDatabase.ORDER_TABLE + " WHERE "
-			+ OrderColumns.KEY_ORDER_DATE + " >= %s and " + OrderColumns.KEY_ORDER_DATE + " < %s";
+	private final static String QUERY_SELECT_MAX_ORDER_NUMBER = "SELECT MAX(" + OrderDao.Properties.OrderNumber.columnName + ") AS max_id FROM " + OrderDao.TABLENAME //
+	        + " WHERE "
+			+ OrderDao.Properties.OrderDate.columnName + " >= %s and " + OrderDao.Properties.OrderDate.columnName + " < %s";
 
   
 	private AndroGisterApplication application;

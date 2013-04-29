@@ -1,28 +1,29 @@
 package eu.ttbox.androgister.domain.dao.order;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
-import eu.ttbox.androgister.AndroGisterApplication;
+import eu.ttbox.androgister.AndroGisterApplication; 
 import eu.ttbox.androgister.database.order.OrderDatabase.OrderColumns;
-import eu.ttbox.androgister.database.order.OrderIdGenerator;
 import eu.ttbox.androgister.domain.Order;
 import eu.ttbox.androgister.domain.OrderDao;
 import eu.ttbox.androgister.domain.OrderItem;
 import eu.ttbox.androgister.domain.OrderItemDao;
-import eu.ttbox.androgister.domain.ProductDao;
-import eu.ttbox.androgister.model.order.OrderHelper;
-import eu.ttbox.androgister.model.order.OrderItemHelper;
-import eu.ttbox.androgister.model.order.OrderStatusEnum;
-
+import eu.ttbox.androgister.domain.dao.helper.OrderHelper;
+import eu.ttbox.androgister.domain.ref.OrderStatusEnum;
 public class OrderDatabase {
 
 
     private static final String TAG = "OrderItemDatabase";
+    
+    private static final  String ORDER_WHERE_SELECT_BY_ID = String.format("%s = ?", OrderDao.Properties.Id.columnName);
+    
     
     // Dao
     private OrderDao orderDao;
@@ -55,36 +56,56 @@ public class OrderDatabase {
     }
     
     
-    public long insertOrder(String deviceId, Order order) throws SQLException {
+    public long insertOrder(String deviceId, Order order,  ArrayList<OrderItem> orderItems) throws SQLException {
         long result = -1;
         synchronized (lockInsertOrder) {
             SQLiteDatabase db = orderDao.getDatabase();
             try {
                 try {
                     db.beginTransaction();
-                    result = insertOrder(deviceId, order, db);
+                    result = insertOrder(deviceId, order, orderItems, db);
                     // Commit
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
                 }
             } finally {
-                db.close();
+//                db.close();
             }
         }
         return result;
     }
 
-    private long insertOrder(String deviceId, Order order, SQLiteDatabase db) throws SQLException {
+    private Order getOrderModel(SQLiteDatabase db, String orderId) {
+        Order order = null;
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(OrderDao.TABLENAME);
+        Cursor cursorOrder =  builder.query(db, orderDao.getAllColumns(), ORDER_WHERE_SELECT_BY_ID, new String[] {orderId}, null, null, null);
+        
+        try {
+            // Validate Query
+            if (cursorOrder.getCount() != 1) {
+                throw new RuntimeException("Not unique result for Order with id " + orderId);
+            }
+            // Read Cursor
+            cursorOrder.moveToFirst();
+            OrderHelper helper = new OrderHelper();
+            order = orderDao.readEntity(cursorOrder, 0);
+        } finally {
+            cursorOrder.close();
+        }
+        return order;
+    }
+    
+    private long insertOrder(String deviceId, Order order,  ArrayList<OrderItem> items, SQLiteDatabase db) throws SQLException {
         long result = -1;
         try {
             // TODO Check for increment number
             long now = System.currentTimeMillis();
             order.setOrderDate(now);
             // Order Id
-            long orderNumberNum = orderIdGenerator.getNextOrderNum(db, now);
-            String orderNumber = String.valueOf(orderNumberNum);
-            order.setOrderNumber(orderNumber);
+            long orderNumberNum = orderIdGenerator.getNextOrderNum(db, now); 
+            order.setOrderNumber(orderNumberNum);
            
             // Order UUID
             String orderUUID = OrderHelper.generateOrderUUID(now, deviceId, orderNumberNum);
@@ -92,16 +113,19 @@ public class OrderDatabase {
             
             Log.d(TAG, "Compute new Order UUID : " + orderUUID);
             // Order
-            orderDao.insertInTx(order); 
-         
-            // Orders Items
-            Long orderId = order.getId();
-            List<OrderItem> items = order.getItems();
-            if (items != null && !items.isEmpty()) {
+            ContentValues orderValues = orderDao.readContentValues(order);
+            long orderId = db.insertOrThrow(OrderDao.TABLENAME, null, orderValues);
+            order.setId(orderId); 
+             // Orders Items
+           
+            
+            if (items != null && !items.isEmpty()  ) {
                 for (OrderItem item : items) {
                     item.setOrderId(orderId); 
-                }
-                orderItemDao.insertInTx(items);
+                    ContentValues itemValues = orderItemDao.readContentValues(item);
+                    long itemId = db.insertOrThrow(OrderItemDao.TABLENAME, null, itemValues);
+                    item.setId(itemId);
+                } 
             }
             result = orderId;
         } catch (SQLException e) {
@@ -122,37 +146,37 @@ public class OrderDatabase {
             SQLiteDatabase db = orderDao.getDatabase();
             try {
                 try {
-                    db.beginTransaction();
-                    String orderIdString = String.valueOf(orderId);
-                    Long orderIdLong = Long.valueOf(orderId);
+                    db.beginTransaction(); 
                     // Get A order clone
-                    Order orderInv = orderDao.load(orderId );
+                    String orderIdAsString = String.valueOf(orderId);
+                    Order order  = getOrderModel(db, orderIdAsString );
+                     
                     // Validate Order Delete Possible
-                    boolean isPossible = OrderHelper.isOrderDeletePossible(orderInv);
+                    boolean isPossible = OrderHelper.isOrderDeletePossible(order);
                     if (!isPossible) {
                         return -1;
                     }
-                    // TODO Manage flag
-                    // Revert Order
-                    orderInv.setId(-1);
+                     // TODO Manage flag
+                    Order orderInv = new Order(order);
+                    // Revert Order 
+                    orderInv.setId(null);
                     orderInv.setStatus(OrderStatusEnum.ORDER_CANCEL);
-                    orderInv.setItems(null);
-                    orderInv.setOrderDeleteUUID(orderInv.getOrderUUID());
+                    orderInv.resetItems();
+                    orderInv.setOrderDeleteUUID(order.getOrderUUID());
                     orderInv.setOrderUUID(null);
                     orderInv.setOrderNumber(-1);
                     orderInv.setPriceSumHT(-1 * orderInv.getPriceSumHT());
                     // Insert New Clone
-                    result = insertOrder(deviceId, orderInv, db);
+                    result = insertOrder(deviceId, orderInv, null, db);
                     if (result == -1) {
-                        throw new RuntimeException(String.format("Could not insert Inversed Order for Original Order Id %s", orderIdString));
+                        throw new RuntimeException(String.format("Could not insert Inversed Order for Original Order Id %s", orderId));
                     }
                     // Update Order fot Cancel status
                     ContentValues values = new ContentValues();
-                    values.put(OrderColumns.KEY_ORDER_DELETE_UUID, orderInv.getOrderUUID());
-                    String whereClause = String.format("%s = ?", OrderColumns.KEY_ID);
-                    int updatedRow = db.update(OrderDao.TABLENAME, values, whereClause, new String[] { orderIdString });
+                    values.put(OrderDao.Properties.OrderDeleteUUID.columnName, orderInv.getOrderUUID());
+                    int updatedRow = db.update(OrderDao.TABLENAME, values, ORDER_WHERE_SELECT_BY_ID, new String[] {orderIdAsString });
                     if (updatedRow != 1) {
-                        throw new RuntimeException(String.format("Wrong number of update %s line for Order Id %s", updatedRow, orderIdString));
+                        throw new RuntimeException(String.format("Wrong number of update %s line for Order Id %s", updatedRow, orderId));
                     }
                     // Commit
                     db.setTransactionSuccessful();

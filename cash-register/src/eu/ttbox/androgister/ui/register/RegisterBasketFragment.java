@@ -17,14 +17,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
+import eu.ttbox.androgister.domain.Order;
+import eu.ttbox.androgister.domain.OrderItem;
 import eu.ttbox.androgister.domain.PersonDao;
-import eu.ttbox.androgister.model.Offer;
-import eu.ttbox.androgister.model.Person;
+import eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum;
 import eu.ttbox.androgister.model.PriceHelper;
-import eu.ttbox.androgister.model.order.Order;
-import eu.ttbox.androgister.model.order.OrderItem;
-import eu.ttbox.androgister.model.order.OrderItemHelper;
-import eu.ttbox.androgister.model.order.OrderPaymentModeEnum;
 import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.person.PersonListActivity;
 
@@ -48,8 +45,9 @@ public class RegisterBasketFragment extends Fragment {
     private ArrayList<OrderItem> basket = new ArrayList<OrderItem>();
     private long basketSum = 0;
 
-    private Order order;
-
+    // Instance
+    private Order order; 
+    
     private final OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,9 +75,17 @@ public class RegisterBasketFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle toSave) {
-        toSave.putSerializable(Intents.EXTRA_ORDER, order);
-    }
+        toSave.putParcelable(Intents.EXTRA_ORDER, order);
+        toSave.putParcelableArrayList(Intents.EXTRA_ORDER_ITEMS, basket);
+        
+     }
 
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        order =  savedInstanceState.getParcelable(Intents.EXTRA_ORDER);
+        basket= savedInstanceState.getParcelableArrayList(Intents.EXTRA_ORDER_ITEMS);
+    }
+    
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -151,11 +157,11 @@ public class RegisterBasketFragment extends Fragment {
     private void addOrIncrementItem(OrderItem item) {
         boolean isIncrement = false;
         // Could cast
-        int productId = (int) item.getProductId();
+        int productId = (int) item.getProductId().intValue();
         OrderItem order = cacheOrderItemByProductId.get(productId);
         if (order != null) {
             if (order.getPriceUnitHT() == item.getPriceUnitHT()) {
-                order.addQuantity(item.getQuantity());
+                order.setQuantity(order.getQuantity() + item.getQuantity());
                 isIncrement = true;
             }
         } else {
@@ -205,7 +211,7 @@ public class RegisterBasketFragment extends Fragment {
             long sumBasket = getComputeBasketSum(items);
             // Prepare Object
             Order order = getOrder();
-            order.setItems(items);
+//            order.setItems(items);
             order.setPriceSumHT(sumBasket);
              
             order.setPaymentMode(paymentMode);
@@ -214,7 +220,7 @@ public class RegisterBasketFragment extends Fragment {
             if (isValid) {
                 // Save It
                 Log.i(TAG, "Ask to save Basket to Order with " + items.size() + " Items");
-                getActivity().startService(Intents.saveOrder(getActivity(), order));
+                getActivity().startService(Intents.saveOrder(getActivity(), order, basket));
                 clearBasket();
             }
         }
@@ -229,7 +235,7 @@ public class RegisterBasketFragment extends Fragment {
         } else if (OrderPaymentModeEnum.CASH == order.getPaymentMode()) {
             return true;
         } else if (OrderPaymentModeEnum.CREDIT == order.getPaymentMode()) {
-            if (order.getPersonId() == -1) {
+            if (order.getPersonId() == null ) {
                 askOpenSelectPersonList(SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET);
                 return false;
             }
@@ -278,14 +284,15 @@ public class RegisterBasketFragment extends Fragment {
         // super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK  ) {
             if (SELECT_PERSON_REQUEST_CODE== requestCode || SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET== requestCode) {
-                Person person = (Person) data.getSerializableExtra(Intents.EXTRA_PERSON);
+//                Person person = (Person) data.getSerializableExtra(Intents.EXTRA_PERSON);
                 Bundle extras = data.getExtras();
                 Order localOrder = null;
-                if (person != null) { 
-                    localOrder = getOrder().setPersonId(extras.getLong(PersonDao.Properties.Id.columnName ))//
-                            .setPersonMatricule(extras.getString(PersonDao.Properties.Lastname.columnName ))//
-                            .setPersonLastname(extras.getString(PersonDao.Properties.Firstname.columnName ))//
-                            .setPersonFirstname(extras.getString(PersonDao.Properties.Matricule.columnName));
+                if (extras != null && !extras.isEmpty()) { 
+                    localOrder = getOrder()//
+                            .withPersonId(extras.getLong(PersonDao.Properties.Id.columnName ))//
+                            .withPersonMatricule(extras.getString(PersonDao.Properties.Lastname.columnName ))//
+                            .withPersonLastname(extras.getString(PersonDao.Properties.Firstname.columnName ))//
+                            .withPersonFirstname(extras.getString(PersonDao.Properties.Matricule.columnName));
                 }
                 setPersonData(localOrder);
                 if (  SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET== requestCode) {

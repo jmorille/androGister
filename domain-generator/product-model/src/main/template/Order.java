@@ -12,6 +12,8 @@ public class Order {
     
     
  // KEEP METHODS - put your custom methods here 
+    
+    // Order Status
     public eu.ttbox.androgister.domain.ref.OrderStatusEnum getStatus() {
        int statusId = getStatusId();
        return eu.ttbox.androgister.domain.ref.OrderStatusEnum.getEnumFromKey(statusId);
@@ -25,7 +27,22 @@ public class Order {
         setStatus(status); 
         return this;
      }
+
+    // Payment Mode
+    public eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum getPaymentMode() {
+        int modeId = getPaymentModeId();
+        return eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum.getEnumFromKey(modeId);
+     }
     
+    public void setPaymentMode(eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum mode) {
+        setPaymentModeId(mode.getKey()); 
+     }
+  
+    public Order withPaymentMode(eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum mode) {
+        setPaymentMode(mode); 
+        return this;
+     }
+  
  // KEEP METHODS END
     
     

@@ -11,10 +11,10 @@ import android.util.Log;
 import com.squareup.otto.Bus;
 
 import eu.ttbox.androgister.core.AppConstants;
-import eu.ttbox.androgister.database.order.OrderIdSequence;
 import eu.ttbox.androgister.domain.DaoMaster;
 import eu.ttbox.androgister.domain.DaoSession;
 import eu.ttbox.androgister.domain.dao.RegisterDbOpenHelper;
+import eu.ttbox.androgister.domain.dao.order.OrderIdSequence;
 
 public class AndroGisterApplication extends Application {
 

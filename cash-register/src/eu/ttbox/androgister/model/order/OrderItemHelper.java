@@ -7,6 +7,7 @@ import eu.ttbox.androgister.database.order.OrderDatabase.OrderItemColumns;
 import eu.ttbox.androgister.model.Offer;
 import eu.ttbox.androgister.model.PriceHelper;
 
+@Deprecated
 public class OrderItemHelper {
 
     boolean isNotInit = true;

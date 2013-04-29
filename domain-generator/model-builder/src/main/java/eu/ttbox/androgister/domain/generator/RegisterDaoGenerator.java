@@ -81,6 +81,7 @@ public class RegisterDaoGenerator {
         // Properties
         product.addStringProperty("name").notNull();
         product.addStringProperty("description");
+        product.addStringProperty("ean");
         product.addLongProperty("priceHT").notNull();
         // product.addStringProperty("tag");
 
@@ -174,18 +175,22 @@ public class RegisterDaoGenerator {
     
     private static Entity addOrder(Schema schema) {
         Entity order = schema.addEntity("Order");
+        order.setTableName("ORDERS"); // "ORDER" is a reserved keyword
         order.setHasKeepSections(Boolean.TRUE);
+        order.implementsParceable();
+        
         implementsDomainModel(order);
+        
         // Properties
-        order.addStringProperty("orderNumber").notNull(); // KEY_ORDER_NUMBER
+        order.addLongProperty("orderNumber").notNull(); // KEY_ORDER_NUMBER
         order.addLongProperty("orderDate"); // KEY_ORDER_DATE
         order.addStringProperty("orderUUID"); // KEY_ORDER_UUID
         order.addStringProperty("orderDeleteUUID"); // KEY_ORDER_DELETE_UUID
         order.addLongProperty("priceSumHT"); // KEY_PRICE_SUM_HT
         order.addIntProperty("statusId").notNull(); // KEY_STATUS
-        order.addIntProperty("paymentMode"); // KEY_PAYMENT_MODE
+        order.addIntProperty("paymentModeId"); // KEY_PAYMENT_MODE
 
-        order.addStringProperty("personId"); // KEY_PERS_ID
+        order.addLongProperty("personId"); // KEY_PERS_ID
         order.addStringProperty("personMatricule"); // KEY_PERS_MATRICULE
         order.addStringProperty("personFirstname"); // KEY_PERS_FIRSTNAME
         order.addStringProperty("personLastname"); // KEY_PERS_LASTNAME
@@ -202,11 +207,11 @@ public class RegisterDaoGenerator {
 
     private static Entity addOrderItem(Schema schema) {
         Entity orderItem = schema.addEntity("OrderItem");
+        orderItem.implementsParceable();
         implementsDomainModel(orderItem);
         // Properties
-        orderItem.addStringProperty("name"); // KEY_NAME
-        // KEY_ORDER_ID = "ORDER_ID";
-        // KEY_PRODUCT_ID = "PRODUCT_ID";
+        orderItem.addStringProperty("name"); // KEY_NAME 
+        orderItem.addLongProperty("productId"); //"PRODUCT_ID";
         orderItem.addStringProperty("ean"); // KEY_EAN = "EAN";
         orderItem.addIntProperty("quantity").notNull(); // KEY_QUANTITY  
         orderItem.addLongProperty("priceUnitHT").notNull();// KEY_PRICE_UNIT_HT  

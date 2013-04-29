@@ -1,12 +1,14 @@
 package eu.ttbox.androgister.core;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.Intent;
-import eu.ttbox.androgister.domain.Person;
+import android.os.Bundle;
+import eu.ttbox.androgister.domain.Order;
+import eu.ttbox.androgister.domain.OrderItem;
 import eu.ttbox.androgister.domain.PersonDao;
-import eu.ttbox.androgister.model.Offer;
-import eu.ttbox.androgister.model.order.Order;
-import eu.ttbox.androgister.model.order.OrderPaymentModeEnum;
+import eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum;
 import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.order.OrderEditActivity;
 
@@ -27,24 +29,27 @@ public class Intents {
     
     public static final String EXTRA_OFFER = "eu.ttbox.androgister.intent.EXTRA_OFFER";
     public static final String EXTRA_ORDER = "eu.ttbox.androgister.intent.EXTRA_ORDER";
+    public static final String EXTRA_ORDER_ITEMS = "eu.ttbox.androgister.intent.EXTRA_ORDER_ITEMS";
     public static final String EXTRA_ORDER_CANCELED_ID = "eu.ttbox.androgister.intent.EXTRA_ORDER_CANCELED_ID";
     public static final String EXTRA_ORDER_PAYMENT_MODE = "eu.ttbox.androgister.intent.EXTRA_ORDER_PAYMENT_MODE";
     public static final String EXTRA_PERSON = "eu.ttbox.androgister.intent.EXTRA_PERSON";
 
-    public static Intent addToBasket(Offer status) {
-        return new Intent(ACTION_ADD_BASKET).putExtra(EXTRA_OFFER, status);
+    public static Intent addToBasket(Bundle offer) {
+        return new Intent(ACTION_ADD_BASKET).putExtras(  offer);
     }
 
     public static Intent saveBasket(OrderPaymentModeEnum paymentMode) {
         return new Intent(ACTION_SAVE_BASKET).putExtra(EXTRA_ORDER_PAYMENT_MODE, paymentMode.getKey());
     }
 
-    public static Intent saveOrder(Context context, Order order) {
+    public static Intent saveOrder(Context context, Order order, ArrayList<OrderItem> items) {
+        // Clone Array
+        OrderItem[] orderItems =  items.toArray(new OrderItem[items.size()]);
+        
         return new Intent(context, OrderService.class) //
                 .setAction(ACTION_ORDER_ADD) //
-                .putExtra(EXTRA_ORDER, order);
-
-        // return new Intent(ACTION_ORDER_ADD).putExtra(EXTRA_ORDER, order);
+                .putExtra(EXTRA_ORDER, order)//
+                .putExtra(EXTRA_ORDER_ITEMS, orderItems); 
     }
 
     public static Intent viewOrderDetail(Context context, long orderId) {
