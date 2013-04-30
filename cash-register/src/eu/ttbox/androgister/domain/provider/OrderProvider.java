@@ -33,7 +33,7 @@ public class OrderProvider extends AbstractGreenContentProvider<Order> {
     // UriMatcher stuff
     private static final UriMatcher sURIMatcher = buildUriMatcher();
 
-    public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", Properties.Id);
+    public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", Properties.Id.columnName);
 
     private HashMap<String, String> mEntityColumnMap;
 
@@ -49,8 +49,7 @@ public class OrderProvider extends AbstractGreenContentProvider<Order> {
     }
 
     private HashMap<String, String> buildEntityColumnMap(OrderDao entityDao) {
-        HashMap<String, String> map = new HashMap<String, String>();
-        ;
+        HashMap<String, String> map = new HashMap<String, String>(); 
         // Add Identity Column
         for (String col : entityDao.getAllColumns()) {
             map.put(col, col);

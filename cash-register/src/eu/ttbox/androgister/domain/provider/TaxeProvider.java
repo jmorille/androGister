@@ -33,7 +33,7 @@ public class TaxeProvider extends AbstractGreenContentProvider<Taxe> {
     // UriMatcher stuff
     private static final UriMatcher sURIMatcher = buildUriMatcher();
 
-    public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", Properties.Id);
+    public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", Properties.Id.columnName);
 
     private HashMap<String, String> mEntityColumnMap;
 

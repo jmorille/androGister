@@ -6,7 +6,9 @@ import java.util.Map;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.UriMatcher;
+import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.domain.OrderItem;
 import eu.ttbox.androgister.domain.OrderItemDao;
@@ -16,14 +18,18 @@ public class OrderItemProvider extends AbstractGreenContentProvider<OrderItem> {
 
     private static final String TAG = "OrderItemProvider";
 
+    public static final String SELECT_BY_ORDER_ID = String.format("%s = ?", Properties.OrderId.columnName);
+    
     // MIME types used for searching words or looking up a single definition
     public static final String ORDER_ITEMS_LIST_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ttbox.cursor.item/orderItem";
     public static final String ORDER_ITEM_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ttbox.cursor.item/orderItem";
 
+    public static final int  BY_ORDER_ENTITIES = 10;
+    
     public static class Constants {
         public static String AUTHORITY = "eu.ttbox.androgister.orderItem";
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/orderItem");
-        public static final Uri CONTENT_URI_GET_ORDER_ITEM = Uri.parse("content://" + AUTHORITY + "/orderItem/");
+        public static final Uri CONTENT_URI_GET_ORDER_ITEM = Uri.parse("content://" + AUTHORITY + "/orderItem/order/");
 
         public static Uri getEntityUri(long entityId) {
             return Uri.withAppendedPath(CONTENT_URI, String.valueOf(entityId));
@@ -73,6 +79,7 @@ public class OrderItemProvider extends AbstractGreenContentProvider<OrderItem> {
         // to get definitions...
         matcher.addURI(Constants.AUTHORITY, "orderItem", ENTITIES);
         matcher.addURI(Constants.AUTHORITY, "orderItem/#", ENTITY);
+        matcher.addURI(Constants.AUTHORITY, "orderItem/order/#", BY_ORDER_ENTITIES);
         return matcher;
     }
 
@@ -97,11 +104,30 @@ public class OrderItemProvider extends AbstractGreenContentProvider<OrderItem> {
         switch (matchUriMatcher(uri)) {
         case ENTITIES:
             return ORDER_ITEMS_LIST_MIME_TYPE;
+        case BY_ORDER_ENTITIES:
+            return ORDER_ITEMS_LIST_MIME_TYPE;
         case ENTITY:
             return ORDER_ITEM_MIME_TYPE; 
         default:
             throw new IllegalArgumentException("Unknown URL " + uri);
         }
+    }
+    
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Log.d(TAG, "query for uri : " + uri);
+        // Use the UriMatcher to see what kind of query we have and format the
+        // db query accordingly
+        switch (matchUriMatcher(uri)) {
+        case BY_ORDER_ENTITIES:
+            String orderId = uri.getLastPathSegment();
+            String mergerSelection  = mergeQuerySelectionClause(selection, SELECT_BY_ORDER_ID);
+            String[] mergedArgs = mergeQuerySelectionArgsClause(selectionArgs, new String[] {orderId} );
+            Log.d(TAG, "mergerSelection : " + mergerSelection);
+            Log.d(TAG, "mergedArgs : " + mergedArgs.length);
+            return queryEntities(projection, mergerSelection, mergedArgs, sortOrder);
+        }
+        return super.query(uri, projection, selection, selectionArgs, sortOrder);
     }
 
 }

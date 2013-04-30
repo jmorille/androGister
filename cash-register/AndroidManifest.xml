@@ -127,7 +127,7 @@
         </activity>
   
         <!-- Order -->
-        <activity  android:exported="false"
+        <activity  android:exported="true"
             android:name=".ui.order.OrderEditActivity"
             android:label="@string/app_name" >
         </activity>

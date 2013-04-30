@@ -151,7 +151,8 @@ public class OrderEditFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
             Log.d(TAG, "OnLoadCompleteListener for Order");
-            OrderCursorHelper helper = orderDao.getCursorHelper(cursor); 
+            cursor.moveToFirst();
+            OrderCursorHelper helper = orderDao.getCursorHelper(cursor);  
             // bind Values
             helper.setTextOrderUUID(orderUuidTextView, cursor);
            // Date
@@ -210,7 +211,7 @@ public class OrderEditFragment extends Fragment {
             String selection = null;
             String[] selectionArgs = null;
             // Loader
-            Uri orderUri = Uri.withAppendedPath(OrderItemProvider.Constants.CONTENT_URI, orderIdString);
+            Uri orderUri = Uri.withAppendedPath(OrderItemProvider.Constants.CONTENT_URI_GET_ORDER_ITEM, orderIdString);
             CursorLoader cursorLoader = new CursorLoader(getActivity(), orderUri, null, selection, selectionArgs, sortOrder);
             return cursorLoader;
         }
@@ -222,8 +223,7 @@ public class OrderEditFragment extends Fragment {
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            myListAdapter.changeCursor(null);
-
+            myListAdapter.changeCursor(null); 
         }
 
     };

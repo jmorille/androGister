@@ -20,9 +20,8 @@ public class OrderHelper {
     }
 
     public static boolean isOrderDeletePossible(Cursor cursor, OrderCursorHelper helper) { 
-        String orderUUID = helper.getOrderUUID(cursor);
-        int statusId = helper.getStatusId(cursor);
-        OrderStatusEnum status = OrderStatusEnum.getEnumFromKey(statusId);
+        String orderUUID = helper.getOrderUUID(cursor); 
+        OrderStatusEnum status = getOrderStatus(cursor, helper);
         String orderDeleteUUID = helper.getOrderDeleteUUID(cursor);
         return OrderHelper.isOrderDeletePossible(orderUUID, status, orderDeleteUUID);
     }
@@ -38,12 +37,12 @@ public class OrderHelper {
         boolean isPossible = true;
         if (isPossible && !OrderStatusEnum.ORDER.equals(status)) {
             isPossible = false;
-            Log.w(TAG, String.format("Order Delete %s is NOT Possible for order status %s", orderUUID, status));
+            Log.d(TAG, String.format("Order Delete %s is NOT Possible for order status %s", orderUUID, status));
         }
         if (isPossible && !orderUUID.equals(orderDeleteUUID)) {
             // Already Invalidate, is not impossible to do again
             isPossible = false;
-            Log.w(TAG, String.format("Order Delete %s is NOT Possible for previous delete by %s", orderUUID, orderDeleteUUID));
+            Log.d(TAG, String.format("Order Delete %s is NOT Possible for previous delete by %s", orderUUID, orderDeleteUUID));
         }
         return isPossible;
     }
@@ -51,7 +50,9 @@ public class OrderHelper {
     
     public static OrderStatusEnum getOrderStatus(Cursor cursor, OrderCursorHelper helper) {
         int statusId = helper.getStatusId(cursor);
-        return OrderStatusEnum.getEnumFromKey(statusId);
+        OrderStatusEnum status =  OrderStatusEnum.getEnumFromKey(statusId);
+        Log.d(TAG, "OrderStatusEnum id : " +statusId + " = " + status);
+        return  status;
     }
     
     

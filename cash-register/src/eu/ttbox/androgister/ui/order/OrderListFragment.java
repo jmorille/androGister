@@ -156,6 +156,7 @@ public class OrderListFragment extends Fragment {
     private void onListItemClick(ListView l, View v, int position, long id) {
         Cursor item = (Cursor) l.getAdapter().getItem(position);
         long orderId = item.getLong(item.getColumnIndex(Properties.Id.columnName));
+        Log.d(TAG, "onListItemClick orderId : " + orderId);
         startActivity(Intents.viewOrderDetail(getActivity(), orderId));
     }
 

@@ -40,23 +40,35 @@ public abstract class AbstractGreenContentProvider<MODEL extends DomainModel> ex
         case ENTITIES:
             return queryEntities(projection, selection, selectionArgs, sortOrder);
         case ENTITY:
-            String selectionMerged = selection;
             String entityId = uri.getLastPathSegment();
-            String[] args = new String[] { entityId };
-            if (!TextUtils.isEmpty(selection)) {
-                Log.d(TAG, "Merge selection [" + selection + "] with Uri : " + uri);
-                selectionMerged = String.format("%s and (%s)",  getSelectClauseByEntityId(), selection);
-                int pSelectionArgSize = selectionArgs.length;
-                args = new String[pSelectionArgSize + 1];
-                System.arraycopy(selectionArgs, 0, args, 1, pSelectionArgSize);
-                selectionArgs[0] = entityId;
-            } else {
-                args = new String[] { entityId };
-            }
-            return queryEntities(projection, selectionMerged, args, null);
+            String mergedSelection  = mergeQuerySelectionClause(selection, getSelectClauseByEntityId());
+            String[] mergedArgs = mergeQuerySelectionArgsClause(selectionArgs, new String[] { entityId });
+            Log.d(TAG, "mergerSelection : " + mergedSelection);
+            Log.d(TAG, "mergedArgs : " + mergedArgs.length); 
+            return queryEntities(projection, mergedSelection, mergedArgs, null);
         default:
             throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
+    }
+    
+    public String mergeQuerySelectionClause(String selection, String other) {
+        String selectionMerged = other;
+        if (!TextUtils.isEmpty(selection)) {
+            selectionMerged = String.format("%s and (%s)",  other, selection);
+        }
+        return selectionMerged;
+    }
+    
+    public String[] mergeQuerySelectionArgsClause(String[] selectionArgs, String[] otherArgs) {
+        String[] args  = otherArgs;
+        if (selectionArgs !=null && selectionArgs.length>0) {
+            int pSelectionArgSize = selectionArgs.length;
+            int otherArgSize = otherArgs.length;
+            args  = new String[pSelectionArgSize +otherArgSize];
+            System.arraycopy(otherArgs, 0, args, 0, otherArgSize);
+            System.arraycopy(selectionArgs, 0, args, otherArgSize, pSelectionArgSize);
+        }
+        return args;
     }
 
     @Override

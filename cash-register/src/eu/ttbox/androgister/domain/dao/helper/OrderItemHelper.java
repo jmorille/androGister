@@ -10,14 +10,14 @@ public class OrderItemHelper {
         OrderItem item = null;
         if (p != null) {
             item = new OrderItem();
-
+            int qty = 1;
             item.withProductId(p.getLong(Properties.Id.columnName)) //
                     .withName(p.getString(Properties.Name.columnName)) //
                     .withEan(p.getString(Properties.Ean.columnName))//
-                    .withQuantity(1) //TODO Quantity
-                    .withPriceUnitHT(p.getLong(Properties.PriceHT.columnName));
+                    .withQuantity(qty) // TODO Quantity
+                    .withPriceUnitHT(p.getLong(Properties.PriceHT.columnName))//
+                    .withPriceSumHT(qty * p.getLong(Properties.PriceHT.columnName));
         }
         return item;
     }
-
 }

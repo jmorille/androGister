@@ -68,6 +68,7 @@ public class ProductItemAdapter extends ResourceCursorAdapter {
         // Price
         holder.nameText.setText(helper.getName(cursor));
         String priceText = PriceHelper.getToStringPrice(helper.getPriceHT(cursor));
+        holder.priceText.setText(priceText);
         // helper.setTextOfferName(holder.nameText, cursor)//
         // .setTextOfferPrice(holder.priceText, cursor);
         // Bg color

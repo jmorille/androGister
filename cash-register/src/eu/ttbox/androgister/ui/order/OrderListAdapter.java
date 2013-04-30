@@ -37,7 +37,7 @@ public class OrderListAdapter extends ResourceCursorAdapter {
     public void setTextOrderStatus(TextView view, Cursor cursor) {
         int statusId = helper.getStatusId(cursor);
         OrderStatusEnum status = OrderStatusEnum.getEnumFromKey(statusId);
-        if (status != null) {
+         if (status != null) {
             view.setText(status.name());
         } else {
             view.setText(null);

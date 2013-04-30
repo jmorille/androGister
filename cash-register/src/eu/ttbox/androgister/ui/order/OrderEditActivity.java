@@ -18,6 +18,7 @@ public class OrderEditActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_edit_activity);
+        Log.d(TAG, "onCreate OrderEditActivity");
     }
 
     @Override
@@ -46,6 +47,7 @@ public class OrderEditActivity extends Activity {
     }
 
     protected void handleIntent(Intent intent) {
+        Log.d(TAG, "handleIntent : " + intent);
         if (intent == null) {
             return;
         }

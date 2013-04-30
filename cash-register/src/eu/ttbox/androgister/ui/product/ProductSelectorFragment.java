@@ -144,8 +144,7 @@ public class ProductSelectorFragment extends Fragment {
         if (UNSET_ID.longValue() == itemId) {
             filterTagId = null;
         } else {
-            filterTagId = String.valueOf(itemId);
-            ;
+            filterTagId = String.valueOf(itemId); 
         }
         getLoaderManager().restartLoader(OFFER_LIST_LOADER, null, offerLoaderCallback);
         // ((Filterable)gridView.getAdapter()).getFilter().filter(filterName);

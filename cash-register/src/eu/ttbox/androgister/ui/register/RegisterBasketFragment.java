@@ -46,8 +46,8 @@ public class RegisterBasketFragment extends Fragment {
     private long basketSum = 0;
 
     // Instance
-    private Order order; 
-    
+    private Order order;
+
     private final OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -63,38 +63,25 @@ public class RegisterBasketFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Restore States
+        Log.d(TAG, "Restore onCreate savedInstanceState: " + savedInstanceState);
+        if (savedInstanceState != null) {
+            order = savedInstanceState.getParcelable(Intents.EXTRA_ORDER);
+            basket = savedInstanceState.getParcelableArrayList(Intents.EXTRA_ORDER_ITEMS);
+            Log.d(TAG, "Restore basket : " + (basket == null ? 0 : basket.size()) + " Items");
+        }
         // Adpater
         listAdapter = new BasketItemAdapter(getActivity(), basket);
-        // Restore
-        if (null != savedInstanceState) {
-            order = (Order) savedInstanceState.getSerializable(Intents.EXTRA_ORDER);
-        }
+
         // Services
         // mStatusReceiver = new StatusReceiver();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle toSave) {
-        toSave.putParcelable(Intents.EXTRA_ORDER, order);
-        toSave.putParcelableArrayList(Intents.EXTRA_ORDER_ITEMS, basket);
-        
-     }
-
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        order =  savedInstanceState.getParcelable(Intents.EXTRA_ORDER);
-        basket= savedInstanceState.getParcelableArrayList(Intents.EXTRA_ORDER_ITEMS);
-    }
-    
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getActivity().stopService( new Intent(getActivity(), OrderService.class));
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.register_basket, container, false);
+        Log.d(TAG, "Restore onCreateView savedInstanceState: " + savedInstanceState);
         // Bind
         listView = (ListView) view.findViewById(R.id.basket_screen_list);
         listView.setOnItemLongClickListener(mOnLongClickListener);
@@ -112,6 +99,21 @@ public class RegisterBasketFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "Save onSaveInstanceState : " + outState);
+        outState.putParcelable(Intents.EXTRA_ORDER, order);
+        outState.putParcelableArrayList(Intents.EXTRA_ORDER_ITEMS, basket);
+        super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().stopService(new Intent(getActivity(), OrderService.class));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         setPersonData(order);
@@ -121,10 +123,9 @@ public class RegisterBasketFragment extends Fragment {
 
     @Override
     public void onPause() {
-        super.onPause(); 
+        super.onPause();
     }
 
-    
     private void setTextSum(long sumPrice) {
         this.basketSum = sumPrice;
         sumTextView.setText(PriceHelper.getToStringPrice(sumPrice));
@@ -146,7 +147,6 @@ public class RegisterBasketFragment extends Fragment {
         }
         return sum;
     }
- 
 
     public void onAddBasketItem(OrderItem item) {
         listAdapter.add(item);
@@ -211,9 +211,9 @@ public class RegisterBasketFragment extends Fragment {
             long sumBasket = getComputeBasketSum(items);
             // Prepare Object
             Order order = getOrder();
-//            order.setItems(items);
+            // order.setItems(items);
             order.setPriceSumHT(sumBasket);
-             
+
             order.setPaymentMode(paymentMode);
             // Validate Order
             isValid = isValidOrder(order);
@@ -235,7 +235,7 @@ public class RegisterBasketFragment extends Fragment {
         } else if (OrderPaymentModeEnum.CASH == order.getPaymentMode()) {
             return true;
         } else if (OrderPaymentModeEnum.CREDIT == order.getPaymentMode()) {
-            if (order.getPersonId() == null ) {
+            if (order.getPersonId() == null) {
                 askOpenSelectPersonList(SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET);
                 return false;
             }
@@ -255,54 +255,56 @@ public class RegisterBasketFragment extends Fragment {
         return order;
     }
 
-    private void setPersonData(Order person) {
+    private void setPersonData(Order order) { 
         // Define Text
         String personFirstname = null;
         String personLastname = null;
         String personMatricule = null;
-        if (person != null) {
-            personFirstname = person.getPersonFirstname();
-            personLastname = person.getPersonLastname();
-            personMatricule = person.getPersonMatricule();
+        if (order != null) {
+            personFirstname = order.getPersonFirstname();
+            personLastname = order.getPersonLastname();
+            personMatricule = order.getPersonMatricule();
         }
         personFirstnameTextView.setText(personFirstname);
         personLastnameTextView.setText(personLastname);
         personMatriculeTextView.setText(personMatricule);
+        this.order = order;
     }
 
     public void askOpenSelectPersonList() {
         askOpenSelectPersonList(SELECT_PERSON_REQUEST_CODE);
-      }
+    }
 
     private void askOpenSelectPersonList(int requestCode) {
         Intent intent = new Intent(getActivity(), PersonListActivity.class);
         startActivityForResult(intent, requestCode);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i(TAG, "#### onActivityResult " + data);
         // super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK  ) {
-            if (SELECT_PERSON_REQUEST_CODE== requestCode || SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET== requestCode) {
-//                Person person = (Person) data.getSerializableExtra(Intents.EXTRA_PERSON);
+        if (resultCode == Activity.RESULT_OK) {
+            if (SELECT_PERSON_REQUEST_CODE == requestCode || SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET == requestCode) {
+                // Person person = (Person)
+                // data.getSerializableExtra(Intents.EXTRA_PERSON);
                 Bundle extras = data.getExtras();
                 Order localOrder = null;
-                if (extras != null && !extras.isEmpty()) { 
+                if (extras != null && !extras.isEmpty()) {
                     localOrder = getOrder()//
-                            .withPersonId(extras.getLong(PersonDao.Properties.Id.columnName ))//
-                            .withPersonMatricule(extras.getString(PersonDao.Properties.Lastname.columnName ))//
-                            .withPersonLastname(extras.getString(PersonDao.Properties.Firstname.columnName ))//
+                            .withPersonId(extras.getLong(PersonDao.Properties.Id.columnName))//
+                            .withPersonMatricule(extras.getString(PersonDao.Properties.Lastname.columnName))//
+                            .withPersonLastname(extras.getString(PersonDao.Properties.Firstname.columnName))//
                             .withPersonFirstname(extras.getString(PersonDao.Properties.Matricule.columnName));
                 }
                 setPersonData(localOrder);
-                if (  SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET== requestCode) {
-                   askToSaveBasketToOrder(order.getPaymentMode()); 
+                if (SELECT_PERSON_REQUEST_CODE_ON_SAVE_BASKET == requestCode) {
+                    askToSaveBasketToOrder(order.getPaymentMode());
                 }
             }
-            
-        } 
+
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
- 
 
 }

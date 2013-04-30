@@ -9,21 +9,20 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
-import eu.ttbox.androgister.AndroGisterApplication;  
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.domain.Order;
 import eu.ttbox.androgister.domain.OrderDao;
 import eu.ttbox.androgister.domain.OrderItem;
 import eu.ttbox.androgister.domain.OrderItemDao;
 import eu.ttbox.androgister.domain.dao.helper.OrderHelper;
 import eu.ttbox.androgister.domain.ref.OrderStatusEnum;
+
 public class OrderDatabase {
 
-
     private static final String TAG = "OrderItemDatabase";
-    
-    private static final  String ORDER_WHERE_SELECT_BY_ID = String.format("%s = ?", OrderDao.Properties.Id.columnName);
-    
-    
+
+    private static final String ORDER_WHERE_SELECT_BY_ID = String.format("%s = ?", OrderDao.Properties.Id.columnName);
+
     // Dao
     private OrderDao orderDao;
     private OrderItemDao orderItemDao;
@@ -33,29 +32,27 @@ public class OrderDatabase {
 
     // Concurency Lock
     private Object[] lockInsertOrder = new Object[0];
-    
+
     /**
      * Constructor
      * 
      * @param context
      *            The Context within which to work, used to create the DB
      */
-    public OrderDatabase(Context context) { 
+    public OrderDatabase(Context context) {
         // Init Dao
-        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext(); 
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
         orderDao = app.getDaoSession().getOrderDao();
         orderItemDao = app.getDaoSession().getOrderItemDao();
         // Generator
-        orderIdGenerator = new OrderIdGenerator(context); 
+        orderIdGenerator = new OrderIdGenerator(context);
     }
-    
 
     public SQLiteDatabase getWritableDatabase() {
         return orderDao.getDatabase();
     }
-    
-    
-    public long insertOrder(String deviceId, Order order,  ArrayList<OrderItem> orderItems) throws SQLException {
+
+    public long insertOrder(String deviceId, Order order, ArrayList<OrderItem> orderItems) throws SQLException {
         long result = -1;
         synchronized (lockInsertOrder) {
             SQLiteDatabase db = orderDao.getDatabase();
@@ -69,7 +66,7 @@ public class OrderDatabase {
                     db.endTransaction();
                 }
             } finally {
-//                db.close();
+                // db.close();
             }
         }
         return result;
@@ -79,8 +76,8 @@ public class OrderDatabase {
         Order order = null;
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(OrderDao.TABLENAME);
-        Cursor cursorOrder =  builder.query(db, orderDao.getAllColumns(), ORDER_WHERE_SELECT_BY_ID, new String[] {orderId}, null, null, null);
-        
+        Cursor cursorOrder = builder.query(db, orderDao.getAllColumns(), ORDER_WHERE_SELECT_BY_ID, new String[] { orderId }, null, null, null);
+
         try {
             // Validate Query
             if (cursorOrder.getCount() != 1) {
@@ -95,36 +92,37 @@ public class OrderDatabase {
         }
         return order;
     }
-    
-    private long insertOrder(String deviceId, Order order,  ArrayList<OrderItem> items, SQLiteDatabase db) throws SQLException {
+
+    private long insertOrder(String deviceId, Order order, ArrayList<OrderItem> items, SQLiteDatabase db) throws SQLException {
         long result = -1;
         try {
             // TODO Check for increment number
             long now = System.currentTimeMillis();
             order.setOrderDate(now);
             // Order Id
-            long orderNumberNum = orderIdGenerator.getNextOrderNum(db, now); 
+            long orderNumberNum = orderIdGenerator.getNextOrderNum(db, now);
             order.setOrderNumber(orderNumberNum);
-           
+            if (order.getStatus() == null) {
+                order.setStatus(OrderStatusEnum.ORDER);
+            }
             // Order UUID
             String orderUUID = OrderHelper.generateOrderUUID(now, deviceId, orderNumberNum);
             order.setOrderUUID(orderUUID);
-            
+
             Log.d(TAG, "Compute new Order UUID : " + orderUUID);
             // Order
             ContentValues orderValues = orderDao.readContentValues(order);
             long orderId = db.insertOrThrow(OrderDao.TABLENAME, null, orderValues);
-            order.setId(orderId); 
-             // Orders Items
-           
-            
-            if (items != null && !items.isEmpty()  ) {
+            order.setId(orderId);
+            // Orders Items
+
+            if (items != null && !items.isEmpty()) {
                 for (OrderItem item : items) {
-                    item.setOrderId(orderId); 
+                    item.setOrderId(orderId);
                     ContentValues itemValues = orderItemDao.readContentValues(item);
                     long itemId = db.insertOrThrow(OrderItemDao.TABLENAME, null, itemValues);
                     item.setId(itemId);
-                } 
+                }
             }
             result = orderId;
         } catch (SQLException e) {
@@ -145,19 +143,19 @@ public class OrderDatabase {
             SQLiteDatabase db = orderDao.getDatabase();
             try {
                 try {
-                    db.beginTransaction(); 
+                    db.beginTransaction();
                     // Get A order clone
                     String orderIdAsString = String.valueOf(orderId);
-                    Order order  = getOrderModel(db, orderIdAsString );
-                     
+                    Order order = getOrderModel(db, orderIdAsString);
+
                     // Validate Order Delete Possible
                     boolean isPossible = OrderHelper.isOrderDeletePossible(order);
                     if (!isPossible) {
                         return -1;
                     }
-                     // TODO Manage flag
+                    // TODO Manage flag
                     Order orderInv = new Order(order);
-                    // Revert Order 
+                    // Revert Order
                     orderInv.setId(null);
                     orderInv.setStatus(OrderStatusEnum.ORDER_CANCEL);
                     orderInv.resetItems();
@@ -173,7 +171,7 @@ public class OrderDatabase {
                     // Update Order fot Cancel status
                     ContentValues values = new ContentValues();
                     values.put(OrderDao.Properties.OrderDeleteUUID.columnName, orderInv.getOrderUUID());
-                    int updatedRow = db.update(OrderDao.TABLENAME, values, ORDER_WHERE_SELECT_BY_ID, new String[] {orderIdAsString });
+                    int updatedRow = db.update(OrderDao.TABLENAME, values, ORDER_WHERE_SELECT_BY_ID, new String[] { orderIdAsString });
                     if (updatedRow != 1) {
                         throw new RuntimeException(String.format("Wrong number of update %s line for Order Id %s", updatedRow, orderId));
                     }
@@ -188,5 +186,5 @@ public class OrderDatabase {
         }
         return result;
     }
-    
+
 }
