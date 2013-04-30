@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import eu.ttbox.androgister.domain.Order;
@@ -19,8 +20,8 @@ public class OrderHelper {
         return result;
     }
 
-    public static boolean isOrderDeletePossible(Cursor cursor, OrderCursorHelper helper) { 
-        String orderUUID = helper.getOrderUUID(cursor); 
+    public static boolean isOrderDeletePossible(Cursor cursor, OrderCursorHelper helper) {
+        String orderUUID = helper.getOrderUUID(cursor);
         OrderStatusEnum status = getOrderStatus(cursor, helper);
         String orderDeleteUUID = helper.getOrderDeleteUUID(cursor);
         return OrderHelper.isOrderDeletePossible(orderUUID, status, orderDeleteUUID);
@@ -39,33 +40,30 @@ public class OrderHelper {
             isPossible = false;
             Log.d(TAG, String.format("Order Delete %s is NOT Possible for order status %s", orderUUID, status));
         }
-        if (isPossible && !orderUUID.equals(orderDeleteUUID)) {
+        if (isPossible && !TextUtils.isEmpty(orderDeleteUUID)) {
             // Already Invalidate, is not impossible to do again
             isPossible = false;
             Log.d(TAG, String.format("Order Delete %s is NOT Possible for previous delete by %s", orderUUID, orderDeleteUUID));
         }
         return isPossible;
     }
-    
-    
+
     public static OrderStatusEnum getOrderStatus(Cursor cursor, OrderCursorHelper helper) {
         int statusId = helper.getStatusId(cursor);
-        OrderStatusEnum status =  OrderStatusEnum.getEnumFromKey(statusId);
-        Log.d(TAG, "OrderStatusEnum id : " +statusId + " = " + status);
-        return  status;
+        OrderStatusEnum status = OrderStatusEnum.getEnumFromKey(statusId);
+        Log.d(TAG, "OrderStatusEnum id : " + statusId + " = " + status);
+        return status;
     }
-    
-    
+
     public static String getOrderStatusLabel(Context context, OrderStatusEnum status) {
-       //FIXME context.getString(resId)    
+        // FIXME context.getString(resId)
         return status.toString();
     }
 
-    public static java.text.DateFormat getOrderDateFormat(Context context ) {
-          java.text.DateFormat longDateFormat = DateFormat.getLongDateFormat(context);
-       
+    public static java.text.DateFormat getOrderDateFormat(Context context) {
+        java.text.DateFormat longDateFormat = DateFormat.getLongDateFormat(context);
+
         return longDateFormat;
     }
-        
-    
+
 }

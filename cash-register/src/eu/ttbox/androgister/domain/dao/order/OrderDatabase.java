@@ -181,7 +181,7 @@ public class OrderDatabase {
                     db.endTransaction();
                 }
             } finally {
-                db.close();
+//                db.close();
             }
         }
         return result;
