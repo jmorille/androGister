@@ -17,11 +17,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
+import eu.ttbox.androgister.core.PriceHelper;
 import eu.ttbox.androgister.domain.Order;
 import eu.ttbox.androgister.domain.OrderItem;
 import eu.ttbox.androgister.domain.PersonDao;
 import eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum;
-import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.service.OrderService;
 import eu.ttbox.androgister.ui.person.PersonListActivity;
 

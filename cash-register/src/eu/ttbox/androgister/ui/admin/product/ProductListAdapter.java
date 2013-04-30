@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import de.greenrobot.dao.query.LazyList;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.core.PriceHelper;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
-import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.ui.admin.product.ProductListAdapter.ViewHolder;
 
 public class ProductListAdapter extends LazyListAdapter<Product, ViewHolder> {

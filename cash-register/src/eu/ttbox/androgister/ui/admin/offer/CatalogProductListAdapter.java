@@ -1,9 +1,9 @@
 package eu.ttbox.androgister.ui.admin.offer;
 
 import android.content.ClipData;
+import android.content.ClipData.Item;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ClipData.Item;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.VelocityTrackerCompat;
@@ -18,11 +18,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import de.greenrobot.dao.query.LazyList;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.ProductProvider;
+import eu.ttbox.androgister.core.PriceHelper;
 import eu.ttbox.androgister.domain.CatalogProduct;
 import eu.ttbox.androgister.domain.Product;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
-import eu.ttbox.androgister.model.PriceHelper;
+import eu.ttbox.androgister.domain.provider.ProductProvider;
 import eu.ttbox.androgister.ui.admin.offer.CatalogProductListAdapter.ViewHolder;
 import eu.ttbox.androgister.ui.admin.product.ProductUiHelper;
 

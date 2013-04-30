@@ -121,7 +121,7 @@ public class ProductService {
             // Save Entity
             LOG.debug("Read Product entity : {}", entity);
             productRepository.persist(entity, begin);
-            updatedEntity.put(entity.uuid, entity.versionDate);
+            updatedEntity.put(entity.serverId, entity.versionDate);
             // Write the status
             mapper.writeValue(jgen, entity);
             jgen.flush();
@@ -133,7 +133,7 @@ public class ProductService {
             @Override
             public Boolean apply(Product entity) {
                 try {
-                	Long clientVersion = updatedEntity.get(entity.uuid);
+                	Long clientVersion = updatedEntity.get(entity.serverId);
                 	if (clientVersion==null || !clientVersion.equals(entity.versionDate)) {
                 		// Send server version
                 		mapper.writeValue(jgen, entity);

@@ -11,16 +11,17 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.core.PriceHelper;
 import eu.ttbox.androgister.domain.OrderDao;
 import eu.ttbox.androgister.domain.OrderDao.OrderCursorHelper;
 import eu.ttbox.androgister.domain.dao.helper.OrderHelper;
-import eu.ttbox.androgister.model.PriceHelper;
-import eu.ttbox.androgister.model.order.OrderStatusEnum;
+import eu.ttbox.androgister.domain.ref.OrderStatusEnum;
+
 
 public class OrderListAdapter extends ResourceCursorAdapter {
 
     private OrderCursorHelper helper;
-    private SimpleDateFormat dateFormat;
+    private java.text.DateFormat dateFormat;
 
     
     public OrderListAdapter(Context context, int layout, Cursor c, int flags) {
@@ -28,9 +29,8 @@ public class OrderListAdapter extends ResourceCursorAdapter {
         AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
         OrderDao orderDao = app.getDaoSession().getOrderDao();
         helper = orderDao.getCursorHelper(null);
-        // FOrmat
-        String datePattern  ="yyyy-MM-dd HH:mm:ss";
-        dateFormat = new SimpleDateFormat(datePattern);
+        // FOrmat 
+        dateFormat = OrderHelper.getOrderDateFormat(context);
     }
  
 
@@ -65,7 +65,7 @@ public class OrderListAdapter extends ResourceCursorAdapter {
         holder.orderNumText.setText(String.valueOf(helper.getOrderNumber(cursor)));
         
         // Date
-        String dateAsString = dateFormat.format(new Date(helper.getOrderDate(cursor)));
+        String dateAsString = dateFormat.format( helper.getOrderDate(cursor) );
         holder.dateText.setText(dateAsString);
         
         // Price

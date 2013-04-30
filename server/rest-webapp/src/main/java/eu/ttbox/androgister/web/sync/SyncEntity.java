@@ -11,5 +11,21 @@ public class SyncEntity<T> {
 		return "SyncEntity [serverId=" + serverId + ", versionDate=" + versionDate + "]";
 	}
 
+	public T getServerId() {
+		return serverId;
+	}
+
+	public void setServerId(T serverId) {
+		this.serverId = serverId;
+	}
+
+	public Long getVersionDate() {
+		return versionDate;
+	}
+
+	public void setVersionDate(Long versionDate) {
+		this.versionDate = versionDate;
+	}
+
 	
 }

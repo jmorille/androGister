@@ -6,35 +6,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.model.order.OrderItemHelper;
+import eu.ttbox.androgister.core.PriceHelper;
+import eu.ttbox.androgister.domain.OrderItemDao;
+import eu.ttbox.androgister.domain.OrderItemDao.OrderItemCursorHelper;
 
 public class OrderItemAdapter extends ResourceCursorAdapter {
 
-    private OrderItemHelper helper;
-    private boolean isNotBinding = true;
+    private OrderItemCursorHelper helper; 
 
     public OrderItemAdapter(Context context, int layout, Cursor c, int flags) {
         super(context, layout, c, flags);
+        // Dao 
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+       OrderItemDao orderDao = app.getDaoSession().getOrderItemDao();
+       helper = orderDao.getCursorHelper(null);
     }
-
-    private void intViewBinding(View view, Context context, Cursor cursor) {
-        helper = new OrderItemHelper().initWrapper(cursor);
-        // Init Cursor
-        isNotBinding = false;
-    }
+ 
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        if (isNotBinding) {
-            intViewBinding(view, context, cursor);
+        if (helper.isNotInit) {
+            helper.initWrapper(cursor);
         }
-        // Bind
         ViewHolder holder = (ViewHolder) view.getTag();
         // Set value
-        helper.setTextItemName(holder.nameTextView, cursor) //
-                .setTextItemQuantity(holder.quantityTextView, cursor)//
-                .setTextItemPriceUnit(holder.priceTextView, cursor);
+        helper.setTextName(holder.nameTextView, cursor);
+        // Qunatity
+        int qty =   helper.getQuantity(cursor);
+        holder.quantityTextView.setText(String.valueOf(qty));
+        // Price Unit
+        long priceUnit = helper.getPriceUnitHT(cursor);
+        String  priceAsString = PriceHelper.getToStringPrice(priceUnit);
+        holder.priceTextView.setText(priceAsString); 
     }
 
     @Override

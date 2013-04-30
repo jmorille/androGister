@@ -19,16 +19,13 @@ import android.widget.TextView;
 import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.domain.provider.ProductProvider;
-import eu.ttbox.androgister.database.product.OfferDatabase.OfferColumns;
-import eu.ttbox.androgister.database.product.OfferHelper;
+import eu.ttbox.androgister.domain.provider.ProductProvider; 
 import eu.ttbox.androgister.domain.ProductDao;
 import eu.ttbox.androgister.domain.ProductDao.ProductCursorHelper;
 import eu.ttbox.androgister.domain.ProductDao.Properties;
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
-import eu.ttbox.androgister.domain.provider.TagProvider;
-import eu.ttbox.androgister.model.Offer;
+import eu.ttbox.androgister.domain.provider.TagProvider; 
 
 /**
  * TODO {link

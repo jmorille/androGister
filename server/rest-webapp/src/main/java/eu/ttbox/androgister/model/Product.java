@@ -7,12 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import eu.ttbox.androgister.web.sync.EntitySyncable;
+
 @Entity
 @Table(name = "Product")
-public class Product {
+public class Product  implements EntitySyncable {
 
     @Id
-    public UUID uuid;
+    public UUID serverId;
 
     @Column(name = "creationDate")
     public Long creationDate;
@@ -43,8 +45,29 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product [uuid=" + uuid + ", name=" + name + "]";
+        return "Product [serverId=" + serverId + ", name=" + name + "]";
     }
+ 
+
+	@Override
+	public UUID getServerId() { 
+		return serverId;
+	} 
+	@Override
+	public void setServerId(UUID serverId) {
+		this.serverId = serverId;
+	}
+ 
+
+	@Override
+	public Long getVersionDate() { 
+		return versionDate;
+	}
+ 
+	@Override
+	public void setVersionDate(Long versionDate) {
+		this.versionDate = versionDate;
+	}
     
     
     

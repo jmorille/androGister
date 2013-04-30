@@ -19,10 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
+import eu.ttbox.androgister.core.PriceHelper;
 import eu.ttbox.androgister.domain.OrderItem;
 import eu.ttbox.androgister.domain.dao.helper.OrderItemHelper;
 import eu.ttbox.androgister.domain.ref.OrderPaymentModeEnum;
-import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.ui.register.RegisterBasketFragment.OnBasketSunUpdateListener;
 
 /**

@@ -10,11 +10,11 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
+import eu.ttbox.androgister.core.PriceHelper;
 import eu.ttbox.androgister.domain.ProductDao;
 import eu.ttbox.androgister.domain.ProductDao.ProductCursorHelper;
 import eu.ttbox.androgister.domain.Tag;
 import eu.ttbox.androgister.domain.TagDao;
-import eu.ttbox.androgister.model.PriceHelper;
 import eu.ttbox.androgister.ui.admin.product.ProductUiHelper;
 
 public class ProductItemAdapter extends ResourceCursorAdapter {

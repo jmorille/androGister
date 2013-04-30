@@ -109,13 +109,13 @@ public class CassandraProductRepository extends AbstractEntityRepository<UUID, S
         log.debug("Creating product : {}", product);
         validateEntity(product);
 
-        if (product.uuid == null) {
-            product.uuid = TimeUUIDUtils.getUniqueTimeUUIDinMillis(); // UUID.randomUUID();//
+        if (product.serverId == null) {
+            product.serverId = TimeUUIDUtils.getUniqueTimeUUIDinMillis(); // UUID.randomUUID();//
         }
 
         try {
             em.persist(product);
-            addProductToSalespointline(product.uuid);
+            addProductToSalespointline(product.serverId);
         } catch (Exception e) {
             log.error("Error Creating product {} : " + e.getMessage());
         }
@@ -137,13 +137,13 @@ public class CassandraProductRepository extends AbstractEntityRepository<UUID, S
     public void remove(Product product) {
         log.debug("Deleting product : {} ", product);
         Mutator<UUID> mutator = HFactory.createMutator(keyspace, UUIDSerializer.get());
-        mutator.addDeletion(product.uuid, ColumnFamilyKeys.PRODUCT_CF.cfName);
+        mutator.addDeletion(product.serverId, ColumnFamilyKeys.PRODUCT_CF.cfName);
         mutator.execute();
         // template.deleteRow(product.uuid);
 
         // productSalespointTemplate.doExecuteSlice(key, predicate, mapper)
         // Depends
-        UUID productUUID = product.uuid;
+        UUID productUUID = product.serverId;
         removeProductToSalespointline(productUUID);
     }
 

@@ -1,4 +1,4 @@
-package eu.ttbox.androgister.model;
+package eu.ttbox.androgister.core;
 
 public class PriceHelper {
 

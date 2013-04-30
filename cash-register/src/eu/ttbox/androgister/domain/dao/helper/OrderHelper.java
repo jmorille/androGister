@@ -1,6 +1,10 @@
 package eu.ttbox.androgister.domain.dao.helper;
 
+import java.text.SimpleDateFormat;
+
+import android.content.Context;
 import android.database.Cursor;
+import android.text.format.DateFormat;
 import android.util.Log;
 import eu.ttbox.androgister.domain.Order;
 import eu.ttbox.androgister.domain.OrderDao.OrderCursorHelper;
@@ -43,4 +47,24 @@ public class OrderHelper {
         }
         return isPossible;
     }
+    
+    
+    public static OrderStatusEnum getOrderStatus(Cursor cursor, OrderCursorHelper helper) {
+        int statusId = helper.getStatusId(cursor);
+        return OrderStatusEnum.getEnumFromKey(statusId);
+    }
+    
+    
+    public static String getOrderStatusLabel(Context context, OrderStatusEnum status) {
+       //FIXME context.getString(resId)    
+        return status.toString();
+    }
+
+    public static java.text.DateFormat getOrderDateFormat(Context context ) {
+          java.text.DateFormat longDateFormat = DateFormat.getLongDateFormat(context);
+       
+        return longDateFormat;
+    }
+        
+    
 }

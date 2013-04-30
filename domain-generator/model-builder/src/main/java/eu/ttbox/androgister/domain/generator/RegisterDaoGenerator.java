@@ -183,13 +183,15 @@ public class RegisterDaoGenerator {
         
         // Properties
         order.addLongProperty("orderNumber").notNull(); // KEY_ORDER_NUMBER
-        order.addLongProperty("orderDate"); // KEY_ORDER_DATE
-        order.addStringProperty("orderUUID"); // KEY_ORDER_UUID
+        order.addLongProperty("orderDate").notNull(); // KEY_ORDER_DATE
+        order.addStringProperty("orderUUID").notNull(); // KEY_ORDER_UUID
         order.addStringProperty("orderDeleteUUID"); // KEY_ORDER_DELETE_UUID
-        order.addLongProperty("priceSumHT"); // KEY_PRICE_SUM_HT
+
         order.addIntProperty("statusId").notNull(); // KEY_STATUS
         order.addIntProperty("paymentModeId"); // KEY_PAYMENT_MODE
-
+        order.addLongProperty("priceSumHT").notNull(); // KEY_PRICE_SUM_HT
+        
+        
         order.addLongProperty("personId"); // KEY_PERS_ID
         order.addStringProperty("personMatricule"); // KEY_PERS_MATRICULE
         order.addStringProperty("personFirstname"); // KEY_PERS_FIRSTNAME

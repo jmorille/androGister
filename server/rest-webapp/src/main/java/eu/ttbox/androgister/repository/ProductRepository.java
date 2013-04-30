@@ -109,8 +109,8 @@ public class ProductRepository {
     public void persist(Product product, Long updateTime) {
         LOG.debug("Creating product : {}", product);
         // validateEntity(product);
-        if (product.uuid == null) {
-            product.uuid = UUID.randomUUID();
+        if (product.serverId == null) {
+            product.serverId = UUID.randomUUID();
             product.creationDate = updateTime;
         }
         product.versionDate = updateTime;
@@ -188,7 +188,7 @@ public class ProductRepository {
     @CacheEvict(value = "product-cache", key = "#product.uuid")
     public void remove(Product product) {
         LOG.debug("Deleting product : {} ", product);
-        remove(product.uuid, product.salepointId);
+        remove(product.serverId, product.salepointId);
     }
 
     @CacheEvict(value = "product-cache", key = "#uuid")

@@ -273,11 +273,15 @@
             android:name=".domain.provider.PersonProvider" android:label="Person"
             android:authorities="eu.ttbox.androgister.person"  />
        <provider android:exported="false"
-            android:name=".domain.provider.UserProvider" android:label="Person"
+            android:name=".domain.provider.UserProvider" android:label="User"
             android:authorities="eu.ttbox.androgister.user"  />
        <provider android:exported="false"
-            android:name=".domain.provider.OrderProvider" android:label="Person"
+            android:name=".domain.provider.OrderProvider" android:label="Order"
             android:authorities="eu.ttbox.androgister.order"  />
+       <provider android:exported="false"
+            android:name=".domain.provider.OrderItemProvider" android:label="Order Item"
+            android:authorities="eu.ttbox.androgister.orderItem"  />
+       
        
         <!-- Old Provider -->
 <!--         <provider  -->
@@ -290,12 +294,12 @@
 <!--             android:authorities="eu.ttbox.androgister.searchableperson.PersonProvider" -->
 <!--             android:readPermission="eu.ttbox.androgister.PERSON_READ" -->
 <!--             android:writePermission="eu.ttbox.androgister.PERSON_WRITE" /> -->
-        <provider
-            android:name=".database.OrderProvider"
-            android:label="Commande"
-            android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider"
-            android:readPermission="eu.ttbox.androgister.ORDER_READ"
-            android:writePermission="eu.ttbox.androgister.ORDER_WRITE" />
+<!--         <provider -->
+<!--             android:name=".database.OrderProvider" -->
+<!--             android:label="Commande" -->
+<!--             android:authorities="eu.ttbox.androgister.searchableorder.OrderProvider" -->
+<!--             android:readPermission="eu.ttbox.androgister.ORDER_READ" -->
+<!--             android:writePermission="eu.ttbox.androgister.ORDER_WRITE" /> -->
 <!--         <provider -->
 <!--             android:name=".database.UserProvider" -->
 <!--             android:authorities="eu.ttbox.androgister.searchableuser.UserProvider" -->

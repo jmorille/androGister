@@ -1,5 +1,7 @@
 package eu.ttbox.androgister.ui.order;
 
+import java.util.Date;
+
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
@@ -20,11 +22,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.R;
 import eu.ttbox.androgister.core.Intents;
-import eu.ttbox.androgister.database.OrderProvider;
-import eu.ttbox.androgister.model.order.OrderHelper;
-import eu.ttbox.androgister.model.order.OrderStatusEnum;
+import eu.ttbox.androgister.core.PriceHelper;
+import eu.ttbox.androgister.domain.OrderDao;
+import eu.ttbox.androgister.domain.OrderDao.OrderCursorHelper;
+import eu.ttbox.androgister.domain.dao.helper.OrderHelper;
+import eu.ttbox.androgister.domain.provider.OrderItemProvider;
+import eu.ttbox.androgister.domain.provider.OrderProvider;
+import eu.ttbox.androgister.domain.ref.OrderStatusEnum;
 
 public class OrderEditFragment extends Fragment {
 
@@ -48,11 +55,18 @@ public class OrderEditFragment extends Fragment {
     // Listeners
     private BroadcastReceiver mStatusReceiver;
 
-    //
+    // DAO
+    private OrderDao orderDao;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.order_edit, container, false);
+        // Dao
+        Context context = getActivity();
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+        orderDao = app.getDaoSession().getOrderDao();
+        
         // View
         itemList = (ListView) v.findViewById(R.id.order_edit_items_list);
         orderNumTextView = (TextView) v.findViewById(R.id.order_orderNum_input);
@@ -129,7 +143,7 @@ public class OrderEditFragment extends Fragment {
             String selection = null;
             String[] selectionArgs = null;
             // Loader
-            Uri orderUri = Uri.withAppendedPath(OrderProvider.Constants.CONTENT_URI_GET_ODRER, orderIdString);
+            Uri orderUri = Uri.withAppendedPath(OrderProvider.Constants.CONTENT_URI_GET_ORDER, orderIdString);
             CursorLoader cursorLoader = new CursorLoader(getActivity(), orderUri, null, selection, selectionArgs, sortOrder);
             return cursorLoader;
         }
@@ -137,21 +151,31 @@ public class OrderEditFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
             Log.d(TAG, "OnLoadCompleteListener for Order");
-            OrderHelper helper = new OrderHelper().initWrapper(cursor); 
+            OrderCursorHelper helper = orderDao.getCursorHelper(cursor); 
             // bind Values
-            helper.setTextOrderNumber(orderNumTextView, cursor) //
-                    .setTextOrderUuid(orderUuidTextView, cursor)//
-                    .setTextOrderStatus(statusTextView, cursor)//
-                    .setTextOrderDate(orderDateTextView, cursor)//
-                    .setTextOrderPriceSum(priceTextView, cursor);
+            helper.setTextOrderUUID(orderUuidTextView, cursor);
+           // Date
+            long orderDate =  helper.getOrderDate(cursor);
+            String orderDateString = OrderHelper.getOrderDateFormat(getActivity()).format( orderDate );
+            orderDateTextView.setText(orderDateString);
+            // Price
+            long priceSumHt = helper.getPriceSumHT(cursor);
+            String priceSumHtString = PriceHelper.getToStringPrice(priceSumHt);
+            priceTextView.setText(priceSumHtString);
+            // Number
+            helper.setTextOrderNumber(orderNumTextView, cursor);
+            // Status
+            int statusId =   helper.getStatusId(cursor);
+            OrderStatusEnum status = OrderStatusEnum.getEnumFromKey(statusId);
+            String statusLabel = OrderHelper.getOrderStatusLabel(getActivity(), status);
+            statusTextView.setText(statusLabel); // FIXME Get a label
             // Validate
-            boolean isDeleteAvailaible = helper.isOrderDeletePossible(cursor);
+            boolean isDeleteAvailaible = OrderHelper.isOrderDeletePossible(cursor, helper);
             deleteButton.setEnabled(isDeleteAvailaible);
             editButton.setEnabled(isDeleteAvailaible);
             // Display Invalidate
-            OrderStatusEnum status = helper.getOrderStatusEnum(cursor);
             if (!isDeleteAvailaible && OrderStatusEnum.ORDER.equals(status)) {
-                String orderDelete = cursor.getString(helper.orderDeleteUuidIdx);
+                String orderDelete = helper.getOrderDeleteUUID(cursor); 
                 orderDeleteUuiTextViewd.setText(orderDelete);
                 orderDeleteUuiTextViewd.setVisibility(View.VISIBLE);
                 orderDeleteUuiTextViewd.setOnClickListener(new OnClickListener() {
@@ -186,7 +210,7 @@ public class OrderEditFragment extends Fragment {
             String selection = null;
             String[] selectionArgs = null;
             // Loader
-            Uri orderUri = Uri.withAppendedPath(OrderProvider.Constants.CONTENT_URI_GET_ODRER_ITEMS, orderIdString);
+            Uri orderUri = Uri.withAppendedPath(OrderItemProvider.Constants.CONTENT_URI, orderIdString);
             CursorLoader cursorLoader = new CursorLoader(getActivity(), orderUri, null, selection, selectionArgs, sortOrder);
             return cursorLoader;
         }

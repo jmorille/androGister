@@ -11,9 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.greenrobot.dao.query.LazyList;
 import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.ProductProvider;
 import eu.ttbox.androgister.domain.Catalog;
 import eu.ttbox.androgister.domain.core.LazyListAdapter;
+import eu.ttbox.androgister.domain.provider.ProductProvider;
 import eu.ttbox.androgister.ui.admin.catalog.CatalogListAdapter.ViewHolder;
 
 public class CatalogListAdapter extends LazyListAdapter<Catalog, ViewHolder> {

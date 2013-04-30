@@ -14,9 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import eu.ttbox.androgister.AndroGisterApplication;
-import eu.ttbox.androgister.R;
-import eu.ttbox.androgister.database.UserProvider;
-import eu.ttbox.androgister.database.user.UserHelper;
+import eu.ttbox.androgister.R; 
 import eu.ttbox.androgister.domain.UserDao;
 import eu.ttbox.androgister.domain.UserDao.UserCursorHelper;
 
