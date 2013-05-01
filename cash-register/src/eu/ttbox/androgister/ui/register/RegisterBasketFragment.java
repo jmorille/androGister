@@ -62,13 +62,15 @@ public class RegisterBasketFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+      
         super.onCreate(savedInstanceState);
-
-        // Restore States
+       
+     // Restore States
         Log.d(TAG, "Restore onCreate savedInstanceState: " + savedInstanceState);
         if (savedInstanceState != null) {
             order = savedInstanceState.getParcelable(Intents.EXTRA_ORDER);
             basket = savedInstanceState.getParcelableArrayList(Intents.EXTRA_ORDER_ITEMS);
+            Log.d(TAG, "Restore Order : " + order);
             Log.d(TAG, "Restore basket : " + (basket == null ? 0 : basket.size()) + " Items");
         }
         // Adpater
@@ -100,12 +102,12 @@ public class RegisterBasketFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "Save onSaveInstanceState : " + outState);
-        outState.putParcelable(Intents.EXTRA_ORDER, order);
-        outState.putParcelableArrayList(Intents.EXTRA_ORDER_ITEMS, basket);
         super.onSaveInstanceState(outState);
-
-    }
+         outState.putParcelable(Intents.EXTRA_ORDER, order);
+        outState.putParcelableArrayList(Intents.EXTRA_ORDER_ITEMS, basket);
+        Log.d(TAG, "Save onSaveInstanceState : " + outState);
+        
+     }
 
     @Override
     public void onDestroy() {

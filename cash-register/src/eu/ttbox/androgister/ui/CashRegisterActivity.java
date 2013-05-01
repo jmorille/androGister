@@ -42,11 +42,22 @@ public class CashRegisterActivity extends AndroGisterActivity {
 		    OrderItem item = OrderItemHelper.createFromOffer(offer);
 			basketFragment.onAddBasketItem( item);
 		}
+ 	};
 
-	};
-
+// 	@Override
+// 	public void onSaveInstanceState(Bundle outState){
+// 	    super.onSaveInstanceState(outState);
+// 	    getFragmentManager().putFragment(outState,"basketFragment",basketFragment);
+// 	}
+//    @Override
+// 	public void onRestoreInstanceState(Bundle inState){
+//        super.onRestoreInstanceState(inState);
+// 	   basketFragment =(RegisterMultiBasketFragment) getFragmentManager().getFragment(inState,"basketFragment");
+// 	}
+ 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "------------- Activity onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cash_register);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -58,6 +69,7 @@ public class CashRegisterActivity extends AndroGisterActivity {
 
 	@Override
 	public void onAttachFragment(Fragment fragment) {
+        Log.d(TAG, "------------- Activity onAttachFragment");
 		super.onAttachFragment(fragment);
 		if (fragment instanceof ProductSelectorFragment) {
 			ProductSelectorFragment pfrag = (ProductSelectorFragment) fragment;

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- Screen -->
+
+    <TextView
+        android:id="@+id/digit_screen"
+        style="@style/digit_screen_style" 
+        android:text="234" />
+
+    <!-- Line -->
+
+    <Button
+        android:id="@+id/del"
+        style="@style/digit_button_style"
+        android:layout_below="@id/digit_screen"
+        android:text="@string/del" />
+
+    <Button
+        android:id="@+id/clear"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/del"
+        android:layout_toEndOf="@id/del"
+        android:text="@string/clear" />
+
+    <Button
+        android:id="@+id/invSign"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/clear"
+        android:layout_toEndOf="@id/clear"
+        android:text="@string/invSign" />
+
+    <Button
+        android:id="@+id/div"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/invSign"
+        android:layout_toEndOf="@id/invSign"
+        android:text="@string/div" />
+
+    <!-- Line 7, 8, 9, X -->
+
+    <Button
+        android:id="@+id/digit7"
+        style="@style/digit_button_style"
+        android:layout_below="@id/del"
+        android:text="@string/digit7" />
+
+    <Button
+        android:id="@+id/digit8"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/digit7"
+        android:layout_toEndOf="@id/digit7"
+        android:text="@string/digit8" />
+
+    <Button
+        android:id="@+id/digit9"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/digit8"
+        android:layout_toEndOf="@id/digit8"
+        android:text="@string/digit9" />
+
+    <Button
+        android:id="@+id/mul"
+        style="@style/operation_button_style"
+        android:layout_alignBaseline="@id/digit9"
+        android:layout_toEndOf="@id/digit9"
+        android:text="@string/mul" />
+
+    <!-- Line 4, 5 , 6 , - -->
+
+    <Button
+        android:id="@+id/digit4"
+        style="@style/digit_button_style"
+        android:layout_below="@id/digit7"
+        android:text="@string/digit4" />
+
+    <Button
+        android:id="@+id/digit5"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/digit4"
+        android:layout_toEndOf="@id/digit4"
+        android:text="@string/digit5" />
+
+    <Button
+        android:id="@+id/digit6"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/digit5"
+        android:layout_toEndOf="@id/digit5"
+        android:text="@string/digit6" />
+
+    <Button
+        android:id="@+id/minus"
+        style="@style/operation_button_style"
+        android:layout_alignBaseline="@id/digit6"
+        android:layout_toEndOf="@id/digit6"
+        android:text="@string/minus" />
+
+    <!-- Line 1, 2, 3, + -->
+
+    <Button
+        android:id="@+id/digit1"
+        style="@style/digit_button_style"
+        android:layout_below="@id/digit4"
+        android:text="@string/digit1" />
+
+    <Button
+        android:id="@+id/digit2"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/digit1"
+        android:layout_toEndOf="@id/digit1"
+        android:text="@string/digit2" />
+
+    <Button
+        android:id="@+id/digit3"
+        style="@style/digit_button_style"
+        android:layout_alignBaseline="@id/digit2"
+        android:layout_toEndOf="@id/digit2"
+        android:text="@string/digit3" />
+
+    <Button
+        android:id="@+id/plus"
+        style="@style/operation_button_style"
+        android:layout_alignBaseline="@id/digit3"
+        android:layout_toEndOf="@id/digit3"
+        android:text="@string/plus" />
+
+    <!-- Mine 0, . , = -->
+
+    <Button
+        android:id="@+id/digit0"
+        style="@style/digit_button_style"
+        android:layout_width="@dimen/digit0_layout_width"
+        android:layout_below="@id/digit1"
+        android:text="@string/digit0" />
+
+    <Button
+        android:id="@+id/dot"
+        style="@style/operation_button_style"
+        android:layout_alignBaseline="@id/digit0"
+        android:layout_toEndOf="@id/digit0"
+        android:text="@string/dot" />
+
+    <Button
+        android:id="@+id/equal"
+        style="@style/operation_button_style"
+        android:layout_alignBaseline="@id/dot"
+        android:layout_alignRight="@id/plus"
+        android:layout_toEndOf="@id/dot"
+        android:text="@string/equal" />
+
+</RelativeLayout>
