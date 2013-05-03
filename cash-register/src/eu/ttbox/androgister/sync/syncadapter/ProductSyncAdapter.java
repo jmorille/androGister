@@ -18,6 +18,9 @@ package eu.ttbox.androgister.sync.syncadapter;
 import java.io.IOException;
 import java.util.List;
 
+import de.greenrobot.dao.query.LazyList;
+import de.greenrobot.dao.query.QueryBuilder;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -29,7 +32,10 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import eu.ttbox.androgister.AndroGisterApplication;
 import eu.ttbox.androgister.domain.Product;
+import eu.ttbox.androgister.domain.ProductDao;
+import eu.ttbox.androgister.domain.ProductDao.Properties;
 import eu.ttbox.androgister.sync.Constants;
 import eu.ttbox.androgister.sync.client.NetworkUtilities;
 import eu.ttbox.androgister.sync.client.RawContact;
@@ -41,8 +47,9 @@ import eu.ttbox.androgister.sync.client.RawContact;
  * update the contacts' status messages, which would be useful for a messaging
  * or social networking client.
  * 
- * @see http
- *      ://stackoverflow.com/questions/1859241/own-sync-adapter-for-android/7795266
+ * @see http 
+ *      ://stackoverflow.com/questions/1859241/own-sync-adapter-for-android/
+ *      7795266
  * @see http://dev.evernote.com/media/pdf/edam-sync.pdf
  */
 public class ProductSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -55,12 +62,24 @@ public class ProductSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final Context mContext;
 
+    private ProductDao productDao;
+
     public ProductSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContext = context;
         mAccountManager = AccountManager.get(context);
+        // Dao 
+        AndroGisterApplication app = (AndroGisterApplication) context.getApplicationContext();
+        productDao = app.getDaoSession().getProductDao();
     }
 
+    public QueryBuilder<Product> createSearchQuery(ProductDao entityDao) {
+        QueryBuilder<Product>  queryBuilder =  productDao.queryBuilder();
+        queryBuilder.where(Properties.Dirty.eq(Boolean.TRUE));
+        return queryBuilder;
+    }
+    
+    
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
@@ -91,18 +110,33 @@ public class ProductSyncAdapter extends AbstractThreadedSyncAdapter {
             // yet, this could involve a round-trip to the server to request
             // and AuthToken.
             final String authtoken = mAccountManager.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, NOTIFY_AUTH_FAILURE);
+
+            
+            QueryBuilder<Product>  queryBuilder =  createSearchQuery(productDao);
+            LazyList<Product>  products =  queryBuilder.build().listLazy();
+            try {
+                for (Product product :  products) {
+                    
+                    
+                    
+                }
+            } finally {
+                products.close();
+            }
             //
             // // Make sure that the sample group exists
             // final long groupId =
             // ContactManager.ensureSampleGroupExists(mContext, account);
             //
-             // Find the local 'dirty' contacts that we need to tell the server  about...
-             // Find the local users that need to be sync'd to the server...
-             dirtyContacts = ProductManager.getDirtyProducts(mContext,  account);
+            // Find the local 'dirty' contacts that we need to tell the server
+            // about...
+            // Find the local users that need to be sync'd to the server...
+            dirtyContacts = ProductManager.getDirtyProducts(mContext, account);
             //
             // // Send the dirty contacts to the server, and retrieve the
             // server-side changes
-//             updatedContacts = NetworkUtilities.syncContacts(account,  authtoken, lastSyncMarker, dirtyContacts);
+            // updatedContacts = NetworkUtilities.syncContacts(account,
+            // authtoken, lastSyncMarker, dirtyContacts);
             //
             // // Update the local contacts database with the changes.
             // updateContacts()
