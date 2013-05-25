@@ -23,7 +23,7 @@
       <!-- Android -->
       <android.version>4.2.2_r2</android.version> <!-- 4.1.2_r3 2.3.3 -->
       <google.maps.version>17_r2</google.maps.version>
-      <google-play-services.version>5</google-play-services.version>
+      <google-play-services.version>7</google-play-services.version>
       
       <!-- Google Apis : https://code.google.com/p/google-api-java-client/ -->
 	  <!-- Oauth2 : google-api-services-oauth2 -->
@@ -33,7 +33,7 @@
       <google-api-services-drive.version>v2-rev62-1.13.2-beta</google-api-services-drive.version>
 
       <!-- Compatibility Api -->
-      <compatibility-v13.version>12</compatibility-v13.version>
+      <compatibility-v13.version>13</compatibility-v13.version>
       <slidingmenu.version>1.2</slidingmenu.version>
 
       <!-- Database -->
@@ -49,7 +49,7 @@
 
 
       <!-- Release -->
-      <android-maven-plugin.version>3.5.1</android-maven-plugin.version> <!-- 3.5.1 -->
+      <android-maven-plugin.version>3.6.0</android-maven-plugin.version> <!-- 3.5.1 -->
       <android.sdk.platform>17</android.sdk.platform>
       <sign.alias>android</sign.alias>
 

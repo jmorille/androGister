@@ -22,21 +22,21 @@
         android:id="@+id/clear"
         style="@style/digit_button_style"
         android:layout_alignBaseline="@id/del"
-        android:layout_toEndOf="@id/del"
+        android:layout_toEndOf="@id/del" 
         android:text="@string/clear" />
 
     <Button
         android:id="@+id/invSign"
         style="@style/digit_button_style"
         android:layout_alignBaseline="@id/clear"
-        android:layout_toEndOf="@id/clear"
+        android:layout_toEndOf="@id/clear" 
         android:text="@string/invSign" />
 
     <Button
         android:id="@+id/div"
         style="@style/digit_button_style"
         android:layout_alignBaseline="@id/invSign"
-        android:layout_toEndOf="@id/invSign"
+        android:layout_toEndOf="@id/invSign" 
         android:text="@string/div" />
 
     <!-- Line 7, 8, 9, X -->
