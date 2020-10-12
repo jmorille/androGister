@@ -40,7 +40,7 @@
     <elasticsearch.version>0.90.0.RC2</elasticsearch.version>
 
     <!-- Test -->
-    <junit.version>4.11</junit.version>
+    <junit.version>4.13.1</junit.version>
     <cassandra-unit.version>1.1.2.1</cassandra-unit.version>
 
     <!-- Plugins -->
